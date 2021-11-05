@@ -1,0 +1,43 @@
+<idea-plugin>
+	<id>ir.mmd.intellijDev.Actionable</id>
+	<name>Actionable</name>
+	<version>1.0.0-Beta</version>
+	<vendor email="ezmmd83@gmail.com" url="https://github.com/MohammadMD1383">MMD</vendor>
+	
+	<description><![CDATA[
+		Adds some favorite/extra actions that are not available in IntelliJ based IDEs.
+		
+		Features:
+		- Duplicate line(s) up - (VSCode like)
+		- Duplicate line(s) down - (VSCode like)
+    ]]></description>
+	
+	<change-notes><![CDATA[
+		Initial Release
+	]]></change-notes>
+	
+	<!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+		 on how to target different products -->
+	<depends>com.intellij.modules.platform</depends>
+	
+	<extensions defaultExtensionNs="com.intellij">
+		<!-- Add your extensions here -->
+	</extensions>
+	
+	<actions>
+		<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate..." popup="true">
+			<add-to-group group-id="EditMenu" anchor="last"/>
+			
+			<action class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
+			        id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
+			        text="Duplicate Lines Up"
+			        description="Duplicate selected line(s) above the current selection; or just the line, which caret is located at, if no selection exists"
+			/>
+			
+			<action class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
+			        id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
+			        text="Duplicate Lines Down"
+			        description="Duplicate selected line(s) below the current selection; or just the line, which caret is located at, if no selection exists"/>
+		</group>
+	</actions>
+</idea-plugin>
