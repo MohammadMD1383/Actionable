@@ -1,28 +1,37 @@
 plugins {
-    id 'org.jetbrains.intellij' version '1.2.1'
-    id 'java'
+	id 'org.jetbrains.intellij' version '1.2.1'
+	id 'java'
 }
 
 group 'ir.mmd.intellijDev'
+version '1.0.0'
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2021.2.3'
+	version = '2021.2.3'
 }
 
 runIde {
 	autoReloadPlugins = true
 }
 
+patchPluginXml {
+	version = project.version
+}
+
+buildSearchableOptions {
+	enabled = false
+}
+
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }

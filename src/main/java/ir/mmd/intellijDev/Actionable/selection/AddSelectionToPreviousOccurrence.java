@@ -1,30 +1,19 @@
-package ir.mmd.intellijDev.Actionable.duplicate;
+package ir.mmd.intellijDev.Actionable.selection;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.editor.Caret;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * AnAction that will duplicate selected line(s) up like how <b>VSCode</b> does
- */
-public class DuplicateLinesUp extends AnAction {
+public class AddSelectionToPreviousOccurrence extends AnAction {
 	@Override
 	public void actionPerformed(@NotNull AnActionEvent e) {
 		final var project = e.getProject();
 		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		final var document = editor.getDocument();
-		
-		// noinspection ConstantConditions
-		final var duplicateUtil = new DuplicateUtil(project, editor, document);
-		
-		for (Caret caret : editor.getCaretModel().getAllCarets()) {
-			duplicateUtil.duplicateUp(
-				caret.getSelectionStart(),
-				caret.getSelectionEnd()
-			);
-		}
 	}
 	
 	@Override

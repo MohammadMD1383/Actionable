@@ -1,24 +1,30 @@
 <idea-plugin>
 	<id>ir.mmd.intellijDev.Actionable</id>
 	<name>Actionable</name>
-	<version>1.0.0-Beta</version>
-	<vendor email="ezmmd83@gmail.com" url="https://github.com/MohammadMD1383">MMD</vendor>
+	<vendor email="ezmmd83@gmail.com" url="https://github.com/MohammadMD1383/Actionable">MMD</vendor>
 	
 	<description><![CDATA[
-		Adds some favorite/extra actions that are not available in IntelliJ based IDEs.
+		<h3>Adds some favorite/extra actions that are not available in IntelliJ based IDEs.</h3>
 		
-		Features:
-		- Duplicate line(s) up - (VSCode like)
-		- Duplicate line(s) down - (VSCode like)
+		<div>Features:</div>
+		<ul>
+			<li>Duplicate line(s) up - (VSCode like)</li>
+			<li>Duplicate line(s) down - (VSCode like)</li>
+		</ul>
     ]]></description>
 	
 	<change-notes><![CDATA[
-		Initial Release
+		<ul>
+			<li><b>1.0.0:</b> Fixed some issues with plugin.xml</li>
+			<li><b>1.0.0-Beta:</b> Initial Release</li>
+		</ul>
 	]]></change-notes>
 	
 	<!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
 		 on how to target different products -->
 	<depends>com.intellij.modules.platform</depends>
+	
+	<idea-version since-build="201"/>
 	
 	<extensions defaultExtensionNs="com.intellij">
 		<!-- Add your extensions here -->
