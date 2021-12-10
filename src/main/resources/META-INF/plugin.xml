@@ -10,24 +10,24 @@
 		<ul>
 			<li>Duplicate line(s) up - (VSCode like)</li>
 			<li>Duplicate line(s) down - (VSCode like)</li>
+			<li>Justify carets start</li>
+			<li>Justify carets end</li>
 		</ul>
     ]]></description>
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>1.1.0:</b> Added justify carets actions</li>
+			<li><b>1.0.1:</b> Fixed issue with duplicate down action</li>
 			<li><b>1.0.0:</b> Fixed some issues with plugin.xml</li>
 			<li><b>1.0.0-Beta:</b> Initial Release</li>
 		</ul>
 	]]></change-notes>
 	
-	<!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
-		 on how to target different products -->
 	<depends>com.intellij.modules.platform</depends>
 	
-	<idea-version since-build="201"/>
-	
 	<extensions defaultExtensionNs="com.intellij">
-		<!-- Add your extensions here -->
+	
 	</extensions>
 	
 	<actions>
@@ -44,6 +44,22 @@
 			        id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
 			        text="Duplicate Lines Down"
 			        description="Duplicate selected line(s) below the current selection; or just the line, which caret is located at, if no selection exists"/>
+		</group>
+		
+		<group id="ir.mmd.intellijDev.Actionable.CaretGroup" text="Caret Actions..." popup="true">
+			<add-to-group group-id="EditMenu" anchor="last"/>
+			
+			<action class="ir.mmd.intellijDev.Actionable.caret.JustifyCaretsStart"
+			        id="ir.mmd.intellijDev.Actionable.caret.JustifyCaretsStart"
+			        text="Justify Carets Start"
+			        description="Justifies carets to the leftmost (needs more than one active caret)"
+			/>
+			
+			<action class="ir.mmd.intellijDev.Actionable.caret.JustifyCaretsEnd"
+			        id="ir.mmd.intellijDev.Actionable.caret.JustifyCaretsEnd"
+			        text="Justify Carets End"
+			        description="Justifies carets to the rightmost (needs more than one active caret)"
+			/>
 		</group>
 	</actions>
 </idea-plugin>

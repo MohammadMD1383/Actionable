@@ -40,7 +40,10 @@ public class DuplicateUtil {
 	 * @param start start offset of duplication range
 	 * @param end   end offset of duplication range
 	 */
-	public void duplicateUp(int start, int end) {
+	public void duplicateUp(
+		int start,
+		int end
+	) {
 		final var duplicateString = getDuplicateString(start, end);
 		
 		WriteCommandAction.runWriteCommandAction(project, () ->
@@ -51,7 +54,10 @@ public class DuplicateUtil {
 	/**
 	 * please refer to {@link DuplicateUtil#duplicateUp(int, int)} for documentation
 	 */
-	public void duplicateDown(int start, int end) {
+	public void duplicateDown(
+		int start,
+		int end
+	) {
 		final var duplicateString = getDuplicateString(start, end);
 		
 		WriteCommandAction.runWriteCommandAction(project, () -> {
@@ -82,7 +88,10 @@ public class DuplicateUtil {
 	 * @param end   ending caret offset of duplication range
 	 * @return selected line(s) for duplication
 	 */
-	private @NotNull DuplicateString getDuplicateString(int start, int end) {
+	private @NotNull DuplicateString getDuplicateString(
+		int start,
+		int end
+	) {
 		int selectionStartLine;
 		int selectionEndLine;
 		int lineStartOffset;
@@ -108,6 +117,10 @@ public class DuplicateUtil {
 		);
 	}
 	
+	/**
+	 * <b>data class</b> <br>
+	 * this class contains information about the text that is going to be duplicated
+	 */
 	private static class DuplicateString {
 		private final int selectionStartLine;
 		private final int selectionEndLine;
