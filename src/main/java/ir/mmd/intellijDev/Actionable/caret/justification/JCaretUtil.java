@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.caret;
+package ir.mmd.intellijDev.Actionable.caret.justification;
 
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Caret;
@@ -14,13 +14,13 @@ import java.util.stream.Stream;
 /**
  * This class is used to manipulate editor carets
  */
-public class CaretUtil {
+public class JCaretUtil {
 	private final @NotNull Editor editor;
 	private final @NotNull Project project;
 	
 	private List<CaretState> caretStates;
 	
-	public CaretUtil(
+	public JCaretUtil(
 		@NotNull Project project,
 		@NotNull Editor editor
 	) {
@@ -36,7 +36,7 @@ public class CaretUtil {
 	}
 	
 	/**
-	 * restores {@link CaretState}s previously backed up by {@link CaretUtil#backupCarets()}
+	 * restores {@link CaretState}s previously backed up by {@link JCaretUtil#backupCarets()}
 	 */
 	public void restoreCarets() {
 		assert caretStates != null;
@@ -66,7 +66,7 @@ public class CaretUtil {
 	}
 	
 	/**
-	 * same as {@link CaretUtil#justifyCaretsStart()} but moves the carets to rightmost active column
+	 * same as {@link JCaretUtil#justifyCaretsStart()} but moves the carets to rightmost active column
 	 */
 	public void justifyCaretsEnd() {
 		final var carets = editor.getCaretModel().getAllCarets();
@@ -107,7 +107,7 @@ public class CaretUtil {
 	
 	/**
 	 * returns the leftmost column position among given carets <br>
-	 * please refer to {@link CaretUtil#justifyCaretsStart()} for details
+	 * please refer to {@link JCaretUtil#justifyCaretsStart()} for details
 	 *
 	 * @param carets list of all carets
 	 * @return the leftmost column position
@@ -118,7 +118,7 @@ public class CaretUtil {
 	}
 	
 	/**
-	 * same as {@link CaretUtil#getStartColumn(List)} but returns the rightmost column position
+	 * same as {@link JCaretUtil#getStartColumn(List)} but returns the rightmost column position
 	 *
 	 * @param carets list of all carets
 	 * @return the rightmost column position

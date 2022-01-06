@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.caret;
+package ir.mmd.intellijDev.Actionable.caret.justification;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -14,7 +14,7 @@ public class JustifyCaretsEnd extends AnAction {
 		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		
 		//noinspection ConstantConditions
-		final var caretUtil = new CaretUtil(project, editor);
+		final var caretUtil = new JCaretUtil(project, editor);
 		
 		caretUtil.backupCarets();
 		ActionHelper.setToggleAction(e, Actions.ColumnSelectionMode, true);

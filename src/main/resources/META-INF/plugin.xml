@@ -12,11 +12,16 @@
 			<li>Duplicate line(s) down - (VSCode like)</li>
 			<li>Justify carets start</li>
 			<li>Justify carets end</li>
+			<li>Copy word at caret</li>
+			<li>Cut word at caret</li>
 		</ul>
+		
+		<b>For detailed description please visit the <a href="https://github.com/MohammadMD1383/Actionable">github repo</a></b>
     ]]></description>
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>1.2.0:</b> Added copy/cut word at caret</li>
 			<li><b>1.1.0:</b> Added justify carets actions</li>
 			<li><b>1.0.1:</b> Fixed issue with duplicate down action</li>
 			<li><b>1.0.0:</b> Fixed some issues with plugin.xml</li>
@@ -31,14 +36,17 @@
 	</extensions>
 	
 	<actions>
-		<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate..." popup="true">
+		<group id="ir.mmd.intellijDev.Actionable" text="Actionable" popup="true">
 			<add-to-group group-id="EditMenu" anchor="last"/>
+		</group>
+		
+		<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate..." popup="true">
+			<add-to-group group-id="ir.mmd.intellijDev.Actionable"/>
 			
 			<action class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
 			        id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
 			        text="Duplicate Lines Up"
-			        description="Duplicate selected line(s) above the current selection; or just the line, which caret is located at, if no selection exists"
-			/>
+			        description="Duplicate selected line(s) above the current selection; or just the line, which caret is located at, if no selection exists"/>
 			
 			<action class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
 			        id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
@@ -47,19 +55,29 @@
 		</group>
 		
 		<group id="ir.mmd.intellijDev.Actionable.CaretGroup" text="Caret Actions..." popup="true">
-			<add-to-group group-id="EditMenu" anchor="last"/>
+			<add-to-group group-id="ir.mmd.intellijDev.Actionable"/>
 			
-			<action class="ir.mmd.intellijDev.Actionable.caret.JustifyCaretsStart"
-			        id="ir.mmd.intellijDev.Actionable.caret.JustifyCaretsStart"
+			<action class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
+			        id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
 			        text="Justify Carets Start"
-			        description="Justifies carets to the leftmost (needs more than one active caret)"
-			/>
+			        description="Justifies carets to the leftmost (needs more than one active caret)"/>
 			
-			<action class="ir.mmd.intellijDev.Actionable.caret.JustifyCaretsEnd"
-			        id="ir.mmd.intellijDev.Actionable.caret.JustifyCaretsEnd"
+			<action class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEnd"
+			        id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEnd"
 			        text="Justify Carets End"
-			        description="Justifies carets to the rightmost (needs more than one active caret)"
-			/>
+			        description="Justifies carets to the rightmost (needs more than one active caret)"/>
+			
+			<separator/>
+			
+			<action class="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaretAction"
+			        id="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaretAction"
+			        text="Copy Word At Caret"
+			        description="Copies the word at the caret"/>
+			
+			<action class="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaretAction"
+		            id="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaretAction"
+			        text="Cut Word At Caret"
+			        description="Cuts the word at the caret"/>
 		</group>
 	</actions>
 </idea-plugin>

@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.caret;
+package ir.mmd.intellijDev.Actionable.caret.justification;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -12,7 +12,7 @@ public class JustifyCaretsStart extends AnAction {
 		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		
 		//noinspection ConstantConditions
-		new CaretUtil(project, editor).justifyCaretsStart();
+		new JCaretUtil(project, editor).justifyCaretsStart();
 	}
 	
 	@Override
