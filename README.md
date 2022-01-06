@@ -2,9 +2,7 @@
 
 This plugin adds some extra functionality that makes it easier to interact with the editor.
 
-<div style="text-align:center;font-size:20px;border:1px solid;">
-    <b>Fell free to extend this plugin by your needs!</b>
-</div>
+<b>Fell free to extend this plugin by your needs!</b>
 
 ---
 
