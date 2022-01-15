@@ -14,6 +14,10 @@
 			<li>Justify carets end</li>
 			<li>Copy word at caret</li>
 			<li>Cut word at caret</li>
+			<li>Move caret to next word</li>
+			<li>Move caret to previous word</li>
+			<li>Move caret to next word with selection</li>
+			<li>Move caret to previous word with selection</li>
 		</ul>
 		
 		<b>For detailed description please visit the <a href="https://github.com/MohammadMD1383/Actionable">github repo</a></b>
@@ -21,6 +25,11 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>1.4.1:</b><br>
+				Added move caret to next/previous word (+ with selection)<br>
+				Added exception reporting feature<br>
+				Minor improvements
+			</li>
 			<li><b>1.2.0:</b> Added copy/cut word at caret</li>
 			<li><b>1.1.0:</b> Added justify carets actions</li>
 			<li><b>1.0.1:</b> Fixed issue with duplicate down action</li>

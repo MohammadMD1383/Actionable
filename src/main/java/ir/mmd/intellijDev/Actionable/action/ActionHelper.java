@@ -15,15 +15,13 @@ public class ActionHelper {
 	 */
 	public static class Actions {
 		public static final String ColumnSelectionMode = "EditorToggleColumnMode";
-		public static final String ActionableMoveToNextWord = "ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWord";
-		public static final String ActionableMoveToPreviousWord = "ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWord";
 	}
 	
 	/**
 	 * sets a {@link ToggleAction}'s state
 	 *
-	 * @param event event of execution
-	 * @param action the action to be manipulated
+	 * @param event   event of execution
+	 * @param action  the action to be manipulated
 	 * @param enabled whether to enable the state or disable it
 	 */
 	public static void setToggleAction(
@@ -32,12 +30,5 @@ public class ActionHelper {
 		boolean enabled
 	) {
 		((ToggleAction) ActionManager.getInstance().getAction(action)).setSelected(event, enabled);
-	}
-	
-	public static void executeAction(
-		@NotNull AnActionEvent event,
-		@NotNull String action
-	) {
-		ActionManager.getInstance().getAction(action).actionPerformed(event);
 	}
 }

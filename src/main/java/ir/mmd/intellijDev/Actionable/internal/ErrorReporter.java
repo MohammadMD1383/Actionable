@@ -11,10 +11,12 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * This class provides convenient way for bug report at Actionable's GitHub repo
+ */
 public class ErrorReporter extends ErrorReportSubmitter {
 	@Override
 	public @NlsActions.ActionText @NotNull String getReportActionText() { return "Create Issue on Github"; }

@@ -6,7 +6,13 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
+/**
+ * This class is the connector between {@link UI} and {@link SettingsState}
+ */
 public class Settings implements Configurable {
+	/**
+	 * the {@link UI} for this setting page
+	 */
 	private UI ui;
 	
 	@Override
@@ -50,6 +56,11 @@ public class Settings implements Configurable {
 	@Override
 	public void disposeUIResources() { ui = null; }
 	
+	/**
+	 * validates the {@link SettingsState#wordSeparators} before saving it
+	 *
+	 * @throws ConfigurationException if required conditions for {@link SettingsState#wordSeparators} is not met
+	 */
 	private void validateWordSeparators() throws ConfigurationException {
 		final var ws = ui.getWordSeparators();
 		

@@ -5,10 +5,28 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * This is a helper class for moving the caret in the editor without committing
+ */
 public class CaretMovementHelper {
+	
+	/**
+	 * move caret forward
+	 */
 	public static final int FORWARD = 1;
+	
+	/**
+	 * move caret backward
+	 */
 	public static final int BACKWARD = -1;
 	
+	/**
+	 * moves the caret until it reaches one the given characters
+	 *
+	 * @param cutil instance of {@link CaretMovementUtil}
+	 * @param chars the characters to stop at
+	 * @param dir   either {@link CaretMovementHelper#FORWARD} or {@link CaretMovementHelper#BACKWARD}
+	 */
 	public static void goUntilReached(
 		@NotNull CaretMovementUtil cutil,
 		@NotNull List<Character> chars,
@@ -21,6 +39,13 @@ public class CaretMovementHelper {
 		}
 	}
 	
+	/**
+	 * moves the caret while it faces with one the given characters
+	 *
+	 * @param cutil instance of {@link CaretMovementUtil}
+	 * @param chars the characters to face with
+	 * @param dir   either {@link CaretMovementHelper#FORWARD} or {@link CaretMovementHelper#BACKWARD}
+	 */
 	public static void goWhileHaving(
 		@NotNull CaretMovementUtil cutil,
 		@NotNull List<Character> chars,
@@ -33,6 +58,14 @@ public class CaretMovementHelper {
 		}
 	}
 	
+	/**
+	 * helper method for moving the caret based on the {@link SettingsState#wordSeparatorsBehaviour}
+	 *
+	 * @param cutil instance of {@link CaretMovementUtil}
+	 * @param chars {@link SettingsState#wordSeparators}
+	 * @param mode  see {@link SettingsState.WSBehaviour}
+	 * @param dir   either {@link CaretMovementHelper#FORWARD} or {@link CaretMovementHelper#BACKWARD}
+	 */
 	public static void moveCaret(
 		@NotNull CaretMovementUtil cutil,
 		@NotNull List<Character> chars,
@@ -42,6 +75,10 @@ public class CaretMovementHelper {
 		Character startingChar;
 		startingChar = cutil.peek(dir == FORWARD ? 0 : -1);
 		
+		/*
+		  because when the starting character is located at -1
+		  so starting point should change to -1.
+		*/
 		if (dir == BACKWARD) cutil.go(-1);
 		
 		if (mode == SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE) {

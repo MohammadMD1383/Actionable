@@ -5,16 +5,16 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
+/**
+ * Main setting entry for the plugin<br>
+ * provides no default ui
+ */
 public class Settings implements Configurable {
 	@Override
-	public String getDisplayName() {
-		return "Actionable";
-	}
+	public String getDisplayName() { return "Actionable"; }
 	
 	@Override
-	public @Nullable JComponent createComponent() {
-		return null;
-	}
+	public @Nullable JComponent createComponent() { return null; }
 	
 	@Override
 	public boolean isModified() { return false; }

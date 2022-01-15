@@ -14,14 +14,39 @@ import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.B
 import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.FORWARD;
 import static ir.mmd.intellijDev.Actionable.util.Utility.inRange;
 
+/**
+ * This class implements actions required by:<br>
+ * <ul>
+ *     <li>{@link MoveCaretToNextWord}</li>
+ *     <li>{@link MoveCaretToNextWordWithSelection}</li>
+ *     <li>{@link MoveCaretToPreviousWord}</li>
+ *     <li>{@link MoveCaretToPreviousWordWithSelection}</li>
+ * </ul>
+ */
 public class Actions {
-	@NotNull
-	private static List<Character> getWordSeparators(@NotNull SettingsState settingsState) {
+	
+	/**
+	 * helper method for gathering {@link SettingsState#wordSeparators} and {@link SettingsState#newLineIncluded} together
+	 *
+	 * @param settingsState see {@link SettingsState#getInstance()}
+	 * @return complete list of {@link SettingsState#wordSeparators}
+	 */
+	private static @NotNull List<Character> getWordSeparators(@NotNull SettingsState settingsState) {
 		final var wordSeparators = settingsState.wordSeparators.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
 		if (settingsState.newLineIncluded) wordSeparators.add('\n');
 		return wordSeparators;
 	}
 	
+	/**
+	 * implementation for:
+	 * <ul>
+	 *     <li>{@link MoveCaretToNextWord}</li>
+	 *     <li>{@link MoveCaretToPreviousWord}</li>
+	 * </ul>
+	 *
+	 * @param e   event of mentioned actions
+	 * @param dir see {@link CaretMovementHelper#moveCaret(CaretMovementUtil, List, int, int)}
+	 */
 	public static void moveCaret(
 		@NotNull AnActionEvent e,
 		int dir
@@ -48,6 +73,16 @@ public class Actions {
 		}
 	}
 	
+	/**
+	 * implementation for:
+	 * <ul>
+	 *     <li>{@link MoveCaretToNextWordWithSelection}</li>
+	 *     <li>{@link MoveCaretToPreviousWordWithSelection}</li>
+	 * </ul>
+	 *
+	 * @param e   event of mentioned actions
+	 * @param dir see {@link CaretMovementHelper#moveCaret(CaretMovementUtil, List, int, int)}
+	 */
 	public static void moveCaretWithSelection(
 		@NotNull AnActionEvent e,
 		int dir

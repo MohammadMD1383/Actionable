@@ -5,11 +5,12 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import org.jetbrains.annotations.NotNull;
 
+import static ir.mmd.intellijDev.Actionable.caret.movement.Actions.moveCaretWithSelection;
 import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.FORWARD;
 
 public class MoveCaretToNextWordWithSelection extends AnAction {
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e) { Actions.moveCaretWithSelection(e, FORWARD); }
+	public void actionPerformed(@NotNull AnActionEvent e) { moveCaretWithSelection(e, FORWARD); }
 	
 	@Override
 	public void update(@NotNull AnActionEvent e) {

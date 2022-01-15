@@ -12,28 +12,55 @@ import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import ir.mmd.intellijDev.Actionable.util.ext.addItem
 
+/**
+ * This class is the UI provider for [Settings]
+ */
 class UI {
+	/**
+	 * word separators backing field
+	 */
 	private lateinit var wordSeparatorsField: JBTextField
+	
+	/**
+	 * easy getter/setter for [wordSeparatorsField]
+	 */
 	var wordSeparators: String
 		get() = wordSeparatorsField.text
 		set(value) {
 			wordSeparatorsField.text = value
 		}
 	
+	/**
+	 * new line character included or not? - backing field
+	 */
 	private lateinit var newLineCheckBox: JBCheckBox
+	
+	/**
+	 * easy getChecked/setChecked for [newLineCheckBox]
+	 */
 	var newLineIncluded: Boolean
 		get() = newLineCheckBox.isSelected
 		set(value) {
 			newLineCheckBox.isSelected = value
 		}
 	
+	/**
+	 * list of radio buttons for behaviour - backing field
+	 */
 	private var wordSeparatorsBehaviour = mutableListOf<JBRadioButton>()
+	
+	/**
+	 * easy getSelection/setSelection for [wordSeparatorsBehaviour]
+	 */
 	var selectedWordSeparatorsBehaviour: Int
 		get() = wordSeparatorsBehaviour.indexOfFirst { it.isSelected }
 		set(value) {
 			wordSeparatorsBehaviour[value].isSelected = true
 		}
 	
+	/**
+	 * the UI implementation
+	 */
 	val ui: DialogPanel = panel {
 		row("Word separators:") {
 			wordSeparatorsField = textField()
