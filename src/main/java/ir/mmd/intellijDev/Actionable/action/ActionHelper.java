@@ -15,6 +15,8 @@ public class ActionHelper {
 	 */
 	public static class Actions {
 		public static final String ColumnSelectionMode = "EditorToggleColumnMode";
+		public static final String ActionableMoveToNextWord = "ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWord";
+		public static final String ActionableMoveToPreviousWord = "ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWord";
 	}
 	
 	/**
@@ -30,5 +32,12 @@ public class ActionHelper {
 		boolean enabled
 	) {
 		((ToggleAction) ActionManager.getInstance().getAction(action)).setSelected(event, enabled);
+	}
+	
+	public static void executeAction(
+		@NotNull AnActionEvent event,
+		@NotNull String action
+	) {
+		ActionManager.getInstance().getAction(action).actionPerformed(event);
 	}
 }

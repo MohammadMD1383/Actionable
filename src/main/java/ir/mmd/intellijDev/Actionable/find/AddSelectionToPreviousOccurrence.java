@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.selection;
+package ir.mmd.intellijDev.Actionable.find;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -18,7 +18,7 @@ public class AddSelectionToPreviousOccurrence extends AnAction {
 		final var project = e.getProject();
 		final var editor = e.getData(CommonDataKeys.EDITOR);
 		
-		e.getPresentation().setEnabledAndVisible(
+		e.getPresentation().setEnabled(
 			project != null && editor != null
 		);
 	}

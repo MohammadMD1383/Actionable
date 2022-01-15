@@ -32,7 +32,7 @@ public class DuplicateLinesUp extends AnAction {
 		final var project = e.getProject();
 		final var editor = e.getData(CommonDataKeys.EDITOR);
 		
-		e.getPresentation().setEnabledAndVisible(
+		e.getPresentation().setEnabled(
 			project != null && editor != null
 		);
 	}

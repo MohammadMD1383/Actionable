@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * This class is used to duplicate line(s) in the editor
  */
-public class DuplicateUtil {
+class DuplicateUtil {
 	@NotNull private final Project project;
 	@NotNull private final Document document;
 	@NotNull private final Editor editor;

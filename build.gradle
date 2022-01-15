@@ -1,10 +1,11 @@
 plugins {
 	id 'org.jetbrains.intellij' version '1.2.1'
+	id 'org.jetbrains.kotlin.jvm' version '1.6.10'
 	id 'java'
 }
 
 group 'ir.mmd.intellijDev'
-version '1.2.0'
+version '1.4.0'
 
 repositories {
 	mavenCentral()
@@ -36,4 +37,12 @@ buildSearchableOptions {
 
 test {
 	useJUnitPlatform()
+}
+
+compileKotlin {
+	kotlinOptions.jvmTarget = "11"
+}
+
+compileTestKotlin {
+	kotlinOptions.jvmTarget = "11"
 }

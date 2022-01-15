@@ -12,7 +12,7 @@ public class JustifyCaretsStart extends AnAction {
 		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		
 		//noinspection ConstantConditions
-		new JCaretUtil(project, editor).justifyCaretsStart();
+		new JustifyCaretUtil(project, editor).justifyCaretsStart();
 	}
 	
 	@Override
@@ -20,7 +20,7 @@ public class JustifyCaretsStart extends AnAction {
 		final var project = e.getProject();
 		final var editor = e.getData(CommonDataKeys.EDITOR);
 		
-		e.getPresentation().setEnabledAndVisible(
+		e.getPresentation().setEnabled(
 			project != null && editor != null &&
 				editor.getCaretModel().getCaretCount() > 1 &&
 				!editor.getSelectionModel().hasSelection(true)

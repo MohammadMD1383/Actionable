@@ -14,7 +14,7 @@ public class JustifyCaretsEnd extends AnAction {
 		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		
 		//noinspection ConstantConditions
-		final var caretUtil = new JCaretUtil(project, editor);
+		final var caretUtil = new JustifyCaretUtil(project, editor);
 		
 		caretUtil.backupCarets();
 		ActionHelper.setToggleAction(e, Actions.ColumnSelectionMode, true);
@@ -28,7 +28,7 @@ public class JustifyCaretsEnd extends AnAction {
 		final var project = e.getProject();
 		final var editor = e.getData(CommonDataKeys.EDITOR);
 		
-		e.getPresentation().setEnabledAndVisible(
+		e.getPresentation().setEnabled(
 			project != null && editor != null &&
 				editor.getCaretModel().getCaretCount() > 1 &&
 				!editor.getSelectionModel().hasSelection(true)

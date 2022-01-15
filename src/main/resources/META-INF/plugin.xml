@@ -32,52 +32,96 @@
 	<depends>com.intellij.modules.platform</depends>
 	
 	<extensions defaultExtensionNs="com.intellij">
-	
+		<errorHandler
+			implementation="ir.mmd.intellijDev.Actionable.internal.ErrorReporter"/>
+		
+		<applicationService
+			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState"/>
+		
+		<applicationConfigurable
+			parentId="tools"
+			id="ir.mmd.intellijDev.Actionable.settings.Settings"
+			instance="ir.mmd.intellijDev.Actionable.settings.Settings"
+			displayName="Actionable">
+			
+			<configurable
+				id="ir.mmd.intellijDev.Actionable.caret.movement.settings.Settings"
+				instance="ir.mmd.intellijDev.Actionable.caret.movement.settings.Settings"
+				displayName="Caret Movement"/>
+		</applicationConfigurable>
 	</extensions>
 	
 	<actions>
 		<group id="ir.mmd.intellijDev.Actionable" text="Actionable" popup="true">
 			<add-to-group group-id="EditMenu" anchor="last"/>
-		</group>
-		
-		<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate..." popup="true">
-			<add-to-group group-id="ir.mmd.intellijDev.Actionable"/>
 			
-			<action class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
-			        id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
-			        text="Duplicate Lines Up"
-			        description="Duplicate selected line(s) above the current selection; or just the line, which caret is located at, if no selection exists"/>
+			<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate..." popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
+					id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
+					text="Duplicate Lines Up"
+					description="Duplicate selected line(s) above the current selection; or just the line, which caret is located at, if no selection exists"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
+					id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
+					text="Duplicate Lines Down"
+					description="Duplicate selected line(s) below the current selection; or just the line, which caret is located at, if no selection exists"/>
+			</group>
 			
-			<action class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
-			        id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
-			        text="Duplicate Lines Down"
-			        description="Duplicate selected line(s) below the current selection; or just the line, which caret is located at, if no selection exists"/>
-		</group>
-		
-		<group id="ir.mmd.intellijDev.Actionable.CaretGroup" text="Caret Actions..." popup="true">
-			<add-to-group group-id="ir.mmd.intellijDev.Actionable"/>
-			
-			<action class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
-			        id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
-			        text="Justify Carets Start"
-			        description="Justifies carets to the leftmost (needs more than one active caret)"/>
-			
-			<action class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEnd"
-			        id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEnd"
-			        text="Justify Carets End"
-			        description="Justifies carets to the rightmost (needs more than one active caret)"/>
-			
-			<separator/>
-			
-			<action class="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaretAction"
-			        id="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaretAction"
-			        text="Copy Word At Caret"
-			        description="Copies the word at the caret"/>
-			
-			<action class="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaretAction"
-		            id="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaretAction"
-			        text="Cut Word At Caret"
-			        description="Cuts the word at the caret"/>
+			<group id="ir.mmd.intellijDev.Actionable.CaretGroup" text="Caret Actions..." popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
+					id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
+					text="Justify Carets Start"
+					description="Justifies carets to the leftmost (needs more than one active caret)"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEnd"
+					id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEnd"
+					text="Justify Carets End"
+					description="Justifies carets to the rightmost (needs more than one active caret)"/>
+				
+				<separator/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaretAction"
+					text="Copy Word At Caret"
+					description="Copies the word at the caret"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaretAction"
+					text="Cut Word At Caret"
+					description="Cuts the word at the caret"/>
+				
+				<separator/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWord"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWord"
+					text="Move Caret to Next Word (Actionable)"
+					description="Like the same action provided by the IDE but a bit different and configurable"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWordWithSelection"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWordWithSelection"
+					text="Move Caret to Next Word with Selection (Actionable)"
+					description="Like the same action provided by the IDE but a bit different and configurable"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWord"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWord"
+					text="Move Caret to Previous Word (Actionable)"
+					description="Like the same action provided by the IDE but a bit different and configurable"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWordWithSelection"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWordWithSelection"
+					text="Move Caret to Previous Word with Selection (Actionable)"
+					description="Like the same action provided by the IDE but a bit different and configurable"/>
+			</group>
 		</group>
 	</actions>
 </idea-plugin>
