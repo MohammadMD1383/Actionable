@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'ir.mmd.intellijDev'
-version '1.4.1'
+version '1.4.2-latest'
 
 repositories {
 	mavenCentral()
@@ -28,7 +28,7 @@ runIde {
 
 patchPluginXml {
 	version = project.version
-	sinceBuild = '191'
+	sinceBuild = '213'
 }
 
 buildSearchableOptions {

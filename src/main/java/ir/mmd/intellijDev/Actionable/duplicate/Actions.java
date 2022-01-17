@@ -14,15 +14,6 @@ import org.jetbrains.annotations.NotNull;
  * </ul>
  */
 public class Actions {
-	
-	/**
-	 * whether to duplicate the selected lines up or down
-	 */
-	public enum Direction {
-		UP,
-		DOWN
-	}
-	
 	/**
 	 * implementation for:
 	 * <ul>
@@ -31,11 +22,11 @@ public class Actions {
 	 * </ul>
 	 *
 	 * @param e   event of mentioned actions
-	 * @param dir see {@link Actions.Direction}
+	 * @param duplicator a method reference from {@link DuplicateUtil} class
 	 */
 	public static void duplicate(
 		@NotNull AnActionEvent e,
-		@NotNull Direction dir
+		@NotNull TriConsumer<DuplicateUtil, Integer, Integer> duplicator
 	) {
 		final var project = e.getProject();
 		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
@@ -43,15 +34,8 @@ public class Actions {
 		
 		// noinspection ConstantConditions
 		final var duplicateUtil = new DuplicateUtil(project, editor, document);
-		
-		final TriConsumer<DuplicateUtil, Integer, Integer> duplicateMethod;
-		if (dir == Direction.UP)
-			duplicateMethod = DuplicateUtil::duplicateUp;
-		else /* dir == Direction.DOWN */
-			duplicateMethod = DuplicateUtil::duplicateDown;
-		
 		for (Caret caret : editor.getCaretModel().getAllCarets()) {
-			duplicateMethod.accept(
+			duplicator.accept(
 				duplicateUtil,
 				caret.getSelectionStart(),
 				caret.getSelectionEnd()

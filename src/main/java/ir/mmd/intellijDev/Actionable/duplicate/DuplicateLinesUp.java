@@ -5,11 +5,9 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import org.jetbrains.annotations.NotNull;
 
-import static ir.mmd.intellijDev.Actionable.duplicate.Actions.Direction.UP;
-
 public class DuplicateLinesUp extends AnAction {
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e) { Actions.duplicate(e, UP); }
+	public void actionPerformed(@NotNull AnActionEvent e) { Actions.duplicate(e, DuplicateUtil::duplicateUp); }
 	
 	@Override
 	public void update(@NotNull AnActionEvent e) {
