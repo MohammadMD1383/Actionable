@@ -1,6 +1,5 @@
 package ir.mmd.intellijDev.Actionable.caret.editing;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -11,10 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 
-public class CutWordAtCaretAction extends AnAction {
-	@Override
+public class Actions {
 	@SuppressWarnings("ConstantConditions")
-	public void actionPerformed(@NotNull AnActionEvent e) {
+	public static void copyElementAtCaret(
+		@NotNull AnActionEvent e,
+		boolean deleteElement
+	) {
 		final var project = e.getProject();
 		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		final var file = FileDocumentManager.getInstance().getFile(editor.getDocument());
@@ -26,17 +27,6 @@ public class CutWordAtCaretAction extends AnAction {
 		final var clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(new StringSelection(word), null);
 		
-		WriteCommandAction.runWriteCommandAction(project, wordElement::delete);
-	}
-	
-	@Override
-	public void update(@NotNull AnActionEvent e) {
-		final var project = e.getProject();
-		final var editor = e.getData(CommonDataKeys.EDITOR);
-		
-		e.getPresentation().setEnabled(
-			project != null && editor != null &&
-				editor.getCaretModel().getCaretCount() == 1
-		);
+		if (deleteElement) WriteCommandAction.runWriteCommandAction(project, wordElement::delete);
 	}
 }

@@ -94,16 +94,16 @@
 				<separator/>
 				
 				<action
-					class="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaretAction"
-					id="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaretAction"
-					text="Copy Word At Caret"
-					description="Copies the word at the caret"/>
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CopyElementAtCaret"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CopyElementAtCaret"
+					text="Copy Element At Caret"
+					description="Copies the element at the caret"/>
 				
 				<action
-					class="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaretAction"
-					id="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaretAction"
-					text="Cut Word At Caret"
-					description="Cuts the word at the caret"/>
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CutElementAtCaret"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CutElementAtCaret"
+					text="Cut Element At Caret"
+					description="Cuts the element at the caret"/>
 				
 				<separator/>
 				
