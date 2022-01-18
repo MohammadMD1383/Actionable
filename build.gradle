@@ -10,12 +10,8 @@ version '1.5.1'
 sourceCompatibility = 11
 targetCompatibility = 11
 
-sourceSets {
-	main {
-		java {
-			exclude 'selection/**'
-		}
-	}
+jar {
+	exclude 'ir/mmd/intellijDev/Actionable/selection/'
 }
 
 repositories {
