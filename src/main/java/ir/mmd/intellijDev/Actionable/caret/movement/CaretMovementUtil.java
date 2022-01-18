@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * This is a wrapper class over {@link Caret} for convenient movement
  */
-class CaretMovementUtil {
+public class CaretMovementUtil {
 	private final @NotNull Document document;
 	private final @NotNull Caret caret;
 	
@@ -28,9 +28,11 @@ class CaretMovementUtil {
 	}
 	
 	/**
-	 * changes back the {@link CaretMovementUtil#caretOffset} to the <b>last {@link CaretMovementUtil#commit(int)}</b>
+	 * changes back the {@link CaretMovementUtil#caretOffset} to the <b>last {@link CaretMovementUtil#commit(int)}</b> and adds the given offset to it.
+	 *
+	 * @param offset the offset to be applied to the {@link CaretMovementUtil#caretOffset} after resetting it
 	 */
-	public void reset() { if (caret.isValid()) caretOffset = caret.getOffset(); }
+	public void reset(int offset) { if (caret.isValid()) caretOffset = caret.getOffset() + offset; }
 	
 	public int getOffset() { return caretOffset; }
 	

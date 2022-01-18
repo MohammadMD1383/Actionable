@@ -21,7 +21,7 @@ public class Actions {
 	 *     <li>{@link DuplicateLinesDown}</li>
 	 * </ul>
 	 *
-	 * @param e   event of mentioned actions
+	 * @param e          event of mentioned actions
 	 * @param duplicator a method reference from {@link DuplicateUtil} class
 	 */
 	public static void duplicate(

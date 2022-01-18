@@ -12,12 +12,14 @@
 			<li>Duplicate line(s) down - (VSCode like)</li>
 			<li>Justify carets start</li>
 			<li>Justify carets end</li>
-			<li>Copy word at caret</li>
-			<li>Cut word at caret</li>
+			<li>Copy element at caret</li>
+			<li>Cut element at caret</li>
 			<li>Move caret to next word</li>
 			<li>Move caret to previous word</li>
 			<li>Move caret to next word with selection</li>
 			<li>Move caret to previous word with selection</li>
+			<li>Add selection to next occurrence</li>
+			<li>Add selection to previous occurrence</li>
 		</ul>
 		
 		<b>For detailed description please visit the <a href="https://github.com/MohammadMD1383/Actionable">github repo</a></b>
@@ -25,6 +27,11 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>1.5.1:</b><br>
+				Added Add selection to next/previous occurrence<br>
+				Renamed Copy/Cut word at caret --to--> Copy/Cut element at caret<br>
+				Minor improvements
+			</li>
 			<li><b>1.4.1:</b><br>
 				Added move caret to next/previous word (+ with selection)<br>
 				Added exception reporting feature<br>
@@ -78,6 +85,20 @@
 					description="Duplicate selected line(s) below the current selection; or just the line, which caret is located at, if no selection exists"/>
 			</group>
 			
+			<group id="ir.mmd.intellijDev.Actionable.FindGroup" text="Find..." popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.find.SelectNextOccurrence"
+					id="ir.mmd.intellijDev.Actionable.find.SelectNextOccurrence"
+					text="Add Selection to Next Occurrence"
+					description="Adds selection to the next occurrence of the word in the editor"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.find.SelectPreviousOccurrence"
+					id="ir.mmd.intellijDev.Actionable.find.SelectPreviousOccurrence"
+					text="Add Selection to Previous Occurrence"
+					description="Adds selection to the previous occurrence of the word in the editor"/>
+			</group>
+			
 			<group id="ir.mmd.intellijDev.Actionable.CaretGroup" text="Caret Actions..." popup="true">
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
@@ -110,25 +131,25 @@
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWord"
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWord"
-					text="Move Caret to Next Word (Actionable)"
+					text="Move Caret to Next Word"
 					description="Like the same action provided by the IDE but a bit different and configurable"/>
 				
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWordWithSelection"
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWordWithSelection"
-					text="Move Caret to Next Word with Selection (Actionable)"
+					text="Move Caret to Next Word with Selection"
 					description="Like the same action provided by the IDE but a bit different and configurable"/>
 				
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWord"
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWord"
-					text="Move Caret to Previous Word (Actionable)"
+					text="Move Caret to Previous Word"
 					description="Like the same action provided by the IDE but a bit different and configurable"/>
 				
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWordWithSelection"
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWordWithSelection"
-					text="Move Caret to Previous Word with Selection (Actionable)"
+					text="Move Caret to Previous Word with Selection"
 					description="Like the same action provided by the IDE but a bit different and configurable"/>
 			</group>
 		</group>

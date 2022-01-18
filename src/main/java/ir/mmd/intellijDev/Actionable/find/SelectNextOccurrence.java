@@ -5,13 +5,11 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import org.jetbrains.annotations.NotNull;
 
-public class AddSelectionToPreviousOccurrence extends AnAction {
+import static ir.mmd.intellijDev.Actionable.find.Actions.selectOccurrence;
+
+public class SelectNextOccurrence extends AnAction {
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e) {
-		final var project = e.getProject();
-		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
-		final var document = editor.getDocument();
-	}
+	public void actionPerformed(@NotNull AnActionEvent e) { selectOccurrence(e, true); }
 	
 	@Override
 	public void update(@NotNull AnActionEvent e) {

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.BACKWARD;
 import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.FORWARD;
+import static ir.mmd.intellijDev.Actionable.util.Utility.getWordSeparators;
 import static ir.mmd.intellijDev.Actionable.util.Utility.inRange;
 
 /**
@@ -24,19 +25,6 @@ import static ir.mmd.intellijDev.Actionable.util.Utility.inRange;
  * </ul>
  */
 public class Actions {
-	
-	/**
-	 * helper method for gathering {@link SettingsState#wordSeparators} and {@link SettingsState#newLineIncluded} together
-	 *
-	 * @param settingsState see {@link SettingsState#getInstance()}
-	 * @return complete list of {@link SettingsState#wordSeparators}
-	 */
-	private static @NotNull List<Character> getWordSeparators(@NotNull SettingsState settingsState) {
-		final var wordSeparators = settingsState.wordSeparators.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
-		if (settingsState.newLineIncluded) wordSeparators.add('\n');
-		return wordSeparators;
-	}
-	
 	/**
 	 * implementation for:
 	 * <ul>
@@ -54,9 +42,12 @@ public class Actions {
 		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		final var document = editor.getDocument();
 		final var settingsState = SettingsState.getInstance();
-		final var wordSeparators = getWordSeparators(settingsState);
+		final var wordSeparators = getWordSeparators();
 		
 		for (Caret caret : editor.getCaretModel().getAllCarets()) {
+			// if we omit this, when caret has selection, and we move it, the selection won't be cleared automatically.
+			caret.removeSelection();
+			
 			final var cutil = new CaretMovementUtil(document, caret);
 			CaretMovementHelper.moveCaret(
 				cutil,
@@ -90,7 +81,7 @@ public class Actions {
 		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		final var document = editor.getDocument();
 		final var settingsState = SettingsState.getInstance();
-		final var wordSeparators = getWordSeparators(settingsState);
+		final var wordSeparators = getWordSeparators();
 		
 		final var carets = editor.getCaretModel().getAllCarets();
 		final var selectionStarts = carets.stream().map(Caret::getLeadSelectionOffset).collect(Collectors.toList());

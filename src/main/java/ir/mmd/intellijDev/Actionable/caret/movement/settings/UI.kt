@@ -89,7 +89,10 @@ class UI {
 		
 		row(label = "Behaviour:") {
 			panel {
-				buttonGroup(this@UI::selectedWordSeparatorsBehaviour) {
+				buttonGroup(
+					getter = { selectedWordSeparatorsBehaviour },
+					setter = { selectedWordSeparatorsBehaviour = it }
+				) {
 					row {
 						wordSeparatorsBehaviour addItem radioButton(
 							"Stop at character type change",
