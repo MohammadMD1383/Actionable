@@ -20,22 +20,32 @@ This plugin adds some extra functionality that makes it easier to interact with 
   > these two actions will work when there are **more than one caret** in the active editor.<br/>
   > the usage is that you can align your carets to the rightmost/leftmost caret. for example:<br/>
   > <small>_the pipe character shows the caret_</small>
-  > 
+  >
   > before:
   > ```
   > String |s = new String();
   > String s2 = |new String();
   > ```
-  > 
+  >
   > after(using align end/right):
   > ```
   > String s = n|ew String();
   > String s2 = |new String();
   > ```
 
-* Copy/Cut word at caret
-  > these actions will copy/cut the word at the caret.<br/>
-  > **Note:** works when there is **only one caret** 
+* Copy/Cut element at caret
+  > these actions will copy/cut the element<sup>*</sup> at the caret.<br/>
+  > **Note:** works when there is **only one caret**
+  >
+  > <small>*: e.g. a string literal is an element, a key word is an element, etc. Actually a <u>psi element</u>.</small>
+
+* Move caret to next/previous word (+ with selection)
+  > These four actions are like the IDE ones, but a little different and also customizable.
+
+* Add selection to next/previous occurrence
+  > Like the one that IDE has, but note that intelliJ platform only supports add selection for **next occurrence**;
+  > but this plugin offers both **next/previous** occurrence finding. 
+  > _<small>will be configurable in future releases.</small>_
 
 ## How does it work?
 
