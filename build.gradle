@@ -6,11 +6,14 @@ plugins {
 group 'ir.mmd.intellijDev'
 version '2.0.0'
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 8
+targetCompatibility = 8
 
 jar {
-	exclude 'ir/mmd/intellijDev/Actionable/selection/'
+	exclude(
+		'ir/mmd/intellijDev/Actionable/selection/',
+		'com/'
+	)
 }
 
 repositories {
@@ -25,6 +28,7 @@ dependencies {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
 	version = '2021.3.1'
+	// version = '2019.1.4'
 	// localPath = "/snap/intellij-idea-community/337/"
 }
 
@@ -34,7 +38,7 @@ runIde {
 
 patchPluginXml {
 	version = project.version
-	sinceBuild = '213'
+	sinceBuild = '191'
 	untilBuild = ''
 }
 

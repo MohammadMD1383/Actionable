@@ -92,7 +92,7 @@ public class Actions {
 		);
 		
 		if (findResult.isStringFound()) {
-			final LogicalPosition logicalPosition = editor.offsetToLogicalPosition(findResult.getStartOffset() + (caret.getOffset() - caret.getSelectionStart()));
+			final VisualPosition logicalPosition = editor.offsetToVisualPosition(findResult.getStartOffset() + (caret.getOffset() - caret.getSelectionStart()));
 			final Caret newCaret = caretModel.addCaret(logicalPosition, true);
 			newCaret.setSelection(findResult.getStartOffset(), findResult.getEndOffset());
 		}

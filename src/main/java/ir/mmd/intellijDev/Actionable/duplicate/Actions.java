@@ -6,7 +6,7 @@ import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.util.TriConsumer;
+import ir.mmd.intellijDev.Actionable.util.func.VoidFunction2;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,7 +29,7 @@ public class Actions {
 	 */
 	public static void duplicate(
 		@NotNull AnActionEvent e,
-		@NotNull TriConsumer<DuplicateUtil, Integer, Integer> duplicator
+		@NotNull VoidFunction2<DuplicateUtil, Integer, Integer> duplicator
 	) {
 		final Project project = e.getProject();
 		final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
@@ -38,7 +38,7 @@ public class Actions {
 		// noinspection ConstantConditions
 		final DuplicateUtil duplicateUtil = new DuplicateUtil(project, editor, document);
 		for (Caret caret : editor.getCaretModel().getAllCarets()) {
-			duplicator.accept(
+			duplicator.exec(
 				duplicateUtil,
 				caret.getSelectionStart(),
 				caret.getSelectionEnd()

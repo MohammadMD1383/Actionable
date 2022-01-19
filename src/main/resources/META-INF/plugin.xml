@@ -27,6 +27,11 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>2.0.0:</b><br>
+				<b>Now plugins supports IntelliJ since 2019.1.4</b><br>
+				Added configuration for find actions<br>
+				Minor improvements
+			</li>
 			<li><b>1.5.1:</b><br>
 				Added Add selection to next/previous occurrence<br>
 				Renamed Copy/Cut word at caret --to--> Copy/Cut element at caret<br>
