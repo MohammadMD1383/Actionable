@@ -3,10 +3,13 @@ package ir.mmd.intellijDev.Actionable.caret.movement;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Caret;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.BACKWARD;
@@ -37,16 +40,16 @@ public class Actions {
 		@NotNull AnActionEvent e,
 		int dir
 	) {
-		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
-		final var document = editor.getDocument();
-		final var settingsState = SettingsState.getInstance();
-		final var wordSeparators = settingsState.wordSeparators;
+		final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
+		final Document document = editor.getDocument();
+		final SettingsState settingsState = SettingsState.getInstance();
+		final String wordSeparators = settingsState.wordSeparators;
 		
 		for (Caret caret : editor.getCaretModel().getAllCarets()) {
 			// if we omit this, when caret has selection, and we move it, the selection won't be cleared automatically.
 			caret.removeSelection();
 			
-			final var cutil = new CaretMovementUtil(document, caret);
+			final CaretMovementUtil cutil = new CaretMovementUtil(document, caret);
 			CaretMovementHelper.moveCaret(
 				cutil,
 				wordSeparators,
@@ -76,13 +79,13 @@ public class Actions {
 		@NotNull AnActionEvent e,
 		int dir
 	) {
-		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
-		final var document = editor.getDocument();
-		final var settingsState = SettingsState.getInstance();
-		final var wordSeparators = settingsState.wordSeparators;
+		final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
+		final Document document = editor.getDocument();
+		final SettingsState settingsState = SettingsState.getInstance();
+		final String wordSeparators = settingsState.wordSeparators;
 		
-		final var carets = editor.getCaretModel().getAllCarets();
-		final var selectionStarts = carets.stream().map(Caret::getLeadSelectionOffset).collect(Collectors.toList());
+		final List<Caret> carets = editor.getCaretModel().getAllCarets();
+		final List<Integer> selectionStarts = carets.stream().map(Caret::getLeadSelectionOffset).collect(Collectors.toList());
 		
 		if (dir == BACKWARD) {
 			Collections.reverse(carets);
@@ -90,8 +93,8 @@ public class Actions {
 		}
 		
 		for (int i = 0; i < carets.size(); i++) {
-			final var caret = carets.get(i);
-			final var cutil = new CaretMovementUtil(document, caret);
+			final Caret caret = carets.get(i);
+			final CaretMovementUtil cutil = new CaretMovementUtil(document, caret);
 			
 			CaretMovementHelper.moveCaret(
 				cutil,
@@ -101,7 +104,7 @@ public class Actions {
 			);
 			
 			if (i + 1 < carets.size()) {
-				final var nextCaret = carets.get(i + 1);
+				final Caret nextCaret = carets.get(i + 1);
 				
 				/* `inRange` method will automatically sort the `start` and `end` parameters if they're not in true order */
 				if (inRange(cutil.getOffset(), nextCaret.getSelectionStart(), nextCaret.getSelectionEnd())) {

@@ -3,6 +3,9 @@ package ir.mmd.intellijDev.Actionable.duplicate;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Caret;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
 import com.intellij.util.TriConsumer;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,12 +31,12 @@ public class Actions {
 		@NotNull AnActionEvent e,
 		@NotNull TriConsumer<DuplicateUtil, Integer, Integer> duplicator
 	) {
-		final var project = e.getProject();
-		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
-		final var document = editor.getDocument();
+		final Project project = e.getProject();
+		final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
+		final Document document = editor.getDocument();
 		
 		// noinspection ConstantConditions
-		final var duplicateUtil = new DuplicateUtil(project, editor, document);
+		final DuplicateUtil duplicateUtil = new DuplicateUtil(project, editor, document);
 		for (Caret caret : editor.getCaretModel().getAllCarets()) {
 			duplicator.accept(
 				duplicateUtil,

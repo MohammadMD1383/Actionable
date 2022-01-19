@@ -43,8 +43,8 @@ public class CaretMovementUtil {
 	 * @return the character or null if the evaluated offset is invalid in the parent {@link Document} of the {@link Caret}
 	 */
 	public @Nullable Character peek(int offset) {
-		final var documentChars = document.getCharsSequence();
-		final var newOffset = caretOffset + offset;
+		final CharSequence documentChars = document.getCharsSequence();
+		final int newOffset = caretOffset + offset;
 		
 		if (newOffset >= 0 && newOffset < documentChars.length())
 			return documentChars.charAt(newOffset);

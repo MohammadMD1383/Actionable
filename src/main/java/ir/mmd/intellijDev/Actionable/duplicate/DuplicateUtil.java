@@ -1,10 +1,7 @@
 package ir.mmd.intellijDev.Actionable.duplicate;
 
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.editor.VisualPosition;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +41,7 @@ class DuplicateUtil {
 		int start,
 		int end
 	) {
-		final var duplicateString = getDuplicateString(start, end);
+		final DuplicateString duplicateString = getDuplicateString(start, end);
 		
 		WriteCommandAction.runWriteCommandAction(project, () ->
 			document.insertString(duplicateString.lineEndOffset, '\n' + duplicateString.text)
@@ -58,7 +55,7 @@ class DuplicateUtil {
 		int start,
 		int end
 	) {
-		final var duplicateString = getDuplicateString(start, end);
+		final DuplicateString duplicateString = getDuplicateString(start, end);
 		
 		WriteCommandAction.runWriteCommandAction(project, () -> {
 			document.insertString(duplicateString.lineStartOffset, duplicateString.text + '\n');
@@ -69,7 +66,7 @@ class DuplicateUtil {
 			// to be more clear, you can comment out the statements below and see the effect.
 			// put the caret at the line start and fire the `duplicate down` action.
 			if (duplicateString.lineStartOffset == start) {
-				final var caret = editor.getCaretModel().getCaretAt(new VisualPosition(duplicateString.selectionStartLine, 0));
+				final Caret caret = editor.getCaretModel().getCaretAt(new VisualPosition(duplicateString.selectionStartLine, 0));
 				if (caret == null) return;
 				
 				caret.moveToLogicalPosition(new LogicalPosition(

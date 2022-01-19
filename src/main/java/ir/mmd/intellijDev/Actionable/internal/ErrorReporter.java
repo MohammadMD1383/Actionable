@@ -29,11 +29,11 @@ public class ErrorReporter extends ErrorReportSubmitter {
 		@NotNull Consumer<? super SubmittedReportInfo> consumer
 	) {
 		try {
-			final var title = URLEncoder.encode(
+			final String title = URLEncoder.encode(
 				"[BUG]: ",
 				StandardCharsets.UTF_8
 			);
-			final var body = URLEncoder.encode(
+			final String body = URLEncoder.encode(
 				additionalInfo + "\n\n<details><pre>" + events[0].getThrowableText() + "</pre></details>",
 				StandardCharsets.UTF_8
 			);

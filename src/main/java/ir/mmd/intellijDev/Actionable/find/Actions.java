@@ -2,9 +2,13 @@ package ir.mmd.intellijDev.Actionable.find;
 
 import com.intellij.find.FindManager;
 import com.intellij.find.FindModel;
+import com.intellij.find.FindResult;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.editor.*;
+import com.intellij.openapi.project.Project;
 import ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementUtil;
+import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState;
 import org.jetbrains.annotations.NotNull;
 
 import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.*;
@@ -34,21 +38,21 @@ public class Actions {
 		@NotNull AnActionEvent e,
 		boolean searchForward
 	) {
-		final var project = e.getProject();
-		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
-		final var document = editor.getDocument();
-		final var findSettingsState = ir.mmd.intellijDev.Actionable.find.settings.SettingsState.getInstance();
-		final var caretMovementSettingsState = ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState.getInstance();
-		final var caretModel = editor.getCaretModel();
-		final var caret = searchForward ? last(caretModel.getAllCarets()) : first(caretModel.getAllCarets());
+		final Project project = e.getProject();
+		final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
+		final Document document = editor.getDocument();
+		final ir.mmd.intellijDev.Actionable.find.settings.SettingsState findSettingsState = ir.mmd.intellijDev.Actionable.find.settings.SettingsState.getInstance();
+		final SettingsState caretMovementSettingsState = ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState.getInstance();
+		final CaretModel caretModel = editor.getCaretModel();
+		final Caret caret = searchForward ? last(caretModel.getAllCarets()) : first(caretModel.getAllCarets());
 		
 		/*
 		  if there is no selection, first we need to make a selection around the word.
 		  this is like what intelliJ does.
 		*/
 		if (!caret.hasSelection()) {
-			final var cutil = new CaretMovementUtil(document, caret);
-			final var wordSeparators = caretMovementSettingsState.wordSeparators;
+			final CaretMovementUtil cutil = new CaretMovementUtil(document, caret);
+			final String wordSeparators = caretMovementSettingsState.wordSeparators;
 			final int startOffset;
 			final int endOffset;
 			
@@ -68,28 +72,28 @@ public class Actions {
 			
 			// startOffset == endOffset : there is no word around caret
 			if (startOffset != endOffset) {
-				final var endChar = cutil.peek(0);
-				final var addition = !wordSeparators.contains(endChar.toString()) ? +1 : 0;
+				final Character endChar = cutil.peek(0);
+				final int addition = !wordSeparators.contains(endChar.toString()) ? +1 : 0;
 				caret.setSelection(startOffset, endOffset + addition);
 			}
 			return;
 		}
 		
-		final var findModel = new FindModel();
+		final FindModel findModel = new FindModel();
 		findModel.setForward(searchForward);
 		findModel.setCaseSensitive(findSettingsState.isCaseSensitive);
 		findModel.setStringToFind(caret.getSelectedText());
 		
-		final var findManager = FindManager.getInstance(project);
-		final var findResult = findManager.findString(
+		final FindManager findManager = FindManager.getInstance(project);
+		final FindResult findResult = findManager.findString(
 			document.getCharsSequence(),
 			searchForward ? caret.getSelectionEnd() : caret.getSelectionStart(),
 			findModel
 		);
 		
 		if (findResult.isStringFound()) {
-			final var logicalPosition = editor.offsetToLogicalPosition(findResult.getStartOffset() + (caret.getOffset() - caret.getSelectionStart()));
-			final var newCaret = caretModel.addCaret(logicalPosition, true);
+			final LogicalPosition logicalPosition = editor.offsetToLogicalPosition(findResult.getStartOffset() + (caret.getOffset() - caret.getSelectionStart()));
+			final Caret newCaret = caretModel.addCaret(logicalPosition, true);
 			newCaret.setSelection(findResult.getStartOffset(), findResult.getEndOffset());
 		}
 	}

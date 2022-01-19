@@ -59,8 +59,8 @@ class JustifyCaretUtil {
 	 * </pre>
 	 */
 	public void justifyCaretsStart() {
-		final var carets = editor.getCaretModel().getAllCarets();
-		final var targetColumn = getStartColumn(carets);
+		final List<Caret> carets = editor.getCaretModel().getAllCarets();
+		final int targetColumn = getStartColumn(carets);
 		
 		justify(carets, targetColumn);
 	}
@@ -69,8 +69,8 @@ class JustifyCaretUtil {
 	 * same as {@link JustifyCaretUtil#justifyCaretsStart()} but moves the carets to rightmost active column
 	 */
 	public void justifyCaretsEnd() {
-		final var carets = editor.getCaretModel().getAllCarets();
-		final var targetColumn = getEndColumn(carets);
+		final List<Caret> carets = editor.getCaretModel().getAllCarets();
+		final int targetColumn = getEndColumn(carets);
 		
 		justify(carets, targetColumn);
 	}
@@ -87,7 +87,7 @@ class JustifyCaretUtil {
 	) {
 		WriteCommandAction.runWriteCommandAction(project, () -> {
 			for (Caret caret : carets) {
-				final var currentLine = caret.getLogicalPosition().line;
+				final int currentLine = caret.getLogicalPosition().line;
 				caret.moveToLogicalPosition(
 					new LogicalPosition(currentLine, targetColumn)
 				);

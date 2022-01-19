@@ -31,7 +31,7 @@ public class CaretMovementHelper {
 		int dir
 	) {
 		while (true) {
-			final var nextChar = cutil.peek(dir);
+			final Character nextChar = cutil.peek(dir);
 			if (nextChar == null || chars.contains(nextChar.toString())) break;
 			cutil.go(dir);
 		}
@@ -50,7 +50,7 @@ public class CaretMovementHelper {
 		int dir
 	) {
 		while (true) {
-			final var nextChar = cutil.peek(dir);
+			final Character nextChar = cutil.peek(dir);
 			if (nextChar == null || !chars.contains(nextChar.toString())) break;
 			cutil.go(dir);
 		}
@@ -70,7 +70,7 @@ public class CaretMovementHelper {
 		int mode,
 		int dir
 	) {
-		final var startingChar = cutil.peek(dir == FORWARD ? 0 : -1);
+		final Character startingChar = cutil.peek(dir == FORWARD ? 0 : -1);
 		if (startingChar == null) return;
 		
 		/*

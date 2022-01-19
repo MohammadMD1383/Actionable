@@ -40,14 +40,14 @@ public class UI {
 	public JPanel getComponent() { return component; }
 	
 	public String getWordSeparators() {
-		var ws = wordSeparatorsField.getText();
+		String ws = wordSeparatorsField.getText();
 		if (newLineIncluded.isSelected()) ws += '\n';
 		if (tabIncluded.isSelected()) ws += '\t';
 		return ws;
 	}
 	public void setWordSeparators(@NotNull String s) {
-		var newLine = s.contains("\n");
-		var tab = s.contains("\t");
+		boolean newLine = s.contains("\n");
+		boolean tab = s.contains("\t");
 		
 		wordSeparatorsField.setText(s.replaceAll("[\n\t]", ""));
 		newLineIncluded.setSelected(newLine);

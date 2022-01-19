@@ -3,6 +3,7 @@ package ir.mmd.intellijDev.Actionable.caret.movement;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
 
 import static ir.mmd.intellijDev.Actionable.caret.movement.Actions.moveCaretWithSelection;
@@ -14,7 +15,7 @@ public class MoveCaretToPreviousWordWithSelection extends AnAction {
 	
 	@Override
 	public void update(@NotNull AnActionEvent e) {
-		final var editor = e.getData(CommonDataKeys.EDITOR);
+		final Editor editor = e.getData(CommonDataKeys.EDITOR);
 		
 		e.getPresentation().setEnabled(editor != null);
 	}

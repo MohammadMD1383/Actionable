@@ -19,19 +19,19 @@ public class Settings implements Configurable {
 	
 	@Override
 	public boolean isModified() {
-		final var settingsState = SettingsState.getInstance();
+		final SettingsState settingsState = SettingsState.getInstance();
 		return settingsState.isCaseSensitive != ui.isCaseSensitive();
 	}
 	
 	@Override
 	public void apply() {
-		final var settingsState = SettingsState.getInstance();
+		final SettingsState settingsState = SettingsState.getInstance();
 		settingsState.isCaseSensitive = ui.isCaseSensitive();
 	}
 	
 	@Override
 	public void reset() {
-		final var settingsState = SettingsState.getInstance();
+		final SettingsState settingsState = SettingsState.getInstance();
 		ui.setCaseSensitive(settingsState.isCaseSensitive);
 	}
 	
