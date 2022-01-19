@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 	storages = @Storage("Actionable.CaretMovementSettingsState.xml")
 )
 public class SettingsState implements PersistentStateComponent<SettingsState> {
-	
 	/**
 	 * <b>enum</b><br>
 	 * for behaviour of <code>move caret ...</code> actions<br>
@@ -31,8 +30,7 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	 * this class holds default values for settings
 	 */
 	public static class Defaults {
-		public static final @NotNull String wordSeparators = "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/? ";
-		public static final boolean newLineInclude = true;
+		public static final @NotNull String wordSeparators = "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/? \n\t";
 		public static final int wordSeparatorsBehaviour = WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE;
 	}
 	
@@ -40,11 +38,6 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	 * see {@link UI} for detailed description
 	 */
 	public @NotNull String wordSeparators = Defaults.wordSeparators;
-	
-	/**
-	 * whether \n is included in the {@link SettingsState#wordSeparators} or not
-	 */
-	public boolean newLineIncluded = Defaults.newLineInclude;
 	
 	/**
 	 * see {@link UI} for detailed description
