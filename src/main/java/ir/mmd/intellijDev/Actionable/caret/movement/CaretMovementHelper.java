@@ -3,8 +3,6 @@ package ir.mmd.intellijDev.Actionable.caret.movement;
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /**
  * This is a helper class for moving the caret in the editor without committing
  */
