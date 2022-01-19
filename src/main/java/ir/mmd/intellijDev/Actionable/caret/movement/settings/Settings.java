@@ -21,16 +21,15 @@ public class Settings implements Configurable {
 	@Override
 	public @Nullable JComponent createComponent() {
 		ui = new UI();
-		return ui.getUi();
+		return ui.getComponent();
 	}
 	
 	@Override
 	public boolean isModified() {
 		final var settingsState = SettingsState.getInstance();
-		
+
 		var modified = !ui.getWordSeparators().equals(settingsState.wordSeparators);
-		modified |= ui.getNewLineIncluded() != settingsState.newLineIncluded;
-		modified |= ui.getSelectedWordSeparatorsBehaviour() != settingsState.wordSeparatorsBehaviour;
+		modified |= ui.getWordSeparatorsBehaviour() != settingsState.wordSeparatorsBehaviour;
 		return modified;
 	}
 	
@@ -38,19 +37,17 @@ public class Settings implements Configurable {
 	public void apply() throws ConfigurationException {
 		validateWordSeparators();
 		final var settingsState = SettingsState.getInstance();
-		
+
 		settingsState.wordSeparators = ui.getWordSeparators();
-		settingsState.newLineIncluded = ui.getNewLineIncluded();
-		settingsState.wordSeparatorsBehaviour = ui.getSelectedWordSeparatorsBehaviour();
+		settingsState.wordSeparatorsBehaviour = ui.getWordSeparatorsBehaviour();
 	}
 	
 	@Override
 	public void reset() {
 		final var settingsState = SettingsState.getInstance();
-		
+
 		ui.setWordSeparators(settingsState.wordSeparators);
-		ui.setNewLineIncluded(settingsState.newLineIncluded);
-		ui.setSelectedWordSeparatorsBehaviour(settingsState.wordSeparatorsBehaviour);
+		ui.setWordSeparatorsBehaviour(settingsState.wordSeparatorsBehaviour);
 	}
 	
 	@Override
@@ -63,10 +60,10 @@ public class Settings implements Configurable {
 	 */
 	private void validateWordSeparators() throws ConfigurationException {
 		final var ws = ui.getWordSeparators();
-		
+
 		if (ws.isEmpty())
 			throw new ConfigurationException("Word Separators must not be Empty");
-		
+
 		if (ws.length() != ws.chars().distinct().count())
 			throw new ConfigurationException("Word Separators must contain distinct characters");
 	}

@@ -1,10 +1,8 @@
 package ir.mmd.intellijDev.Actionable.util;
 
-import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This class contains utility methods for java sources
@@ -28,18 +26,6 @@ public class Utility {
 			return start <= i && i <= end;
 		else /* end < start */
 			return end <= i && i <= start;
-	}
-	
-	/**
-	 * helper method for gathering {@link SettingsState#wordSeparators} and {@link SettingsState#newLineIncluded} together
-	 *
-	 * @return complete list of {@link SettingsState#wordSeparators}
-	 */
-	public static @NotNull List<Character> getWordSeparators() {
-		final var settingsState = SettingsState.getInstance();
-		final var wordSeparators = settingsState.wordSeparators.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
-		if (settingsState.newLineIncluded) wordSeparators.add('\n');
-		return wordSeparators;
 	}
 	
 	/**

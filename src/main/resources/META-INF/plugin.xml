@@ -53,6 +53,8 @@
 		
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState"/>
+		<applicationService
+			serviceImplementation="ir.mmd.intellijDev.Actionable.find.settings.SettingsState"/>
 		
 		<applicationConfigurable
 			parentId="tools"
@@ -64,6 +66,11 @@
 				id="ir.mmd.intellijDev.Actionable.caret.movement.settings.Settings"
 				instance="ir.mmd.intellijDev.Actionable.caret.movement.settings.Settings"
 				displayName="Caret Movement"/>
+			
+			<configurable
+				id="ir.mmd.intellijDev.Actionable.find.settings.Settings"
+				instance="ir.mmd.intellijDev.Actionable.find.settings.Settings"
+				displayName="Find"/>
 		</applicationConfigurable>
 	</extensions>
 	

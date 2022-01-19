@@ -5,7 +5,6 @@ import com.intellij.find.FindModel;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementUtil;
-import ir.mmd.intellijDev.Actionable.util.Utility;
 import org.jetbrains.annotations.NotNull;
 
 import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.*;
@@ -38,6 +37,8 @@ public class Actions {
 		final var project = e.getProject();
 		final var editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		final var document = editor.getDocument();
+		final var findSettingsState = ir.mmd.intellijDev.Actionable.find.settings.SettingsState.getInstance();
+		final var caretMovementSettingsState = ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState.getInstance();
 		final var caretModel = editor.getCaretModel();
 		final var caret = searchForward ? last(caretModel.getAllCarets()) : first(caretModel.getAllCarets());
 		
@@ -47,7 +48,7 @@ public class Actions {
 		*/
 		if (!caret.hasSelection()) {
 			final var cutil = new CaretMovementUtil(document, caret);
-			final var wordSeparators = Utility.getWordSeparators();
+			final var wordSeparators = caretMovementSettingsState.wordSeparators;
 			final int startOffset;
 			final int endOffset;
 			
@@ -68,7 +69,7 @@ public class Actions {
 			// startOffset == endOffset : there is no word around caret
 			if (startOffset != endOffset) {
 				final var endChar = cutil.peek(0);
-				final var addition = !wordSeparators.contains(endChar) ? +1 : 0;
+				final var addition = !wordSeparators.contains(endChar.toString()) ? +1 : 0;
 				caret.setSelection(startOffset, endOffset + addition);
 			}
 			return;
@@ -76,7 +77,7 @@ public class Actions {
 		
 		final var findModel = new FindModel();
 		findModel.setForward(searchForward);
-		findModel.setCaseSensitive(true);
+		findModel.setCaseSensitive(findSettingsState.isCaseSensitive);
 		findModel.setStringToFind(caret.getSelectedText());
 		
 		final var findManager = FindManager.getInstance(project);

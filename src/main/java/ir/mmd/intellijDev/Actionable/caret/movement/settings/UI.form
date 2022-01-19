@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ir.mmd.intellijDev.Actionable.caret.movement.settings.UI">
+  <grid id="27dc6" binding="component" layout-manager="GridLayoutManager" row-count="10" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="641" height="484"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="9cb03" class="javax.swing.JTextField" binding="wordSeparatorsField">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="258d6" class="javax.swing.JButton" binding="wordSeparatorsFieldDefault">
+        <constraints>
+          <grid row="0" column="2" row-span="4" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <label resource-bundle="strings" key="global.defaultButton.label"/>
+          <text resource-bundle="strings" key="global.defaultButton.label"/>
+        </properties>
+      </component>
+      <component id="bf1dc" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="4" column="0" row-span="4" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="strings" key="caretMovementPanel.wordSeparatorsBehaviour.label"/>
+        </properties>
+      </component>
+      <component id="db03d" class="javax.swing.JCheckBox" binding="newLineIncluded">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="strings" key="caretMovementPanel.wordSeparators.newLineIncluded.label"/>
+        </properties>
+      </component>
+      <component id="7afe0" class="javax.swing.JCheckBox" binding="tabIncluded">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="strings" key="caretMovementPanel.wordSeparators.tabIncluded.label"/>
+        </properties>
+      </component>
+      <component id="9119" class="javax.swing.JRadioButton" binding="stopAtCharacterTypeChangeRadioButton">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <actionCommand value="0"/>
+          <text resource-bundle="strings" key="caretMovementPanel.wordSeparatorsBehaviour.option1.label"/>
+        </properties>
+      </component>
+      <component id="5e647" class="javax.swing.JButton" binding="wordSeparatorsBehaviourDefault">
+        <constraints>
+          <grid row="4" column="2" row-span="4" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="strings" key="global.defaultButton.label"/>
+        </properties>
+      </component>
+      <component id="1a0c4" class="javax.swing.JRadioButton" binding="stopAtNextSameCharacterTypeRadioButton">
+        <constraints>
+          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <actionCommand value="1"/>
+          <text resource-bundle="strings" key="caretMovementPanel.wordSeparatorsBehaviour.option2.label"/>
+        </properties>
+      </component>
+      <component id="d15c7" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-6579301"/>
+          <text resource-bundle="strings" key="caretMovementPanel.wordSeparatorsBehaviour.option1.comment"/>
+        </properties>
+      </component>
+      <component id="f4cf" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-6579301"/>
+          <text resource-bundle="strings" key="caretMovementPanel.wordSeparatorsBehaviour.option2.comment"/>
+        </properties>
+      </component>
+      <vspacer id="9a0eb">
+        <constraints>
+          <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <component id="8114d" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="4" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="strings" key="caretMovementPanel.wordSeparators.label"/>
+        </properties>
+      </component>
+      <component id="a6c1a" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-6579301"/>
+          <text resource-bundle="strings" key="caretMovementPanel.wordSeparators.comment"/>
+        </properties>
+      </component>
+      <component id="5705b" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-6579301"/>
+          <text resource-bundle="strings" key="caretMovementPanel.wordSeparatorsBehaviour.comment"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+  <buttonGroups>
+    <group name="wordSeparatorsBehaviourGroup" bound="true">
+      <member id="9119"/>
+      <member id="1a0c4"/>
+    </group>
+  </buttonGroups>
+  <inspectionSuppressions>
+    <suppress inspection="NoLabelFor"/>
+    <suppress inspection="MissingMnemonic"/>
+  </inspectionSuppressions>
+</form>

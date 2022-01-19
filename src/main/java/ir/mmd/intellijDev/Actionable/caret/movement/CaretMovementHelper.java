@@ -29,12 +29,12 @@ public class CaretMovementHelper {
 	 */
 	public static void goUntilReached(
 		@NotNull CaretMovementUtil cutil,
-		@NotNull List<Character> chars,
+		@NotNull String chars,
 		int dir
 	) {
 		while (true) {
 			final var nextChar = cutil.peek(dir);
-			if (nextChar == null || chars.contains(nextChar)) break;
+			if (nextChar == null || chars.contains(nextChar.toString())) break;
 			cutil.go(dir);
 		}
 	}
@@ -48,12 +48,12 @@ public class CaretMovementHelper {
 	 */
 	public static void goWhileHaving(
 		@NotNull CaretMovementUtil cutil,
-		@NotNull List<Character> chars,
+		@NotNull String chars,
 		int dir
 	) {
 		while (true) {
 			final var nextChar = cutil.peek(dir);
-			if (nextChar == null || !chars.contains(nextChar)) break;
+			if (nextChar == null || !chars.contains(nextChar.toString())) break;
 			cutil.go(dir);
 		}
 	}
@@ -68,12 +68,12 @@ public class CaretMovementHelper {
 	 */
 	public static void moveCaret(
 		@NotNull CaretMovementUtil cutil,
-		@NotNull List<Character> chars,
+		@NotNull String chars,
 		int mode,
 		int dir
 	) {
-		Character startingChar;
-		startingChar = cutil.peek(dir == FORWARD ? 0 : -1);
+		final var startingChar = cutil.peek(dir == FORWARD ? 0 : -1);
+		if (startingChar == null) return;
 		
 		/*
 		  because when the starting character is located at -1
@@ -82,13 +82,13 @@ public class CaretMovementHelper {
 		if (dir == BACKWARD) cutil.go(-1);
 		
 		if (mode == SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE) {
-			if (chars.contains(startingChar)) {
+			if (chars.contains(startingChar.toString())) {
 				goWhileHaving(cutil, chars, dir);
 			} else /* !chars.contains(startingChar) */ {
 				goUntilReached(cutil, chars, dir);
 			}
 		} else /* mode == SettingsState.WSBehaviour.STOP_AT_NEXT_SAME_CHAR_TYPE */ {
-			if (chars.contains(startingChar)) {
+			if (chars.contains(startingChar.toString())) {
 				goWhileHaving(cutil, chars, dir);
 				goUntilReached(cutil, chars, dir);
 			} else /* !chars.contains(startingChar) */ {
