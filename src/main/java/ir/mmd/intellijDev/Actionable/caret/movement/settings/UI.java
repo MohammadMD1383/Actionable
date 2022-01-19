@@ -42,7 +42,7 @@ public class UI {
 	public String getWordSeparators() {
 		var ws = wordSeparatorsField.getText();
 		if (newLineIncluded.isSelected()) ws += '\n';
-		if (tabIncluded.isSelected()) ws += '\n';
+		if (tabIncluded.isSelected()) ws += '\t';
 		return ws;
 	}
 	public void setWordSeparators(@NotNull String s) {

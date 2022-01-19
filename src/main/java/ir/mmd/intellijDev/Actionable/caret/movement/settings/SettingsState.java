@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * This class provides the persistent state for the settings
  */
 @State(
-	name = "ir.mmd.intellijDev.Actionable.caret.movement.settings.CaretMovementSettingsState",
+	name = "ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState",
 	storages = @Storage("Actionable.CaretMovementSettingsState.xml")
 )
 public class SettingsState implements PersistentStateComponent<SettingsState> {
