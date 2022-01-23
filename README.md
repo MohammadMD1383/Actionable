@@ -2,7 +2,7 @@
 
 This plugin adds some extra functionality that makes it easier to interact with the editor.
 
-<b>Fell free to extend this plugin by your needs!</b>
+<b>Feel free to extend this plugin by your needs!</b>
 
 ---
 
