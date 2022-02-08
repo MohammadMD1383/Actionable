@@ -20,10 +20,34 @@ import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAct
 import static ir.mmd.intellijDev.Actionable.find.Actions.getWordBoundaries;
 import static ir.mmd.intellijDev.Actionable.util.Utility.copyToClipboard;
 
+/**
+ * This class contains implementation for these actions:
+ * <ul>
+ *     <li>{@link CopyElementAtCaret}</li>
+ *     <li>{@link CutElementAtCaret}</li>
+ *     <li>{@link CopyWordAtCaret}</li>
+ *     <li>{@link CutWordAtCaret}</li>
+ *     <li>{@link SetElementCopyPasteOffset}</li>
+ *     <li>{@link SetElementCutPasteOffset}</li>
+ *     <li>{@link SetWordCopyPasteOffset}</li>
+ *     <li>{@link SetWordCutPasteOffset}</li>
+ * </ul>
+ */
 public class Actions {
 	public static final Key<String> scheduledPasteActionKind = new Key<>("scheduledPasteAction.kink");
 	public static final Key<Integer> scheduledPasteActionOffset = new Key<>("scheduledPasteAction.offset");
 	
+	/**
+	 * implementation of:
+	 * <ul>
+	 *     <li>{@link CopyElementAtCaret}</li>
+	 *     <li>{@link CutElementAtCaret}</li>
+	 * </ul>
+	 *
+	 * @param e             instance of {@link AnActionEvent}
+	 * @param deleteElement if true, element will be deleted after being copied,
+	 *                      in other words it cuts the element
+	 */
 	public static void copyElementAtCaret(
 		@NotNull AnActionEvent e,
 		boolean deleteElement
@@ -38,6 +62,17 @@ public class Actions {
 		if (deleteElement) runWriteCommandAction(project, element::delete);
 	}
 	
+	/**
+	 * implementation of:
+	 * <ul>
+	 *     <li>{@link CopyWordAtCaret}</li>
+	 *     <li>{@link CutWordAtCaret}</li>
+	 * </ul>
+	 *
+	 * @param e          instance of {@link AnActionEvent}
+	 * @param deleteWord if true, word will be deleted after being copied,
+	 *                   in other words it cuts the word
+	 */
 	public static void copyWordAtCaret(
 		@NotNull AnActionEvent e,
 		boolean deleteWord
@@ -55,6 +90,18 @@ public class Actions {
 		}
 	}
 	
+	/**
+	 * implementation of:
+	 * <ul>
+	 *     <li>{@link SetElementCopyPasteOffset}</li>
+	 *     <li>{@link SetElementCutPasteOffset}</li>
+	 *     <li>{@link SetWordCopyPasteOffset}</li>
+	 *     <li>{@link SetWordCutPasteOffset}</li>
+	 * </ul>
+	 *
+	 * @param e          instance of {@link AnActionEvent}
+	 * @param actionName the action command; see usages for more info
+	 */
 	@SuppressWarnings("ConstantConditions")
 	public static void setPasteOffset(
 		@NotNull AnActionEvent e,
@@ -81,6 +128,14 @@ public class Actions {
 		project.putUserData(scheduledPasteActionOffset, caret.getOffset());
 	}
 	
+	/**
+	 * returns the {@link PsiElement} located at caret
+	 *
+	 * @param project  instance of current {@link Project}
+	 * @param document instance of the {@link Document}
+	 * @param caret    the {@link Caret} to find the element at
+	 * @return the element located at the specified {@link Caret}
+	 */
 	@SuppressWarnings("ConstantConditions")
 	public static PsiElement getElementAtCaret(
 		Project project,
@@ -92,6 +147,15 @@ public class Actions {
 		return PsiManager.getInstance(project).findFile(file).findElementAt(caretOffset);
 	}
 	
+	/**
+	 * returns the word located at the caret
+	 *
+	 * @param document instance of the {@link Document}
+	 * @param caret    the {@link Caret} to find the word at
+	 * @param wb       [optional] array of two elements that will be filled with the word boundaries
+	 *                 found at the caret
+	 * @return a string containing the word
+	 */
 	@SuppressWarnings("ConstantConditions")
 	public static @Nullable String getWordAtCaret(
 		@NotNull Document document,
@@ -106,6 +170,7 @@ public class Actions {
 		final int[] wordBoundaries = getWordBoundaries(cutil, wordSeparators, hardStopCharacters);
 		
 		if (wordBoundaries[0] != wordBoundaries[1]) {
+			/* check if the caller wants the word boundaries */
 			if (wb != null) {
 				wb[0] = wordBoundaries[0];
 				wb[1] = wordBoundaries[1];

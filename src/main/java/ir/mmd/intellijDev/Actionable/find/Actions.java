@@ -56,12 +56,14 @@ public class Actions {
 			final CaretMovementUtil cutil = new CaretMovementUtil(document, caret);
 			final int[] wordBoundaries = getWordBoundaries(cutil, wordSeparators, hardStopCharacters);
 			
-			// wordBoundaries[0]: startOffset & wordBoundaries[1]: endOffset
-			// startOffset == endOffset : there is no word around caret
+			/*
+			  wordBoundaries[0]: startOffset & wordBoundaries[1]: endOffset
+			  startOffset == endOffset : there is no word around caret
+			*/
 			if (wordBoundaries[0] != wordBoundaries[1]) {
-				final Character endChar = cutil.peek(0);
-				final int addition = !wordSeparators.contains(endChar.toString()) ? +1 : 0;
-				caret.setSelection(wordBoundaries[0], wordBoundaries[1] + addition);
+				// final Character endChar = cutil.peek(0);
+				// final int addition = !wordSeparators.contains(endChar.toString()) ? +1 : 0;
+				caret.setSelection(wordBoundaries[0], wordBoundaries[1] /*+ addition*/);
 			}
 			return;
 		}
@@ -85,6 +87,14 @@ public class Actions {
 		}
 	}
 	
+	/**
+	 * returns the start and end offset of the word which is located at the specified caret (aka: word boundaries)
+	 *
+	 * @param cutil          instance of {@link CaretMovementUtil} containing the specified caret
+	 * @param wordSeparators a string containing the word separators
+	 * @param hardStops      a string containing the hard stop word separators
+	 * @return an <code>int[2]</code> containing the boundaries
+	 */
 	public static int @NotNull [] getWordBoundaries(
 		@NotNull CaretMovementUtil cutil,
 		@NotNull String wordSeparators,

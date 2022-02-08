@@ -13,10 +13,16 @@ import org.jetbrains.annotations.Nullable;
 	storages = @Storage("Actionable.FindSettingsState.xml")
 )
 public class SettingsState implements PersistentStateComponent<SettingsState> {
+	/**
+	 * This class contains the default values for the settings
+	 */
 	public static class Defaults {
 		public static final boolean IS_CASE_SENSITIVE = true;
 	}
 	
+	/**
+	 * see {@link UI} for more information
+	 */
 	public boolean isCaseSensitive = Defaults.IS_CASE_SENSITIVE;
 	
 	@SuppressWarnings("deprecation")

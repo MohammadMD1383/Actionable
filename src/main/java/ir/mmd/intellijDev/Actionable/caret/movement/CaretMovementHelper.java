@@ -81,6 +81,10 @@ public class CaretMovementHelper {
 		*/
 		final Character startingChar = cutil.peek(dir == FORWARD ? 0 : -1);
 		if (startingChar == null) return;
+		
+		/*
+		  hard stop if caret reached one of hard stop characters
+		*/
 		if (hardStops.contains(startingChar.toString())) {
 			if (dir == BACKWARD) cutil.go(-1);
 			return;

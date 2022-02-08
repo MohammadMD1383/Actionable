@@ -27,6 +27,11 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>2.1.0:</b><br>
+				<b>Now plugins supports IntelliJ since 2017.1</b><br>
+				Added configuration for hard stop word separators.<br>
+				visit settings page of the plugin for more info. <code>Settings > tools > Actionable > Caret Movement</code>
+			</li>
 			<li><b>2.0.0:</b><br>
 				<b>Now plugins supports IntelliJ since 2019.1.4</b><br>
 				Added configuration for find actions<br>
