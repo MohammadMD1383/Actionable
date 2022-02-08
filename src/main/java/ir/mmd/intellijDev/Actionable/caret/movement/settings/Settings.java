@@ -30,16 +30,19 @@ public class Settings implements Configurable {
 		
 		boolean modified = !ui.getWordSeparators().equals(settingsState.wordSeparators);
 		modified |= ui.getWordSeparatorsBehaviour() != settingsState.wordSeparatorsBehaviour;
+		modified |= !ui.getHardStopCharacters().equals(settingsState.hardStopCharacters);
 		return modified;
 	}
 	
 	@Override
 	public void apply() throws ConfigurationException {
 		validateWordSeparators();
+		validateHardStopCharacter();
 		final SettingsState settingsState = SettingsState.getInstance();
 		
 		settingsState.wordSeparators = ui.getWordSeparators();
 		settingsState.wordSeparatorsBehaviour = ui.getWordSeparatorsBehaviour();
+		settingsState.hardStopCharacters = ui.getHardStopCharacters();
 	}
 	
 	@Override
@@ -48,6 +51,7 @@ public class Settings implements Configurable {
 		
 		ui.setWordSeparators(settingsState.wordSeparators);
 		ui.setWordSeparatorsBehaviour(settingsState.wordSeparatorsBehaviour);
+		ui.setHardStopCharacters(settingsState.hardStopCharacters);
 	}
 	
 	@Override
@@ -66,5 +70,17 @@ public class Settings implements Configurable {
 		
 		if (ws.length() != ws.chars().distinct().count())
 			throw new ConfigurationException("Word Separators must contain distinct characters");
+	}
+	
+	/**
+	 * validates the {@link SettingsState#hardStopCharacters} before saving it
+	 *
+	 * @throws ConfigurationException if required conditions for {@link SettingsState#hardStopCharacters} is not met
+	 */
+	private void validateHardStopCharacter() throws ConfigurationException {
+		final String hs = ui.getHardStopCharacters();
+		
+		if (hs.length() != hs.chars().distinct().count())
+			throw new ConfigurationException("Hard stop characters must contain distinct characters");
 	}
 }

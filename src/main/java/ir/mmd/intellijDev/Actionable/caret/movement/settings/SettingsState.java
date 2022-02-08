@@ -30,8 +30,9 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	 * this class holds default values for settings
 	 */
 	public static class Defaults {
-		public static final @NotNull String wordSeparators = "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/? \n\t";
+		public static final @NotNull String wordSeparators = "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?\n\t";
 		public static final int wordSeparatorsBehaviour = WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE;
+		public static final String hardStopSeparators = " ";
 	}
 	
 	/**
@@ -43,6 +44,11 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	 * see {@link UI} for detailed description
 	 */
 	public int wordSeparatorsBehaviour = Defaults.wordSeparatorsBehaviour;
+	
+	/**
+	 * see {@link UI} for detailed description
+	 */
+	public String hardStopCharacters = Defaults.hardStopSeparators;
 	
 	@SuppressWarnings("deprecation")
 	public static SettingsState getInstance() { return ServiceManager.getService(SettingsState.class); }

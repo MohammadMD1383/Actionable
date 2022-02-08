@@ -1,7 +1,10 @@
 package ir.mmd.intellijDev.Actionable.util;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.util.List;
 
 /**
@@ -43,4 +46,20 @@ public class Utility {
 	 * @throws IndexOutOfBoundsException if the list is empty
 	 */
 	public static <E> E last(@NotNull List<E> list) { return list.get(list.size() - 1); }
+	
+	/**
+	 * safely returns {@link Character} from {@link CharSequence} or <code>null</code> if given index is out of bounds.
+	 *
+	 * @param charSequence the array to get from
+	 * @param i            index
+	 * @return {@link Character} or <code>null</code> if index is out of bounds
+	 */
+	public static @Nullable Character safeGet(CharSequence charSequence, int i) { return 0 <= i && i < charSequence.length() ? charSequence.charAt(i) : null; }
+	
+	/**
+	 * copies the given string to system clipboard
+	 *
+	 * @param s the string to be copied
+	 */
+	public static void copyToClipboard(String s) { Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(s), null); }
 }

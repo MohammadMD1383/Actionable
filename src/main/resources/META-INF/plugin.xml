@@ -127,6 +127,18 @@
 				<separator/>
 				
 				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaret"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaret"
+					text="Copy Word At Caret"
+					description="Copies the Word at the caret"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaret"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaret"
+					text="Cut Word At Caret"
+					description="Cuts the Word at the caret"/>
+				
+				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.CopyElementAtCaret"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.CopyElementAtCaret"
 					text="Copy Element At Caret"
@@ -137,6 +149,46 @@
 					id="ir.mmd.intellijDev.Actionable.caret.editing.CutElementAtCaret"
 					text="Cut Element At Caret"
 					description="Cuts the element at the caret"/>
+				
+				<!--————————————————————————————————————————————————————————————————————————-->
+				
+				<!--<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.SetWordCopyPasteOffset"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.SetWordCopyPasteOffset"
+					text="Set Copy-Paste Word Offset At Caret"
+					description="Please refer to documentation on github repo"/>-->
+				
+				<!--
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.SetWordCutPasteOffset"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.SetWordCutPasteOffset"
+					text="Set Cut-Paste Word Offset At Caret"
+					description="Please refer to documentation on github repo"/>
+				-->
+				
+				<!--
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.SetElementCopyPasteOffset"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.SetElementCopyPasteOffset"
+					text="Set Copy-Paste Element Offset At Caret"
+					description="Please refer to documentation on github repo"/>
+				-->
+				
+				<!--
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.SetElementCutPasteOffset"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.SetElementCutPasteOffset"
+					text="Set Cut-Paste Element Offset At Caret"
+					description="Please refer to documentation on github repo"/>
+				-->
+				
+				<!--
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.ExecutePasteAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.ExecutePasteAction"
+					text="Execute Paste"
+					description="Please refer to documentation on github repo"/>
+				-->
 				
 				<separator/>
 				

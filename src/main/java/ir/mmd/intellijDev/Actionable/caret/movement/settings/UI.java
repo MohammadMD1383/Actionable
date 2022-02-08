@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import static com.intellij.icons.AllIcons.General.Mouse;
+
 public class UI {
 	private JPanel component;
 	private JTextField wordSeparatorsField;
@@ -16,10 +18,12 @@ public class UI {
 	private JRadioButton stopAtNextSameCharacterTypeRadioButton;
 	private JButton wordSeparatorsFieldDefault;
 	private JButton wordSeparatorsBehaviourDefault;
+	private JTextField hardStopCharactersField;
+	private JButton hardStopCharactersDefault;
+	private JCheckBox hardStopCharactersIncludeNewLine;
+	private JCheckBox hardStopCharactersIncludeTab;
 	
-	public UI() {
-		initListeners();
-	}
+	public UI() { initListeners(); }
 	
 	private void initListeners() {
 		wordSeparatorsFieldDefault.addMouseListener(new MouseAdapter() {
@@ -33,6 +37,13 @@ public class UI {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				UI.this.setWordSeparatorsBehaviour(SettingsState.Defaults.wordSeparatorsBehaviour);
+			}
+		});
+		
+		hardStopCharactersDefault.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				UI.this.setHardStopCharacters(SettingsState.Defaults.hardStopSeparators);
 			}
 		});
 	}
@@ -62,5 +73,20 @@ public class UI {
 				stopAtNextSameCharacterTypeRadioButton.getModel(),
 			true
 		);
+	}
+	
+	public String getHardStopCharacters() {
+		String hs = hardStopCharactersField.getText();
+		if (hardStopCharactersIncludeNewLine.isSelected()) hs += "\n";
+		if (hardStopCharactersIncludeTab.isSelected()) hs += "\t";
+		return hs;
+	}
+	public void setHardStopCharacters(@NotNull String s) {
+		final boolean newLine = s.contains("\n");
+		final boolean tab = s.contains("\t");
+		
+		hardStopCharactersField.setText(s.replaceAll("[\n\t]", ""));
+		hardStopCharactersIncludeNewLine.setSelected(newLine);
+		hardStopCharactersIncludeTab.setSelected(tab);
 	}
 }

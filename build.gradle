@@ -12,6 +12,11 @@ targetCompatibility = 8
 jar {
 	exclude(
 		'ir/mmd/intellijDev/Actionable/selection/',
+		'ir/mmd/intellijDev/Actionable/caret/editing/SetElementCopyPasteOffset.class',
+		'ir/mmd/intellijDev/Actionable/caret/editing/SetElementCutPasteOffset.class',
+		'ir/mmd/intellijDev/Actionable/caret/editing/SetWordCopyPasteOffset.class',
+		'ir/mmd/intellijDev/Actionable/caret/editing/SetWordCutPasteOffset.class',
+		'ir/mmd/intellijDev/Actionable/caret/editing/ExecutePasteAction.class',
 		'com/'
 	)
 }
@@ -38,8 +43,8 @@ runIde {
 
 patchPluginXml {
 	version = project.version
-	sinceBuild = '191'
-	untilBuild = ''
+	sinceBuild = '171'
+	untilBuild = '' // to be always the latest version
 }
 
 buildSearchableOptions {

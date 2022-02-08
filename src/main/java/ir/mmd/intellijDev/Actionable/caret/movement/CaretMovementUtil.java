@@ -35,6 +35,7 @@ public class CaretMovementUtil {
 	public void reset(int offset) { if (caret.isValid()) caretOffset = caret.getOffset() + offset; }
 	
 	public int getOffset() { return caretOffset; }
+	public void setOffset(int offset) { caretOffset = offset; }
 	
 	/**
 	 * peeks and returns the character at the given offset from current {@link CaretMovementUtil#caretOffset}

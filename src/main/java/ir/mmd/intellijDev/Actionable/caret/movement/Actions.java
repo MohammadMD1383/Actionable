@@ -34,7 +34,7 @@ public class Actions {
 	 * </ul>
 	 *
 	 * @param e   event of mentioned actions
-	 * @param dir see {@link CaretMovementHelper#moveCaret(CaretMovementUtil, String, int, int)}
+	 * @param dir see {@link CaretMovementHelper#moveCaret(CaretMovementUtil, String, String, int, int)}
 	 */
 	public static void moveCaret(
 		@NotNull AnActionEvent e,
@@ -44,6 +44,7 @@ public class Actions {
 		final Document document = editor.getDocument();
 		final SettingsState settingsState = SettingsState.getInstance();
 		final String wordSeparators = settingsState.wordSeparators;
+		final String hardStopCharacters = settingsState.hardStopCharacters;
 		
 		for (Caret caret : editor.getCaretModel().getAllCarets()) {
 			// if we omit this, when caret has selection, and we move it, the selection won't be cleared automatically.
@@ -53,6 +54,7 @@ public class Actions {
 			CaretMovementHelper.moveCaret(
 				cutil,
 				wordSeparators,
+				hardStopCharacters,
 				settingsState.wordSeparatorsBehaviour,
 				dir
 			);
@@ -73,7 +75,7 @@ public class Actions {
 	 * </ul>
 	 *
 	 * @param e   event of mentioned actions
-	 * @param dir see {@link CaretMovementHelper#moveCaret(CaretMovementUtil, String, int, int)}
+	 * @param dir see {@link CaretMovementHelper#moveCaret(CaretMovementUtil, String, String, int, int)}
 	 */
 	public static void moveCaretWithSelection(
 		@NotNull AnActionEvent e,
@@ -83,6 +85,7 @@ public class Actions {
 		final Document document = editor.getDocument();
 		final SettingsState settingsState = SettingsState.getInstance();
 		final String wordSeparators = settingsState.wordSeparators;
+		final String hardStopCharacters = settingsState.hardStopCharacters;
 		
 		final List<Caret> carets = editor.getCaretModel().getAllCarets();
 		final List<Integer> selectionStarts = carets.stream().map(Caret::getLeadSelectionOffset).collect(Collectors.toList());
@@ -99,6 +102,7 @@ public class Actions {
 			CaretMovementHelper.moveCaret(
 				cutil,
 				wordSeparators,
+				hardStopCharacters,
 				settingsState.wordSeparatorsBehaviour,
 				dir
 			);

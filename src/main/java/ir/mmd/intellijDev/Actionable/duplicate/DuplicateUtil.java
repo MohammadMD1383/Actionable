@@ -1,10 +1,11 @@
 package ir.mmd.intellijDev.Actionable.duplicate;
 
-import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import org.jetbrains.annotations.NotNull;
+
+import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
 
 /**
  * This class is used to duplicate line(s) in the editor
@@ -43,7 +44,7 @@ class DuplicateUtil {
 	) {
 		final DuplicateString duplicateString = getDuplicateString(start, end);
 		
-		WriteCommandAction.runWriteCommandAction(project, () ->
+		runWriteCommandAction(project, () ->
 			document.insertString(duplicateString.lineEndOffset, '\n' + duplicateString.text)
 		);
 	}
@@ -57,7 +58,7 @@ class DuplicateUtil {
 	) {
 		final DuplicateString duplicateString = getDuplicateString(start, end);
 		
-		WriteCommandAction.runWriteCommandAction(project, () -> {
+		runWriteCommandAction(project, () -> {
 			document.insertString(duplicateString.lineStartOffset, duplicateString.text + '\n');
 			
 			// check if the caret is at line start,

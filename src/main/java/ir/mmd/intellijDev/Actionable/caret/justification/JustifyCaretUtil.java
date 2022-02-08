@@ -1,6 +1,5 @@
 package ir.mmd.intellijDev.Actionable.caret.justification;
 
-import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.CaretState;
 import com.intellij.openapi.editor.Editor;
@@ -10,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
 
 /**
  * This class is used to manipulate editor carets
@@ -85,7 +86,7 @@ class JustifyCaretUtil {
 		List<Caret> carets,
 		int targetColumn
 	) {
-		WriteCommandAction.runWriteCommandAction(project, () -> {
+		runWriteCommandAction(project, () -> {
 			for (Caret caret : carets) {
 				final int currentLine = caret.getLogicalPosition().line;
 				caret.moveToLogicalPosition(
