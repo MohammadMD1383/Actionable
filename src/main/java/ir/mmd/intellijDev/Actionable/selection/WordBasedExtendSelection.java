@@ -13,8 +13,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.*;
-import static ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE;
 import static ir.mmd.intellijDev.Actionable.util.Utility.safeGet;
 
 public class WordBasedExtendSelection extends AnAction {

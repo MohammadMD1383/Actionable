@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'ir.mmd.intellijDev'
-version '2.1.0'
+version '2.2.0'
 
 sourceCompatibility = 8
 targetCompatibility = 8
@@ -12,11 +12,6 @@ targetCompatibility = 8
 jar {
 	exclude(
 		'ir/mmd/intellijDev/Actionable/selection/',
-		'ir/mmd/intellijDev/Actionable/caret/editing/SetElementCopyPasteOffset.class',
-		'ir/mmd/intellijDev/Actionable/caret/editing/SetElementCutPasteOffset.class',
-		'ir/mmd/intellijDev/Actionable/caret/editing/SetWordCopyPasteOffset.class',
-		'ir/mmd/intellijDev/Actionable/caret/editing/SetWordCutPasteOffset.class',
-		'ir/mmd/intellijDev/Actionable/caret/editing/ExecutePasteAction.class',
 		'com/'
 	)
 }

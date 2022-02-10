@@ -6,8 +6,6 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static com.intellij.icons.AllIcons.General.Mouse;
-
 public class UI {
 	private JPanel component;
 	private JTextField wordSeparatorsField;

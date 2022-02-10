@@ -55,8 +55,8 @@ public class Actions {
 		final Project project = e.getProject();
 		final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		final Document document = editor.getDocument();
-		final Caret care = editor.getCaretModel().getPrimaryCaret();
-		final PsiElement element = getElementAtCaret(project, document, care);
+		final Caret caret = editor.getCaretModel().getPrimaryCaret();
+		final PsiElement element = getElementAtCaret(project, document, caret);
 		
 		copyToClipboard(element.getText());
 		if (deleteElement) runWriteCommandAction(project, element::delete);
@@ -154,7 +154,7 @@ public class Actions {
 	 * @param caret    the {@link Caret} to find the word at
 	 * @param wb       [optional] array of two elements that will be filled with the word boundaries
 	 *                 found at the caret
-	 * @return a string containing the word
+	 * @return a string containing the word or null if the word is not matched
 	 */
 	@SuppressWarnings("ConstantConditions")
 	public static @Nullable String getWordAtCaret(
