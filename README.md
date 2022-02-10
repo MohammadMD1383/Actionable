@@ -4,6 +4,8 @@ This plugin adds some extra functionality that makes it easier to interact with 
 
 <b>Feel free to extend this plugin by your needs!</b>
 
+Already familiar with the plugin actions? see [How does it work](#how-does-it-work)
+
 ---
 
 ## Features
@@ -33,8 +35,8 @@ This plugin adds some extra functionality that makes it easier to interact with 
   > String s2 = |new String();
   > ```
 
-* Copy/Cut element at caret
-  > these actions will copy/cut the element<sup>*</sup> at the caret.<br/>
+* Copy/Cut word/element at caret
+  > these actions will copy/cut the word/element<sup>*</sup> at the caret.<br/>
   > **Note:** works when there is **only one caret**
   >
   > <small>*: e.g. a string literal is an element, a key word is an element, etc. Actually a <u>psi element</u>.</small>
@@ -44,8 +46,25 @@ This plugin adds some extra functionality that makes it easier to interact with 
 
 * Add selection to next/previous occurrence
   > Like the one that IDE has, but note that intelliJ platform only supports add selection for **next occurrence**;
-  > but this plugin offers both **next/previous** occurrence finding. 
+  > but this plugin offers both **next/previous** occurrence finding.
   > _<small>will be configurable in future releases.</small>_
+
+* Set copy/cut paste word/element offset + Execute paste
+  > By executing the mentioned actions, you will set the paste location in your **project**, which will be later used to
+  > paste the clicked word/element.
+  >
+  > Let's make it clearer by an example: _(pipe sign indicates the caret position)_
+  > ```js
+  > document.write("Hello, world! |");
+  > ```
+  > then you execute the set `set copy-paste word offset` action;<br>
+  > now you click on the word `document`, the result will be as follows:
+  > ```js
+  > document.write("Hello, world! document|");
+  > ```
+  >
+  > In this example, I used the `mouse left click` keybinding for the `Execute paste` action.<br>
+  > I recommend using this keybinding if possible.<br>
 
 ## How does it work?
 

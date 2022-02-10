@@ -12,6 +12,8 @@
 			<li>Duplicate line(s) down - (VSCode like)</li>
 			<li>Justify carets start</li>
 			<li>Justify carets end</li>
+			<li>Copy word at caret</li>
+			<li>Cut word at caret</li>
 			<li>Copy element at caret</li>
 			<li>Cut element at caret</li>
 			<li>Move caret to next word</li>
