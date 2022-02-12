@@ -11,7 +11,10 @@ import ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementUtil;
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState;
 import org.jetbrains.annotations.NotNull;
 
-import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.*;
+import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.BACKWARD;
+import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.FORWARD;
+import static ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.goUntilReached;
+import static ir.mmd.intellijDev.Actionable.caret.movement.OffsetMovementUtil.goUntilReached;
 import static ir.mmd.intellijDev.Actionable.util.Utility.first;
 import static ir.mmd.intellijDev.Actionable.util.Utility.last;
 
@@ -114,6 +117,26 @@ public class Actions {
 		cutil.go(+1); // because of the `-1` at upper statement
 		final int endOffset = cutil.getOffset();
 		
+		return new int[]{startOffset, endOffset};
+	}
+	
+	/**
+	 * returns the start and end offset of the word which is located at the specified offset in the given document (aka: word boundaries)
+	 *
+	 * @param document       instance of {@link Document}
+	 * @param wordSeparators a string containing the word separators
+	 * @param hardStops      a string containing the hard stop word separators
+	 * @param offset         the offset in the document to find word boundaries at
+	 * @return word boundaries or null if not found
+	 */
+	public static int @NotNull [] getWordBoundaries(
+		@NotNull Document document,
+		@NotNull String wordSeparators,
+		@NotNull String hardStops,
+		int offset
+	) {
+		final int startOffset = goUntilReached(document, wordSeparators, hardStops, offset, BACKWARD);
+		final int endOffset = goUntilReached(document, wordSeparators, hardStops, offset - 1, FORWARD) + 1;
 		return new int[]{startOffset, endOffset};
 	}
 }

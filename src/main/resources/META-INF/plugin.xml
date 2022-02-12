@@ -34,6 +34,11 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>2.2.1:</b><br>
+				Added highlighter hinting for set copy/cut-paste word/element offset<br>
+				Added configuration for the above<br>
+				renewed plugin settings categories
+			</li>
 			<li><b>2.2.0:</b><br>
 				Added set copy/cut-paste word/element offset at caret actions.<br>
 				visit repository home page for detailed information about how these actions work.
@@ -76,6 +81,8 @@
 			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState"/>
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.find.settings.SettingsState"/>
+		<applicationService
+			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState"/>
 		
 		<applicationConfigurable
 			parentId="tools"
@@ -84,9 +91,20 @@
 			displayName="Actionable">
 			
 			<configurable
-				id="ir.mmd.intellijDev.Actionable.caret.movement.settings.Settings"
-				instance="ir.mmd.intellijDev.Actionable.caret.movement.settings.Settings"
-				displayName="Caret Movement"/>
+				id="ir.mmd.intellijDev.Actionable.caret.settings.Settings"
+				instance="ir.mmd.intellijDev.Actionable.caret.settings.Settings"
+				displayName="Caret">
+				
+				<configurable
+					id="ir.mmd.intellijDev.Actionable.caret.movement.settings.Settings"
+					instance="ir.mmd.intellijDev.Actionable.caret.movement.settings.Settings"
+					displayName="Movement"/>
+				
+				<configurable
+					id="ir.mmd.intellijDev.Actionable.caret.editing.settings.Settings"
+					instance="ir.mmd.intellijDev.Actionable.caret.editing.settings.Settings"
+					displayName="Editing"/>
+			</configurable>
 			
 			<configurable
 				id="ir.mmd.intellijDev.Actionable.find.settings.Settings"

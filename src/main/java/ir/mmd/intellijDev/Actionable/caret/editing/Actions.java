@@ -5,9 +5,17 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.colors.EditorColors;
+import com.intellij.openapi.editor.event.EditorMouseEvent;
+import com.intellij.openapi.editor.event.EditorMouseMotionListener;
+import com.intellij.openapi.editor.markup.HighlighterLayer;
+import com.intellij.openapi.editor.markup.HighlighterTargetArea;
+import com.intellij.openapi.editor.markup.MarkupModel;
+import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
@@ -17,8 +25,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
+import static ir.mmd.intellijDev.Actionable.caret.movement.OffsetMovementUtil.getCharAtOffset;
 import static ir.mmd.intellijDev.Actionable.find.Actions.getWordBoundaries;
-import static ir.mmd.intellijDev.Actionable.util.Utility.copyToClipboard;
+import static ir.mmd.intellijDev.Actionable.util.Utility.*;
 
 /**
  * This class contains implementation for these actions:
@@ -36,6 +45,7 @@ import static ir.mmd.intellijDev.Actionable.util.Utility.copyToClipboard;
 public class Actions {
 	public static final Key<String> scheduledPasteActionKind = new Key<>("scheduledPasteAction.kink");
 	public static final Key<Integer> scheduledPasteActionOffset = new Key<>("scheduledPasteAction.offset");
+	public static final Key<RangeHighlighter> previousHighlighterKey = new Key<>("scheduledPasteAction.motionListener");
 	
 	/**
 	 * implementation of:
@@ -107,25 +117,108 @@ public class Actions {
 		@NotNull AnActionEvent e,
 		@NotNull String actionName
 	) {
-		final Project project = e.getProject();
 		final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
 		final Caret caret = editor.getCaretModel().getPrimaryCaret();
-		final String kind = project.getUserData(scheduledPasteActionKind);
-		final Integer offset = project.getUserData(scheduledPasteActionOffset);
+		final boolean showPasteActionHints = ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState.getInstance().showPasteActionHints;
+		final String kind = editor.getUserData(scheduledPasteActionKind);
+		final Integer offset = editor.getUserData(scheduledPasteActionOffset);
 		
 		// this also ensures not null
 		if (actionName.equals(kind)) {
 			if (offset == caret.getOffset()) {
-				project.putUserData(scheduledPasteActionKind, null);
-				project.putUserData(scheduledPasteActionOffset, null);
+				removeScheduledPasteAction(editor);
 			} else /* offset != caret.getOffset() */ {
-				project.putUserData(scheduledPasteActionOffset, caret.getOffset());
+				editor.putUserData(scheduledPasteActionOffset, caret.getOffset());
 			}
 			return;
 		}
 		
-		project.putUserData(scheduledPasteActionKind, actionName);
-		project.putUserData(scheduledPasteActionOffset, caret.getOffset());
+		editor.putUserData(scheduledPasteActionKind, actionName);
+		editor.putUserData(scheduledPasteActionOffset, caret.getOffset());
+		if (showPasteActionHints) editor.addEditorMouseMotionListener(motionListener);
+	}
+	
+	/**
+	 * removes the <code>scheduledPasteAction</code> from the given editor
+	 *
+	 * @param editor the editor to remove paste action from
+	 */
+	public static void removeScheduledPasteAction(@NotNull Editor editor) {
+		if (ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState.getInstance().showPasteActionHints) {
+			editor.removeEditorMouseMotionListener(motionListener);
+			final RangeHighlighter rangeHighlighter = editor.getUserData(previousHighlighterKey);
+			if (rangeHighlighter != null) editor.getMarkupModel().removeHighlighter(rangeHighlighter);
+			editor.putUserData(previousHighlighterKey, null);
+		}
+		
+		editor.putUserData(scheduledPasteActionKind, null);
+		editor.putUserData(scheduledPasteActionOffset, null);
+	}
+	
+	/**
+	 * this is used to highlight the word/element which is under the caret when there is an active <code>scheduledPasteAction</code>
+	 */
+	public static final EditorMouseMotionListener motionListener = new EditorMouseMotionListener() {
+		@Override
+		@SuppressWarnings("ConstantConditions")
+		public void mouseMoved(@NotNull EditorMouseEvent e) {
+			final Editor editor = e.getEditor();
+			final RangeHighlighter previousHighlighter = editor.getUserData(previousHighlighterKey);
+			final int offset = e.getOffset();
+			
+			if (previousHighlighter == null || !inRange(offset, previousHighlighter.getStartOffset(), previousHighlighter.getEndOffset())) {
+				final Project project = editor.getProject();
+				final Document document = editor.getDocument();
+				final MarkupModel markupModel = editor.getMarkupModel();
+				final String pasteKind = editor.getUserData(scheduledPasteActionKind);
+				final boolean isElementTarget = pasteKind.split(";")[0].equals("el");
+				final int startOffset, endOffset;
+				
+				if (isElementTarget) {
+					final PsiElement element = getElementAtOffset(project, document, offset);
+					if (element == null || element.getText().trim().equals("")) {
+						startOffset = 0;
+						endOffset = 0;
+					} else {
+						final TextRange elementRange = element.getTextRange();
+						startOffset = elementRange.getStartOffset();
+						endOffset = elementRange.getEndOffset();
+					}
+				} else /* isWordTarget */ {
+					final int[] wordBoundaries = new int[2];
+					getWordAtOffset(document, offset, wordBoundaries);
+					startOffset = wordBoundaries[0];
+					endOffset = wordBoundaries[1];
+				}
+				
+				if (previousHighlighter != null) markupModel.removeHighlighter(previousHighlighter);
+				editor.putUserData(previousHighlighterKey, markupModel.addRangeHighlighter(
+					EditorColors.IDENTIFIER_UNDER_CARET_ATTRIBUTES,
+					startOffset,
+					endOffset,
+					HighlighterLayer.LAST + 10,
+					HighlighterTargetArea.EXACT_RANGE
+				));
+			}
+		}
+	};
+	
+	/**
+	 * returns the {@link PsiElement} at the given offset in the given {@link Document}
+	 *
+	 * @param project  instance of {@link Project}
+	 * @param document instance of {@link Document}
+	 * @param offset   offset in the document to find element at
+	 * @return the element
+	 */
+	@SuppressWarnings("ConstantConditions")
+	public static @Nullable PsiElement getElementAtOffset(
+		@NotNull Project project,
+		@NotNull Document document,
+		int offset
+	) {
+		final VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+		return PsiManager.getInstance(project).findFile(file).findElementAt(offset);
 	}
 	
 	/**
@@ -136,15 +229,42 @@ public class Actions {
 	 * @param caret    the {@link Caret} to find the element at
 	 * @return the element located at the specified {@link Caret}
 	 */
-	@SuppressWarnings("ConstantConditions")
 	public static PsiElement getElementAtCaret(
 		Project project,
 		@NotNull Document document,
 		@NotNull Caret caret
+	) { return getElementAtOffset(project, document, caret.getOffset()); }
+	
+	/**
+	 * returns the word at the specified offset in the given document
+	 *
+	 * @param document instance of {@link Document}
+	 * @param offset   offset in the document to find word at
+	 * @param wb       [optional] an int[2] to revive word boundaries
+	 * @return the word
+	 */
+	@SuppressWarnings("ConstantConditions")
+	public static @Nullable String getWordAtOffset(
+		@NotNull Document document,
+		int offset,
+		int @Nullable [] wb
 	) {
-		final VirtualFile file = FileDocumentManager.getInstance().getFile(document);
-		final int caretOffset = caret.getOffset();
-		return PsiManager.getInstance(project).findFile(file).findElementAt(caretOffset);
+		final CharSequence documentChars = document.getCharsSequence();
+		final SettingsState settingsState = SettingsState.getInstance();
+		final String wordSeparators = settingsState.wordSeparators;
+		final String hardStopCharacters = settingsState.hardStopCharacters;
+		final int[] wordBoundaries = getWordBoundaries(document, wordSeparators, hardStopCharacters, offset);
+		
+		if (wordBoundaries[0] != wordBoundaries[1]) {
+			/* check if the caller wants the word boundaries */
+			if (wb != null) {
+				wb[0] = wordBoundaries[0];
+				wb[1] = wordBoundaries[1];
+			}
+			
+			final int addition = !isInCollection(getCharAtOffset(document, offset), wordSeparators, hardStopCharacters) ? +1 : 0;
+			return documentChars.subSequence(wordBoundaries[0], wordBoundaries[1] + addition).toString();
+		} else return null;
 	}
 	
 	/**
@@ -176,7 +296,7 @@ public class Actions {
 				wb[1] = wordBoundaries[1];
 			}
 			
-			final int addition = !wordSeparators.contains(cutil.peek(0).toString()) ? +1 : 0;
+			final int addition = !isInCollection(cutil.peek(0), wordSeparators, hardStopCharacters) ? +1 : 0;
 			return documentChars.subSequence(wordBoundaries[0], wordBoundaries[1] + addition).toString();
 		} else return null;
 	}

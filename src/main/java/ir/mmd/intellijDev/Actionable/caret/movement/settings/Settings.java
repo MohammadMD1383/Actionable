@@ -16,7 +16,7 @@ public class Settings implements Configurable {
 	private UI ui;
 	
 	@Override
-	public String getDisplayName() { return "Caret Movement"; }
+	public String getDisplayName() { return "Movement"; }
 	
 	@Override
 	public @Nullable JComponent createComponent() {

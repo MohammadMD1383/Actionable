@@ -62,4 +62,17 @@ public class Utility {
 	 * @param s the string to be copied
 	 */
 	public static void copyToClipboard(String s) { Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(s), null); }
+	
+	/**
+	 * check whether the given character is inside the specified strings or not
+	 *
+	 * @param ch   the character to check
+	 * @param strs the strings
+	 * @return true if found, false otherwise
+	 */
+	public static boolean isInCollection(@NotNull Character ch, String @NotNull ... strs) {
+		for (String str : strs)
+			if (str.contains(ch.toString())) return true;
+		return false;
+	}
 }
