@@ -164,7 +164,7 @@ public class Actions {
 		public void mouseMoved(@NotNull EditorMouseEvent e) {
 			final Editor editor = e.getEditor();
 			final RangeHighlighter previousHighlighter = editor.getUserData(previousHighlighterKey);
-			final int offset = e.getOffset();
+			final int offset = editor.logicalPositionToOffset(editor.xyToLogicalPosition(e.getMouseEvent().getPoint()));
 			
 			if (previousHighlighter == null || !inRange(offset, previousHighlighter.getStartOffset(), previousHighlighter.getEndOffset())) {
 				final Project project = editor.getProject();
@@ -193,14 +193,20 @@ public class Actions {
 				
 				if (previousHighlighter != null) markupModel.removeHighlighter(previousHighlighter);
 				editor.putUserData(previousHighlighterKey, markupModel.addRangeHighlighter(
-					EditorColors.IDENTIFIER_UNDER_CARET_ATTRIBUTES,
 					startOffset,
 					endOffset,
 					HighlighterLayer.LAST + 10,
+					EditorColors.IDENTIFIER_UNDER_CARET_ATTRIBUTES.getDefaultAttributes(),
 					HighlighterTargetArea.EXACT_RANGE
 				));
 			}
 		}
+		
+		/**
+		 * implemented to be compatible with earlier versions of the intellij idea
+		 */
+		@Override
+		public void mouseDragged(@NotNull EditorMouseEvent e) { }
 	};
 	
 	/**
