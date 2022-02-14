@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'ir.mmd.intellijDev'
-version '2.2.1'
+version '2.2.2'
 
 sourceCompatibility = 8
 targetCompatibility = 8
@@ -12,6 +12,7 @@ targetCompatibility = 8
 jar {
 	exclude(
 		'ir/mmd/intellijDev/Actionable/selection/',
+		'ir/mmd/intellijDev/Actionable/action/',
 		'com/'
 	)
 }

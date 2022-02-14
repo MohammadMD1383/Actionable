@@ -75,4 +75,17 @@ public class Utility {
 			if (str.contains(ch.toString())) return true;
 		return false;
 	}
+	
+	/**
+	 * repeats a string n times and returns it
+	 *
+	 * @param s     the string to repeat
+	 * @param count the times to repeat the given string
+	 * @return the new string repeated <code>count</code> times
+	 */
+	public static @NotNull String repeat(@NotNull String s, int count) {
+		StringBuilder str = new StringBuilder();
+		for (int i = 0; i < count; i++) str.append(s);
+		return str.toString();
+	}
 }

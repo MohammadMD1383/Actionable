@@ -34,6 +34,10 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>2.2.2:</b><br>
+				fixed invalid caret bug with justify carets actions<br>
+				improved functionality of justify carets end action
+			</li>
 			<li><b>2.2.1:</b><br>
 				Added highlighter hinting for set copy/cut-paste word/element offset<br>
 				Added configuration for the above<br>

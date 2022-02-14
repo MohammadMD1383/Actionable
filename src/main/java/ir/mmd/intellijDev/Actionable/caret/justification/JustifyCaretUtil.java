@@ -1,7 +1,7 @@
 package ir.mmd.intellijDev.Actionable.caret.justification;
 
 import com.intellij.openapi.editor.Caret;
-import com.intellij.openapi.editor.CaretState;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.project.Project;
@@ -11,15 +11,17 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
+import static ir.mmd.intellijDev.Actionable.util.Utility.repeat;
 
 /**
  * This class is used to manipulate editor carets
  */
 class JustifyCaretUtil {
-	private final @NotNull Editor editor;
 	private final @NotNull Project project;
+	private final @NotNull Editor editor;
+	private final @NotNull Document document;
 	
-	private List<CaretState> caretStates;
+	// private List<CaretState> caretStates;
 	
 	public JustifyCaretUtil(
 		@NotNull Project project,
@@ -27,22 +29,23 @@ class JustifyCaretUtil {
 	) {
 		this.editor = editor;
 		this.project = project;
+		this.document = editor.getDocument();
 	}
 	
-	/**
-	 * saves current {@link CaretState}s to restore later
-	 */
-	public void backupCarets() {
-		caretStates = editor.getCaretModel().getCaretsAndSelections();
-	}
+	// /**
+	//  * saves current {@link CaretState}s to restore later
+	//  */
+	// public void backupCarets() {
+	// 	caretStates = editor.getCaretModel().getCaretsAndSelections();
+	// }
 	
-	/**
-	 * restores {@link CaretState}s previously backed up by {@link JustifyCaretUtil#backupCarets()}
-	 */
-	public void restoreCarets() {
-		assert caretStates != null;
-		editor.getCaretModel().setCaretsAndSelections(caretStates);
-	}
+	// /**
+	//  * restores {@link CaretState}s previously backed up by {@link JustifyCaretUtil#backupCarets()}
+	//  */
+	// public void restoreCarets() {
+	// 	assert caretStates != null;
+	// 	editor.getCaretModel().setCaretsAndSelections(caretStates);
+	// }
 	
 	/**
 	 * moves all carets to leftmost active column between carets <br><br>
@@ -88,7 +91,15 @@ class JustifyCaretUtil {
 	) {
 		runWriteCommandAction(project, () -> {
 			for (Caret caret : carets) {
+				if (!caret.isValid()) continue;
+				
 				final int currentLine = caret.getLogicalPosition().line;
+				final int lineEndOffset = document.getLineEndOffset(currentLine);
+				final int lineLastColumn = editor.offsetToLogicalPosition(lineEndOffset).column;
+				
+				if (lineLastColumn < targetColumn)
+					document.insertString(lineEndOffset, repeat(" ", targetColumn - lineLastColumn));
+				
 				caret.moveToLogicalPosition(
 					new LogicalPosition(currentLine, targetColumn)
 				);

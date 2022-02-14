@@ -7,15 +7,11 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import static ir.mmd.intellijDev.Actionable.caret.justification.Actions.justifyCarets;
+
 public class JustifyCaretsStart extends AnAction {
 	@Override
-	public void actionPerformed(@NotNull AnActionEvent e) {
-		final Project project = e.getProject();
-		final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
-		
-		//noinspection ConstantConditions
-		new JustifyCaretUtil(project, editor).justifyCaretsStart();
-	}
+	public void actionPerformed(@NotNull AnActionEvent e) { justifyCarets(e, JustifyCaretUtil::justifyCaretsStart); }
 	
 	@Override
 	public void update(@NotNull AnActionEvent e) {

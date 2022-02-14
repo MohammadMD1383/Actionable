@@ -23,7 +23,7 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	 */
 	public static class WSBehaviour {
 		public static final int STOP_AT_CHAR_TYPE_CHANGE = 0;
-		public static final int STOP_AT_NEXT_SAME_CHAR_TYPE = 1;
+		// --Commented out by Inspection (2/14/22, 1:40 PM):public static final int STOP_AT_NEXT_SAME_CHAR_TYPE = 1;
 	}
 	
 	/**
