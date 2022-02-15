@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -115,8 +116,9 @@ class JustifyCaretUtil {
 	 * </pre>
 	 */
 	public void justifyCaretsEndWithShifting() {
-		final int targetColumn = getRightmostColumn();
+		if (hasMoreThanOneCaretOnOneLine()) return;
 		
+		final int targetColumn = getRightmostColumn();
 		runWriteCommandAction(project, () -> {
 			for (Caret caret : carets) {
 				final int diff = targetColumn - caret.getLogicalPosition().column;
@@ -128,10 +130,9 @@ class JustifyCaretUtil {
 	/**
 	 * returns all {@link LogicalPosition}s of given carets as a {@link Stream}
 	 *
-	 * @param carets list of all carets
 	 * @return stream of {@link LogicalPosition}s from given carets
 	 */
-	private Stream<LogicalPosition> getAllCaretPositionsStream(@NotNull List<Caret> carets) { return carets.stream().map(Caret::getLogicalPosition); }
+	private Stream<LogicalPosition> getAllCaretPositionsStream() { return carets.stream().map(Caret::getLogicalPosition); }
 	
 	/**
 	 * returns the leftmost column position among given carets <br>
@@ -141,7 +142,7 @@ class JustifyCaretUtil {
 	 */
 	private int getLeftmostColumn() {
 		//noinspection OptionalGetWithoutIsPresent
-		return getAllCaretPositionsStream(carets).mapToInt(position -> position.column).min().getAsInt();
+		return getAllCaretPositionsStream().mapToInt(position -> position.column).min().getAsInt();
 	}
 	
 	/**
@@ -151,6 +152,13 @@ class JustifyCaretUtil {
 	 */
 	private int getRightmostColumn() {
 		//noinspection OptionalGetWithoutIsPresent
-		return getAllCaretPositionsStream(carets).mapToInt(position -> position.column).max().getAsInt();
+		return getAllCaretPositionsStream().mapToInt(position -> position.column).max().getAsInt();
 	}
+	
+	/**
+	 * checks if there are more than on caret on a single line
+	 *
+	 * @return true if there are more than one caret on a single line, otherwise false
+	 */
+	private boolean hasMoreThanOneCaretOnOneLine() { return getAllCaretPositionsStream().mapToInt(position -> position.line).allMatch(new HashSet<>()::add); }
 }
