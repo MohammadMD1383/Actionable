@@ -12,8 +12,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
-import static ir.mmd.intellijDev.Actionable.caret.editing.Actions.getWordAtCaret;
-import static ir.mmd.intellijDev.Actionable.caret.editing.Actions.removeScheduledPasteAction;
+import static ir.mmd.intellijDev.Actionable.caret.editing.Actions.*;
 
 public class ExecutePasteAction extends AnAction {
 	@Override
@@ -99,13 +98,5 @@ public class ExecutePasteAction extends AnAction {
 	}
 	
 	@Override
-	public void update(@NotNull AnActionEvent e) {
-		final Project project = e.getProject();
-		final Editor editor = e.getData(CommonDataKeys.EDITOR);
-		
-		e.getPresentation().setEnabled(
-			project != null && editor != null &&
-				editor.getCaretModel().getCaretCount() == 1
-		);
-	}
+	public void update(@NotNull AnActionEvent e) { setActionAvailability(e); }
 }

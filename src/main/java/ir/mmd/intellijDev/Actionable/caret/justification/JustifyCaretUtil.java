@@ -20,6 +20,7 @@ class JustifyCaretUtil {
 	private final @NotNull Project project;
 	private final @NotNull Editor editor;
 	private final @NotNull Document document;
+	private final @NotNull List<Caret> carets;
 	
 	// private List<CaretState> caretStates;
 	
@@ -30,6 +31,7 @@ class JustifyCaretUtil {
 		this.editor = editor;
 		this.project = project;
 		this.document = editor.getDocument();
+		carets = editor.getCaretModel().getAllCarets();
 	}
 	
 	// /**
@@ -63,32 +65,22 @@ class JustifyCaretUtil {
 	 * </pre>
 	 */
 	public void justifyCaretsStart() {
-		final List<Caret> carets = editor.getCaretModel().getAllCarets();
-		final int targetColumn = getStartColumn(carets);
-		
-		justify(carets, targetColumn);
+		justify(getLeftmostColumn());
 	}
 	
 	/**
 	 * same as {@link JustifyCaretUtil#justifyCaretsStart()} but moves the carets to rightmost active column
 	 */
 	public void justifyCaretsEnd() {
-		final List<Caret> carets = editor.getCaretModel().getAllCarets();
-		final int targetColumn = getEndColumn(carets);
-		
-		justify(carets, targetColumn);
+		justify(getRightmostColumn());
 	}
 	
 	/**
 	 * aligns given carets across target column
 	 *
-	 * @param carets       carets to be aligned
 	 * @param targetColumn the column that all carets will be aligned across to it
 	 */
-	private void justify(
-		List<Caret> carets,
-		int targetColumn
-	) {
+	private void justify(int targetColumn) {
 		runWriteCommandAction(project, () -> {
 			for (Caret caret : carets) {
 				if (!caret.isValid()) continue;
@@ -108,34 +100,56 @@ class JustifyCaretUtil {
 	}
 	
 	/**
+	 * moves all carets to rightmost active column between carets, and shifts the text<br><br>
+	 * example: <br>
+	 * <pre>
+	 *     int short |= 12;
+	 *     int mediumMedium |= 12;
+	 *     int largeLargeLarge |= 12;
+	 * </pre>
+	 * will change to <br>
+	 * <pre>
+	 *     int short           |= 12;
+	 *     int mediumMedium    |= 12;
+	 *     int largeLargeLarge |= 12;
+	 * </pre>
+	 */
+	public void justifyCaretsEndWithShifting() {
+		final int targetColumn = getRightmostColumn();
+		
+		runWriteCommandAction(project, () -> {
+			for (Caret caret : carets) {
+				final int diff = targetColumn - caret.getLogicalPosition().column;
+				document.insertString(caret.getOffset() - 1, repeat(" ", diff));
+			}
+		});
+	}
+	
+	/**
 	 * returns all {@link LogicalPosition}s of given carets as a {@link Stream}
 	 *
 	 * @param carets list of all carets
 	 * @return stream of {@link LogicalPosition}s from given carets
 	 */
-	private Stream<LogicalPosition> getAllCaretPositionsStream(@NotNull List<Caret> carets) {
-		return carets.stream().map(Caret::getLogicalPosition);
-	}
+	private Stream<LogicalPosition> getAllCaretPositionsStream(@NotNull List<Caret> carets) { return carets.stream().map(Caret::getLogicalPosition); }
 	
 	/**
 	 * returns the leftmost column position among given carets <br>
 	 * please refer to {@link JustifyCaretUtil#justifyCaretsStart()} for details
 	 *
-	 * @param carets list of all carets
 	 * @return the leftmost column position
 	 */
-	private int getStartColumn(@NotNull List<Caret> carets) {
+	private int getLeftmostColumn() {
 		//noinspection OptionalGetWithoutIsPresent
 		return getAllCaretPositionsStream(carets).mapToInt(position -> position.column).min().getAsInt();
 	}
 	
 	/**
-	 * same as {@link JustifyCaretUtil#getStartColumn(List)} but returns the rightmost column position
+	 * same as {@link JustifyCaretUtil#getLeftmostColumn()} but returns the rightmost column position
 	 *
-	 * @param carets list of all carets
 	 * @return the rightmost column position
 	 */
-	private int getEndColumn(@NotNull List<Caret> carets) {
+	private int getRightmostColumn() {
 		//noinspection OptionalGetWithoutIsPresent
 		return getAllCaretPositionsStream(carets).mapToInt(position -> position.column).max().getAsInt();
 	}

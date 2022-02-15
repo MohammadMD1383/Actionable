@@ -27,6 +27,22 @@ import static ir.mmd.intellijDev.Actionable.util.Utility.inRange;
  */
 public class Actions {
 	/**
+	 * common action availability criteria among these actions:
+	 * <ul>
+	 *     <li>{@link MoveCaretToNextWord}</li>
+	 *     <li>{@link MoveCaretToNextWordWithSelection}</li>
+	 *     <li>{@link MoveCaretToPreviousWord}</li>
+	 *     <li>{@link MoveCaretToPreviousWordWithSelection}</li>
+	 * </ul>
+	 *
+	 * @param e event of execution
+	 */
+	public static void setActionAvailability(@NotNull AnActionEvent e) {
+		final Editor editor = e.getData(CommonDataKeys.EDITOR);
+		e.getPresentation().setEnabled(editor != null);
+	}
+	
+	/**
 	 * implementation for:
 	 * <ul>
 	 *     <li>{@link MoveCaretToNextWord}</li>

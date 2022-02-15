@@ -18,6 +18,24 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Actions {
 	/**
+	 * common action availability criteria among these actions:
+	 * <ul>
+	 *     <li>{@link DuplicateLinesDown}</li>
+	 *     <li>{@link DuplicateLinesUp}</li>
+	 * </ul>
+	 *
+	 * @param e event of execution
+	 */
+	public static void setActionAvailability(@NotNull AnActionEvent e) {
+		final Project project = e.getProject();
+		final Editor editor = e.getData(CommonDataKeys.EDITOR);
+		
+		e.getPresentation().setEnabled(
+			project != null && editor != null
+		);
+	}
+	
+	/**
 	 * implementation for:
 	 * <ul>
 	 *     <li>{@link DuplicateLinesUp}</li>

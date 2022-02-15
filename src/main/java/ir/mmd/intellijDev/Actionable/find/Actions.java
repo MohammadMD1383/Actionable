@@ -27,6 +27,24 @@ import static ir.mmd.intellijDev.Actionable.util.Utility.last;
  */
 public class Actions {
 	/**
+	 * common action availability criteria among these actions:
+	 * <ul>
+	 *     <li>{@link SelectNextOccurrence}</li>
+	 *     <li>{@link SelectPreviousOccurrence}</li>
+	 * </ul>
+	 *
+	 * @param e event of execution
+	 */
+	public static void setActionAvailability(@NotNull AnActionEvent e) {
+		final Project project = e.getProject();
+		final Editor editor = e.getData(CommonDataKeys.EDITOR);
+		
+		e.getPresentation().setEnabled(
+			project != null && editor != null
+		);
+	}
+	
+	/**
 	 * implementation for:
 	 * <ul>
 	 *     <li>{@link SelectNextOccurrence}</li>

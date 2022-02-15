@@ -10,11 +10,39 @@ import org.jetbrains.annotations.NotNull;
 /**
  * this class holds implementation of these actions:
  * <ul>
- *     <li>{@link JustifyCaretsEnd}</li>
  *     <li>{@link JustifyCaretsStart}</li>
+ *     <li>{@link JustifyCaretsEnd}</li>
+ *     <li>{@link JustifyCaretsEndAndShift}</li>
  * </ul>
  */
 public class Actions {
+	/**
+	 * common availability criteria among these actions:
+	 * <ul>
+	 *     <li>{@link JustifyCaretsStart}</li>
+	 *     <li>{@link JustifyCaretsEnd}</li>
+	 *     <li>{@link JustifyCaretsEndAndShift}</li>
+	 * </ul>
+	 *
+	 * @param e event of execution
+	 */
+	public static void setActionAvailability(@NotNull AnActionEvent e) {
+		final Project project = e.getProject();
+		final Editor editor = e.getData(CommonDataKeys.EDITOR);
+		
+		e.getPresentation().setEnabled(
+			project != null && editor != null &&
+				editor.getCaretModel().getCaretCount() > 1 &&
+				!editor.getSelectionModel().hasSelection(true)
+		);
+	}
+	
+	/**
+	 * executes the given <code>justifier</code>
+	 *
+	 * @param e         event of execution
+	 * @param justifier a method of {@link JustifyCaretUtil}
+	 */
 	public static void justifyCarets(
 		@NotNull AnActionEvent e,
 		@NotNull VoidFunction0<JustifyCaretUtil> justifier

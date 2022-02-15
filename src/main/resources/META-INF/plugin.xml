@@ -12,6 +12,7 @@
 			<li>Duplicate line(s) down - (VSCode like)</li>
 			<li>Justify carets start</li>
 			<li>Justify carets end</li>
+			<li>Justify carets end and shift text</li>
 			<li>Copy word at caret</li>
 			<li>Cut word at caret</li>
 			<li>Copy element at caret</li>
@@ -34,6 +35,10 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>2.3.1:</b><br>
+				Added justify carets end and shift text action<br>
+				Minor improvements
+			</li>
 			<li><b>2.2.2:</b><br>
 				fixed invalid caret bug with justify carets actions<br>
 				improved functionality of justify carets end action
@@ -161,6 +166,12 @@
 					id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEnd"
 					text="Justify Carets End"
 					description="Justifies carets to the rightmost (needs more than one active caret)"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEndAndShift"
+					id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEndAndShift"
+					text="Justify Carets End and Shift Text"
+					description="Justifies carets to the rightmost (needs more than one active caret) and shifts the text with the carets"/>
 				
 				<separator/>
 				

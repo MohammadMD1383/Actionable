@@ -48,6 +48,31 @@ public class Actions {
 	public static final Key<RangeHighlighter> previousHighlighterKey = new Key<>("scheduledPasteAction.motionListener");
 	
 	/**
+	 * common action availability criteria among these actions:
+	 * <ul>
+	 *     <li>{@link CopyElementAtCaret}</li>
+	 *     <li>{@link CutElementAtCaret}</li>
+	 *     <li>{@link CopyWordAtCaret}</li>
+	 *     <li>{@link CutWordAtCaret}</li>
+	 *     <li>{@link SetElementCopyPasteOffset}</li>
+	 *     <li>{@link SetElementCutPasteOffset}</li>
+	 *     <li>{@link SetWordCopyPasteOffset}</li>
+	 *     <li>{@link SetWordCutPasteOffset}</li>
+	 * </ul>
+	 *
+	 * @param e event of execution
+	 */
+	public static void setActionAvailability(@NotNull AnActionEvent e) {
+		final Project project = e.getProject();
+		final Editor editor = e.getData(CommonDataKeys.EDITOR);
+		
+		e.getPresentation().setEnabled(
+			project != null && editor != null &&
+				editor.getCaretModel().getCaretCount() == 1
+		);
+	}
+	
+	/**
 	 * implementation of:
 	 * <ul>
 	 *     <li>{@link CopyElementAtCaret}</li>
