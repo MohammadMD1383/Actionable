@@ -8,7 +8,7 @@
 		
 		<div>Features:</div>
 		<ul>
-			<li><h4>Custom Actions!</h4> <a href="https://github.com/MohammadMD1383/Actionable/Scripting.md">how-to</a></li>
+			<li><h4>Custom Actions!</h4> <a href="https://github.com/MohammadMD1383/Actionable/blob/master/Scripting.md">how-to</a></li>
 			<li>Duplicate line(s) up - (VSCode like)</li>
 			<li>Duplicate line(s) down - (VSCode like)</li>
 			<li>Justify carets start</li>
