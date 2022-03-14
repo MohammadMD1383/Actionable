@@ -8,6 +8,7 @@
 		
 		<div>Features:</div>
 		<ul>
+			<li><h4>Custom Actions!</h4> <a href="https://github.com/MohammadMD1383/Actionable/Scripting.md">how-to</a></li>
 			<li>Duplicate line(s) up - (VSCode like)</li>
 			<li>Duplicate line(s) down - (VSCode like)</li>
 			<li>Justify carets start</li>
@@ -35,6 +36,10 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.0.0:</b><br>
+				Added scripting feature for custom actions! - available at Settings -> Tools -> Actionable -> Scripting<br>
+				please visit github repo for more info.
+			</li>
 			<li><b>2.3.1:</b><br>
 				Added justify carets end and shift text action<br>
 				Minor improvements
@@ -92,6 +97,8 @@
 			serviceImplementation="ir.mmd.intellijDev.Actionable.find.settings.SettingsState"/>
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState"/>
+		<applicationService
+			serviceImplementation="ir.mmd.intellijDev.Actionable.scripting.settings.SettingsState"/>
 		
 		<applicationConfigurable
 			parentId="tools"
@@ -119,6 +126,11 @@
 				id="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				instance="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				displayName="Find"/>
+			
+			<configurable
+				id="ir.mmd.intellijDev.Actionable.scripting.settings.Settings"
+				instance="ir.mmd.intellijDev.Actionable.scripting.settings.Settings"
+				displayName="Scripting"/>
 		</applicationConfigurable>
 	</extensions>
 	
@@ -256,6 +268,54 @@
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWordWithSelection"
 					text="Move Caret to Previous Word with Selection"
 					description="Like the same action provided by the IDE but a bit different and configurable"/>
+			</group>
+			
+			<group id="ir.mmd.intellijDev.Actionable.CustomActionGroup" text="Custom Actions" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction1"
+					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction1"
+					text="Custom Action 1"
+					description="Executes custom action 1"/>
+				<action
+					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction2"
+					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction2"
+					text="Custom Action 2"
+					description="Executes custom action 2"/>
+				<action
+					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction3"
+					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction3"
+					text="Custom Action 3"
+					description="Executes custom action 3"/>
+				<action
+					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction4"
+					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction4"
+					text="Custom Action 4"
+					description="Executes custom action 4"/>
+				<action
+					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction5"
+					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction5"
+					text="Custom Action 5"
+					description="Executes custom action 5"/>
+				<action
+					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction6"
+					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction6"
+					text="Custom Action 6"
+					description="Executes custom action 6"/>
+				<action
+					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction7"
+					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction7"
+					text="Custom Action 7"
+					description="Executes custom action 7"/>
+				<action
+					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction8"
+					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction8"
+					text="Custom Action 8"
+					description="Executes custom action 8"/>
+				<action
+					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction9"
+					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction9"
+					text="Custom Action 9"
+					description="Executes custom action 9"/>
 			</group>
 		</group>
 	</actions>
