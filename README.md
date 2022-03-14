@@ -8,6 +8,9 @@ Already familiar with the plugin actions? see [How does it work](#how-does-it-wo
 
 ---
 
+## Scripting and Custom Actions!
+please visit [how-to](https://github.com/MohammadMD1383/Actionable/Scripting.md) for more info.
+
 ## Features
 
 * Duplicate Line(s) down/up
