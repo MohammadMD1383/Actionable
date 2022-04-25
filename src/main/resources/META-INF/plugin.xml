@@ -2,13 +2,12 @@
 	<id>ir.mmd.intellijDev.Actionable</id>
 	<name>Actionable</name>
 	<vendor email="ezmmd83@gmail.com" url="https://github.com/MohammadMD1383/Actionable">MMD</vendor>
-	
+
 	<description><![CDATA[
 		<h3>Adds some favorite/extra actions that are not available in IntelliJ based IDEs.</h3>
 		
 		<div>Features:</div>
 		<ul>
-			<li><h4>Custom Actions!</h4> <a href="https://github.com/MohammadMD1383/Actionable/blob/master/Scripting.md">how-to</a></li>
 			<li>Duplicate line(s) up - (VSCode like)</li>
 			<li>Duplicate line(s) down - (VSCode like)</li>
 			<li>Justify carets start</li>
@@ -33,9 +32,12 @@
 		
 		<b>For detailed description about all the actions, please visit the <a href="https://github.com/MohammadMD1383/Actionable">github repo</a></b>
     ]]></description>
-	
+
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.1.0:</b><br>
+				<b>Removed scripting feature in favor of better existing plugins.</b>
+			</li>
 			<li><b>3.0.0:</b><br>
 				Added scripting feature for custom actions! - available at Settings -> Tools -> Actionable -> Scripting<br>
 				please visit github repo for more info.
@@ -84,238 +86,185 @@
 			<li><b>1.0.0-Beta:</b> Initial Release</li>
 		</ul>
 	]]></change-notes>
-	
+
 	<depends>com.intellij.modules.platform</depends>
-	
+
 	<extensions defaultExtensionNs="com.intellij">
 		<errorHandler
 			implementation="ir.mmd.intellijDev.Actionable.internal.ErrorReporter"/>
-		
+
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState"/>
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.find.settings.SettingsState"/>
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState"/>
-		<applicationService
-			serviceImplementation="ir.mmd.intellijDev.Actionable.scripting.settings.SettingsState"/>
-		
+
 		<applicationConfigurable
 			parentId="tools"
 			id="ir.mmd.intellijDev.Actionable.settings.Settings"
 			instance="ir.mmd.intellijDev.Actionable.settings.Settings"
 			displayName="Actionable">
-			
+
 			<configurable
 				id="ir.mmd.intellijDev.Actionable.caret.settings.Settings"
 				instance="ir.mmd.intellijDev.Actionable.caret.settings.Settings"
 				displayName="Caret">
-				
+
 				<configurable
 					id="ir.mmd.intellijDev.Actionable.caret.movement.settings.Settings"
 					instance="ir.mmd.intellijDev.Actionable.caret.movement.settings.Settings"
 					displayName="Movement"/>
-				
+
 				<configurable
 					id="ir.mmd.intellijDev.Actionable.caret.editing.settings.Settings"
 					instance="ir.mmd.intellijDev.Actionable.caret.editing.settings.Settings"
 					displayName="Editing"/>
 			</configurable>
-			
+
 			<configurable
 				id="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				instance="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				displayName="Find"/>
-			
-			<configurable
-				id="ir.mmd.intellijDev.Actionable.scripting.settings.Settings"
-				instance="ir.mmd.intellijDev.Actionable.scripting.settings.Settings"
-				displayName="Scripting"/>
 		</applicationConfigurable>
 	</extensions>
-	
+
 	<actions>
 		<group id="ir.mmd.intellijDev.Actionable" text="Actionable" popup="true">
 			<add-to-group group-id="EditMenu" anchor="last"/>
-			
-			<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate..." popup="true">
+
+			<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate" popup="true">
 				<action
 					class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
 					id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
 					text="Duplicate Lines Up"
 					description="Duplicate selected line(s) above the current selection; or just the line, which caret is located at, if no selection exists"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
 					id="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesDown"
 					text="Duplicate Lines Down"
 					description="Duplicate selected line(s) below the current selection; or just the line, which caret is located at, if no selection exists"/>
 			</group>
-			
-			<group id="ir.mmd.intellijDev.Actionable.FindGroup" text="Find..." popup="true">
+
+			<group id="ir.mmd.intellijDev.Actionable.FindGroup" text="Find" popup="true">
 				<action
 					class="ir.mmd.intellijDev.Actionable.find.SelectNextOccurrence"
 					id="ir.mmd.intellijDev.Actionable.find.SelectNextOccurrence"
 					text="Add Selection to Next Occurrence"
 					description="Adds selection to the next occurrence of the word in the editor"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.find.SelectPreviousOccurrence"
 					id="ir.mmd.intellijDev.Actionable.find.SelectPreviousOccurrence"
 					text="Add Selection to Previous Occurrence"
 					description="Adds selection to the previous occurrence of the word in the editor"/>
 			</group>
-			
-			<group id="ir.mmd.intellijDev.Actionable.CaretGroup" text="Caret Actions..." popup="true">
+
+			<group id="ir.mmd.intellijDev.Actionable.CaretGroup" text="Caret Actions" popup="true">
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
 					id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
 					text="Justify Carets Start"
 					description="Justifies carets to the leftmost (needs more than one active caret)"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEnd"
 					id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEnd"
 					text="Justify Carets End"
 					description="Justifies carets to the rightmost (needs more than one active caret)"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEndAndShift"
 					id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEndAndShift"
 					text="Justify Carets End and Shift Text"
 					description="Justifies carets to the rightmost (needs more than one active caret) and shifts the text with the carets"/>
-				
+
 				<separator/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaret"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.CopyWordAtCaret"
 					text="Copy Word At Caret"
 					description="Copies the Word at the caret"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaret"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.CutWordAtCaret"
 					text="Cut Word At Caret"
 					description="Cuts the Word at the caret"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.CopyElementAtCaret"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.CopyElementAtCaret"
 					text="Copy Element At Caret"
 					description="Copies the element at the caret"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.CutElementAtCaret"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.CutElementAtCaret"
 					text="Cut Element At Caret"
 					description="Cuts the element at the caret"/>
-				
-				<!--————————————————————————————————————————————————————————————————————————-->
-				
+
+				<separator/>
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.SetWordCopyPasteOffset"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.SetWordCopyPasteOffset"
 					text="Set Copy-Paste Word Offset At Caret"
 					description="Please refer to documentation on github repo"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.SetWordCutPasteOffset"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.SetWordCutPasteOffset"
 					text="Set Cut-Paste Word Offset At Caret"
 					description="Please refer to documentation on github repo"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.SetElementCopyPasteOffset"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.SetElementCopyPasteOffset"
 					text="Set Copy-Paste Element Offset At Caret"
 					description="Please refer to documentation on github repo"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.SetElementCutPasteOffset"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.SetElementCutPasteOffset"
 					text="Set Cut-Paste Element Offset At Caret"
 					description="Please refer to documentation on github repo"/>
-				
+
+				<separator/>
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.ExecutePasteAction"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.ExecutePasteAction"
 					text="Execute Paste"
 					description="Please refer to documentation on github repo"/>
-				
+
 				<separator/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWord"
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWord"
 					text="Move Caret to Next Word"
 					description="Like the same action provided by the IDE but a bit different and configurable"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWordWithSelection"
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextWordWithSelection"
 					text="Move Caret to Next Word with Selection"
 					description="Like the same action provided by the IDE but a bit different and configurable"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWord"
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWord"
 					text="Move Caret to Previous Word"
 					description="Like the same action provided by the IDE but a bit different and configurable"/>
-				
+
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWordWithSelection"
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWordWithSelection"
 					text="Move Caret to Previous Word with Selection"
 					description="Like the same action provided by the IDE but a bit different and configurable"/>
-			</group>
-			
-			<group id="ir.mmd.intellijDev.Actionable.CustomActionGroup" text="Custom Actions" popup="true">
-				<action
-					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction1"
-					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction1"
-					text="Custom Action 1"
-					description="Executes custom action 1"/>
-				<action
-					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction2"
-					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction2"
-					text="Custom Action 2"
-					description="Executes custom action 2"/>
-				<action
-					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction3"
-					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction3"
-					text="Custom Action 3"
-					description="Executes custom action 3"/>
-				<action
-					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction4"
-					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction4"
-					text="Custom Action 4"
-					description="Executes custom action 4"/>
-				<action
-					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction5"
-					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction5"
-					text="Custom Action 5"
-					description="Executes custom action 5"/>
-				<action
-					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction6"
-					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction6"
-					text="Custom Action 6"
-					description="Executes custom action 6"/>
-				<action
-					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction7"
-					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction7"
-					text="Custom Action 7"
-					description="Executes custom action 7"/>
-				<action
-					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction8"
-					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction8"
-					text="Custom Action 8"
-					description="Executes custom action 8"/>
-				<action
-					class="ir.mmd.intellijDev.Actionable.scripting.CustomAction9"
-					id="ir.mmd.intellijDev.Actionable.scripting.CustomAction9"
-					text="Custom Action 9"
-					description="Executes custom action 9"/>
 			</group>
 		</group>
 	</actions>

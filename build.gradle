@@ -1,11 +1,11 @@
 plugins {
-	id 'org.jetbrains.intellij' version '1.4.0'
-	id "org.jetbrains.kotlin.jvm" version "1.6.10"
+	id 'org.jetbrains.intellij' version '1.5.3'
+	id "org.jetbrains.kotlin.jvm" version "1.6.21"
 	id 'java'
 }
 
 group 'ir.mmd.intellijDev'
-version '3.0.0'
+version '3.1.0'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -13,18 +13,10 @@ targetCompatibility = JavaVersion.VERSION_1_8
 compileKotlin {
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
-	
+
 	kotlinOptions {
 		jvmTarget = JavaVersion.VERSION_1_8
 		freeCompilerArgs = ["-Xjvm-default=all"]
-	}
-}
-
-sourceSets {
-	main {
-		java {
-			srcDir "j-mim/src/main/java"
-		}
 	}
 }
 
@@ -32,8 +24,6 @@ jar {
 	exclude(
 		'ir/mmd/intellijDev/Actionable/selection/',
 		'ir/mmd/intellijDev/Actionable/action/',
-		'ir/mimlang/jmim/util/',
-		'ir/mimlang/jmim/CLIKt.class',
 	)
 }
 
@@ -42,14 +32,14 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.jetbrains.kotlin:kotlin-stdlib'
-	compileOnly 'org.jetbrains.kotlinx:kotlinx-cli:0.3.4'
+	implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.21'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
+	// version = '2022.1'
 	version = '2021.3.1'
 	// version = '2019.1.4'
 	// localPath = "/snap/intellij-idea-community/337/"

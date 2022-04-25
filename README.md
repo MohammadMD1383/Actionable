@@ -8,9 +8,6 @@ Already familiar with the plugin actions? see [How does it work](#how-does-it-wo
 
 ---
 
-## Scripting and Custom Actions!
-please visit [how-to](https://github.com/MohammadMD1383/Actionable/blob/master/Scripting.md) for more info.
-
 ## Features
 
 * Duplicate Line(s) down/up
@@ -36,6 +33,22 @@ please visit [how-to](https://github.com/MohammadMD1383/Actionable/blob/master/S
   > ```
   > String s = n|ew String();
   > String s2 = |new String();
+  > ```
+
+* Justify carets to the end and shift text
+  > This action is helpful when you want to e.g. align multiline variable declarations to be justified
+  >
+  > <i>the (|) character shows the caret</i><br/>
+  > before:
+  > ```
+  > String s |= new String();
+  > String someLongName |= new String();
+  > ```
+  >
+  > after:
+  > ```
+  > String s            |= new String();
+  > String someLongName |= new String();
   > ```
 
 * Copy/Cut word/element at caret
