@@ -6,16 +6,18 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.editor.Document
-import ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper
-import ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementUtil
-import ir.mmd.intellijDev.Actionable.caret.movement.OffsetMovementUtil
+import ir.mmd.intellijDev.Actionable.caret.movement.CaretUtil
+import ir.mmd.intellijDev.Actionable.caret.movement.CaretUtil.Companion.BACKWARD
+import ir.mmd.intellijDev.Actionable.caret.movement.CaretUtil.Companion.FORWARD
+import ir.mmd.intellijDev.Actionable.caret.movement.findOffsetOfNext
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
+import ir.mmd.intellijDev.Actionable.util.editor
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState as FindSettingsState
 
 abstract class FindAction(private val searchForward: Boolean) : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) {
 		val project = e.project!!
-		val editor = e.getRequiredData(CommonDataKeys.EDITOR)
+		val editor = e.editor!!
 		val document = editor.document
 		val caretModel = editor.caretModel
 		val caret = if (searchForward) caretModel.allCarets.last() else caretModel.allCarets.first()
@@ -29,7 +31,7 @@ abstract class FindAction(private val searchForward: Boolean) : AnAction() {
 		  this is like what intelliJ does.
 		*/
 		if (!caret.hasSelection()) {
-			val cutil = CaretMovementUtil(caret)
+			val cutil = CaretUtil(caret)
 			val wordBoundaries = getWordBoundaries(cutil, wordSeparators, hardStopCharacters)
 			
 			/*
@@ -75,7 +77,6 @@ class SelectPreviousOccurrence : FindAction(false)
 class SelectNextOccurrence : FindAction(true)
 
 
-
 /* todo: move to another file */
 
 /**
@@ -93,25 +94,25 @@ fun getWordBoundaries(
 	hardStops: String,
 	offset: Int
 ): IntArray {
-	val startOffset = OffsetMovementUtil.goUntilReached(document, wordSeparators, hardStops, offset, CaretMovementHelper.BACKWARD)
-	val endOffset = OffsetMovementUtil.goUntilReached(document, wordSeparators, hardStops, offset - 1, CaretMovementHelper.FORWARD) + 1
+	val startOffset = document.findOffsetOfNext(offset, wordSeparators, hardStops, BACKWARD)
+	val endOffset = document.findOffsetOfNext(offset - 1, wordSeparators, hardStops, FORWARD) + 1
 	return intArrayOf(startOffset, endOffset)
 }
 
 /**
  * returns the start and end offset of the word which is located at the specified caret (aka: word boundaries)
  *
- * @param cutil          instance of [CaretMovementUtil] containing the specified caret
+ * @param cutil          instance of [CaretUtil] containing the specified caret
  * @param wordSeparators a string containing the word separators
  * @param hardStops      a string containing the hard stop word separators
  * @return an `int[2]` containing the boundaries
  */
 fun getWordBoundaries(
-	cutil: CaretMovementUtil,
+	cutil: CaretUtil,
 	wordSeparators: String,
 	hardStops: String
 ): IntArray {
-	CaretMovementHelper.goUntilReached(cutil, wordSeparators, hardStops, CaretMovementHelper.BACKWARD)
+	cutil.moveUntilReach(wordSeparators, hardStops, BACKWARD)
 	val startOffset = cutil.offset
 	
 	/*
@@ -120,8 +121,8 @@ fun getWordBoundaries(
 	  visually the character after caret, is actually the character that is associated with the caret.
 	*/
 	cutil.reset(-1)
-	CaretMovementHelper.goUntilReached(cutil, wordSeparators, hardStops, CaretMovementHelper.FORWARD)
-	cutil.go(+1) // because of the `-1` at upper statement
-	val endOffset = cutil.offset
-	return intArrayOf(startOffset, endOffset)
+	cutil.moveUntilReach(wordSeparators, hardStops, FORWARD)
+	cutil.move(+1) // because of the `-1` at upper statement
+	
+	return intArrayOf(startOffset, cutil.offset)
 }

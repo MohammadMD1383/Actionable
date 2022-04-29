@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 
 abstract class DuplicateAction(private val duplicator: DuplicateUtil.(Int, Int) -> Unit) : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) {
-		val editor = e.getRequiredData(CommonDataKeys.EDITOR)
+		val editor = e.editor!!
 		val dutil = DuplicateUtil(editor)
 		
 		editor.caretModel.allCarets.forEach {

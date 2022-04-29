@@ -1,3 +1,12 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'com.guardsquare:proguard-gradle:7.2.1'
+	}
+}
+
 plugins {
 	id 'org.jetbrains.intellij' version '1.5.3'
 	id "org.jetbrains.kotlin.jvm" version "1.6.21"
@@ -13,7 +22,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 compileKotlin {
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
-
+	
 	kotlinOptions {
 		jvmTarget = JavaVersion.VERSION_1_8
 		freeCompilerArgs = ["-Xjvm-default=all"]
@@ -42,7 +51,6 @@ intellij {
 	// version = '2022.1'
 	version = '2021.3.1'
 	// version = '2019.1.4'
-	// localPath = "/snap/intellij-idea-community/337/"
 }
 
 runIde {

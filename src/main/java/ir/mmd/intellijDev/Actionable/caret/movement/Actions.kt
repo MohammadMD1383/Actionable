@@ -1,66 +1,27 @@
 package ir.mmd.intellijDev.Actionable.caret.movement
 
+import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.intellij.openapi.editor.Caret
-import ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.BACKWARD
-import ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.FORWARD
 import ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.moveCaret
+import ir.mmd.intellijDev.Actionable.caret.movement.CaretUtil.Companion.BACKWARD
+import ir.mmd.intellijDev.Actionable.caret.movement.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-import java.util.stream.Collectors
+import ir.mmd.intellijDev.Actionable.util.editor
+import ir.mmd.intellijDev.Actionable.util.selectionRange
 
-/**
- * This class implements actions required by:<br></br>
- *
- *  * [MoveCaretToNextWord]
- *  * [MoveCaretToNextWordWithSelection]
- *  * [MoveCaretToPreviousWord]
- *  * [MoveCaretToPreviousWordWithSelection]
- *
- */
-object Actions {
-	/**
-	 * common action availability criteria among these actions:
-	 *
-	 *  * [MoveCaretToNextWord]
-	 *  * [MoveCaretToNextWordWithSelection]
-	 *  * [MoveCaretToPreviousWord]
-	 *  * [MoveCaretToPreviousWordWithSelection]
-	 *
-	 *
-	 * @param e event of execution
-	 */
-	fun setActionAvailability(e: AnActionEvent) {
-		val editor = e.getData(CommonDataKeys.EDITOR)
-		e.presentation.isEnabled = editor != null
-	}
-	
-	/**
-	 * implementation for:
-	 *
-	 *  * [MoveCaretToNextWord]
-	 *  * [MoveCaretToPreviousWord]
-	 *
-	 *
-	 * @param e   event of mentioned actions
-	 * @param dir see [CaretMovementHelper.moveCaret]
-	 */
+abstract class CaretMoveAction : AnAction() {
 	fun moveCaret(
 		e: AnActionEvent,
 		dir: Int
 	) {
-		val editor = e.getRequiredData(CommonDataKeys.EDITOR)
 		val settingsState = SettingsState.getInstance()
-		val wordSeparators = settingsState.wordSeparators
-		val hardStopCharacters = settingsState.hardStopCharacters
-		for (caret in editor.caretModel.allCarets) {
-			// if we omit this, when caret has selection, and we move it, the selection won't be cleared automatically.
-			caret.removeSelection()
-			val cutil = CaretMovementUtil(caret)
+		e.editor!!.caretModel.allCarets.forEach {
+			it.removeSelection()
+			val cutil = CaretUtil(it)
 			moveCaret(
 				cutil,
-				wordSeparators,
-				hardStopCharacters,
+				settingsState.wordSeparators,
+				settingsState.hardStopCharacters,
 				settingsState.wordSeparatorsBehaviour,
 				dir
 			)
@@ -74,56 +35,62 @@ object Actions {
 		}
 	}
 	
-	/**
-	 * implementation for:
-	 *
-	 *  * [MoveCaretToNextWordWithSelection]
-	 *  * [MoveCaretToPreviousWordWithSelection]
-	 *
-	 *
-	 * @param e   event of mentioned actions
-	 * @param dir see [CaretMovementHelper.moveCaret]
-	 */
 	fun moveCaretWithSelection(
 		e: AnActionEvent,
 		dir: Int
 	) {
-		val editor = e.getRequiredData(CommonDataKeys.EDITOR)
 		val settingsState = SettingsState.getInstance()
-		val wordSeparators = settingsState.wordSeparators
-		val hardStopCharacters = settingsState.hardStopCharacters
-		val carets = editor.caretModel.allCarets
-		val selectionStarts = carets.stream().map { obj: Caret? -> obj!!.leadSelectionOffset }.collect(Collectors.toList())
+		val carets = e.editor!!.caretModel.allCarets
+		val selectionStarts = carets.map { it.leadSelectionOffset } as MutableList<Int>
 		
 		if (dir == BACKWARD) {
 			carets.reverse()
 			selectionStarts.reverse()
 		}
 		
-		for (i in carets.indices) {
-			val caret = carets[i]
-			val cutil = CaretMovementUtil(caret)
+		carets.forEachIndexed { i, caret ->
+			val cutil = CaretUtil(caret)
 			
 			moveCaret(
 				cutil,
-				wordSeparators,
-				hardStopCharacters,
+				settingsState.wordSeparators,
+				settingsState.hardStopCharacters,
 				settingsState.wordSeparatorsBehaviour,
 				dir
 			)
 			
-			if (i + 1 < carets.size) {
-				val nextCaret = carets[i + 1]
-				
-				if (cutil.offset in nextCaret.selectionStart..nextCaret.selectionEnd) {
+			carets.getOrNull(i + 1)?.let { nextCaret ->
+				if (cutil.offset in nextCaret.selectionRange) {
 					nextCaret.setSelection(selectionStarts[i], nextCaret.offset)
 					selectionStarts[i + 1] = selectionStarts[i]
-					continue
+					return@forEachIndexed
 				}
 			}
 			
-			/* see the note of the same expression at `moveCarets` method */cutil.commit(if (dir == FORWARD) +1 else 0)
-			caret.setSelection(selectionStarts[i]!!, caret.offset)
+			/* see the note of the same expression at `moveCarets` method */
+			cutil.commit(if (dir == FORWARD) +1 else 0)
+			caret.setSelection(selectionStarts[i], caret.offset)
 		}
 	}
+	
+	override fun update(e: AnActionEvent) {
+		e.presentation.isEnabled = e.editor != null
+	}
+}
+
+
+class MoveCaretToPreviousWordWithSelection : CaretMoveAction() {
+	override fun actionPerformed(e: AnActionEvent) = moveCaretWithSelection(e, BACKWARD)
+}
+
+class MoveCaretToPreviousWord : CaretMoveAction() {
+	override fun actionPerformed(e: AnActionEvent) = moveCaret(e, BACKWARD)
+}
+
+class MoveCaretToNextWordWithSelection : CaretMoveAction() {
+	override fun actionPerformed(e: AnActionEvent) = moveCaretWithSelection(e, FORWARD)
+}
+
+class MoveCaretToNextWord : CaretMoveAction() {
+	override fun actionPerformed(e: AnActionEvent) = moveCaret(e, FORWARD)
 }
