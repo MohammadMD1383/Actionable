@@ -2,46 +2,36 @@ package ir.mmd.intellijDev.Actionable.caret.movement
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import ir.mmd.intellijDev.Actionable.caret.movement.CaretMovementHelper.moveCaret
+import com.intellij.openapi.editor.Caret
 import ir.mmd.intellijDev.Actionable.caret.movement.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.caret.movement.CaretUtil.Companion.FORWARD
-import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.util.editor
-import ir.mmd.intellijDev.Actionable.util.selectionRange
+import ir.mmd.intellijDev.Actionable.util.*
+import ir.mmd.intellijDev.Actionable.util.ext.allCarets
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.hasEditor
+import ir.mmd.intellijDev.Actionable.util.ext.withEach
 
 abstract class CaretMoveAction : AnAction() {
-	fun moveCaret(
-		e: AnActionEvent,
+	fun moveCarets(
+		carets: List<Caret>,
 		dir: Int
-	) {
-		val settingsState = SettingsState.getInstance()
-		e.editor!!.caretModel.allCarets.forEach {
-			it.removeSelection()
-			val cutil = CaretUtil(it)
-			moveCaret(
-				cutil,
-				settingsState.wordSeparators,
-				settingsState.hardStopCharacters,
-				settingsState.wordSeparatorsBehaviour,
+	) = withMovementSettings {
+		carets.withEach {
+			removeSelection()
+			util.moveCaret(
+				wordSeparators,
+				hardStopCharacters,
+				wordSeparatorsBehaviour,
 				dir
 			)
-			
-			/*
-			 (in FORWARD movement direction)
-			 because the caret stays at the beginning of the character that is associated to,
-			 we move it one more character forward, to place it exactly after the character that we want.
-			*/
-			cutil.commit(if (dir == FORWARD) +1 else 0)
 		}
 	}
 	
-	fun moveCaretWithSelection(
-		e: AnActionEvent,
+	fun moveCaretsWithSelection(
+		carets: MutableList<Caret>,
 		dir: Int
-	) {
-		val settingsState = SettingsState.getInstance()
-		val carets = e.editor!!.caretModel.allCarets
-		val selectionStarts = carets.map { it.leadSelectionOffset } as MutableList<Int>
+	) = withMovementSettings {
+		val selectionStarts = carets.map { it.leadSelectionOffset } as MutableList
 		
 		if (dir == BACKWARD) {
 			carets.reverse()
@@ -51,46 +41,42 @@ abstract class CaretMoveAction : AnAction() {
 		carets.forEachIndexed { i, caret ->
 			val cutil = CaretUtil(caret)
 			
-			moveCaret(
-				cutil,
-				settingsState.wordSeparators,
-				settingsState.hardStopCharacters,
-				settingsState.wordSeparatorsBehaviour,
-				dir
+			cutil.moveCaret(
+				wordSeparators,
+				hardStopCharacters,
+				wordSeparatorsBehaviour,
+				dir,
+				false
 			)
 			
 			carets.getOrNull(i + 1)?.let { nextCaret ->
-				if (cutil.offset in nextCaret.selectionRange) {
+				if (cutil.offset in nextCaret.selectionRange) return@forEachIndexed after {
 					nextCaret.setSelection(selectionStarts[i], nextCaret.offset)
 					selectionStarts[i + 1] = selectionStarts[i]
-					return@forEachIndexed
 				}
 			}
 			
-			/* see the note of the same expression at `moveCarets` method */
-			cutil.commit(if (dir == FORWARD) +1 else 0)
+			cutil.commit()
 			caret.setSelection(selectionStarts[i], caret.offset)
 		}
 	}
 	
-	override fun update(e: AnActionEvent) {
-		e.presentation.isEnabled = e.editor != null
-	}
+	override fun update(e: AnActionEvent) = e.enableIf { hasEditor }
 }
 
 
-class MoveCaretToPreviousWordWithSelection : CaretMoveAction() {
-	override fun actionPerformed(e: AnActionEvent) = moveCaretWithSelection(e, BACKWARD)
+class MoveCaretToNextWord : CaretMoveAction() {
+	override fun actionPerformed(e: AnActionEvent) = moveCarets(e.allCarets, FORWARD)
 }
 
 class MoveCaretToPreviousWord : CaretMoveAction() {
-	override fun actionPerformed(e: AnActionEvent) = moveCaret(e, BACKWARD)
+	override fun actionPerformed(e: AnActionEvent) = moveCarets(e.allCarets, BACKWARD)
 }
 
 class MoveCaretToNextWordWithSelection : CaretMoveAction() {
-	override fun actionPerformed(e: AnActionEvent) = moveCaretWithSelection(e, FORWARD)
+	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, FORWARD)
 }
 
-class MoveCaretToNextWord : CaretMoveAction() {
-	override fun actionPerformed(e: AnActionEvent) = moveCaret(e, FORWARD)
+class MoveCaretToPreviousWordWithSelection : CaretMoveAction() {
+	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, BACKWARD)
 }

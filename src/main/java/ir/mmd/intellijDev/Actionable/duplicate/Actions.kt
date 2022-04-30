@@ -3,6 +3,9 @@ package ir.mmd.intellijDev.Actionable.duplicate
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.hasEditor
+import ir.mmd.intellijDev.Actionable.util.ext.hasProject
 
 abstract class DuplicateAction(private val duplicator: DuplicateUtil.(Int, Int) -> Unit) : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) {
@@ -14,11 +17,7 @@ abstract class DuplicateAction(private val duplicator: DuplicateUtil.(Int, Int) 
 		}
 	}
 	
-	override fun update(e: AnActionEvent) {
-		val project = e.project
-		val editor = e.getData(CommonDataKeys.EDITOR)
-		e.presentation.isEnabled = project != null && editor != null
-	}
+	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
 }
 
 class DuplicateLinesUp : DuplicateAction(DuplicateUtil::duplicateUp)

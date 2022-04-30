@@ -2,8 +2,8 @@ package ir.mmd.intellijDev.Actionable.caret.movement.settings
 
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.options.ConfigurationException
-import ir.mmd.intellijDev.Actionable.util.runOnly
-import ir.mmd.intellijDev.Actionable.util.isAllDistinct
+import ir.mmd.intellijDev.Actionable.util.ext.runOnly
+import ir.mmd.intellijDev.Actionable.util.ext.isAllDistinct
 import javax.swing.JComponent
 
 /**

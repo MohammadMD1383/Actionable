@@ -17,6 +17,7 @@ import ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.caret.movement.CaretUtil
 import ir.mmd.intellijDev.Actionable.find.getWordBoundaries
 import ir.mmd.intellijDev.Actionable.util.*
+import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState as MovementSettingsState
 
 abstract class EditingAction : AnAction() {
@@ -95,11 +96,7 @@ abstract class EditingAction : AnAction() {
 		
 	}
 	
-	override fun update(e: AnActionEvent) {
-		val project = e.project
-		val editor = e.getData(CommonDataKeys.EDITOR)
-		e.presentation.isEnabled = project != null && editor != null && editor.caretModel.caretCount == 1
-	}
+	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { caretCount == 1 } }
 	
 	/**
 	 * implementation of:
@@ -226,21 +223,17 @@ object Actions {
 		document: Document,
 		offset: Int,
 		wb: IntArray?
-	): String? {
+	): String? = withMovementSettings {
 		val documentChars = document.charsSequence
-		val settingsState = MovementSettingsState.getInstance()
-		val wordSeparators = settingsState.wordSeparators
-		val hardStopCharacters = settingsState.hardStopCharacters
-		val wordBoundaries = getWordBoundaries(document, wordSeparators, hardStopCharacters, offset)
-		return if (wordBoundaries[0] != wordBoundaries[1]) {
-			/* check if the caller wants the word boundaries */
+		val (startOffset, endOffset) = document.getWordBoundaries(offset, wordSeparators, hardStopCharacters)
+		return if (startOffset != endOffset) {
 			wb?.let {
-				it[0] = wordBoundaries[0]
-				it[1] = wordBoundaries[1]
+				it[0] = startOffset
+				it[1] = endOffset
 			}
 			
 			val addition = if (documentChars[offset] !in wordSeparators + hardStopCharacters) +1 else 0
-			documentChars.substring(wordBoundaries[0], wordBoundaries[1] + addition)
+			documentChars.substring(startOffset, endOffset + addition)
 		} else null
 	}
 	

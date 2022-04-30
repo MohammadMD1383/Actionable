@@ -1,7 +1,7 @@
 package ir.mmd.intellijDev.Actionable.caret.editing.settings
 
 import com.intellij.openapi.options.Configurable
-import ir.mmd.intellijDev.Actionable.util.runOnly
+import ir.mmd.intellijDev.Actionable.util.ext.runOnly
 import javax.swing.JComponent
 
 class Settings : Configurable {

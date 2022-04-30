@@ -2,8 +2,10 @@ package ir.mmd.intellijDev.Actionable.caret.movement
 
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
-import ir.mmd.intellijDev.Actionable.util.contains
-import ir.mmd.intellijDev.Actionable.util.isPositive
+import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
+import ir.mmd.intellijDev.Actionable.util.ext.contains
+import ir.mmd.intellijDev.Actionable.util.ext.isPositive
+import ir.mmd.intellijDev.Actionable.util.nonnull
 
 /**
  * This is a wrapper class over [Caret] for convenient movement
@@ -55,7 +57,7 @@ class CaretUtil(private val caret: Caret) {
 	 */
 	fun peek(offset: Int): Char? = if (offset == 0) null else document.charsSequence.getOrNull(this.offset + offset.run {
 		this + if (isPositive xor caret.logicalPosition.leansForward) 0 else if (isPositive) -1 else +1
-	}) // todo inspection: convert with() to run() and vice versa
+	})
 	
 	/**
 	 * moves the temporary [CaretUtil.offset]
@@ -70,7 +72,32 @@ class CaretUtil(private val caret: Caret) {
 		while (true) if ((peek(step) ?: break).let { it in hardStops || it !in chars }) break else move(step)
 	}
 	
-	fun moveUntilReach(chars: String, hardStops: String, step: Int) {
+	fun moveUntilReached(chars: String, hardStops: String, step: Int) {
 		while (peek(step) !in (chars + hardStops)) move(step)
+	}
+	
+	fun moveCaret(
+		separators: String,
+		hardStops: String,
+		mode: Int,
+		dir: Int,
+		commit: Boolean = true
+	) = nonnull(peek(dir)) {
+		when (mode) {
+			SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE -> if (it in separators) {
+				moveWhileFacing(separators, hardStops, dir)
+			} else {
+				moveUntilReached(separators, hardStops, dir)
+			}
+			
+			SettingsState.WSBehaviour.STOP_AT_NEXT_SAME_CHAR_TYPE -> if (it in separators) { // todo make a boolean to check if the first attempt was reached the hard stops
+				moveWhileFacing(separators, hardStops, dir)
+				moveUntilReached(separators, hardStops, dir)
+			} else {
+				moveUntilReached(separators, hardStops, dir)
+				moveWhileFacing(separators, hardStops, dir)
+			}
+		}
+		if (commit) commit()
 	}
 }
