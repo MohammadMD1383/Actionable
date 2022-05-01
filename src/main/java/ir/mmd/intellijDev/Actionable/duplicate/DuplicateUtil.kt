@@ -4,11 +4,9 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.LogicalPosition
 import com.intellij.openapi.editor.VisualPosition
 import com.intellij.openapi.util.TextRange
-import ir.mmd.intellijDev.Actionable.util.runWriteCommandAction
+import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
-/**
- * This class is used to duplicate line(s) in the editor
- */
+// todo rewrite with caret access here
 class DuplicateUtil(private val editor: Editor) {
 	private val project = editor.project!!
 	private val document = editor.document
@@ -29,10 +27,9 @@ class DuplicateUtil(private val editor: Editor) {
 	fun duplicateUp(
 		start: Int,
 		end: Int
-	) {
-		val duplicateString = getDuplicateString(start, end)
+	) = with(getDuplicateString(start, end)) {
 		project.runWriteCommandAction {
-			document.insertString(duplicateString.endOffset, "\n${duplicateString.text}")
+			document.insertString(endOffset, "\n${text}")
 		}
 	}
 	
@@ -42,23 +39,20 @@ class DuplicateUtil(private val editor: Editor) {
 	fun duplicateDown(
 		start: Int,
 		end: Int
-	) {
-		val duplicateString = getDuplicateString(start, end)
+	) = with(getDuplicateString(start, end)) {
 		project.runWriteCommandAction {
-			document.insertString(duplicateString.startOffset, "${duplicateString.text}\n")
+			document.insertString(startOffset, "${text}\n")
 			
 			// check if the caret is at line start,
 			// then move the caret manually.
 			// due to an issue that caret won't move automatically.
 			// to be more clear, you can comment out the statements below and see the effect.
 			// put the caret at the line start and fire the `duplicate down` action.
-			if (duplicateString.startOffset == start) {
-				val caret = editor.caretModel.getCaretAt(VisualPosition(duplicateString.startingLine, 0)) ?: return@runWriteCommandAction
-				caret.moveToLogicalPosition(LogicalPosition(
-					duplicateString.startingLine + (duplicateString.endingLine - duplicateString.startingLine + 1),
+			if (startOffset == start) (editor.caretModel.getCaretAt(VisualPosition(startingLine, 0)) ?: return@runWriteCommandAction)
+				.moveToLogicalPosition(LogicalPosition(
+					startingLine + (endingLine - startingLine + 1),
 					0
 				))
-			}
 		}
 	}
 	
@@ -84,7 +78,7 @@ class DuplicateUtil(private val editor: Editor) {
 			endingLine = document.getLineNumber(end)
 			startOffset = document.getLineStartOffset(startingLine)
 			endOffset = document.getLineEndOffset(endingLine)
-		} else  /* no selection */ {
+		} else /* no selection */ {
 			endingLine = document.getLineNumber(start)
 			startingLine = endingLine
 			startOffset = document.getLineStartOffset(startingLine)

@@ -21,7 +21,9 @@ public class UI {
 	private JCheckBox hardStopCharactersIncludeNewLine;
 	private JCheckBox hardStopCharactersIncludeTab;
 	
-	public UI() { initListeners(); }
+	public UI() {
+		initListeners();
+	}
 	
 	private void initListeners() {
 		wordSeparatorsFieldDefault.addMouseListener(new MouseAdapter() {
@@ -46,7 +48,9 @@ public class UI {
 		});
 	}
 	
-	public JPanel getComponent() { return component; }
+	public JPanel getComponent() {
+		return component;
+	}
 	
 	public String getWordSeparators() {
 		String ws = wordSeparatorsField.getText();
@@ -54,6 +58,7 @@ public class UI {
 		if (tabIncluded.isSelected()) ws += '\t';
 		return ws;
 	}
+	
 	public void setWordSeparators(@NotNull String s) {
 		boolean newLine = s.contains("\n");
 		boolean tab = s.contains("\t");
@@ -63,7 +68,10 @@ public class UI {
 		tabIncluded.setSelected(tab);
 	}
 	
-	public int getWordSeparatorsBehaviour() { return Integer.parseInt(wordSeparatorsBehaviourGroup.getSelection().getActionCommand()); }
+	public int getWordSeparatorsBehaviour() {
+		return Integer.parseInt(wordSeparatorsBehaviourGroup.getSelection().getActionCommand());
+	}
+	
 	public void setWordSeparatorsBehaviour(int i) {
 		wordSeparatorsBehaviourGroup.setSelected(
 			i == SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE ?
@@ -79,6 +87,7 @@ public class UI {
 		if (hardStopCharactersIncludeTab.isSelected()) hs += "\t";
 		return hs;
 	}
+	
 	public void setHardStopCharacters(@NotNull String s) {
 		final boolean newLine = s.contains("\n");
 		final boolean tab = s.contains("\t");

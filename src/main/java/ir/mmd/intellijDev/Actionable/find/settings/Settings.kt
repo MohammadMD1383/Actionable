@@ -1,7 +1,7 @@
 package ir.mmd.intellijDev.Actionable.find.settings
 
 import com.intellij.openapi.options.Configurable
-import ir.mmd.intellijDev.Actionable.util.ext.runOnly
+import ir.mmd.intellijDev.Actionable.util.withFindSettings
 import javax.swing.JComponent
 
 class Settings : Configurable {
@@ -10,15 +10,15 @@ class Settings : Configurable {
 	override fun getDisplayName() = "Find"
 	override fun createComponent(): JComponent? = UI().run { ui = this; component }
 	
-	override fun isModified(): Boolean = SettingsState.getInstance().run {
+	override fun isModified(): Boolean = withFindSettings {
 		isCaseSensitive != ui!!.isCaseSensitive
 	}
 	
-	override fun apply() = SettingsState.getInstance().runOnly {
+	override fun apply() = withFindSettings {
 		isCaseSensitive = ui!!.isCaseSensitive
 	}
 	
-	override fun reset() = SettingsState.getInstance().runOnly {
+	override fun reset() = withFindSettings {
 		ui!!.isCaseSensitive = isCaseSensitive
 	}
 	

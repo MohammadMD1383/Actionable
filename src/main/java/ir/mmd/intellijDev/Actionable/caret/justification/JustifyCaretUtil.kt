@@ -2,15 +2,18 @@ package ir.mmd.intellijDev.Actionable.caret.justification
 
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.LogicalPosition
-import ir.mmd.intellijDev.Actionable.util.runWriteCommandAction
+import ir.mmd.intellijDev.Actionable.util.ext.doIf
+import ir.mmd.intellijDev.Actionable.util.ext.forEachIf
+import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
-/**
- * This class is used to manipulate editor carets
- */
 class JustifyCaretUtil(private val editor: Editor) {
 	private val project = editor.project!!
 	private val document = editor.document
 	private val carets = editor.caretModel.allCarets
+	
+	private val leftmostColumn: Int get() = carets.minOf { it.visualPosition.column }
+	private val rightmostColumn: Int get() = carets.maxOf { it.logicalPosition.column }
+	private val hasJustOneCaretOnEachLine get() = carets.distinctBy { it.logicalPosition.line }.size == carets.size
 	
 	/**
 	 * moves all carets to leftmost active column between carets
@@ -44,14 +47,12 @@ class JustifyCaretUtil(private val editor: Editor) {
 	 * @param targetColumn the column that all carets will be aligned across to it
 	 */
 	private fun justify(targetColumn: Int) = project.runWriteCommandAction {
-		for (caret in carets) {
-			if (!caret.isValid) continue
-			
-			val currentLine = caret.logicalPosition.line
+		carets.forEachIf({ isValid }) {
+			val currentLine = it.logicalPosition.line
 			val lineEndOffset = document.getLineEndOffset(currentLine)
 			val lineLastColumn = editor.offsetToLogicalPosition(lineEndOffset).column
 			if (lineLastColumn < targetColumn) document.insertString(lineEndOffset, " ".repeat(targetColumn - lineLastColumn))
-			caret.moveToLogicalPosition(LogicalPosition(currentLine, targetColumn))
+			it.moveToLogicalPosition(LogicalPosition(currentLine, targetColumn))
 		}
 	}
 	
@@ -74,35 +75,14 @@ class JustifyCaretUtil(private val editor: Editor) {
 	 * int largeLargeLarge |= 12;
 	 * ```
 	 */
-	fun justifyCaretsEndWithShifting() {
-		if (hasMoreThanOneCaretOnOneLine()) return
+	fun justifyCaretsEndWithShifting() = doIf({ hasJustOneCaretOnEachLine }) {
 		project.runWriteCommandAction {
 			carets.forEach {
-				document.insertString(it.offset - 1, " ".repeat(rightmostColumn - it.logicalPosition.column)) // todo: check if it works
+				document.insertString(
+					it.offset + if (it.logicalPosition.leansForward) -1 else 0,
+					" ".repeat(rightmostColumn - it.logicalPosition.column)
+				)
 			}
 		}
 	}
-	
-	/**
-	 * returns the leftmost column position among given carets
-	 *
-	 * please refer to [JustifyCaretUtil.justifyCaretsStart] for details
-	 *
-	 * @return the leftmost column position
-	 */
-	private val leftmostColumn: Int get() = carets.minOf { it.logicalPosition.column }
-	
-	/**
-	 * same as [leftmostColumn] but returns the rightmost column position
-	 *
-	 * @return the rightmost column position
-	 */
-	private val rightmostColumn: Int get() = carets.maxOf { it.logicalPosition.column }
-	
-	/**
-	 * checks if there are more than on caret on a single line
-	 *
-	 * @return true if there are more than one caret on a single line, otherwise false
-	 */
-	private fun hasMoreThanOneCaretOnOneLine() = carets.distinctBy { it.logicalPosition.line }.size != carets.size
 }

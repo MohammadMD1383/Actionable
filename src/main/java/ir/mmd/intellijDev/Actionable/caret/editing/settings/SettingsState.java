@@ -26,11 +26,17 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	public boolean showPasteActionHints = Defaults.showPasteActionHints;
 	
 	@SuppressWarnings("deprecation")
-	public static SettingsState getInstance() { return ServiceManager.getService(SettingsState.class); }
+	public static SettingsState getInstance() {
+		return ServiceManager.getService(SettingsState.class);
+	}
 	
 	@Override
-	public @Nullable SettingsState getState() { return this; }
+	public @Nullable SettingsState getState() {
+		return this;
+	}
 	
 	@Override
-	public void loadState(@NotNull SettingsState state) { XmlSerializerUtil.copyBean(state, this); }
+	public void loadState(@NotNull SettingsState state) {
+		XmlSerializerUtil.copyBean(state, this);
+	}
 }

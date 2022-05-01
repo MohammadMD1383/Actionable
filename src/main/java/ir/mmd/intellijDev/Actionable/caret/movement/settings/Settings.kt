@@ -2,8 +2,8 @@ package ir.mmd.intellijDev.Actionable.caret.movement.settings
 
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.options.ConfigurationException
-import ir.mmd.intellijDev.Actionable.util.ext.runOnly
 import ir.mmd.intellijDev.Actionable.util.ext.isAllDistinct
+import ir.mmd.intellijDev.Actionable.util.withMovementSettings
 import javax.swing.JComponent
 
 /**
@@ -15,29 +15,27 @@ class Settings : Configurable {
 	override fun getDisplayName() = "Movement"
 	override fun createComponent(): JComponent? = UI().run { ui = this; component }
 	
-	override fun isModified() = SettingsState.getInstance().run {
-		(ui!!.wordSeparators != wordSeparators) or
-			(ui!!.wordSeparatorsBehaviour != wordSeparatorsBehaviour) or
-			(ui!!.hardStopCharacters != hardStopCharacters)
+	override fun isModified() = withMovementSettings {
+		ui!!.wordSeparators != wordSeparators ||
+			ui!!.wordSeparatorsBehaviour != wordSeparatorsBehaviour ||
+			ui!!.hardStopCharacters != hardStopCharacters
 	}
 	
 	override fun apply() {
 		validateWordSeparators()
 		validateHardStopCharacter()
 		
-		SettingsState.getInstance().runOnly {
+		withMovementSettings {
 			wordSeparators = ui!!.wordSeparators
 			wordSeparatorsBehaviour = ui!!.wordSeparatorsBehaviour
 			hardStopCharacters = ui!!.hardStopCharacters
 		}
 	}
 	
-	override fun reset() {
-		SettingsState.getInstance().runOnly {
-			ui!!.wordSeparators = wordSeparators
-			ui!!.wordSeparatorsBehaviour = wordSeparatorsBehaviour
-			ui!!.hardStopCharacters = hardStopCharacters
-		}
+	override fun reset() = withMovementSettings {
+		ui!!.wordSeparators = wordSeparators
+		ui!!.wordSeparatorsBehaviour = wordSeparatorsBehaviour
+		ui!!.hardStopCharacters = hardStopCharacters
 	}
 	
 	override fun disposeUIResources() {
@@ -62,8 +60,6 @@ class Settings : Configurable {
 	 * @throws ConfigurationException if required conditions for [SettingsState.hardStopCharacters] is not met
 	 */
 	private fun validateHardStopCharacter(): Unit = with(ui!!.hardStopCharacters) {
-		when {
-			isAllDistinct().not() -> throw ConfigurationException("Hard stop characters must contain distinct characters")
-		}
+		if (!isAllDistinct()) throw ConfigurationException("Hard stop characters must contain distinct characters")
 	}
 }

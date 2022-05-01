@@ -11,7 +11,9 @@ public class UI {
 	private JCheckBox showPasteActionHintsCheckbox;
 	private JButton showPasteActionHintsCheckboxDefaultButton;
 	
-	public UI() { initListeners(); }
+	public UI() {
+		initListeners();
+	}
 	
 	private void initListeners() {
 		showPasteActionHintsCheckboxDefaultButton.addMouseListener(new MouseAdapter() {
@@ -22,8 +24,15 @@ public class UI {
 		});
 	}
 	
-	public JPanel getComponent() { return component; }
+	public JPanel getComponent() {
+		return component;
+	}
 	
-	public boolean isPasteActionHintsShown() { return showPasteActionHintsCheckbox.isSelected(); }
-	public void setPasteActionHintsShown(boolean b) { showPasteActionHintsCheckbox.setSelected(b); }
+	public boolean isPasteActionHintsShown() {
+		return showPasteActionHintsCheckbox.isSelected();
+	}
+	
+	public void setPasteActionHintsShown(boolean b) {
+		showPasteActionHintsCheckbox.setSelected(b);
+	}
 }

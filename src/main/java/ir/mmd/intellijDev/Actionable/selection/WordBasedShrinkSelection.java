@@ -1,7 +1,7 @@
 package ir.mmd.intellijDev.Actionable.selection;
 
 // --Commented out by Inspection START (2/14/22, 1:42 PM):
-//public class WordBasedShrinkSelection extends AnAction {
+// public class WordBasedShrinkSelection extends AnAction {
 //	@Override
 //	public void actionPerformed(@NotNull AnActionEvent e) {
 //

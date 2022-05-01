@@ -1,11 +1,10 @@
-package ir.mmd.intellijDev.Actionable.caret.movement
+package ir.mmd.intellijDev.Actionable.util
 
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.contains
 import ir.mmd.intellijDev.Actionable.util.ext.isPositive
-import ir.mmd.intellijDev.Actionable.util.nonnull
 
 /**
  * This is a wrapper class over [Caret] for convenient movement
@@ -30,24 +29,11 @@ class CaretUtil(private val caret: Caret) {
 	 */
 	var offset = caret.offset
 	
-	inline val nextChar: Char? get() = peek(+1)
-	inline val prevChar: Char? get() = peek(-1)
-	
-	/**
-	 * changes back the [CaretUtil.offset] to the **last [CaretUtil.commit]** and adds the given offset to it.
-	 *
-	 * @param offset the offset to be applied to the [CaretUtil.offset] after resetting it
-	 */
-	fun reset(offset: Int = 0) {
-		this.offset = caret.offset + offset
+	private fun reset() {
+		offset = caret.offset
 	}
 	
-	/**
-	 * moves the [caret] to the [CaretUtil.offset]
-	 *
-	 * @param offset the offset to be added to [CaretUtil.offset] before committing
-	 */
-	fun commit(offset: Int = 0) = caret.moveToOffset(offset.let { this.offset += it; this.offset })
+	fun commit() = caret.moveToOffset(offset)
 	
 	/**
 	 * peeks and returns the character at the given offset from current [CaretUtil.offset]
@@ -59,21 +45,20 @@ class CaretUtil(private val caret: Caret) {
 		this + if (isPositive xor caret.logicalPosition.leansForward) 0 else if (isPositive) -1 else +1
 	})
 	
-	/**
-	 * moves the temporary [CaretUtil.offset]
-	 *
-	 * @param offset can be either positive or negative
-	 */
-	fun move(offset: Int) {
-		this.offset += offset
+	private fun moveWhileFacing(chars: String, hardStops: String, step: Int): Boolean {
+		while (true) when (peek(step) ?: return false) {
+			in hardStops -> return true
+			!in chars -> return false
+			else -> offset += step
+		}
 	}
 	
-	fun moveWhileFacing(chars: String, hardStops: String, step: Int) {
-		while (true) if ((peek(step) ?: break).let { it in hardStops || it !in chars }) break else move(step)
-	}
-	
-	fun moveUntilReached(chars: String, hardStops: String, step: Int) {
-		while (peek(step) !in (chars + hardStops)) move(step)
+	private fun moveUntilReached(chars: String, hardStops: String, step: Int): Boolean {
+		while (true) when (peek(step) ?: return false) {
+			in hardStops -> return true
+			in chars -> return false
+			else -> offset += step
+		}
 	}
 	
 	fun moveCaret(
@@ -90,14 +75,38 @@ class CaretUtil(private val caret: Caret) {
 				moveUntilReached(separators, hardStops, dir)
 			}
 			
-			SettingsState.WSBehaviour.STOP_AT_NEXT_SAME_CHAR_TYPE -> if (it in separators) { // todo make a boolean to check if the first attempt was reached the hard stops
-				moveWhileFacing(separators, hardStops, dir)
-				moveUntilReached(separators, hardStops, dir)
+			SettingsState.WSBehaviour.STOP_AT_NEXT_SAME_CHAR_TYPE -> if (it in separators) {
+				if (!moveWhileFacing(separators, hardStops, dir)) moveUntilReached(separators, hardStops, dir)
 			} else {
-				moveUntilReached(separators, hardStops, dir)
-				moveWhileFacing(separators, hardStops, dir)
+				if (!moveUntilReached(separators, hardStops, dir)) moveWhileFacing(separators, hardStops, dir)
 			}
 		}
 		if (commit) commit()
+	}
+	
+	fun getWordBoundaries(
+		wordSeparators: String,
+		hardStops: String
+	) = IntArray(2).apply {
+		moveUntilReached(wordSeparators, hardStops, BACKWARD)
+		set(0, offset)
+		reset()
+		
+		moveUntilReached(wordSeparators, hardStops, FORWARD)
+		set(1, offset)
+		reset()
+	}
+	
+	fun getAssociatedWord(boundaries: IntArray? = null): String? = withMovementSettings {
+		returnBy(getWordBoundaries(wordSeparators, hardStopCharacters)) { (startOffset, endOffset) ->
+			return@returnBy if (startOffset == endOffset) null else {
+				boundaries?.let {
+					it[0] = startOffset
+					it[1] = endOffset
+				}
+				
+				document.charsSequence.substring(startOffset, endOffset)
+			}
+		}
 	}
 }

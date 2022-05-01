@@ -22,8 +22,15 @@ public class UI {
 		});
 	}
 	
-	public JPanel getComponent() { return component; }
+	public JPanel getComponent() {
+		return component;
+	}
 	
-	public boolean isCaseSensitive() { return caseSensitiveCheckBox.isSelected(); }
-	public void setCaseSensitive(boolean b) { caseSensitiveCheckBox.setSelected(b); }
+	public boolean isCaseSensitive() {
+		return caseSensitiveCheckBox.isSelected();
+	}
+	
+	public void setCaseSensitive(boolean b) {
+		caseSensitiveCheckBox.setSelected(b);
+	}
 }

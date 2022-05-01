@@ -4,32 +4,43 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
-import ir.mmd.intellijDev.Actionable.caret.editing.Actions.getWordAtCaret
-import ir.mmd.intellijDev.Actionable.util.*
+import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.withMovementSettings
 
 class ExecutePasteAction : EditingAction() {
-	override fun actionPerformed(e: AnActionEvent) {
-		val editor = e.editor!!
-		val document = editor.document
-		val caret = e.primaryCaret!!
-		val pasteOffset = editor.getUserData(scheduledPasteActionOffset)!!
+	override fun actionPerformed(e: AnActionEvent) = withMovementSettings {
+		val editor = e.editor
+		val caret = e.primaryCaret
 		val (target, action) = (editor.getUserData(scheduledPasteActionKind) ?: return).split(';')
 		
 		val startOffset: Int
 		val endOffset: Int
 		
-		if (target == "el") e.psiFile!!.elementAt(caret)!!.textRange.let {
-			startOffset = it.startOffset
-			endOffset = it.endOffset
-		} else  /* target == "wd" */ {
-			val wordBoundaries = intArrayOf(0, 0)
-			getWordAtCaret(document, caret, wordBoundaries)
-			startOffset = wordBoundaries[0]
-			endOffset = wordBoundaries[1]
+		when (target) {
+			"el" -> e.psiFile!!.elementAt(caret)!!.textRange.let { (start, end) ->
+				startOffset = start
+				endOffset = end
+			}
+			
+			"wd" -> caret.util.getWordBoundaries(wordSeparators, hardStopCharacters).let { (start, end) ->
+				startOffset = start
+				endOffset = end
+			}
+			
+			else -> throw Exception("Unknown scheduled paste action target")
 		}
 		
-		e.project!!.runWriteCommandAction { paste(document, caret, startOffset, endOffset, pasteOffset, action == "ct") }
-		removeScheduledPasteAction(editor)
+		e.project!!.runWriteCommandAction {
+			paste(
+				editor.document,
+				caret,
+				startOffset,
+				endOffset,
+				editor.getUserData(scheduledPasteActionOffset)!!,
+				action == "ct"
+			)
+		}
+		editor.removeScheduledPasteAction()
 	}
 	
 	/**
