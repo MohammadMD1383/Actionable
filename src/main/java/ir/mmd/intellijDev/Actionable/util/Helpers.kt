@@ -7,16 +7,16 @@ import ir.mmd.intellijDev.Actionable.find.settings.SettingsState as FindSettings
 inline fun <T> by(receiver: T, block: (T) -> Unit) = block(receiver)
 inline fun <T, R> returnBy(receiver: T, block: (T) -> R) = block(receiver)
 
+inline fun <T, O, R> with(receiver: T, obj: O, block: T.(O) -> R) = receiver.block(obj)
+
 inline fun after(block: () -> Unit) = block()
+inline fun trueAfter(block: () -> Unit): Boolean {
+	block()
+	return true
+}
 
 inline fun <T> nonnull(receiver: T?, block: (T) -> Unit) {
 	if (receiver != null) block(receiver)
-}
-
-inline fun countRepeats(initial: Int = 1, addition: Int = 1, block: (Int) -> Boolean): Int {
-	var count = initial
-	while (block(count)) count += addition
-	return count
 }
 
 inline fun <R> withFindSettings(block: FindSettingsState.() -> R) = FindSettingsState.getInstance().run(block)

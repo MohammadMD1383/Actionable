@@ -6,4 +6,5 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
 
 inline fun Project.runWriteCommandAction(noinline action: () -> Unit) = WriteCommandAction.runWriteCommandAction(this, action)
+inline fun <T> Project.runWriteCommandActionWith(obj: T, crossinline action: (T) -> Unit) = runWriteCommandAction { action(obj) }
 inline fun Project.psiFileFor(document: Document) = PsiDocumentManager.getInstance(this).getPsiFile(document)

@@ -1,3 +1,5 @@
+import proguard.gradle.ProGuardTask
+
 buildscript {
 	repositories {
 		mavenCentral()
@@ -27,13 +29,6 @@ compileKotlin {
 		jvmTarget = JavaVersion.VERSION_1_8
 		freeCompilerArgs = ["-Xjvm-default=all"]
 	}
-}
-
-jar {
-	exclude(
-		'ir/mmd/intellijDev/Actionable/selection/',
-		'ir/mmd/intellijDev/Actionable/action/',
-	)
 }
 
 repositories {
@@ -70,3 +65,60 @@ buildSearchableOptions {
 test {
 	useJUnitPlatform()
 }
+
+task minify(type: ProGuardTask, dependsOn: buildPlugin) {
+	outputs.upToDateWhen { false }
+	
+	final gradleModulesPath = '/mnt/8CD64E25D64E103E/CacheFiles/linux/.gradle/caches/modules-2/files-2.1'
+	final javaModulesPath = '/usr/lib/jvm/java-18-openjdk-amd64/jmods'
+	final pkg = 'ir.mmd.intellijDev.Actionable'
+	
+	optimizationpasses 5
+	
+	dontnote()
+	dontwarn 'kotlin.**'
+	
+	libraryjars "$javaModulesPath/java.base.jmod"
+	libraryjars "$javaModulesPath/java.desktop.jmod"
+	libraryjars "$javaModulesPath/java.datatransfer.jmod"
+	
+	libraryjars "$gradleModulesPath/com.jetbrains.intellij.idea/ideaIC/2021.3.1/c2ea6f6a9dee8ad102f889942471eb402f1c7a5a/ideaIC-2021.3.1/lib/platform-api.jar"
+	libraryjars "$gradleModulesPath/com.jetbrains.intellij.idea/ideaIC/2021.3.1/c2ea6f6a9dee8ad102f889942471eb402f1c7a5a/ideaIC-2021.3.1/lib/util.jar"
+	libraryjars "$gradleModulesPath/com.jetbrains.intellij.idea/ideaIC/2021.3.1/c2ea6f6a9dee8ad102f889942471eb402f1c7a5a/ideaIC-2021.3.1/lib/forms_rt.jar"
+	libraryjars "$gradleModulesPath/com.jetbrains.intellij.idea/ideaIC/2021.3.1/c2ea6f6a9dee8ad102f889942471eb402f1c7a5a/ideaIC-2021.3.1/lib/annotations.jar"
+	
+	injars "build/distributions/Actionable-${project.version}.zip"
+	outjars "build/minified/Actionable-${project.version}.zip"
+	
+	keep "class ${pkg}.internal.ErrorReporter"
+	keep "class ${pkg}.settings.Settings"
+	keep "class ${pkg}.duplicate.DuplicateLinesUp"
+	keep "class ${pkg}.duplicate.DuplicateLinesDown"
+	keep "class ${pkg}.find.settings.Settings"
+	keep "class ${pkg}.find.settings.SettingsState"
+	keep "class ${pkg}.find.SelectNextOccurrence"
+	keep "class ${pkg}.find.SelectPreviousOccurrence"
+	keep "class ${pkg}.caret.settings.Settings"
+	keep "class ${pkg}.caret.movement.settings.Settings"
+	keep "class ${pkg}.caret.movement.settings.SettingsState"
+	keep "class ${pkg}.caret.movement.MoveCaretToNextWord"
+	keep "class ${pkg}.caret.movement.MoveCaretToNextWordWithSelection"
+	keep "class ${pkg}.caret.movement.MoveCaretToPreviousWord"
+	keep "class ${pkg}.caret.movement.MoveCaretToPreviousWordWithSelection"
+	keep "class ${pkg}.caret.justification.JustifyCaretsStart"
+	keep "class ${pkg}.caret.justification.JustifyCaretsEnd"
+	keep "class ${pkg}.caret.justification.JustifyCaretsEndAndShift"
+	keep "class ${pkg}.caret.editing.settings.Settings"
+	keep "class ${pkg}.caret.editing.settings.SettingsState"
+	keep "class ${pkg}.caret.editing.CopyWordAtCaret"
+	keep "class ${pkg}.caret.editing.CutWordAtCaret"
+	keep "class ${pkg}.caret.editing.CopyElementAtCaret"
+	keep "class ${pkg}.caret.editing.CutElementAtCaret"
+	keep "class ${pkg}.caret.editing.SetWordCopyPasteOffset"
+	keep "class ${pkg}.caret.editing.SetWordCutPasteOffset"
+	keep "class ${pkg}.caret.editing.SetElementCopyPasteOffset"
+	keep "class ${pkg}.caret.editing.SetElementCutPasteOffset"
+	keep "class ${pkg}.caret.editing.ExecutePasteAction"
+}
+
+buildPlugin.finalizedBy(minify)

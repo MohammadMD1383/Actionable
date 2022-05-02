@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.LogicalPosition
 import ir.mmd.intellijDev.Actionable.util.ext.doIf
 import ir.mmd.intellijDev.Actionable.util.ext.forEachIf
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
+import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandActionWith
 
 class JustifyCaretUtil(private val editor: Editor) {
 	private val project = editor.project!!
@@ -76,12 +77,13 @@ class JustifyCaretUtil(private val editor: Editor) {
 	 * ```
 	 */
 	fun justifyCaretsEndWithShifting() = doIf({ hasJustOneCaretOnEachLine }) {
-		project.runWriteCommandAction {
+		project.runWriteCommandActionWith(rightmostColumn) { targetColumn ->
 			carets.forEach {
 				document.insertString(
-					it.offset + if (it.logicalPosition.leansForward) -1 else 0,
-					" ".repeat(rightmostColumn - it.logicalPosition.column)
+					it.offset,
+					" ".repeat(targetColumn - it.logicalPosition.column)
 				)
+				it.moveToLogicalPosition(LogicalPosition(it.logicalPosition.line, targetColumn))
 			}
 		}
 	}

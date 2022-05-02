@@ -3,8 +3,10 @@ package ir.mmd.intellijDev.Actionable.util
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
+import ir.mmd.intellijDev.Actionable.util.ext.charAtOrNull
 import ir.mmd.intellijDev.Actionable.util.ext.contains
 import ir.mmd.intellijDev.Actionable.util.ext.isPositive
+import ir.mmd.intellijDev.Actionable.util.ext.plus
 
 /**
  * This is a wrapper class over [Caret] for convenient movement
@@ -38,25 +40,30 @@ class CaretUtil(private val caret: Caret) {
 	/**
 	 * peeks and returns the character at the given offset from current [CaretUtil.offset]
 	 *
-	 * @param offset the offset from current **temporary caret position**
+	 * @param dir the offset from current **temporary caret position**
 	 * @return the character or null if the evaluated offset is invalid in the parent [Document] of the [Caret]
 	 */
-	fun peek(offset: Int): Char? = if (offset == 0) null else document.charsSequence.getOrNull(this.offset + offset.run {
-		this + if (isPositive xor caret.logicalPosition.leansForward) 0 else if (isPositive) -1 else +1
-	})
+	private fun peek(dir: Int): Char? = if (dir == 0) null else document.charAtOrNull(offset + dir.plus { if (isPositive) -1 else 0 })
+	
+	private fun move(step: Int, hardStops: String): Boolean {
+		(peek(step) ?: return false).let {
+			offset += step
+			return it !in hardStops
+		}
+	}
 	
 	private fun moveWhileFacing(chars: String, hardStops: String, step: Int): Boolean {
 		while (true) when (peek(step) ?: return false) {
-			in hardStops -> return true
-			!in chars -> return false
+			in hardStops -> return false
+			!in chars -> return true
 			else -> offset += step
 		}
 	}
 	
 	private fun moveUntilReached(chars: String, hardStops: String, step: Int): Boolean {
 		while (true) when (peek(step) ?: return false) {
-			in hardStops -> return true
-			in chars -> return false
+			in hardStops -> return false
+			in chars -> return true
 			else -> offset += step
 		}
 	}
@@ -68,18 +75,17 @@ class CaretUtil(private val caret: Caret) {
 		dir: Int,
 		commit: Boolean = true
 	) = nonnull(peek(dir)) {
+		if (!move(dir, hardStops)) return@nonnull after { if (commit) commit() }
 		when (mode) {
-			SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE -> if (it in separators) {
+			SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE -> if (it in separators)
 				moveWhileFacing(separators, hardStops, dir)
-			} else {
+			else
 				moveUntilReached(separators, hardStops, dir)
-			}
 			
-			SettingsState.WSBehaviour.STOP_AT_NEXT_SAME_CHAR_TYPE -> if (it in separators) {
-				if (!moveWhileFacing(separators, hardStops, dir)) moveUntilReached(separators, hardStops, dir)
-			} else {
-				if (!moveUntilReached(separators, hardStops, dir)) moveWhileFacing(separators, hardStops, dir)
-			}
+			SettingsState.WSBehaviour.STOP_AT_NEXT_SAME_CHAR_TYPE -> if (it in separators)
+				moveWhileFacing(separators, hardStops, dir) and moveUntilReached(separators, hardStops, dir)
+			else
+				moveUntilReached(separators, hardStops, dir) and moveWhileFacing(separators, hardStops, dir)
 		}
 		if (commit) commit()
 	}

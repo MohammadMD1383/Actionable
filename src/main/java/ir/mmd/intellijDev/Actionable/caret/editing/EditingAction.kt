@@ -38,9 +38,9 @@ abstract class EditingAction : AnAction() {
 				val startOffset: Int
 				val endOffset: Int
 				
-				when (editor.getUserData(scheduledPasteActionKind)!!.split(';')[0]) {
-					"el" -> editor.project!!.psiFileFor(editor.document)!!.findElementAt(offset)!!.run {
-						if (text.isBlank()) {
+				when ((editor.getUserData(scheduledPasteActionKind) ?: return).split(';')[0]) {
+					"el" -> editor.project!!.psiFileFor(editor.document)!!.findElementAt(offset).run {
+						if (this == null || text.isBlank()) {
 							startOffset = 0
 							endOffset = 0
 						} else textRange.let { (start, end) ->
@@ -49,12 +49,12 @@ abstract class EditingAction : AnAction() {
 						}
 					}
 					
-					"wd" -> editor.document.getWordBoundaries(offset, wordSeparators, hardStopCharacters).let { (start, end) ->
+					"wd" -> editor.document.getWordBoundaries(offset, wordSeparators + hardStopCharacters).let { (start, end) ->
 						startOffset = start
 						endOffset = end
 					}
 					
-					else -> throw throw Exception("Unknown scheduled paste action target")
+					else -> throw Exception("Unknown scheduled paste action target")
 				}
 				
 				editor.markupModel.runOnly {

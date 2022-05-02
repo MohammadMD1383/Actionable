@@ -36,7 +36,8 @@
 	<change-notes><![CDATA[
 		<ul>
 			<li><b>3.1.0:</b><br>
-				<b>Removed scripting feature in favor of better existing plugins.</b>
+				<b>Removed scripting feature in favor of better existing plugins.</b><br>
+				rewritten plugin in kotlin
 			</li>
 			<li><b>3.0.0:</b><br>
 				Added scripting feature for custom actions! - available at Settings -> Tools -> Actionable -> Scripting<br>
