@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.duplicate
+package ir.mmd.intellijDev.Actionable.util
 
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.LogicalPosition
@@ -49,10 +49,12 @@ class DuplicateUtil(private val editor: Editor) {
 			// to be more clear, you can comment out the statements below and see the effect.
 			// put the caret at the line start and fire the `duplicate down` action.
 			if (startOffset == start) (editor.caretModel.getCaretAt(VisualPosition(startingLine, 0)) ?: return@runWriteCommandAction)
-				.moveToLogicalPosition(LogicalPosition(
-					startingLine + (endingLine - startingLine + 1),
-					0
-				))
+				.moveToLogicalPosition(
+					LogicalPosition(
+						startingLine + (endingLine - startingLine + 1),
+						0
+					)
+				)
 		}
 	}
 	

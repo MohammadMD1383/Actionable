@@ -17,7 +17,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.withEditingSettings
 import ir.mmd.intellijDev.Actionable.util.withMovementSettings
 
-abstract class EditingAction : AnAction() {
+abstract class CaretEditingAction : AnAction() {
 	companion object {
 		@JvmStatic
 		protected val scheduledPasteActionKind = Key<String>("scheduledPasteAction.kink")
@@ -59,13 +59,15 @@ abstract class EditingAction : AnAction() {
 				
 				editor.markupModel.runOnly {
 					previousHighlighter?.let { removeHighlighter(it) }
-					editor.putUserData(previousHighlighterKey, addRangeHighlighter(
-						startOffset,
-						endOffset,
-						HighlighterLayer.LAST + 10,
-						EditorColors.IDENTIFIER_UNDER_CARET_ATTRIBUTES.defaultAttributes,
-						HighlighterTargetArea.EXACT_RANGE
-					))
+					editor.putUserData(
+						previousHighlighterKey, addRangeHighlighter(
+							startOffset,
+							endOffset,
+							HighlighterLayer.LAST + 10,
+							EditorColors.IDENTIFIER_UNDER_CARET_ATTRIBUTES.defaultAttributes,
+							HighlighterTargetArea.EXACT_RANGE
+						)
+					)
 				}
 			}
 			

@@ -13,6 +13,9 @@ inline val Int.isPositive: Boolean get() = this > 0
 inline operator fun Int.plus(block: Int.() -> Int) = plus(block())
 
 inline fun <T> T.runOnly(block: T.() -> Unit) = block()
+inline fun <T> T.letOnly(block: (T) -> Unit) = block(this)
+
+inline val <T> T.isNotNull: Boolean get() = this != null
 
 inline fun <T, O1, O2> T.applyWith(o1: O1, o2: O2, block: T.(O1, O2) -> Unit) = apply { block(o1, o2) }
 

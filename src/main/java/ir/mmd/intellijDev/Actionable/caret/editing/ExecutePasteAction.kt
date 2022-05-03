@@ -7,7 +7,7 @@ import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.withMovementSettings
 
-class ExecutePasteAction : EditingAction() {
+class ExecutePasteAction : CaretEditingAction() {
 	override fun actionPerformed(e: AnActionEvent) = withMovementSettings {
 		val editor = e.editor
 		val caret = e.primaryCaret
@@ -62,7 +62,7 @@ class ExecutePasteAction : EditingAction() {
 		offset: Int,
 		isCutAction: Boolean
 	) {
-		if (start == end) return // todo check
+		if (start == end) return
 		val text = document.getText(TextRange(start, end))
 		
 		if (offset > start && offset > end) {
@@ -74,5 +74,11 @@ class ExecutePasteAction : EditingAction() {
 			document.insertString(offset, text)
 			caret.moveToOffset(offset + text.length)
 		} /* else -> offset is between the start and end -> ignore */
+	}
+	
+	override fun update(e: AnActionEvent) = e.enableIf {
+		hasProject and hasEditorWith {
+			caretCount == 1 && getUserData(scheduledPasteActionKind).isNotNull
+		}
 	}
 }

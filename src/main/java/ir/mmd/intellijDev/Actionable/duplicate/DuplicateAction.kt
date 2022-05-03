@@ -2,6 +2,7 @@ package ir.mmd.intellijDev.Actionable.duplicate
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import ir.mmd.intellijDev.Actionable.util.DuplicateUtil
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
 abstract class DuplicateAction(private val duplicate: DuplicateUtil.(Int, Int) -> Unit) : AnAction() {
