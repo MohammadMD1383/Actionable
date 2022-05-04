@@ -1,6 +1,7 @@
 import org.jetbrains.intellij.tasks.BuildSearchableOptionsTask
 import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 import org.jetbrains.intellij.tasks.RunIdeTask
+import org.jetbrains.intellij.tasks.RunPluginVerifierTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import proguard.gradle.ProGuardTask
 import kotlin.text.RegexOption.MULTILINE
@@ -34,7 +35,7 @@ dependencies {
 }
 
 group = "ir.mmd.intellijDev"
-version = "3.2.0"
+version = "3.3.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
@@ -52,6 +53,7 @@ intellij {
 	// version.set("2022.1")
 	version.set("2021.3.1")
 	// version.set("2019.1.4")
+	// version.set("2017.1")
 }
 
 tasks.withType<RunIdeTask> {
@@ -105,10 +107,11 @@ task<ProGuardTask>("minify") {
 	libraryjars("$javaModulesPath/java.desktop.jmod")
 	libraryjars("$javaModulesPath/java.datatransfer.jmod")
 	
-	libraryjars("$gradleModulesPath/$ideaLibPath/platform-api.jar")
-	libraryjars("$gradleModulesPath/$ideaLibPath/util.jar")
-	libraryjars("$gradleModulesPath/$ideaLibPath/forms_rt.jar")
-	libraryjars("$gradleModulesPath/$ideaLibPath/annotations.jar")
+	// libraryjars("$gradleModulesPath/$ideaLibPath/platform-api.jar")
+	// libraryjars("$gradleModulesPath/$ideaLibPath/util.jar")
+	// libraryjars("$gradleModulesPath/$ideaLibPath/forms_rt.jar")
+	// libraryjars("$gradleModulesPath/$ideaLibPath/annotations.jar")
+	libraryjars("/mnt/8CD64E25D64E103E/CacheFiles/linux/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2021.3.1/8eb6c37e8af72efb8045589d1038747924f62677/ideaIC-2021.3.1-sources.jar")
 	
 	injars(inFile)
 	outjars(outFile)
@@ -116,6 +119,22 @@ task<ProGuardTask>("minify") {
 	keepattributes("RuntimeVisibleAnnotations")
 	generateKeepRules()
 }
+
+tasks.withType<RunPluginVerifierTask> {
+	ideVersions.set(
+		"IC-2017.1"
+	)
+	
+	localPaths.set(
+		File("/home/mohammad/IDEA/IU-221.5591.19")
+	)
+	
+	distributionFile.set(
+		tasks["minify"].outputs.files.files.first()
+	)
+}
+
+// Helpers
 
 fun ProGuardTask.generateKeepRules() {
 	val xmlContent = file(pluginXmlPath).readText()
@@ -129,3 +148,5 @@ fun ProGuardTask.generateKeepRules() {
 	
 	classes.forEach(::keep)
 }
+
+fun <T> ListProperty<T>.set(vararg values: T) = set(listOf(*values))

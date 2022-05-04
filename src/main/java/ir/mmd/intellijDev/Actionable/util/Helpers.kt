@@ -5,7 +5,8 @@ import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState as Mo
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState as FindSettingsState
 
 inline fun <T> by(receiver: T, block: (T) -> Unit) = block(receiver)
-inline fun <T, R> returnBy(receiver: T, block: (T) -> R) = block(receiver)
+inline fun <T, R> returnBy(obj: T, block: (T) -> R) = block(obj)
+inline fun <T1, T2, R> returnBy(obj1: T1, obj2: T2, block: (T1, T2) -> R) = block(obj1, obj2)
 
 inline fun <T, O, R> with(receiver: T, obj: O, block: T.(O) -> R) = receiver.block(obj)
 

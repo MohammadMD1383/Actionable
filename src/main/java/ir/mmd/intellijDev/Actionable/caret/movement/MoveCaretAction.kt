@@ -3,57 +3,59 @@ package ir.mmd.intellijDev.Actionable.caret.movement
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
-import ir.mmd.intellijDev.Actionable.util.CaretUtil
+import com.intellij.psi.PsiFile
+import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
+import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.returnBy
 import ir.mmd.intellijDev.Actionable.util.withMovementSettings
 
 abstract class MoveCaretAction : AnAction() {
-	fun moveCarets(
-		carets: List<Caret>,
-		dir: Int
-	) = withMovementSettings {
-		carets.withEach {
-			removeSelection()
-			util.moveCaret(
-				wordSeparators,
-				hardStopCharacters,
-				wordSeparatorsBehaviour,
-				dir
-			)
+	fun moveCaretVirtually(
+		caret: Caret,
+		forward: Boolean,
+		psiFile: PsiFile? = null
+	): Int = if (psiFile == null) withMovementSettings {
+		val cutil = caret.util
+		cutil.moveCaret(
+			wordSeparators,
+			hardStopCharacters,
+			wordSeparatorsBehaviour,
+			if (forward) FORWARD else BACKWARD
+		)
+		cutil.offset
+	} else returnBy(caret.offset, caret.editor.document.textLength) { offset, length ->
+		if (offset == length) {
+			if (forward) offset
+			else psiFile.findElementAt(offset - 1)!!.textRange.startOffset
+		} else psiFile.findElementAt(offset)!!.run {
+			if (forward) nextLeaf()?.textRange?.startOffset ?: textRange.endOffset
+			else prevLeaf()?.textRange?.startOffset ?: 0
 		}
 	}
 	
 	fun moveCaretsWithSelection(
 		carets: MutableList<Caret>,
-		dir: Int
-	) = withMovementSettings {
-		val selectionStarts = carets.map { it.leadSelectionOffset } as MutableList
-		
-		if (dir == CaretUtil.BACKWARD) {
+		forward: Boolean,
+		targetOffset: (Caret) -> Int
+	) = returnBy(carets.map { it.leadSelectionOffset } as MutableList) { selectionStarts ->
+		if (!forward) {
 			carets.reverse()
 			selectionStarts.reverse()
 		}
 		
 		carets.forEachIndexed { i, caret ->
-			val cutil = caret.util
-			
-			cutil.moveCaret(
-				wordSeparators,
-				hardStopCharacters,
-				wordSeparatorsBehaviour,
-				dir,
-				false
-			)
+			val offset = targetOffset(caret)
 			
 			carets.getOrNull(i + 1)?.let { nextCaret ->
-				if (cutil.offset in nextCaret.selectionRange) return@forEachIndexed after {
+				if (offset in nextCaret.selectionRange) return@forEachIndexed after {
 					nextCaret.setSelection(selectionStarts[i], nextCaret.offset)
 					selectionStarts[i + 1] = selectionStarts[i]
 				}
 			}
 			
-			cutil.commit()
+			caret.moveToOffset(offset)
 			caret.setSelection(selectionStarts[i], caret.offset)
 		}
 	}

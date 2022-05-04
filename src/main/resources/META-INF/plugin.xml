@@ -7,7 +7,7 @@
 		<h3>Adds some favorite/extra actions that are not available in IntelliJ based IDEs.</h3>
 		
 		<div>Features:</div>
-		<ul>
+		<ul>			
 			<li>Duplicate Lines Up</li>
 			<li>Duplicate Lines Down</li>
 			<li>Remove Duplicate Selections</li>
@@ -30,6 +30,10 @@
 			<li>Move Caret to Next Word with Selection</li>
 			<li>Move Caret to Previous Word</li>
 			<li>Move Caret to Previous Word with Selection</li>
+			<li>Move Caret to Next Element</li>
+			<li>Move Caret to Previous Element</li>
+			<li>Move Caret to Next Element with Selection</li>
+			<li>Move Caret to Previous Element with Selection</li>
 		</ul>
 		
 		<b>For detailed description about all the actions, please visit the <a href="https://github.com/MohammadMD1383/Actionable">github repo</a></b>
@@ -287,6 +291,30 @@
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousWordWithSelection"
 					text="Move Caret to Previous Word with Selection"
 					description="Like the same action provided by the IDE but a bit different and configurable"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextElement"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextElement"
+					text="Move Caret to Next Element"
+					description="Moves the caret to next psi element"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElement"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElement"
+					text="Move Caret to Previous Element"
+					description="Moves the caret to previous psi element"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextElementWithSelection"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextElementWithSelection"
+					text="Move Caret to Next Element with Selection"
+					description="Moves the caret to next psi element with selection"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElementWithSelection"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElementWithSelection"
+					text="Move Caret to Previous Element with Selection"
+					description="Moves the caret to previous psi element with selection"/>
 			</group>
 		</group>
 	</actions>
