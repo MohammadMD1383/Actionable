@@ -111,11 +111,7 @@ task<ProGuardTask>("minify") {
 	libraryjars("$javaModulesPath/java.desktop.jmod")
 	libraryjars("$javaModulesPath/java.datatransfer.jmod")
 	
-	// libraryjars("$gradleModulesPath/$ideaLibPath/platform-api.jar")
-	// libraryjars("$gradleModulesPath/$ideaLibPath/util.jar")
-	// libraryjars("$gradleModulesPath/$ideaLibPath/forms_rt.jar")
-	// libraryjars("$gradleModulesPath/$ideaLibPath/annotations.jar")
-	libraryjars("/mnt/8CD64E25D64E103E/CacheFiles/linux/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2021.3.1/8eb6c37e8af72efb8045589d1038747924f62677/ideaIC-2021.3.1-sources.jar")
+	libraryjars("$gradleModulesPath/$ideaLibPath/")
 	
 	injars(inFile)
 	outjars(outFile)
@@ -125,6 +121,8 @@ task<ProGuardTask>("minify") {
 }
 
 tasks.withType<RunPluginVerifierTask> {
+	dependsOn("minify")
+	
 	ideVersions.set(
 		"IC-2017.1"
 	)
