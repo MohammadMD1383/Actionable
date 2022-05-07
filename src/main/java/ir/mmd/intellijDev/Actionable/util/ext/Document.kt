@@ -5,6 +5,7 @@ import ir.mmd.intellijDev.Actionable.util.returnBy
 import ir.mmd.intellijDev.Actionable.util.withMovementSettings
 
 inline fun Document.charAtOrNull(offset: Int) = charsSequence.getOrNull(offset)
+inline fun Document.replaceCharAt(offset: Int, c: Char) = replaceString(offset, offset + 1, c.toString())
 
 fun Document.getWordBoundaries(
 	offset: Int,

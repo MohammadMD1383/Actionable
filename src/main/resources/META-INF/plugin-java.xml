@@ -1,0 +1,6 @@
+<idea-plugin>
+	<extensions defaultExtensionNs="com.intellij">
+		<!-- <typedHandler -->
+		<!-- 	implementation="ir.mmd.intellijDev.Actionable.typing.java.AutoChangeCase"/> -->
+	</extensions>
+</idea-plugin>

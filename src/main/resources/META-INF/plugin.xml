@@ -8,9 +8,16 @@
 		
 		<div>Features:</div>
 		<ul>			
+			<li>Predict Words: Camel-Case</li>
+			<li>Predict Words: Pascal-Case</li>
+			<li>Predict Words: Snake-Case</li>
+			<li>Predict Words: Kebab-Case</li>
+			<li>Predict Words: Spaced</li>
 			<li>Duplicate Lines Up</li>
 			<li>Duplicate Lines Down</li>
 			<li>Remove Duplicate Selections</li>
+			<li>Select Word Under Caret</li>
+			<li>Select Element Under Caret</li>
 			<li>Add Selection to Next Occurrence</li>
 			<li>Add Selection to Previous Occurrence</li>
 			<li>Justify Carets Start</li>
@@ -41,6 +48,11 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.3.0:</b><br>
+				Added move caret to next/previous element with/without selection actions.<br>
+				Added select word/element under caret actions.<br>
+				Added predict case actions.
+			</li>
 			<li><b>3.2.0:</b><br>
 				Added Cancel Paste action<br>
 				Added Remove Duplicate Selections action<br>
@@ -97,9 +109,10 @@
 			<li><b>1.0.0:</b> Fixed some issues with plugin.xml</li>
 			<li><b>1.0.0-Beta:</b> Initial Release</li>
 		</ul>
-	]]></change-notes>
+		]]></change-notes>
 	
 	<depends>com.intellij.modules.platform</depends>
+	<depends config-file="plugin-java.xml" optional="true">com.intellij.java</depends>
 	
 	<extensions defaultExtensionNs="com.intellij">
 		<errorHandler
@@ -145,6 +158,38 @@
 		<group id="ir.mmd.intellijDev.Actionable" text="Actionable" popup="true">
 			<add-to-group group-id="EditMenu" anchor="last"/>
 			
+			<group id="ir.mmd.intellijDev.Actionable.TypingGroup" text="Typing" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.typing.PredictCamelcaseWordsAction"
+					id="ir.mmd.intellijDev.Actionable.typing.PredictCamelcaseWordsAction"
+					text="Predict Words: Camel-Case"
+					description="Predicts the words from a raw text and rewrites them in camel-case"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.typing.PredictPascalCaseWordsAction"
+					id="ir.mmd.intellijDev.Actionable.typing.PredictPascalCaseWordsAction"
+					text="Predict Words: Pascal-Case"
+					description="Predicts the words from a raw text and rewrites them in pascal-case"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.typing.PredictSnakeCaseWordsAction"
+					id="ir.mmd.intellijDev.Actionable.typing.PredictSnakeCaseWordsAction"
+					text="Predict Words: Snake-Case"
+					description="Predicts the words from a raw text and rewrites them in snake-case"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.typing.PredictKebabCaseWordsAction"
+					id="ir.mmd.intellijDev.Actionable.typing.PredictKebabCaseWordsAction"
+					text="Predict Words: Kebab-Case"
+					description="Predicts the words from a raw text and rewrites them in kebab-case"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.typing.PredictSpacedWordsAction"
+					id="ir.mmd.intellijDev.Actionable.typing.PredictSpacedWordsAction"
+					text="Predict Words: Spaced"
+					description="Predicts the words from a raw text and rewrites them in spaced"/>
+			</group>
+			
 			<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate" popup="true">
 				<action
 					class="ir.mmd.intellijDev.Actionable.duplicate.DuplicateLinesUp"
@@ -165,6 +210,20 @@
 					id="ir.mmd.intellijDev.Actionable.duplicate.RemoveDuplicates"
 					text="Remove Duplicate Selections"
 					description="Removes duplicate selections"/>
+			</group>
+			
+			<group id="ir.mmd.intellijDev.Actionable.SelectionGroup" text="Selection" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.SelectWordUnderCaretAction"
+					id="ir.mmd.intellijDev.Actionable.selection.SelectWordUnderCaretAction"
+					text="Select Word Under Caret"
+					description="Selects the word under the caret"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.SelectElementUnderCaretAction"
+					id="ir.mmd.intellijDev.Actionable.selection.SelectElementUnderCaretAction"
+					text="Select Element Under Caret"
+					description="Selects the element under the caret"/>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.FindGroup" text="Find" popup="true">

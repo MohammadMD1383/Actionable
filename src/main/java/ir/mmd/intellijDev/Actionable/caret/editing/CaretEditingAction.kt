@@ -89,7 +89,7 @@ abstract class CaretEditingAction : AnAction() {
 	fun copyElementAtCaret(
 		e: AnActionEvent,
 		deleteElement: Boolean
-	) = e.psiFile!!.elementAt(e.primaryCaret)!!.runOnly {
+	) = e.psiFile.elementAt(e.primaryCaret)!!.runOnly {
 		text.copyToClipboard()
 		if (deleteElement) e.project!!.runWriteCommandAction(::delete)
 	}

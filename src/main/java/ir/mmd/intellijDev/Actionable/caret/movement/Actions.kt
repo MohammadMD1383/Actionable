@@ -22,14 +22,14 @@ class MoveCaretToPreviousWord : MoveCaretAction() {
 class MoveCaretToNextElement : MoveCaretAction() {
 	override fun actionPerformed(e: AnActionEvent) = e.allCarets.withEach {
 		removeSelection()
-		moveToOffset(moveCaretVirtually(this, true, e.psiFile!!))
+		moveToOffset(moveCaretVirtually(this, true, e.psiFile))
 	}
 }
 
 class MoveCaretToPreviousElement : MoveCaretAction() {
 	override fun actionPerformed(e: AnActionEvent) = e.allCarets.withEach {
 		removeSelection()
-		moveToOffset(moveCaretVirtually(this, false, e.psiFile!!))
+		moveToOffset(moveCaretVirtually(this, false, e.psiFile))
 	}
 }
 
@@ -47,12 +47,12 @@ class MoveCaretToPreviousWordWithSelection : MoveCaretAction() {
 
 class MoveCaretToNextElementWithSelection : MoveCaretAction() {
 	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, true) {
-		moveCaretVirtually(it, true, e.psiFile!!)
+		moveCaretVirtually(it, true, e.psiFile)
 	}
 }
 
 class MoveCaretToPreviousElementWithSelection : MoveCaretAction() {
 	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, false) {
-		moveCaretVirtually(it, false, e.psiFile!!)
+		moveCaretVirtually(it, false, e.psiFile)
 	}
 }

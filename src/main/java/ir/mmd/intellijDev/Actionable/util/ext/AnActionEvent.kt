@@ -10,7 +10,7 @@ inline val AnActionEvent.hasEditor: Boolean get() = getData(CommonDataKeys.EDITO
 inline fun AnActionEvent.hasEditorWith(block: Editor.() -> Boolean) = getData(CommonDataKeys.EDITOR)?.block() ?: false
 inline val AnActionEvent.hasProject: Boolean get() = project != null
 inline val AnActionEvent.editor: Editor get() = getRequiredData(CommonDataKeys.EDITOR)
-inline val AnActionEvent.psiFile: PsiFile? get() = getData(CommonDataKeys.PSI_FILE)
+inline val AnActionEvent.psiFile: PsiFile get() = getRequiredData(CommonDataKeys.PSI_FILE)
 inline val AnActionEvent.primaryCaret: Caret get() = editor.caretModel.primaryCaret
 inline val AnActionEvent.allCarets: MutableList<Caret> get() = editor.caretModel.allCarets
 

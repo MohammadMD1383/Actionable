@@ -50,6 +50,10 @@ tasks.withType<KotlinCompile> {
 }
 
 intellij {
+	plugins.set(
+		"com.intellij.java"
+	)
+	
 	// version.set("2022.1")
 	version.set("2021.3.1")
 	// version.set("2019.1.4")

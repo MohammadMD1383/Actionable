@@ -6,7 +6,6 @@ import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.charAtOrNull
 import ir.mmd.intellijDev.Actionable.util.ext.contains
 import ir.mmd.intellijDev.Actionable.util.ext.isPositive
-import ir.mmd.intellijDev.Actionable.util.ext.plus
 
 /**
  * This is a wrapper class over [Caret] for convenient movement
@@ -35,7 +34,9 @@ class CaretUtil(private val caret: Caret) {
 		offset = caret.offset
 	}
 	
-	fun commit() = caret.moveToOffset(offset)
+	private fun commit() = caret.moveToOffset(offset)
+	
+	private fun relativePositionToOffset(pos: Int): Int = offset + if (pos.isPositive) pos - 1 else pos
 	
 	/**
 	 * peeks and returns the character at the given offset from current [CaretUtil.offset]
@@ -43,7 +44,7 @@ class CaretUtil(private val caret: Caret) {
 	 * @param dir the offset from current **temporary caret position**
 	 * @return the character or null if the evaluated offset is invalid in the parent [Document] of the [Caret]
 	 */
-	private fun peek(dir: Int): Char? = if (dir == 0) null else document.charAtOrNull(offset + dir.plus { if (isPositive) -1 else 0 })
+	private fun peek(dir: Int): Char? = if (dir == 0) null else document.charAtOrNull(relativePositionToOffset(dir))
 	
 	private fun move(step: Int, hardStops: String): Boolean {
 		(peek(step) ?: return false).let {

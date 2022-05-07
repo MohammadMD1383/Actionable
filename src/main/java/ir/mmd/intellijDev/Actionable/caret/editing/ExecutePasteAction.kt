@@ -17,7 +17,7 @@ class ExecutePasteAction : CaretEditingAction() {
 		val endOffset: Int
 		
 		when (target) {
-			"el" -> e.psiFile!!.elementAt(caret)!!.textRange.let { (start, end) ->
+			"el" -> e.psiFile.elementAt(caret)!!.textRange.let { (start, end) ->
 				startOffset = start
 				endOffset = end
 			}
