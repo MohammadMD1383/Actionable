@@ -4,19 +4,20 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
 import com.intellij.psi.PsiFile
+import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.returnBy
-import ir.mmd.intellijDev.Actionable.util.withMovementSettings
+import ir.mmd.intellijDev.Actionable.util.withService
 
 abstract class MoveCaretAction : AnAction() {
 	fun moveCaretVirtually(
 		caret: Caret,
 		forward: Boolean,
 		psiFile: PsiFile? = null
-	): Int = if (psiFile == null) withMovementSettings {
+	): Int = if (psiFile == null) withService<SettingsState, Int> {
 		val cutil = caret.util
 		cutil.moveCaret(
 			wordSeparators,
@@ -30,8 +31,8 @@ abstract class MoveCaretAction : AnAction() {
 			if (forward) offset
 			else psiFile.findElementAt(offset - 1)!!.textRange.startOffset
 		} else psiFile.findElementAt(offset)!!.run {
-			if (forward) nextLeaf()?.textRange?.startOffset ?: textRange.endOffset
-			else prevLeaf()?.textRange?.startOffset ?: 0
+			if (forward) nextLeaf(true)?.textRange?.startOffset ?: textRange.endOffset
+			else prevLeaf(true)?.textRange?.startOffset ?: 0
 		}
 	}
 	

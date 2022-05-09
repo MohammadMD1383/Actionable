@@ -8,7 +8,7 @@ fun String.isAllDistinct() = toCharArray().distinct().size == length
 
 inline fun stringBuilder(block: StringBuilder.() -> Unit) = StringBuilder().apply(block).toString()
 inline operator fun String.contains(char: Char?) = char != null && indexOf(char) >= 0
-inline val String.pascalCase: String get() = replaceFirstChar { c -> c.uppercaseChar() }
+inline val String.titleCase: String get() = replaceFirstChar { c -> c.uppercaseChar() }
 inline operator fun IntRange?.contains(i: Int) = this != null && contains(i)
 
 inline val Int.isPositive: Boolean get() = this > 0

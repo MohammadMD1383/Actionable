@@ -8,6 +8,7 @@
 		
 		<div>Features:</div>
 		<ul>			
+			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
 			<li>Predict Words: Pascal-Case</li>
 			<li>Predict Words: Snake-Case</li>
@@ -18,6 +19,7 @@
 			<li>Remove Duplicate Selections</li>
 			<li>Select Word Under Caret</li>
 			<li>Select Element Under Caret</li>
+			<li>Select Literal Element Under Caret</li>
 			<li>Add Selection to Next Occurrence</li>
 			<li>Add Selection to Previous Occurrence</li>
 			<li>Justify Carets Start</li>
@@ -38,8 +40,8 @@
 			<li>Move Caret to Previous Word</li>
 			<li>Move Caret to Previous Word with Selection</li>
 			<li>Move Caret to Next Element</li>
-			<li>Move Caret to Previous Element</li>
 			<li>Move Caret to Next Element with Selection</li>
+			<li>Move Caret to Previous Element</li>
 			<li>Move Caret to Previous Element with Selection</li>
 		</ul>
 		
@@ -112,7 +114,9 @@
 		]]></change-notes>
 	
 	<depends>com.intellij.modules.platform</depends>
+	<depends>com.intellij.modules.lang</depends>
 	<depends config-file="plugin-java.xml" optional="true">com.intellij.java</depends>
+	<depends config-file="plugin-javascript.xml" optional="true">JavaScript</depends>
 	
 	<extensions defaultExtensionNs="com.intellij">
 		<errorHandler
@@ -124,6 +128,9 @@
 			serviceImplementation="ir.mmd.intellijDev.Actionable.find.settings.SettingsState"/>
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState"/>
+		
+		<projectService
+			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.html.state.State"/>
 		
 		<applicationConfigurable
 			parentId="tools"
@@ -152,11 +159,24 @@
 				instance="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				displayName="Find"/>
 		</applicationConfigurable>
+		
+		<typedHandler
+			implementation="ir.mmd.intellijDev.Actionable.typing.html.ExpandTagOnType"/>
 	</extensions>
 	
 	<actions>
 		<group id="ir.mmd.intellijDev.Actionable" text="Actionable" popup="true">
 			<add-to-group group-id="EditMenu" anchor="last"/>
+			
+			<group id="ir.mmd.intellijDev.Actionable.TypeHandlersGroup" text="Type Handlers" popup="true">
+				<separator text="HTML"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.typing.html.state.ExpandTagOnTypeState"
+					id="ir.mmd.intellijDev.Actionable.typing.html.state.ExpandTagOnTypeState"
+					text="Expand Tag on Type"
+					description="Expands tag on typing"/>
+			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.TypingGroup" text="Typing" popup="true">
 				<action
@@ -224,6 +244,12 @@
 					id="ir.mmd.intellijDev.Actionable.selection.SelectElementUnderCaretAction"
 					text="Select Element Under Caret"
 					description="Selects the element under the caret"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.SelectLiteralElementUnderCaretAction"
+					id="ir.mmd.intellijDev.Actionable.selection.SelectLiteralElementUnderCaretAction"
+					text="Select Literal Element Under Caret"
+					description="Selects the literal element under the caret"/>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.FindGroup" text="Find" popup="true">
@@ -358,16 +384,16 @@
 					description="Moves the caret to next psi element"/>
 				
 				<action
-					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElement"
-					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElement"
-					text="Move Caret to Previous Element"
-					description="Moves the caret to previous psi element"/>
-				
-				<action
 					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextElementWithSelection"
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextElementWithSelection"
 					text="Move Caret to Next Element with Selection"
 					description="Moves the caret to next psi element with selection"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElement"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElement"
+					text="Move Caret to Previous Element"
+					description="Moves the caret to previous psi element"/>
 				
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElementWithSelection"

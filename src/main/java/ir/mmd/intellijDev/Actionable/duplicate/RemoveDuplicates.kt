@@ -2,11 +2,12 @@ package ir.mmd.intellijDev.Actionable.duplicate
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.withFindSettings
+import ir.mmd.intellijDev.Actionable.util.withService
 
 class RemoveDuplicates : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) = withFindSettings {
+	override fun actionPerformed(e: AnActionEvent) = withService<SettingsState, Unit> {
 		val editor = e.editor
 		val strings = HashSet<String>()
 		

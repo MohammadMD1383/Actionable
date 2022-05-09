@@ -17,11 +17,11 @@ class ErrorReporter : ErrorReportSubmitter() {
 	override fun getReportActionText() = "Create Issue on Github"
 	
 	override fun submit(
-		events: Array<IdeaLoggingEvent>,
+		events: Array<out IdeaLoggingEvent>,
 		additionalInfo: String?,
 		parentComponent: Component,
-		consumer: Consumer<in SubmittedReportInfo?>
-	) = try {
+		consumer: Consumer<in SubmittedReportInfo>
+	): Boolean = try {
 		val title = URLEncoder.encode("[BUG]: ", "UTF-8")
 		val body = URLEncoder.encode("$additionalInfo\n\n<details><pre>${events[0].throwableText}</pre></details>", "UTF-8")
 		Desktop.getDesktop().browse(URI.create("https://github.com/MohammadMD1383/Actionable/issues/new?title=$title&body=$body"))

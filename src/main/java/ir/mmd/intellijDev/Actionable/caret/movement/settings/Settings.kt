@@ -3,7 +3,7 @@ package ir.mmd.intellijDev.Actionable.caret.movement.settings
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.options.ConfigurationException
 import ir.mmd.intellijDev.Actionable.util.ext.isAllDistinct
-import ir.mmd.intellijDev.Actionable.util.withMovementSettings
+import ir.mmd.intellijDev.Actionable.util.withService
 import javax.swing.JComponent
 
 /**
@@ -13,9 +13,10 @@ class Settings : Configurable {
 	private var ui: UI? = null
 	
 	override fun getDisplayName() = "Movement"
+	override fun getHelpTopic() = null
 	override fun createComponent(): JComponent? = UI().run { ui = this; component }
 	
-	override fun isModified() = withMovementSettings {
+	override fun isModified() = withService<SettingsState, Boolean> {
 		ui!!.wordSeparators != wordSeparators ||
 			ui!!.wordSeparatorsBehaviour != wordSeparatorsBehaviour ||
 			ui!!.hardStopCharacters != hardStopCharacters
@@ -25,14 +26,14 @@ class Settings : Configurable {
 		validateWordSeparators()
 		validateHardStopCharacter()
 		
-		withMovementSettings {
+		withService<SettingsState, Unit> {
 			wordSeparators = ui!!.wordSeparators
 			wordSeparatorsBehaviour = ui!!.wordSeparatorsBehaviour
 			hardStopCharacters = ui!!.hardStopCharacters
 		}
 	}
 	
-	override fun reset() = withMovementSettings {
+	override fun reset() = withService<SettingsState, Unit> {
 		ui!!.wordSeparators = wordSeparators
 		ui!!.wordSeparatorsBehaviour = wordSeparatorsBehaviour
 		ui!!.hardStopCharacters = hardStopCharacters

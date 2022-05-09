@@ -1,11 +1,14 @@
 package ir.mmd.intellijDev.Actionable.util.ext
 
 import com.intellij.openapi.editor.Document
+import com.intellij.openapi.util.TextRange
+import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.returnBy
-import ir.mmd.intellijDev.Actionable.util.withMovementSettings
+import ir.mmd.intellijDev.Actionable.util.withService
 
 inline fun Document.charAtOrNull(offset: Int) = charsSequence.getOrNull(offset)
 inline fun Document.replaceCharAt(offset: Int, c: Char) = replaceString(offset, offset + 1, c.toString())
+inline fun Document.getText(range: IntRange) = getText(TextRange(range.first, range.last))
 
 fun Document.getWordBoundaries(
 	offset: Int,
@@ -19,7 +22,7 @@ fun Document.getWordBoundaries(
 fun Document.getWordAtOffset(
 	offset: Int,
 	boundaries: IntArray? = null
-): String? = withMovementSettings {
+): String? = withService<SettingsState, String?> {
 	returnBy(getWordBoundaries(offset, wordSeparators + hardStopCharacters)) { (startOffset, endOffset) ->
 		if (startOffset == endOffset) null else {
 			boundaries?.let {

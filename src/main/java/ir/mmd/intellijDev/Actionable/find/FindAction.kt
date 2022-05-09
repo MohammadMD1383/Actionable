@@ -7,10 +7,11 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.by
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.withMovementSettings
+import ir.mmd.intellijDev.Actionable.util.withService
+import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState as MovementSettingsState
 
 abstract class FindAction(private val searchForward: Boolean) : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) = withMovementSettings {
+	override fun actionPerformed(e: AnActionEvent) = withService<MovementSettingsState, Unit> {
 		val editor = e.editor
 		val caretModel = editor.caretModel
 		val caret = caretModel.allCarets.run { if (searchForward) last() else first() }

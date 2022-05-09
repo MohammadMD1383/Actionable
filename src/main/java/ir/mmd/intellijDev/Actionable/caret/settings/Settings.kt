@@ -5,6 +5,7 @@ import javax.swing.JComponent
 
 class Settings : Configurable {
 	override fun getDisplayName() = "Caret"
+	override fun getHelpTopic() = null
 	override fun createComponent(): JComponent? = null
 	override fun isModified() = false
 	override fun apply() {}

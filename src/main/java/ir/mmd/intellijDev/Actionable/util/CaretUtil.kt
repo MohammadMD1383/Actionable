@@ -30,6 +30,9 @@ class CaretUtil(private val caret: Caret) {
 	 */
 	var offset = caret.offset
 	
+	inline val nextChar: Char? get() = peek(+1)
+	inline val prevChar: Char? get() = peek(-1)
+	
 	private fun reset() {
 		offset = caret.offset
 	}
@@ -44,7 +47,7 @@ class CaretUtil(private val caret: Caret) {
 	 * @param dir the offset from current **temporary caret position**
 	 * @return the character or null if the evaluated offset is invalid in the parent [Document] of the [Caret]
 	 */
-	private fun peek(dir: Int): Char? = if (dir == 0) null else document.charAtOrNull(relativePositionToOffset(dir))
+	fun peek(dir: Int): Char? = if (dir == 0) null else document.charAtOrNull(relativePositionToOffset(dir))
 	
 	private fun move(step: Int, hardStops: String): Boolean {
 		(peek(step) ?: return false).let {
@@ -61,7 +64,7 @@ class CaretUtil(private val caret: Caret) {
 		}
 	}
 	
-	private fun moveUntilReached(chars: String, hardStops: String, step: Int): Boolean {
+	fun moveUntilReached(chars: String, hardStops: String, step: Int): Boolean {
 		while (true) when (peek(step) ?: return false) {
 			in hardStops -> return false
 			in chars -> return true
@@ -104,7 +107,7 @@ class CaretUtil(private val caret: Caret) {
 		reset()
 	}
 	
-	fun getAssociatedWord(boundaries: IntArray? = null): String? = withMovementSettings {
+	fun getAssociatedWord(boundaries: IntArray? = null): String? = withService<SettingsState, String?> {
 		returnBy(getWordBoundaries(wordSeparators, hardStopCharacters)) { (startOffset, endOffset) ->
 			return@returnBy if (startOffset == endOffset) null else {
 				boundaries?.let {

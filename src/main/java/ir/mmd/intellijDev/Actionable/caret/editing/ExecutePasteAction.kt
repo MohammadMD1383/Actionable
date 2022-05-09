@@ -4,11 +4,12 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
+import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.withMovementSettings
+import ir.mmd.intellijDev.Actionable.util.withService
 
 class ExecutePasteAction : CaretEditingAction() {
-	override fun actionPerformed(e: AnActionEvent) = withMovementSettings {
+	override fun actionPerformed(e: AnActionEvent) = withService<SettingsState, Unit> {
 		val editor = e.editor
 		val caret = e.primaryCaret
 		val (target, action) = (editor.getUserData(scheduledPasteActionKind) ?: return).split(';')

@@ -35,7 +35,7 @@ dependencies {
 }
 
 group = "ir.mmd.intellijDev"
-version = "3.3.0"
+version = "3.4.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
@@ -51,12 +51,15 @@ tasks.withType<KotlinCompile> {
 
 intellij {
 	plugins.set(
-		"com.intellij.java"
+		"com.intellij.java",
+		"JavaScript"
 	)
 	
+	version.set("IU-2022.1")
 	// version.set("2022.1")
-	version.set("2021.3.1")
+	// version.set("2021.3.1")
 	// version.set("2019.1.4")
+	// version.set("IU-2018.1")
 	// version.set("2017.1")
 }
 

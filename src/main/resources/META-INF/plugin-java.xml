@@ -1,6 +1,30 @@
 <idea-plugin>
 	<extensions defaultExtensionNs="com.intellij">
-		<!-- <typedHandler -->
-		<!-- 	implementation="ir.mmd.intellijDev.Actionable.typing.java.AutoChangeCase"/> -->
+		<projectService
+			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.java.state.State"/>
+		
+		<typedHandler
+			implementation="ir.mmd.intellijDev.Actionable.typing.java.AutoInsertSemicolon"/>
+		<typedHandler
+			implementation="ir.mmd.intellijDev.Actionable.typing.java.AutoClassCase"/>
 	</extensions>
+	
+	<actions>
+		<group compact="true">
+			<add-to-group group-id="ir.mmd.intellijDev.Actionable.TypeHandlersGroup"/>
+			<separator text="Java"/>
+			
+			<action
+				class="ir.mmd.intellijDev.Actionable.typing.java.state.AutoInsertSemicolonState"
+				id="ir.mmd.intellijDev.Actionable.typing.java.state.AutoInsertSemicolonState"
+				text="Auto Insert Semicolons"
+				description="Whether to automatically insert semicolons or not"/>
+			
+			<action
+				class="ir.mmd.intellijDev.Actionable.typing.java.state.AutoClassCaseState"
+				id="ir.mmd.intellijDev.Actionable.typing.java.state.AutoClassCaseState"
+				text="Auto Class Case"
+				description="Whether to automatically capitalize class names or not"/>
+		</group>
+	</actions>
 </idea-plugin>
