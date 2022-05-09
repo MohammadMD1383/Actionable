@@ -43,6 +43,8 @@
 			<li>Move Caret to Next Element with Selection</li>
 			<li>Move Caret to Previous Element</li>
 			<li>Move Caret to Previous Element with Selection</li>
+			<li>Auto Insert Semicolons</li>
+			<li>Auto Class Case</li>
 		</ul>
 		
 		<b>For detailed description about all the actions, please visit the <a href="https://github.com/MohammadMD1383/Actionable">github repo</a></b>
@@ -50,6 +52,24 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.4.0:</b><br>
+				Bug fixes<br>
+				Added select literal element under caret action<br>
+				Added type handlers for:
+				<ul>
+					<li><b>HTML</b>
+						<ul>
+							<li>Auto expand tag on type (experimental)</li>
+						</ul>
+					</li>
+					<li><b>Java</b>
+						<ul>
+							<li>Auto insert semicolons</li>
+							<li>Auto Change first character of class name to uppercase</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
 			<li><b>3.3.0:</b><br>
 				Added move caret to next/previous element with/without selection actions.<br>
 				Added select word/element under caret actions.<br>

@@ -6,8 +6,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import proguard.gradle.ProGuardTask
 import kotlin.text.RegexOption.MULTILINE
 
-val pluginXmlPath = "src/main/resources/META-INF/plugin.xml"
-
 buildscript {
 	repositories {
 		mavenCentral()
@@ -68,15 +66,28 @@ tasks.withType<RunIdeTask> {
 }
 
 task("patchPluginXmlFeatures") {
-	val xmlFile = file(pluginXmlPath)
-	val featuresPattern = """<action[\s][\S\s]*?text="(.*?)"[\S\s]*?\/>"""
+	val xmlFiles = listOf(
+		"src/main/resources/META-INF/plugin.xml",
+		"src/main/resources/META-INF/plugin-java.xml",
+		"src/main/resources/META-INF/plugin-javascript.xml",
+	)
+	
+	val features = mutableListOf<String>()
+	
+	xmlFiles.forEach { xmlPath ->
+		val xmlFile = file(xmlPath)
+		val text = xmlFile.readText()
+		val featuresPattern = """<action[\s][\S\s]*?text="(.*?)"[\S\s]*?\/>"""
+		features += Regex(featuresPattern, MULTILINE).findAll(text).map { it.groupValues[1] }
+	}
+	
+	val pluginXmlFile = file(xmlFiles[0])
+	val text = pluginXmlFile.readText()
 	val ulPattern = """<description>[\S\s]*?<ul>([\S\s]*?)<\/ul>[\S\s]*?<\/description>"""
-	val text = xmlFile.readText()
-	val features = Regex(featuresPattern, MULTILINE).findAll(text).map { it.groupValues[1] }
 	val range = Regex(ulPattern, MULTILINE).find(text)!!.groups[1]!!.range
 	val featuresStr = "\n${features.joinToString("\n") { "<li>$it</li>" }}".prependIndent("\t\t\t") + "\n\t\t"
 	val newText = text.replaceRange(range, featuresStr)
-	xmlFile.writeText(newText)
+	pluginXmlFile.writeText(newText)
 }
 
 tasks.withType<PatchPluginXmlTask> {
@@ -100,7 +111,8 @@ task<ProGuardTask>("minify") {
 	
 	val gradleModulesPath = "/mnt/8CD64E25D64E103E/CacheFiles/linux/.gradle/caches/modules-2/files-2.1"
 	val javaModulesPath = "/usr/lib/jvm/java-18-openjdk-amd64/jmods"
-	val ideaLibPath = "com.jetbrains.intellij.idea/ideaIC/2021.3.1/c2ea6f6a9dee8ad102f889942471eb402f1c7a5a/ideaIC-2021.3.1/lib"
+	val ideaLibPath = "com.jetbrains.intellij.idea/ideaIU/2022.1/d6eb959f8d998b33558cfcfeef623f2f09c31416/ideaIU-2022.1/lib"
+	val javaPluginLibPath = "com.jetbrains.intellij.idea/ideaIU/2022.1/d6eb959f8d998b33558cfcfeef623f2f09c31416/ideaIU-2022.1/plugins/java/lib"
 	val inFile = tasks.buildPlugin.get().archiveFile.get().asFile
 	val outFile = "build/minified/${inFile.name}"
 	
@@ -115,12 +127,17 @@ task<ProGuardTask>("minify") {
 	libraryjars("$javaModulesPath/java.datatransfer.jmod")
 	
 	libraryjars("$gradleModulesPath/$ideaLibPath/")
+	libraryjars("$gradleModulesPath/$javaPluginLibPath/")
 	
 	injars(inFile)
 	outjars(outFile)
 	
 	keepattributes("RuntimeVisibleAnnotations")
-	generateKeepRules()
+	keep("class kotlin.reflect.**")
+	
+	generateKeepRules("src/main/resources/META-INF/plugin.xml")
+	generateKeepRules("src/main/resources/META-INF/plugin-java.xml")
+	generateKeepRules("src/main/resources/META-INF/plugin-javascript.xml")
 }
 
 tasks.withType<RunPluginVerifierTask> {
@@ -141,13 +158,13 @@ tasks.withType<RunPluginVerifierTask> {
 
 // Helpers
 
-fun ProGuardTask.generateKeepRules() {
-	val xmlContent = file(pluginXmlPath).readText()
+fun ProGuardTask.generateKeepRules(xmlFile: String) {
+	val xmlContent = file(xmlFile).readText()
 	val classes = mutableSetOf<String>()
 	
 	Regex(""""ir\.mmd\.intellijDev\.Actionable\..*?"""").findAll(xmlContent).forEach { match ->
 		classes += match.value.trim('"').let {
-			"class " + if ("SettingsState" in it) "$it { public <fields>; }" else it
+			"class " + if ("State" in it) "$it { public <fields>; }" else it
 		}
 	}
 	
