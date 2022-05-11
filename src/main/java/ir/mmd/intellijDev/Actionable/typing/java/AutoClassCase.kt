@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.typing.java
 
+import ai.grazie.nlp.tokenizer.word.WhitespaceWordTokenizer.words
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.editor.Editor
@@ -17,22 +18,23 @@ class AutoClassCase : TypedHandlerDelegate() {
 		file: PsiFile
 	) = Result.CONTINUE.also {
 		if (
-			project.service<State>().autoClassCaseEnabled ||
+			!project.service<State>().autoClassCaseEnabled ||
 			file.fileType !is JavaFileType ||
-			(c != ' ' && c != '{')
+			c != '{'
 		) return@also
 		
+		val document = editor.document
 		val caret = editor.caretModel.primaryCaret
 		val element = file.elementAtOrBefore(caret)
 			?.prevLeafNoWhitespace(true)
 			?.parentOfType<PsiClass>(true)
 			?: return@also
-		val name = element.name!!
-		
-		if (name.first().isLowerCase()) with(element.nameIdentifier!!.textRange) {
-			project.runWriteCommandAction {
-				editor.document.replaceString(startOffset, startOffset + 1, name.first().uppercase())
-			}
+		val nameStart = element.nameIdentifier?.textRange?.startOffset ?: return@also
+		val nameEnd = caret.offset
+		val spacedName = document.getText(nameStart..nameEnd)
+		val newName = spacedName.trim().words().joinToString("") { it.titleCase }
+		project.runWriteCommandAction {
+			document.replaceString(nameStart, nameEnd, newName)
 		}
 	}
 }
