@@ -1,7 +1,6 @@
 import org.jetbrains.intellij.tasks.BuildSearchableOptionsTask
 import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 import org.jetbrains.intellij.tasks.RunIdeTask
-import org.jetbrains.intellij.tasks.RunPluginVerifierTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import proguard.gradle.ProGuardTask
 import kotlin.text.RegexOption.MULTILINE
@@ -93,7 +92,7 @@ task("patchPluginXmlFeatures") {
 tasks.withType<PatchPluginXmlTask> {
 	dependsOn("patchPluginXmlFeatures")
 	version.set(project.version.toString())
-	sinceBuild.set("171")
+	sinceBuild.set("181")
 	untilBuild.set("") // to be always the latest version
 }
 
@@ -138,22 +137,6 @@ task<ProGuardTask>("minify") {
 	generateKeepRules("src/main/resources/META-INF/plugin.xml")
 	generateKeepRules("src/main/resources/META-INF/plugin-java.xml")
 	generateKeepRules("src/main/resources/META-INF/plugin-javascript.xml")
-}
-
-tasks.withType<RunPluginVerifierTask> {
-	dependsOn("minify")
-	
-	ideVersions.set(
-		"IC-2017.1"
-	)
-	
-	localPaths.set(
-		File("/home/mohammad/IDEA/IU-221.5591.19")
-	)
-	
-	distributionFile.set(
-		tasks["minify"].outputs.files.files.first()
-	)
 }
 
 // Helpers

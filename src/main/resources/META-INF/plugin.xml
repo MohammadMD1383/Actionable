@@ -52,6 +52,10 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.4.1:</b><br>
+				Improved auto semicolon insertion (java)<br>
+				Bug fixes
+			</li>
 			<li><b>3.4.0:</b><br>
 				Bug fixes<br>
 				Added select literal element under caret action<br>

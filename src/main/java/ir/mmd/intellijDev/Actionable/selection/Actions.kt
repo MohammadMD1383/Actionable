@@ -2,7 +2,7 @@ package ir.mmd.intellijDev.Actionable.selection
 
 import com.intellij.openapi.editor.Caret
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiLiteralValue
+import com.intellij.psi.PsiLiteral
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.withService
@@ -23,7 +23,7 @@ class SelectElementUnderCaretAction : SelectTextUnderCaretAction() {
 
 class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange? {
-		val (start, end) = psiFile.elementAt(caret)?.parentOfType<PsiLiteralValue>(true)?.textRange ?: return null
+		val (start, end) = psiFile.elementAt(caret)?.parentOfType<PsiLiteral>(true)?.textRange ?: return null
 		return start..end
 	}
 }

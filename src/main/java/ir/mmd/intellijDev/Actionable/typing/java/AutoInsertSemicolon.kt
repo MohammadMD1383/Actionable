@@ -8,7 +8,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiField
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiLocalVariable
+import com.intellij.psi.PsiModifier
 import com.intellij.psi.PsiModifier.ABSTRACT
+import com.intellij.psi.PsiModifier.DEFAULT
 import com.intellij.psi.PsiReturnStatement
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
 import ir.mmd.intellijDev.Actionable.util.ext.*
@@ -32,7 +34,7 @@ class AutoInsertSemicolon : TypedHandlerDelegate() {
 		val clazz = element.containingClass!!
 		
 		if (
-			clazz.isInterface or
+			(clazz.isInterface and !element.hasModifierProperty(DEFAULT)) or
 			element.hasModifierProperty(ABSTRACT)
 		) return@also
 		
