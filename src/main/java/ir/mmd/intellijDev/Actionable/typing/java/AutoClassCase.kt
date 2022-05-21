@@ -1,6 +1,5 @@
 package ir.mmd.intellijDev.Actionable.typing.java
 
-import ai.grazie.nlp.tokenizer.word.WhitespaceWordTokenizer.words
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.editor.Editor
@@ -32,7 +31,7 @@ class AutoClassCase : TypedHandlerDelegate() {
 		val nameStart = element.nameIdentifier?.textRange?.startOffset ?: return@also
 		val nameEnd = caret.offset
 		val spacedName = document.getText(nameStart..nameEnd)
-		val newName = spacedName.trim().words().joinToString("") { it.titleCase }
+		val newName = spacedName.trim().split(' ').joinToString("") { it.titleCase }
 		project.runWriteCommandAction {
 			document.replaceString(nameStart, nameEnd, newName)
 		}
