@@ -20,6 +20,10 @@
 			<li>Select Word Under Caret</li>
 			<li>Select Element Under Caret</li>
 			<li>Select Literal Element Under Caret</li>
+			<li>Move Selection Up</li>
+			<li>Move Selection Down</li>
+			<li>Move Selection Left</li>
+			<li>Move Selection Right</li>
 			<li>Add Selection to Next Occurrence</li>
 			<li>Add Selection to Previous Occurrence</li>
 			<li>Justify Carets Start</li>
@@ -52,6 +56,10 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.5.0:</b><br>
+				Added fix for Rider's <i>Start New Line Before Caret</i> in XAML files.<br>
+				Added box selection movement actions.
+			</li>
 			<li><b>3.4.1:</b><br>
 				Improved auto semicolon insertion (java)<br>
 				Bug fixes
@@ -139,7 +147,8 @@
 	
 	<depends>com.intellij.modules.platform</depends>
 	<depends>com.intellij.modules.lang</depends>
-	<depends config-file="plugin-java.xml" optional="true">com.intellij.java</depends>
+	<depends config-file="plugin-rider.xml" optional="true">com.intellij.modules.rider</depends>
+	<depends config-file="plugin-java.xml" optional="true">com.intellij.modules.java</depends>
 	<depends config-file="plugin-javascript.xml" optional="true">JavaScript</depends>
 	
 	<extensions defaultExtensionNs="com.intellij">
@@ -274,6 +283,32 @@
 					id="ir.mmd.intellijDev.Actionable.selection.SelectLiteralElementUnderCaretAction"
 					text="Select Literal Element Under Caret"
 					description="Selects the literal element under the caret"/>
+				
+				<group id="ir.mmd.intellijDev.Actionable.selection.BoxMovementGroup" text="Box Movement" popup="true">
+					<action
+						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionUp"
+						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionUp"
+						text="Move Selection Up"
+						description="Moves selection up (Box Movement)"/>
+					
+					<action
+						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionDown"
+						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionDown"
+						text="Move Selection Down"
+						description="Moves selection down (Box Movement)"/>
+					
+					<action
+						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionLeft"
+						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionLeft"
+						text="Move Selection Left"
+						description="Moves selection left (Box Movement)"/>
+					
+					<action
+						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionRight"
+						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionRight"
+						text="Move Selection Right"
+						description="Moves selection right (Box Movement)"/>
+				</group>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.FindGroup" text="Find" popup="true">

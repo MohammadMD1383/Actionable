@@ -17,22 +17,32 @@ buildscript {
 
 plugins {
 	id("org.jetbrains.intellij") version "1.5.3"
-	id("org.jetbrains.kotlin.jvm") version "1.6.21"
+	kotlin("jvm") version "1.6.21"
 	java
 }
 
 repositories {
 	mavenCentral()
+	maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
+	implementation("com.github.MohammadMD1383:kwing:6ab01b185a")
+	
+	classpath("/Files/jetbrains/idea/plugins/java")
+	classpath("/Files/jetbrains/idea/plugins/JavaScriptLanguage")
+	
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 }
 
+fun DependencyHandlerScope.classpath(path: String) {
+	compileOnly(fileTree("include" to "**/*.jar", "dir" to path))
+}
+
 group = "ir.mmd.intellijDev"
-version = "3.4.2"
+version = "3.5.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
@@ -42,15 +52,20 @@ java {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		jvmTarget = JavaVersion.VERSION_1_8.toString()
-		freeCompilerArgs = listOf("-Xjvm-default=all")
+		freeCompilerArgs = listOf(
+			"-Xjvm-default=all",
+			"-Xcontext-receivers"
+		)
 	}
 }
 
 intellij {
-	plugins.set(
-		"com.intellij.java",
-		"JavaScript"
-	)
+	// localPath.set("/Files/jetbrains/rider")
+	// localPath.set("/Files/jetbrains/idea")
+	// localPath.set("/Files/jetbrains/clion")
+	// localPath.set("/Files/jetbrains/studio")
+	
+	plugins.set("java")
 	
 	version.set("IU-2022.1")
 	// version.set("2022.1")
@@ -68,7 +83,8 @@ task("patchPluginXmlFeatures") {
 	val xmlFiles = listOf(
 		"src/main/resources/META-INF/plugin.xml",
 		"src/main/resources/META-INF/plugin-java.xml",
-		"src/main/resources/META-INF/plugin-javascript.xml",
+		"src/main/resources/META-INF/plugin-rider.xml",
+		"src/main/resources/META-INF/plugin-javascript.xml"
 	)
 	
 	val features = mutableListOf<String>()
@@ -108,10 +124,7 @@ task<ProGuardTask>("minify") {
 	dependsOn(tasks.buildPlugin)
 	outputs.upToDateWhen { false }
 	
-	val gradleModulesPath = "/mnt/8CD64E25D64E103E/CacheFiles/linux/.gradle/caches/modules-2/files-2.1"
 	val javaModulesPath = "/usr/lib/jvm/java-18-openjdk-amd64/jmods"
-	val ideaLibPath = "com.jetbrains.intellij.idea/ideaIU/2022.1/d6eb959f8d998b33558cfcfeef623f2f09c31416/ideaIU-2022.1/lib"
-	val javaPluginLibPath = "com.jetbrains.intellij.idea/ideaIU/2022.1/d6eb959f8d998b33558cfcfeef623f2f09c31416/ideaIU-2022.1/plugins/java/lib"
 	val inFile = tasks.buildPlugin.get().archiveFile.get().asFile
 	val outFile = "build/minified/${inFile.name}"
 	
@@ -125,8 +138,8 @@ task<ProGuardTask>("minify") {
 	libraryjars("$javaModulesPath/java.desktop.jmod")
 	libraryjars("$javaModulesPath/java.datatransfer.jmod")
 	
-	libraryjars("$gradleModulesPath/$ideaLibPath/")
-	libraryjars("$gradleModulesPath/$javaPluginLibPath/")
+	libraryjars("/Files/jetbrains/idea/lib")
+	libraryjars("/Files/jetbrains/idea/plugins/java/lib")
 	
 	injars(inFile)
 	outjars(outFile)
@@ -137,6 +150,7 @@ task<ProGuardTask>("minify") {
 	generateKeepRules("src/main/resources/META-INF/plugin.xml")
 	generateKeepRules("src/main/resources/META-INF/plugin-java.xml")
 	generateKeepRules("src/main/resources/META-INF/plugin-javascript.xml")
+	generateKeepRules("src/main/resources/META-INF/plugin-rider.xml")
 }
 
 // Helpers

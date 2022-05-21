@@ -1,0 +1,13 @@
+<idea-plugin>
+	<actions>
+		<group id="ir.mmd.intellijDev.Actionable.FixGroup" text="IDE Fix" popup="true">
+			<add-to-group group-id="ir.mmd.intellijDev.Actionable"/>
+			
+			<action
+				class="ir.mmd.intellijDev.Actionable.fix.rider.StartLineUp"
+				id="ir.mmd.intellijDev.Actionable.fix.rider.StartLineUp"
+				text="Start Line Up"
+				description="Start line Up (fix for rider action in xaml documents)"/>
+		</group>
+	</actions>
+</idea-plugin>

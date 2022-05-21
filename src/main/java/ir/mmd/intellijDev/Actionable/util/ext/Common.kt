@@ -23,7 +23,9 @@ inline fun <T, O1, O2> T.applyWith(o1: O1, o2: O2, block: T.(O1, O2) -> Unit) = 
 
 inline fun <T> Iterable<T>.withEach(block: T.() -> Unit) = forEach { it.block() }
 inline fun <T> Iterable<T>.forEachIf(condition: T.() -> Boolean, block: (T) -> Unit) = forEach { if (it.condition()) block(it) }
-inline fun <T, N> Iterable<T>.forEachWithTransformed(transform: T.() -> N, block: (T, N) -> Unit) = forEach { block(it, transform(it)) }
+
+inline operator fun IntRange.component1() = first
+inline operator fun IntRange.component2() = last
 
 inline fun doIf(condition: () -> Boolean, block: () -> Unit) {
 	if (condition()) block()
