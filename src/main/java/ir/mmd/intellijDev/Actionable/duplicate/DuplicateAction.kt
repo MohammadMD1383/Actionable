@@ -15,5 +15,6 @@ abstract class DuplicateAction(private val duplicate: DuplicateUtil.(Int, Int) -
 		}
 	}
 	
+	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
 }

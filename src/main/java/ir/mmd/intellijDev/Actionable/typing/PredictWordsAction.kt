@@ -50,5 +50,6 @@ abstract class PredictWordsAction : AnAction() {
 		}
 	}
 	
+	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasEditorWith { allCaretsHasSelection } }
 }

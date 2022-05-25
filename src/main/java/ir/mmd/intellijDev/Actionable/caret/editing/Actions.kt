@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
 class CutWordAtCaret : CaretEditingAction() {
+	override fun isDumbAware() = true
 	override fun actionPerformed(e: AnActionEvent) = copyWordAtCaret(e, true)
 }
 
@@ -12,6 +13,7 @@ class CutElementAtCaret : CaretEditingAction() {
 }
 
 class CopyWordAtCaret : CaretEditingAction() {
+	override fun isDumbAware() = true
 	override fun actionPerformed(e: AnActionEvent) = copyWordAtCaret(e, false)
 }
 

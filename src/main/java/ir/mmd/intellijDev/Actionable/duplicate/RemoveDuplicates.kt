@@ -21,5 +21,6 @@ class RemoveDuplicates : AnAction() {
 		}
 	}
 	
+	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { caretCount > 1 && allCaretsHasSelection } }
 }

@@ -8,6 +8,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.withService
 
 class SelectWordUnderCaretAction : SelectTextUnderCaretAction() {
+	override fun isDumbAware() = true
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange? = withService<SettingsState, IntRange?> {
 		val (start, end) = caret.util.getWordBoundaries(wordSeparators, hardStopCharacters)
 		return if (start != end) start..end else null

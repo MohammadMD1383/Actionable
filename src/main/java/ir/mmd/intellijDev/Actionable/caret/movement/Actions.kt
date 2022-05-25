@@ -6,6 +6,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.psiFile
 import ir.mmd.intellijDev.Actionable.util.ext.withEach
 
 class MoveCaretToNextWord : MoveCaretAction() {
+	override fun isDumbAware() = true
 	override fun actionPerformed(e: AnActionEvent) = e.allCarets.withEach {
 		removeSelection()
 		moveToOffset(moveCaretVirtually(this, true))
@@ -13,6 +14,7 @@ class MoveCaretToNextWord : MoveCaretAction() {
 }
 
 class MoveCaretToPreviousWord : MoveCaretAction() {
+	override fun isDumbAware() = true
 	override fun actionPerformed(e: AnActionEvent) = e.allCarets.withEach {
 		removeSelection()
 		moveToOffset(moveCaretVirtually(this, false))
@@ -34,12 +36,14 @@ class MoveCaretToPreviousElement : MoveCaretAction() {
 }
 
 class MoveCaretToNextWordWithSelection : MoveCaretAction() {
+	override fun isDumbAware() = true
 	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, true) {
 		moveCaretVirtually(it, true)
 	}
 }
 
 class MoveCaretToPreviousWordWithSelection : MoveCaretAction() {
+	override fun isDumbAware() = true
 	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, false) {
 		moveCaretVirtually(it, false)
 	}

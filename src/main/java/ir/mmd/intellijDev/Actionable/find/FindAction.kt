@@ -36,5 +36,6 @@ abstract class FindAction(private val searchForward: Boolean) : AnAction() {
 		)!!.setSelection(startOffset, endOffset)
 	}
 	
+	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
 }

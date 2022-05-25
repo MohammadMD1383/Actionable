@@ -7,7 +7,7 @@
 		<h3>Adds some favorite/extra actions that are not available in IntelliJ based IDEs.</h3>
 		
 		<div>Features:</div>
-		<ul>			
+		<ul>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
 			<li>Predict Words: Pascal-Case</li>
@@ -57,6 +57,10 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.5.1:</b><br>
+				Improved Start Line Up action (fix for Rider)<br>
+				Now actions are dumb-aware (some are allowed to be executed while indexing)
+			</li>
 			<li><b>3.5.0:</b><br>
 				Added fix for Rider's <i>Start New Line Before Caret</i> in XAML files.<br>
 				Added box selection movement actions.

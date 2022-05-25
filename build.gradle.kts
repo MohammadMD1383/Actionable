@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
-	implementation("com.github.MohammadMD1383:kwing:6ab01b185a")
+	implementation("com.github.MohammadMD1383:kwing:0f72f2bdf1")
 	
 	classpath("/Files/jetbrains/idea/plugins/java")
 	classpath("/Files/jetbrains/idea/plugins/JavaScriptLanguage")
@@ -42,7 +42,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "3.5.0"
+version = "3.5.1"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
