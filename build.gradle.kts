@@ -16,19 +16,17 @@ buildscript {
 }
 
 plugins {
-	id("org.jetbrains.intellij") version "1.5.3"
+	id("org.jetbrains.intellij") version "1.6.0"
 	kotlin("jvm") version "1.6.21"
 	java
 }
 
 repositories {
 	mavenCentral()
-	maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
-	implementation("com.github.MohammadMD1383:kwing:0f72f2bdf1")
 	
 	classpath("/Files/jetbrains/idea/plugins/java")
 	classpath("/Files/jetbrains/idea/plugins/JavaScriptLanguage")
@@ -42,7 +40,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "3.5.1"
+version = "3.6.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
@@ -67,8 +65,8 @@ intellij {
 	
 	plugins.set("java")
 	
-	version.set("IU-2022.1")
-	// version.set("2022.1")
+	// version.set("IU-2022.1")
+	version.set("2022.1")
 	// version.set("2021.3.1")
 	// version.set("2019.1.4")
 	// version.set("IU-2018.1")

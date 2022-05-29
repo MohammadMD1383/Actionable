@@ -9,7 +9,7 @@ class Settings : Configurable {
 	
 	override fun getDisplayName() = "Editing"
 	override fun getHelpTopic() = null
-	override fun createComponent(): JComponent? = UI().run { ui = this; component }
+	override fun createComponent(): JComponent = ui?.component ?: UI().run { ui = this; component }
 	
 	override fun isModified() = withService<SettingsState, Boolean> {
 		ui!!.isPasteActionHintsShown != showPasteActionHints

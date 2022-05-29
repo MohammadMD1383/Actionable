@@ -14,7 +14,7 @@ class Settings : Configurable {
 	
 	override fun getDisplayName() = "Movement"
 	override fun getHelpTopic() = null
-	override fun createComponent(): JComponent? = UI().run { ui = this; component }
+	override fun createComponent(): JComponent = ui?.component ?: UI().run { ui = this; component }
 	
 	override fun isModified() = withService<SettingsState, Boolean> {
 		ui!!.wordSeparators != wordSeparators ||

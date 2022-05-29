@@ -7,13 +7,14 @@
 		<h3>Adds some favorite/extra actions that are not available in IntelliJ based IDEs.</h3>
 		
 		<div>Features:</div>
-		<ul>
+		<ul>			
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
 			<li>Predict Words: Pascal-Case</li>
 			<li>Predict Words: Snake-Case</li>
 			<li>Predict Words: Kebab-Case</li>
 			<li>Predict Words: Spaced</li>
+			<li>Add Selection to Macros</li>
 			<li>Duplicate Lines Up</li>
 			<li>Duplicate Lines Down</li>
 			<li>Remove Duplicate Selections</li>
@@ -57,6 +58,10 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.6.0:</b><br>
+				Added macro feature (without simulation of typing)<br>
+				Also there is a setting for editing macros at <pre>Settings -> tools -> Actionable -> Macro</pre>
+			</li>
 			<li><b>3.5.1:</b><br>
 				Improved Start Line Up action (fix for Rider)<br>
 				Now actions are dumb-aware (some are allowed to be executed while indexing)
@@ -156,6 +161,12 @@
 	<depends config-file="plugin-java.xml" optional="true">com.intellij.modules.java</depends>
 	<depends config-file="plugin-javascript.xml" optional="true">JavaScript</depends>
 	
+	<applicationListeners>
+		<listener
+			class="ir.mmd.intellijDev.Actionable.app.Startup"
+			topic="com.intellij.ide.AppLifecycleListener"/>
+	</applicationListeners>
+	
 	<extensions defaultExtensionNs="com.intellij">
 		<errorHandler
 			implementation="ir.mmd.intellijDev.Actionable.internal.ErrorReporter"/>
@@ -166,6 +177,8 @@
 			serviceImplementation="ir.mmd.intellijDev.Actionable.find.settings.SettingsState"/>
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState"/>
+		<applicationService
+			serviceImplementation="ir.mmd.intellijDev.Actionable.text.macro.settings.SettingsState"/>
 		
 		<projectService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.html.state.State"/>
@@ -196,6 +209,11 @@
 				id="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				instance="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				displayName="Find"/>
+			
+			<configurable
+				id="ir.mmd.intellijDev.Actionable.text.macro.settings.Settings"
+				instance="ir.mmd.intellijDev.Actionable.text.macro.settings.Settings"
+				displayName="Macro"/>
 		</applicationConfigurable>
 		
 		<typedHandler
@@ -246,6 +264,22 @@
 					id="ir.mmd.intellijDev.Actionable.typing.PredictSpacedWordsAction"
 					text="Predict Words: Spaced"
 					description="Predicts the words from a raw text and rewrites them in spaced"/>
+			</group>
+			
+			<group id="ir.mmd.intellijDev.Actionable.TextGroup" text="Text" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.text.macro.AddSelectionToMacrosAction"
+					id="ir.mmd.intellijDev.Actionable.text.macro.AddSelectionToMacrosAction"
+					text="Add Selection to Macros"
+					description="Adds the current selection to the macros"/>
+				
+				<separator text="Recorded Macros"/>
+				
+				<group
+					id="ir.mmd.intellijDev.Actionable.text.macro.MacrosActionGroup"
+					text="Macros"
+					description="Recorded macros"
+					searchable="true"/>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate" popup="true">

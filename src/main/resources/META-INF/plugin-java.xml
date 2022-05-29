@@ -10,7 +10,7 @@
 	</extensions>
 	
 	<actions>
-		<group compact="true">
+		<group>
 			<add-to-group group-id="ir.mmd.intellijDev.Actionable.TypeHandlersGroup"/>
 			<separator text="Java"/>
 			

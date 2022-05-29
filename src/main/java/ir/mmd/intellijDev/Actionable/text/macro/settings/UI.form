@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ir.mmd.intellijDev.Actionable.text.macro.settings.UI">
+  <grid id="27dc6" binding="component" layout-manager="CardLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="700" height="548"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <scrollpane id="29353">
+        <constraints>
+          <card name="Card1"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="ccc78" class="javax.swing.JTable" binding="macrosTable">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
+      </scrollpane>
+    </children>
+  </grid>
+  <inspectionSuppressions>
+    <suppress inspection="NoLabelFor" id="45b41"/>
+    <suppress inspection="MissingMnemonic"/>
+    <suppress inspection="NoLabelFor" id="29353"/>
+  </inspectionSuppressions>
+</form>
