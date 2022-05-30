@@ -142,9 +142,10 @@ task<ProGuardTask>("minify") {
 	injars(inFile)
 	outjars(outFile)
 	
-	keepattributes("RuntimeVisibleAnnotations")
+	keepattributes("RuntimeVisibleAnnotations,Signature")
 	keep("class kotlin.reflect.**")
 	
+	keep("class ir.mmd.intellijDev.Actionable.app.Startup")
 	generateKeepRules("src/main/resources/META-INF/plugin.xml")
 	generateKeepRules("src/main/resources/META-INF/plugin-java.xml")
 	generateKeepRules("src/main/resources/META-INF/plugin-javascript.xml")

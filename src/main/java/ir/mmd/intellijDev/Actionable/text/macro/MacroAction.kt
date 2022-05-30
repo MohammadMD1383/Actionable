@@ -7,15 +7,19 @@ import ir.mmd.intellijDev.Actionable.util.ext.*
 class MacroAction(name: String, private val macro: String) : AnAction(name) {
 	private val macroLength = macro.length
 	
-	override fun actionPerformed(e: AnActionEvent) {
-		val project = e.project!!
-		val editor = e.editor
-		
-		project.runWriteCommandActionWith(editor.document) { document ->
-			editor.allCarets.forEach { caret ->
-				val offset = caret.offset
-				document.insertString(offset, macro)
-				caret moveTo offset + macroLength
+	override fun actionPerformed(e: AnActionEvent) = with(e.editor) {
+		e.project!!.runWriteCommandActionWith(document) { document ->
+			allCarets.forEach { caret ->
+				caret moveTo macroLength + if (caret.hasSelection()) {
+					val (start, end) = caret.selectionRange
+					caret.removeSelection()
+					document.replaceString(start, end, macro)
+					start
+				} else {
+					val offset = caret.offset
+					document.insertString(offset, macro)
+					offset
+				}
 			}
 		}
 	}

@@ -3,7 +3,6 @@ package ir.mmd.intellijDev.Actionable.text.macro.settings;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -23,6 +22,6 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	
 	@Override
 	public void loadState(@NotNull SettingsState state) {
-		XmlSerializerUtil.copyBean(state, this);
+		this.macros = state.macros;
 	}
 }
