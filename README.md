@@ -8,6 +8,12 @@ Already familiar with the plugin actions? see [How does it work](#how-does-it-wo
 
 ---
 
+## Notice:
+
+**the documentation provided here is outdated and doesn't cover all features.**
+
+**feature explanations will be moved to the *[wiki](https://github.com/MohammadMD1383/Actionable/wiki) pages.*
+
 ## Features
 
 * Duplicate Line(s) down/up
