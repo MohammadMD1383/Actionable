@@ -12,7 +12,7 @@ Already familiar with the plugin actions? see [How does it work](#how-does-it-wo
 
 **the documentation provided here is outdated and doesn't cover all features.**
 
-**feature explanations will be moved to the *[wiki](https://github.com/MohammadMD1383/Actionable/wiki) pages.*
+**feature explanations will be moved to the _[wiki](https://github.com/MohammadMD1383/Actionable/wiki) pages._**
 
 ## Features
 
