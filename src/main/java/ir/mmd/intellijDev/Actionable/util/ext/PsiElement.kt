@@ -11,9 +11,17 @@ inline fun PsiElement.prevLeaf(skipEmptyElements: Boolean = false) = PsiTreeUtil
 inline fun PsiElement.acceptChildren(crossinline block: (PsiElement) -> Unit) = acceptChildren(psiElementVisitor(block))
 
 fun PsiElement.prevLeafNoWhitespace(skipEmptyElements: Boolean = false): PsiElement? {
-	var element = prevLeaf()
+	var element = prevLeaf(skipEmptyElements)
 	while (element != null && element is PsiWhiteSpace) {
 		element = element.prevLeaf(skipEmptyElements)
+	}
+	return element
+}
+
+fun PsiElement.nextLeafNoWhitespace(skipEmptyElements: Boolean = false): PsiElement? {
+	var element = nextLeaf(skipEmptyElements)
+	while (element != null && element is PsiWhiteSpace) {
+		element = element.nextLeaf(skipEmptyElements)
 	}
 	return element
 }

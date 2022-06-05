@@ -8,6 +8,7 @@
 		
 		<div>Features:</div>
 		<ul>			
+			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
 			<li>Predict Words: Pascal-Case</li>
@@ -50,6 +51,7 @@
 			<li>Move Caret to Previous Element with Selection</li>
 			<li>Auto Insert Semicolons</li>
 			<li>Auto Class Case</li>
+			<li>Just in Time Refactoring</li>
 			<li>Start Line Up</li>
 		</ul>
 		
@@ -58,6 +60,12 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.7.0:</b><br>
+				fixed issue <a href="https://github.com/MohammadMD1383/Actionable/issues/2">#2</a><br>
+				improvements to AutoClassCase and AutoInsertSemicolon (Java)<br>
+				new type handler for xml: collapse empty tag on backspace (when tag is completely empty and caret should be inside the tag)<br>
+				internal improvements
+			</li>
 			<li><b>3.6.0:</b><br>
 				Added macro feature (without simulation of typing)<br>
 				Also there is a setting for editing macros at
@@ -169,6 +177,11 @@
 	</application-components>
 	
 	<extensions defaultExtensionNs="com.intellij">
+		<typedHandler
+			implementation="ir.mmd.intellijDev.Actionable.typing.html.ExpandTagOnType"/>
+		<backspaceHandlerDelegate
+			implementation="ir.mmd.intellijDev.Actionable.typing.xml.CollapseEmptyTagOnBackspace"/>r
+		
 		<errorHandler
 			implementation="ir.mmd.intellijDev.Actionable.internal.ErrorReporter"/>
 		
@@ -183,7 +196,9 @@
 		
 		<projectService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.html.state.State"/>
-		
+		<projectService
+			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.xml.state.State"/>
+			
 		<applicationConfigurable
 			parentId="tools"
 			id="ir.mmd.intellijDev.Actionable.settings.Settings"
@@ -216,9 +231,6 @@
 				instance="ir.mmd.intellijDev.Actionable.text.macro.settings.Settings"
 				displayName="Macro"/>
 		</applicationConfigurable>
-		
-		<typedHandler
-			implementation="ir.mmd.intellijDev.Actionable.typing.html.ExpandTagOnType"/>
 	</extensions>
 	
 	<actions>
@@ -226,6 +238,14 @@
 			<add-to-group group-id="EditMenu" anchor="last"/>
 			
 			<group id="ir.mmd.intellijDev.Actionable.TypeHandlersGroup" text="Type Handlers" popup="true">
+				<separator text="XML"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.typing.xml.state.CollapseEmptyTagOnBackspaceState"
+					id="ir.mmd.intellijDev.Actionable.typing.xml.state.CollapseEmptyTagOnBackspaceState"
+					text="Collapse Empty Tag on Backspace"
+					description="Collapses empty tag when backspace pressed if caret is inside the tag with absolutely no content"/>
+				
 				<separator text="HTML"/>
 				
 				<action

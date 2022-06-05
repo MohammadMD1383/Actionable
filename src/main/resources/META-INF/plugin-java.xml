@@ -7,6 +7,8 @@
 			implementation="ir.mmd.intellijDev.Actionable.typing.java.AutoInsertSemicolon"/>
 		<typedHandler
 			implementation="ir.mmd.intellijDev.Actionable.typing.java.AutoClassCase"/>
+		<!-- <typedHandler -->
+		<!-- 	implementation="ir.mmd.intellijDev.Actionable.typing.java.JITRefactoringInsert"/> -->
 	</extensions>
 	
 	<actions>
@@ -25,6 +27,12 @@
 				id="ir.mmd.intellijDev.Actionable.typing.java.state.AutoClassCaseState"
 				text="Auto Class Case"
 				description="Whether to automatically capitalize class names or not"/>
+			
+			<!-- <action -->
+			<!-- 	class="ir.mmd.intellijDev.Actionable.typing.java.state.JITRefactoringEnabled" -->
+			<!-- 	id="ir.mmd.intellijDev.Actionable.typing.java.state.JITRefactoringEnabled" -->
+			<!-- 	text="Just in Time Refactoring" -->
+			<!-- 	description="Renames all references as you edit"/> -->
 		</group>
 	</actions>
 </idea-plugin>

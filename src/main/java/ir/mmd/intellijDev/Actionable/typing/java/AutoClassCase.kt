@@ -28,12 +28,17 @@ class AutoClassCase : TypedHandlerDelegate() {
 			?.prevLeafNoWhitespace(true)
 			?.parentOfType<PsiClass>(true)
 			?: return@also
+		
 		val nameStart = element.nameIdentifier?.textRange?.startOffset ?: return@also
 		val nameEnd = caret.offset
-		val spacedName = document.getText(nameStart..nameEnd)
-		val newName = spacedName.trim().split(' ').joinToString("") { it.titleCase }
+		val spacedName = document.getText(nameStart..nameEnd).run {
+			val i = indexOfAny(listOf("extends", "implements", "permits", "\n"))
+			if (i != -1) substring(0, i) else this
+		}
+		val newName = spacedName.trim().split(' ').joinToString("") { it.titleCase } + " "
+		
 		project.runWriteCommandAction {
-			document.replaceString(nameStart, nameEnd, newName)
+			document.replaceString(nameStart, nameStart + spacedName.length, newName)
 		}
 	}
 }

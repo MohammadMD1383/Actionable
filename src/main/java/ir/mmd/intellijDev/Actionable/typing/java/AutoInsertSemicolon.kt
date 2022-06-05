@@ -5,13 +5,9 @@ import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiField
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiLocalVariable
-import com.intellij.psi.PsiModifier
+import com.intellij.psi.*
 import com.intellij.psi.PsiModifier.ABSTRACT
 import com.intellij.psi.PsiModifier.DEFAULT
-import com.intellij.psi.PsiReturnStatement
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
@@ -50,6 +46,7 @@ class AutoInsertSemicolon : TypedHandlerDelegate() {
 		file: PsiFile
 	) = Result.CONTINUE.also {
 		if (
+			!project.service<State>().autoInsertSemicolonEnabled ||
 			file.fileType !is JavaFileType ||
 			c == ';'
 		) return@also
@@ -58,14 +55,23 @@ class AutoInsertSemicolon : TypedHandlerDelegate() {
 		val caret = editor.caretModel.primaryCaret
 		val element = file.elementAt(caret)
 			?.prevLeafNoWhitespace(true)
-			?.parentOfTypes(PsiField::class, PsiLocalVariable::class, PsiReturnStatement::class, withSelf = true)
-			?: return@also
+			?.parentOfTypes(
+				PsiField::class,
+				PsiLocalVariable::class,
+				PsiAssignmentExpression::class,
+				PsiReturnStatement::class,
+				withSelf = true
+			) ?: return@also
 		
-		if (!element.textContains(';')) {
-			val lineEnd = document.getLineEndOffset(caret.logicalPosition.line)
-			project.runWriteCommandAction {
-				document.insertString(lineEnd, ";")
-			}
+		if (
+			element is PsiEnumConstant ||
+			element.textContains(';') ||
+			element.nextLeafNoWhitespace(true).let { it is PsiJavaToken && it.tokenType == JavaTokenType.SEMICOLON }
+		) return@also
+		
+		val lineEnd = document.getLineEndOffset(caret.logicalPosition.line)
+		project.runWriteCommandAction {
+			document.insertString(lineEnd, ";")
 		}
 	}
 }

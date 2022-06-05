@@ -18,5 +18,10 @@ inline fun <T> nonnull(receiver: T?, block: (T) -> Unit) {
 	if (receiver != null) block(receiver)
 }
 
+inline fun tryCatching(block: () -> Unit) = try {
+	block()
+} catch (_: Throwable) {
+}
+
 inline fun <reified T> service(): T = ServiceManager.getService(T::class.java)
 inline fun <reified T, R> withService(block: T.() -> R) = ServiceManager.getService(T::class.java).block()

@@ -1,11 +1,10 @@
 package ir.mmd.intellijDev.Actionable.typing.html.state
 
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.ToggleAction
-import ir.mmd.intellijDev.Actionable.util.ext.withService
+import ir.mmd.intellijDev.Actionable.typing.StateToggleAction
 
-class ExpandTagOnTypeState : ToggleAction() {
-	override fun isDumbAware() = true
-	override fun isSelected(e: AnActionEvent) = e.project!!.withService<State, Boolean> { expandTagOnTypeEnabled }
-	override fun setSelected(e: AnActionEvent, state: Boolean) = e.project!!.withService<State, Unit> { expandTagOnTypeEnabled = state }
+class ExpandTagOnTypeState : StateToggleAction<State>(State::class.java) {
+	override fun State.get() = expandTagOnTypeEnabled
+	override fun State.set(b: Boolean) {
+		expandTagOnTypeEnabled = b
+	}
 }

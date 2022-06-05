@@ -1,9 +1,9 @@
 package ir.mmd.intellijDev.Actionable.action;
 
-public interface Actions {
-	String MACRO_PREFIX = "Actionable.Macro";
+public final class Actions {
+	public static final String MACRO_PREFIX = "Actionable.Macro";
 	
-	interface Groups {
-		String MACROS = "ir.mmd.intellijDev.Actionable.text.macro.MacrosActionGroup";
+	public static class Groups {
+		public static final String MACROS = "ir.mmd.intellijDev.Actionable.text.macro.MacrosActionGroup";
 	}
 }

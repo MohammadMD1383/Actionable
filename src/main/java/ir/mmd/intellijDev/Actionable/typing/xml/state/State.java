@@ -1,25 +1,17 @@
-package ir.mmd.intellijDev.Actionable.typing.java.state;
+package ir.mmd.intellijDev.Actionable.typing.xml.state;
 
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @com.intellij.openapi.components.State(
-	name = "ir.mmd.intellijDev.Actionable.typing.java.state.State",
-	storages = @Storage("Actionable.Typing.Java.State.xml")
+	name = "ir.mmd.intellijDev.Actionable.typing.xml.state.State",
+	storages = @Storage("Actionable.Typing.Xml.State.xml")
 )
 public class State implements PersistentStateComponent<State> {
-	public boolean autoClassCaseEnabled = true;
-	public boolean autoInsertSemicolonEnabled = true;
-	public boolean jitRefactoringEnabled = false;
-	
-	@SuppressWarnings("deprecation")
-	public static @NotNull State getInstance() {
-		return ServiceManager.getService(State.class);
-	}
+	public boolean collapseEmptyTagOnBackspaceEnabled = true;
 	
 	@Override
 	public @Nullable State getState() {
