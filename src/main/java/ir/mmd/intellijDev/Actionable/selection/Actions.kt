@@ -4,9 +4,11 @@ import com.intellij.openapi.editor.Caret
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiLiteral
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
+import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.withService
 
+@Keep
 class SelectWordUnderCaretAction : SelectTextUnderCaretAction() {
 	override fun isDumbAware() = true
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange? = withService<SettingsState, IntRange?> {
@@ -15,6 +17,7 @@ class SelectWordUnderCaretAction : SelectTextUnderCaretAction() {
 	}
 }
 
+@Keep
 class SelectElementUnderCaretAction : SelectTextUnderCaretAction() {
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange? {
 		val (start, end) = psiFile.elementAt(caret)?.textRange ?: return null
@@ -22,6 +25,7 @@ class SelectElementUnderCaretAction : SelectTextUnderCaretAction() {
 	}
 }
 
+@Keep
 class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange? {
 		val (start, end) = psiFile.elementAt(caret)?.parentOfType<PsiLiteral>(true)?.textRange ?: return null

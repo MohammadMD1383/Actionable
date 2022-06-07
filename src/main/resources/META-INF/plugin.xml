@@ -7,7 +7,7 @@
 		<h3>Adds some favorite/extra actions that are not available in IntelliJ based IDEs.</h3>
 		
 		<div>Features:</div>
-		<ul>
+		<ul>			
 			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
@@ -62,7 +62,10 @@
 	<change-notes><![CDATA[
 		<ul>
 			<li><b>3.8.0:</b><br>
-			
+				fixed issue with registering macros<br>
+				new java action: add import (from anywhere in the document using a popup dialog)<br>
+				<b>new java typeHandler: just-in-time refactoring for local variables</b><br>
+				fixed issue with CollapseEmptyTagOnBackspace
 			</li>
 			<li><b>3.7.0:</b><br>
 				fixed issue <a href="https://github.com/MohammadMD1383/Actionable/issues/2">#2</a><br>

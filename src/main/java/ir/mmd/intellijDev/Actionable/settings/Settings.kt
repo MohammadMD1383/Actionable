@@ -1,12 +1,9 @@
 package ir.mmd.intellijDev.Actionable.settings
 
 import com.intellij.openapi.options.Configurable
+import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 
-/**
- * Main setting entry for the plugin
- *
- * provides no default ui
- */
+@Keep
 class Settings : Configurable {
 	override fun getDisplayName() = "Actionable"
 	override fun getHelpTopic() = null

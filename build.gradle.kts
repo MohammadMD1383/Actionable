@@ -145,26 +145,10 @@ task<ProGuardTask>("minify") {
 	keepattributes("RuntimeVisibleAnnotations,Signature")
 	keep("class kotlin.reflect.**")
 	
-	keep("class ir.mmd.intellijDev.Actionable.app.Startup")
-	generateKeepRules("src/main/resources/META-INF/plugin.xml")
-	generateKeepRules("src/main/resources/META-INF/plugin-java.xml")
-	generateKeepRules("src/main/resources/META-INF/plugin-javascript.xml")
-	generateKeepRules("src/main/resources/META-INF/plugin-rider.xml")
+	keep("@ir.mmd.intellijDev.Actionable.internal.proguard.Keep class *")
+	keepclassmembers("class * { @ir.mmd.intellijDev.Actionable.internal.proguard.Keep *; }")
 }
 
 // Helpers
-
-fun ProGuardTask.generateKeepRules(xmlFile: String) {
-	val xmlContent = file(xmlFile).readText()
-	val classes = mutableSetOf<String>()
-	
-	Regex(""""ir\.mmd\.intellijDev\.Actionable\..*?"""").findAll(xmlContent).forEach { match ->
-		classes += match.value.trim('"').let {
-			"class " + if ("State" in it) "$it { public <fields>; }" else it
-		}
-	}
-	
-	classes.forEach(::keep)
-}
 
 fun <T> ListProperty<T>.set(vararg values: T) = set(listOf(*values))

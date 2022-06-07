@@ -8,9 +8,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.*
 import com.intellij.psi.PsiModifier.ABSTRACT
 import com.intellij.psi.PsiModifier.DEFAULT
+import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
+@Keep
 class AutoInsertSemicolon : TypedHandlerDelegate() {
 	override fun beforeCharTyped(
 		c: Char,

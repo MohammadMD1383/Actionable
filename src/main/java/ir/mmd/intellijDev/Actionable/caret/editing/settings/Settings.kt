@@ -1,9 +1,11 @@
 package ir.mmd.intellijDev.Actionable.caret.editing.settings
 
 import com.intellij.openapi.options.Configurable
+import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 import ir.mmd.intellijDev.Actionable.util.withService
 import javax.swing.JComponent
 
+@Keep
 class Settings : Configurable {
 	private var ui: UI? = null
 	

@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.ui.Messages
 import ir.mmd.intellijDev.Actionable.action.registerMacro
+import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 import ir.mmd.intellijDev.Actionable.text.macro.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
@@ -12,6 +13,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.hasEditorWith
 import ir.mmd.intellijDev.Actionable.util.ext.primaryCaret
 import ir.mmd.intellijDev.Actionable.util.withService
 
+@Keep
 class AddSelectionToMacrosAction : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) = withService<SettingsState, Unit> {
 		val project = e.project

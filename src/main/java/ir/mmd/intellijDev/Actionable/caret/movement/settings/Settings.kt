@@ -2,13 +2,12 @@ package ir.mmd.intellijDev.Actionable.caret.movement.settings
 
 import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.options.ConfigurationException
+import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 import ir.mmd.intellijDev.Actionable.util.ext.isAllDistinct
 import ir.mmd.intellijDev.Actionable.util.withService
 import javax.swing.JComponent
 
-/**
- * This class is the connector between [UI] and [SettingsState]
- */
+@Keep
 class Settings : Configurable {
 	private var ui: UI? = null
 	
