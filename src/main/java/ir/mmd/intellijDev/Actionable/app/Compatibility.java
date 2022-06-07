@@ -5,12 +5,12 @@ import org.jetbrains.annotations.NotNull;
 
 public final class Compatibility {
 	public static final class Version {
-		public static final int[] currentVersion = getCurrentVersion();
+		public static final int[] currentVersion;
 		public static final int[] _193_5233_102_ = new int[]{193, 5233, 102};
 		
-		private static int @NotNull [] getCurrentVersion() {
+		static {
 			final String[] strings = ApplicationInfo.getInstance().getBuild().asStringWithoutProductCodeAndSnapshot().split("\\.");
-			return new int[]{
+			currentVersion = new int[]{
 				Integer.parseInt(strings[0]),
 				Integer.parseInt(strings[1]),
 				Integer.parseInt(strings[2])

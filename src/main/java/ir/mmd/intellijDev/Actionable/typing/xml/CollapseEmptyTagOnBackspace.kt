@@ -57,6 +57,6 @@ class CollapseEmptyTagOnBackspace : BackspaceHandlerDelegate() {
 			editor.caretModel.primaryCaret moveTo caretOffset!! + 1
 			caretOffset = null
 		}
-		return true
+		return false
 	}
 }

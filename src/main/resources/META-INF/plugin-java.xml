@@ -7,8 +7,11 @@
 			implementation="ir.mmd.intellijDev.Actionable.typing.java.AutoInsertSemicolon"/>
 		<typedHandler
 			implementation="ir.mmd.intellijDev.Actionable.typing.java.AutoClassCase"/>
-		<!-- <typedHandler -->
-		<!-- 	implementation="ir.mmd.intellijDev.Actionable.typing.java.JITRefactoringInsert"/> -->
+		<typedHandler
+			implementation="ir.mmd.intellijDev.Actionable.typing.java.JITRefactoringInsert"/>
+		
+		<backspaceHandlerDelegate
+			implementation="ir.mmd.intellijDev.Actionable.typing.java.JITRefactoringDelete"/>
 	</extensions>
 	
 	<actions>
@@ -28,11 +31,22 @@
 				text="Auto Class Case"
 				description="Whether to automatically capitalize class names or not"/>
 			
-			<!-- <action -->
-			<!-- 	class="ir.mmd.intellijDev.Actionable.typing.java.state.JITRefactoringEnabled" -->
-			<!-- 	id="ir.mmd.intellijDev.Actionable.typing.java.state.JITRefactoringEnabled" -->
-			<!-- 	text="Just in Time Refactoring" -->
-			<!-- 	description="Renames all references as you edit"/> -->
+			<action
+				class="ir.mmd.intellijDev.Actionable.typing.java.state.JITRefactoringEnabled"
+				id="ir.mmd.intellijDev.Actionable.typing.java.state.JITRefactoringEnabled"
+				text="Just in Time Refactoring"
+				description="Renames all references as you edit"/>
+		</group>
+		
+		<group>
+			<add-to-group group-id="ir.mmd.intellijDev.Actionable.ExtraGroup"/>
+			<separator text="Java"/>
+			
+			<action
+				class="ir.mmd.intellijDev.Actionable.extra.java.AddImportDialogAction"
+				id="ir.mmd.intellijDev.Actionable.extra.java.AddImportDialogAction"
+				text="Add Import"
+				description="Add import to current file using a popup dialog with ease"/>
 		</group>
 	</actions>
 </idea-plugin>

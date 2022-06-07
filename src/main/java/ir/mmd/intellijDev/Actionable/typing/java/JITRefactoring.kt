@@ -7,15 +7,10 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiIdentifier
-import com.intellij.psi.PsiReferenceService
-import com.intellij.psi.PsiReferenceService.Hints.NO_HINTS
+import com.intellij.psi.PsiLocalVariable
 import com.intellij.psi.search.searches.ReferencesSearch
-import com.intellij.util.containers.toArray
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
-import ir.mmd.intellijDev.Actionable.util.ext.prevLeafNoWhitespace
-import ir.mmd.intellijDev.Actionable.util.ext.replaceString
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
-import ir.mmd.intellijDev.Actionable.util.ext.service
+import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.trueAfter
 
 class JITRefactoringInsert : TypedHandlerDelegate() {
@@ -26,8 +21,7 @@ class JITRefactoringInsert : TypedHandlerDelegate() {
 		) return@also
 		
 		val document = editor.document
-		val caret = editor.caretModel.primaryCaret
-		val offset = caret.offset
+		val offset = editor.caretModel.primaryCaret.offset
 		var element = file.findElementAt(offset) ?: return@also
 		
 		if (element !is PsiIdentifier)
@@ -35,14 +29,16 @@ class JITRefactoringInsert : TypedHandlerDelegate() {
 		if (element !is PsiIdentifier)
 			return@also
 		
-		val var1 = element.reference
-		val var2 = element.references
-		val var3 = ReferencesSearch.search(element).findAll()
+		val localVariable = element.parentOfType<PsiLocalVariable>() ?: return@also
+		val newIdentifier = element.textRange.run {
+			document.getText(startOffset..endOffset + 1)
+		}
 		
-		val newText = element.text
 		project.runWriteCommandAction {
-			PsiReferenceService.getService().getReferences(element, NO_HINTS).forEach {
-				document.replaceString(it.element.textRange, newText)
+			ReferencesSearch.search(localVariable).findAll().forEach {
+				it.element.textRange.run {
+					document.replaceString(startOffset + 1, endOffset + 1, newIdentifier)
+				}
 			}
 		}
 	}
@@ -56,6 +52,20 @@ class JITRefactoringDelete : BackspaceHandlerDelegate() {
 			file.fileType !is JavaFileType
 		) return@trueAfter
 		
+		val document = editor.document
+		val offset = editor.caretModel.primaryCaret.offset
+		val element = file.findElementAt(offset) ?: return@trueAfter
+		val localVariable = element.parentOfType<PsiLocalVariable>() ?: return@trueAfter
+		val newIdentifier = element.textRange.run {
+			document.getText(startOffset until endOffset)
+		}
 		
+		editor.project.runWriteCommandAction {
+			ReferencesSearch.search(localVariable).findAll().forEach {
+				it.element.textRange.run {
+					document.replaceString(startOffset - 1, endOffset - 1, newIdentifier)
+				}
+			}
+		}
 	}
 }

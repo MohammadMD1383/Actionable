@@ -7,7 +7,7 @@
 		<h3>Adds some favorite/extra actions that are not available in IntelliJ based IDEs.</h3>
 		
 		<div>Features:</div>
-		<ul>			
+		<ul>
 			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
@@ -52,6 +52,7 @@
 			<li>Auto Insert Semicolons</li>
 			<li>Auto Class Case</li>
 			<li>Just in Time Refactoring</li>
+			<li>Add Import</li>
 			<li>Start Line Up</li>
 		</ul>
 		
@@ -60,6 +61,9 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.8.0:</b><br>
+			
+			</li>
 			<li><b>3.7.0:</b><br>
 				fixed issue <a href="https://github.com/MohammadMD1383/Actionable/issues/2">#2</a><br>
 				improvements to AutoClassCase and AutoInsertSemicolon (Java)<br>
@@ -170,20 +174,18 @@
 	<depends config-file="plugin-java.xml" optional="true">com.intellij.modules.java</depends>
 	<depends config-file="plugin-javascript.xml" optional="true">JavaScript</depends>
 	
-	<application-components>
-		<component>
-			<implementation-class>ir.mmd.intellijDev.Actionable.app.Startup</implementation-class>
-		</component>
-	</application-components>
-	
 	<extensions defaultExtensionNs="com.intellij">
-		<typedHandler
-			implementation="ir.mmd.intellijDev.Actionable.typing.html.ExpandTagOnType"/>
-		<backspaceHandlerDelegate
-			implementation="ir.mmd.intellijDev.Actionable.typing.xml.CollapseEmptyTagOnBackspace"/>r
-		
 		<errorHandler
 			implementation="ir.mmd.intellijDev.Actionable.internal.ErrorReporter"/>
+		
+		<typedHandler
+			implementation="ir.mmd.intellijDev.Actionable.typing.html.ExpandTagOnType"/>
+		
+		<backspaceHandlerDelegate
+			implementation="ir.mmd.intellijDev.Actionable.typing.xml.CollapseEmptyTagOnBackspace"/>
+		
+		<preloadingActivity
+			implementation="ir.mmd.intellijDev.Actionable.app.Startup"/>
 		
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState"/>
@@ -198,7 +200,7 @@
 			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.html.state.State"/>
 		<projectService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.xml.state.State"/>
-			
+		
 		<applicationConfigurable
 			parentId="tools"
 			id="ir.mmd.intellijDev.Actionable.settings.Settings"
@@ -520,6 +522,8 @@
 					text="Move Caret to Previous Element with Selection"
 					description="Moves the caret to previous psi element with selection"/>
 			</group>
+			
+			<group id="ir.mmd.intellijDev.Actionable.ExtraGroup" text="Extra" popup="true"/>
 		</group>
 	</actions>
 </idea-plugin>

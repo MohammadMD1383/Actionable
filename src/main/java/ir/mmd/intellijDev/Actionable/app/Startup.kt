@@ -1,24 +1,18 @@
 package ir.mmd.intellijDev.Actionable.app
 
-import com.intellij.diagnostic.LoadingState
 import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.components.ApplicationComponent
+import com.intellij.openapi.application.PreloadingActivity
+import com.intellij.openapi.progress.ProgressIndicator
 import ir.mmd.intellijDev.Actionable.action.registerMacro
-import ir.mmd.intellijDev.Actionable.app.Compatibility.Version
 import ir.mmd.intellijDev.Actionable.text.macro.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.service
 
-@Suppress("DEPRECATION")
-class Startup : ApplicationComponent {
-	@Suppress("OVERRIDE_DEPRECATION")
-	override fun initComponent() {
+class Startup : PreloadingActivity() {
+	override fun preload(indicator: ProgressIndicator) {
 		initMacros()
 	}
 	
 	private fun initMacros() {
-		if (Compatibility.isCompatibleWith(Version._193_5233_102_))
-			if (!LoadingState.COMPONENTS_LOADED.isOccurred) return
-		
 		val actionManager = ActionManager.getInstance()
 		service<SettingsState>().macros.forEach { (name, macro) ->
 			actionManager.registerMacro(name, macro)

@@ -28,7 +28,7 @@ repositories {
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
 	
-	classpath("/Files/jetbrains/idea/plugins/java")
+	// classpath("/Files/jetbrains/idea/plugins/java")
 	classpath("/Files/jetbrains/idea/plugins/JavaScriptLanguage")
 	
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
@@ -40,7 +40,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "3.7.0"
+version = "3.8.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
@@ -58,12 +58,12 @@ tasks.withType<KotlinCompile> {
 }
 
 intellij {
+	plugins.set("java")
+	
 	// localPath.set("/Files/jetbrains/rider")
 	// localPath.set("/Files/jetbrains/idea")
 	// localPath.set("/Files/jetbrains/clion")
 	// localPath.set("/Files/jetbrains/studio")
-	
-	plugins.set("java")
 	
 	// version.set("IU-2022.1")
 	version.set("2022.1")
