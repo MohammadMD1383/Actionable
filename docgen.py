@@ -50,15 +50,15 @@ if __name__ == '__main__':
 		with open(file_path, 'r') as file:
 			process_annotation(file_path, file.read())
 	
-	if not os.path.exists("doc"):
-		os.mkdir("doc")
+	if not os.path.exists("docs"):
+		os.mkdir("docs")
 	else:
-		for file in glob.glob("doc/*"):
+		for file in glob.glob("docs/*"):
 			os.remove(file)
 	
-	with open('doc/index.md', 'w') as index:
+	with open('docs/index.md', 'w') as index:
 		for doc in documentations:
 			index.write(f"[{doc.title}]({doc.name}.md)\n")
 			
-			with open(f'doc/{doc.name}.md', 'w') as file:
+			with open(f'docs/{doc.name}.md', 'w') as file:
 				file.write(doc.__str__())
