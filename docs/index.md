@@ -13,4 +13,3 @@ title: Actionable
 [Justify Carets End](JustifyCaretsEnd.md)
 
 [Remove Duplicate Selections](RemoveDuplicates.md)
-
