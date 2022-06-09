@@ -13,11 +13,11 @@ import ir.mmd.intellijDev.Actionable.util.withService
 	title = "Remove Duplicate Selections",
 	description = "This action will remove duplicate selections (should be used with multi-caret mode)",
 	example = """
-		| symbol   | meaning         |
-		|----------|-----------------|
-		| `(`      | selection start |
-		| `)`      | selection end   |
-		| `&#124;` | caret           |
+		| symbol              | meaning         |
+		|---------------------|-----------------|
+		| `(`                 | selection start |
+		| `)`                 | selection end   |
+		| <code>&#124;</code> | caret           |
 		
 		having:
 		```

@@ -23,7 +23,7 @@ class Documentation:
 
 
 doc_pattern = compile(
-	r'@Documentation\(.*title = "(.*?)".*description = "(.*?)".*example = """(.*?)""".*?\n\).*?class ([a-zA-Z]+)',
+	r'@Documentation\(.*?title = "(.*?)".*?description = "(.*?)".*?example = """(.*?)""".*?\n\).*?class ([a-zA-Z]+)',
 	re.DOTALL | re.MULTILINE
 )
 documentations: list[Documentation] = []
@@ -36,8 +36,7 @@ def all_files():
 
 
 def process_annotation(content: str):
-	match = doc_pattern.search(content)
-	if match is not None:
+	for match in doc_pattern.finditer(content):
 		documentations.append(Documentation(
 			match.groups()[3],
 			match.groups()[0],
@@ -63,12 +62,14 @@ if __name__ == '__main__':
 			'title: Actionable',
 			'---',
 			'',
+			'<iframe frameborder="none" width="384px" height="325px" src="https://plugins.jetbrains.com/embeddable/card/17962"></iframe>',
+			'',
 			'## Features:'
 		]) + '\n\n')
 		
 		for doc in documentations:
 			file_name = f'{doc.name}.md'
-			index.write(f"[{doc.title}]({file_name})\n")
+			index.write(f"[{doc.title}]({file_name})\n\n")
 			
 			with open(f'docs/{file_name}', 'w') as file:
 				file.write('\n'.join([

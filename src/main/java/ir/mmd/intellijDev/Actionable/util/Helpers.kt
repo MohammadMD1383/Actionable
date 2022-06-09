@@ -9,9 +9,15 @@ inline fun <T1, T2, R> returnBy(obj1: T1, obj2: T2, block: (T1, T2) -> R) = bloc
 inline fun <T, O, R> with(receiver: T, obj: O, block: T.(O) -> R) = receiver.block(obj)
 
 inline fun after(block: () -> Unit) = block()
+
 inline fun trueAfter(block: () -> Unit): Boolean {
 	block()
 	return true
+}
+
+inline fun falseAfter(block: () -> Unit): Boolean {
+	block()
+	return false
 }
 
 inline fun <T> nonnull(receiver: T?, block: (T) -> Unit) {

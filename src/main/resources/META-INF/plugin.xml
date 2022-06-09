@@ -5,6 +5,7 @@
 	
 	<description><![CDATA[
 		<h3>Adds some favorite/extra actions that are not available in IntelliJ based IDEs.</h3>
+		<b>For a detailed description about all the actions, please visit the <a href="https://mohammadmd1383.github.io/Actionable/">documentation</a></b>
 		
 		<div>Features:</div>
 		<ul>			
@@ -55,12 +56,13 @@
 			<li>Add Import</li>
 			<li>Start Line Up</li>
 		</ul>
-		
-		<b>For detailed description about all the actions, please visit the <a href="https://github.com/MohammadMD1383/Actionable">github repo</a></b>
 		]]></description>
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.8.1:</b><br>
+				fixed a bug
+			</li>
 			<li><b>3.8.0:</b><br>
 				fixed issue with registering macros<br>
 				new java action: add import (from anywhere in the document using a popup dialog)<br>
