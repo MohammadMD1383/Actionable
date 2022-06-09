@@ -56,6 +56,9 @@ if __name__ == '__main__':
 		for file in glob.glob("docs/*"):
 			os.remove(file)
 	
+	with open('docs/_config.yml', 'w') as config:
+		config.write('theme: jekyll-theme-cayman')
+	
 	with open('docs/index.md', 'w') as index:
 		index.write('\n'.join([
 			'---',

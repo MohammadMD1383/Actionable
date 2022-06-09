@@ -6,6 +6,14 @@ title: Actionable
 
 ## Features:
 
+[Cut Word at Caret](CutWordAtCaret.md)
+
+[Cut Element at Caret](CutElementAtCaret.md)
+
+[Copy Word at Caret](CopyWordAtCaret.md)
+
+[Copy Element at Caret](CopyElementAtCaret.md)
+
 [Justify Carets End and Shift Text](JustifyCaretsEndAndShift.md)
 
 [Justify Carets Start](JustifyCaretsStart.md)
@@ -13,3 +21,4 @@ title: Actionable
 [Justify Carets End](JustifyCaretsEnd.md)
 
 [Remove Duplicate Selections](RemoveDuplicates.md)
+
