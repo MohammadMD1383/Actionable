@@ -22,8 +22,10 @@ class Documentation:
 		])
 
 
-doc_pattern = compile(r'@Documentation\(.*title = "(.*?)".*description = "(.*?)".*example = """(.*?)""".*?\n\)', re.DOTALL | re.MULTILINE)
-name_pattern = compile(r'([a-zA-Z]+)\..+$')
+doc_pattern = compile(
+	r'@Documentation\(.*title = "(.*?)".*description = "(.*?)".*example = """(.*?)""".*?\n\).*?class ([a-zA-Z]+)',
+	re.DOTALL | re.MULTILINE
+)
 documentations: list[Documentation] = []
 
 
@@ -33,22 +35,21 @@ def all_files():
 			yield path
 
 
-def process_annotation(path: str, content: str):
-	name_match = name_pattern.search(path)
-	doc_match = doc_pattern.search(content)
-	if doc_match is not None:
+def process_annotation(content: str):
+	match = doc_pattern.search(content)
+	if match is not None:
 		documentations.append(Documentation(
-			name_match.groups()[0],
-			doc_match.groups()[0],
-			doc_match.groups()[1],
-			dedent(doc_match.groups()[2]).strip()
+			match.groups()[3],
+			match.groups()[0],
+			match.groups()[1],
+			dedent(match.groups()[2]).strip()
 		))
 
 
 if __name__ == '__main__':
 	for file_path in all_files():
 		with open(file_path, 'r') as file:
-			process_annotation(file_path, file.read())
+			process_annotation(file.read())
 	
 	if not os.path.exists("docs"):
 		os.mkdir("docs")
@@ -57,8 +58,23 @@ if __name__ == '__main__':
 			os.remove(file)
 	
 	with open('docs/index.md', 'w') as index:
+		index.write('\n'.join([
+			'---',
+			'title: Actionable',
+			'---',
+			'',
+			'## Features:'
+		]) + '\n\n')
+		
 		for doc in documentations:
-			index.write(f"[{doc.title}]({doc.name}.md)\n")
+			file_name = f'{doc.name}.md'
+			index.write(f"[{doc.title}]({file_name})\n")
 			
-			with open(f'docs/{doc.name}.md', 'w') as file:
+			with open(f'docs/{file_name}', 'w') as file:
+				file.write('\n'.join([
+					'---',
+					'title: Actionable',
+					'---'
+				]) + '\n\n')
 				file.write(doc.__str__())
+				file.write('\n\n[&larr; Back](index.md)')

@@ -1,3 +1,7 @@
+---
+title: Actionable
+---
+
 ## Remove Duplicate Selections
 
 This action will remove duplicate selections (should be used with multi-caret mode)
@@ -6,11 +10,11 @@ This action will remove duplicate selections (should be used with multi-caret mo
 
 ### example:
 
-| symbol   | meaning         |
-|----------|-----------------|
-| `(`      | selection start |
-| `)`      | selection end   |
-| `&#124;` | caret           |
+| symbol              | meaning         |
+|---------------------|-----------------|
+| `(`                 | selection start |
+| `)`                 | selection end   |
+| <code>&#124;</code> | caret           |
 
 having:
 ```
@@ -24,3 +28,5 @@ will produce:
 (text 2)|
 |
 ```
+
+[&larr; Back](index.md)
