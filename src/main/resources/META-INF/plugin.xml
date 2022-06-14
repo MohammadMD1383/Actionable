@@ -60,6 +60,9 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.8.2:</b><br>
+				fixed a bug with start line up (Rider)
+			</li>
 			<li><b>3.8.1:</b><br>
 				fixed a bug
 			</li>

@@ -15,12 +15,16 @@ class StartLineUp : AnAction() {
 		val enterAction = action(ACTION_EDITOR_ENTER)!!
 		
 		editor.caretModel.allCarets.asReversed().forEach { caret ->
-			val line = caret.logicalPosition.line - 1
-			val upperLineEnd = document.getLineEndOffset(line)
-			
 			caret.removeSelection()
-			caret moveTo upperLineEnd
-			enterAction.actionPerformed(e)
+			val line = caret.logicalPosition.line
+			
+			if (line == 0) {
+				e.project.runWriteCommandAction { document.insertString(0, "\n") }
+				caret moveTo 0
+			} else {
+				caret moveTo document.getLineEndOffset(line - 1)
+				enterAction.actionPerformed(e)
+			}
 		}
 	}
 	
