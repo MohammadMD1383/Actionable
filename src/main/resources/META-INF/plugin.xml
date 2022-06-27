@@ -8,7 +8,7 @@
 		<b>For a detailed description about all the actions, please visit the <a href="https://mohammadmd1383.github.io/Actionable/">documentation</a></b>
 		
 		<div>Features:</div>
-		<ul>			
+		<ul>
 			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
@@ -60,6 +60,10 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.9.0:</b><br>
+				Added select text between quotes/double-quotes/backticks action (single-line)
+				Added shortcut for settings as a toggle action (Actionable -> Find -> Is find case-sensitive?)
+			</li>
 			<li><b>3.8.2:</b><br>
 				fixed a bug with start line up (Rider)
 			</li>
@@ -354,6 +358,24 @@
 					text="Select Literal Element Under Caret"
 					description="Selects the literal element under the caret"/>
 				
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenQuotesAction"
+					id="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenQuotesAction"
+					text="Select Text Between Quotes (Single-Line)"
+					description="Selects the text between two quotes in a line"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenDoubleQuotesAction"
+					id="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenDoubleQuotesAction"
+					text="Select Text Between Double-Quotes (Single-Line)"
+					description="Selects the text between two double-quotes in a line"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenBackticksAction"
+					id="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenBackticksAction"
+					text="Select Text Between Backticks (Single-Line)"
+					description="Selects the text between two backticks in a line"/>
+				
 				<group id="ir.mmd.intellijDev.Actionable.selection.BoxMovementGroup" text="Box Movement" popup="true">
 					<action
 						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionUp"
@@ -529,6 +551,16 @@
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElementWithSelection"
 					text="Move Caret to Previous Element with Selection"
 					description="Moves the caret to previous psi element with selection"/>
+			</group>
+			
+			<group id="ir.mmd.intellijDev.Actionable.GlobalToggles" text="Global Toggles" popup="true">
+				<separator text="Find"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.find.settings.handy.FindCaseSensitivityToggleAction"
+					id="ir.mmd.intellijDev.Actionable.find.settings.handy.FindCaseSensitivityToggleAction"
+					text="Find Is Case-Sensitive"
+					description="A shortcut for `is find case-sensitive` option in Actionable settings"/>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.ExtraGroup" text="Extra" popup="true"/>

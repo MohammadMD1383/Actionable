@@ -1,10 +1,10 @@
 package ir.mmd.intellijDev.Actionable.typing.java.state
 
 import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
-import ir.mmd.intellijDev.Actionable.typing.StateToggleAction
+import ir.mmd.intellijDev.Actionable.util.ProjectStateToggleAction
 
 @Keep
-class AutoClassCaseState : StateToggleAction<State>(State::class.java) {
+class AutoClassCaseState : ProjectStateToggleAction<State>(State::class.java) {
 	override fun State.get() = autoClassCaseEnabled
 	override fun State.set(b: Boolean) {
 		autoClassCaseEnabled = b
@@ -12,7 +12,7 @@ class AutoClassCaseState : StateToggleAction<State>(State::class.java) {
 }
 
 @Keep
-class AutoInsertSemicolonState : StateToggleAction<State>(State::class.java) {
+class AutoInsertSemicolonState : ProjectStateToggleAction<State>(State::class.java) {
 	override fun State.get() = autoInsertSemicolonEnabled
 	override fun State.set(b: Boolean) {
 		autoInsertSemicolonEnabled = b
@@ -20,7 +20,7 @@ class AutoInsertSemicolonState : StateToggleAction<State>(State::class.java) {
 }
 
 @Keep
-class JITRefactoringEnabled : StateToggleAction<State>(State::class.java) {
+class JITRefactoringEnabled : ProjectStateToggleAction<State>(State::class.java) {
 	override fun State.get() = jitRefactoringEnabled
 	override fun State.set(b: Boolean) {
 		jitRefactoringEnabled = b

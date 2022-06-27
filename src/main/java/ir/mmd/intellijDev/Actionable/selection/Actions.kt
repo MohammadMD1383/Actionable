@@ -32,3 +32,12 @@ class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
 		return start..end
 	}
 }
+
+@Keep
+class SelectTextBetweenQuotesAction : SelectTextBetweenAction("'")
+
+@Keep
+class SelectTextBetweenDoubleQuotesAction : SelectTextBetweenAction("\"")
+
+@Keep
+class SelectTextBetweenBackticksAction : SelectTextBetweenAction("`")
