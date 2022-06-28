@@ -10,10 +10,11 @@ abstract class SelectTextBetweenAction(private val char: String) : SelectTextUnd
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange? {
 		val cutil = caret.util
 		
-		if (!cutil.moveUntilReached(char, "\n", FORWARD)) return null
-		val start = cutil.offset
-		
 		if (!cutil.moveUntilReached(char, "\n", BACKWARD)) return null
+		val start = cutil.offset
+		cutil.reset()
+		
+		if (!cutil.moveUntilReached(char, "\n", FORWARD)) return null
 		val end = cutil.offset
 		
 		return start..end

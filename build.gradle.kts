@@ -17,7 +17,7 @@ buildscript {
 
 plugins {
 	id("org.jetbrains.intellij") version "1.6.0"
-	kotlin("jvm") version "1.6.21"
+	kotlin("jvm") version "1.7.0"
 	java
 }
 
@@ -26,9 +26,8 @@ repositories {
 }
 
 dependencies {
-	implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.0")
 	
-	// classpath("/Files/jetbrains/idea/plugins/java")
 	classpath("/Files/jetbrains/idea/plugins/JavaScriptLanguage")
 	
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
@@ -40,7 +39,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "3.9.0"
+version = "3.9.1"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
@@ -50,7 +49,7 @@ java {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		jvmTarget = JavaVersion.VERSION_1_8.toString()
-		freeCompilerArgs = listOf(
+		freeCompilerArgs = freeCompilerArgs + listOf(
 			"-Xjvm-default=all",
 			"-Xcontext-receivers"
 		)
@@ -58,7 +57,10 @@ tasks.withType<KotlinCompile> {
 }
 
 intellij {
-	plugins.set("java")
+	plugins.set(
+		"java",
+		"Kotlin"
+	)
 	
 	// localPath.set("/Files/jetbrains/rider")
 	// localPath.set("/Files/jetbrains/idea")
@@ -138,6 +140,8 @@ task<ProGuardTask>("minify") {
 	
 	libraryjars("/Files/jetbrains/idea/lib")
 	libraryjars("/Files/jetbrains/idea/plugins/java/lib")
+	libraryjars("/Files/jetbrains/idea/plugins/Kotlin/lib")
+	libraryjars("/Files/jetbrains/idea/plugins/JavaScriptLanguage/lib")
 	
 	injars(inFile)
 	outjars(outFile)

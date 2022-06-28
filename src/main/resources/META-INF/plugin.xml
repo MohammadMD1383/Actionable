@@ -8,7 +8,7 @@
 		<b>For a detailed description about all the actions, please visit the <a href="https://mohammadmd1383.github.io/Actionable/">documentation</a></b>
 		
 		<div>Features:</div>
-		<ul>
+		<ul>			
 			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
@@ -23,6 +23,9 @@
 			<li>Select Word Under Caret</li>
 			<li>Select Element Under Caret</li>
 			<li>Select Literal Element Under Caret</li>
+			<li>Select Text Between Quotes (Single-Line)</li>
+			<li>Select Text Between Double-Quotes (Single-Line)</li>
+			<li>Select Text Between Backticks (Single-Line)</li>
 			<li>Move Selection Up</li>
 			<li>Move Selection Down</li>
 			<li>Move Selection Left</li>
@@ -50,6 +53,7 @@
 			<li>Move Caret to Next Element with Selection</li>
 			<li>Move Caret to Previous Element</li>
 			<li>Move Caret to Previous Element with Selection</li>
+			<li>Find Is Case-Sensitive</li>
 			<li>Auto Insert Semicolons</li>
 			<li>Auto Class Case</li>
 			<li>Just in Time Refactoring</li>
@@ -60,8 +64,13 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.9.1:</b><br>
+				upgrade to use kotlin 1.7.0<br>
+				changed functionality of SelectLiteralElementUnderCaretAction (language aware; not supporting all yet)<br>
+				fix in change-notes
+			</li>
 			<li><b>3.9.0:</b><br>
-				Added select text between quotes/double-quotes/backticks action (single-line)
+				Added select text between quotes/double-quotes/backticks action (single-line)<br>
 				Added shortcut for settings as a toggle action (Actionable -> Find -> Is find case-sensitive?)
 			</li>
 			<li><b>3.8.2:</b><br>

@@ -10,6 +10,7 @@ inline fun Document.charAtOrNull(offset: Int) = charsSequence.getOrNull(offset)
 inline fun Document.replaceCharAt(offset: Int, c: Char) = replaceString(offset, offset + 1, c.toString())
 inline fun Document.replaceString(range: TextRange, s: CharSequence) = replaceString(range.startOffset, range.endOffset, s)
 inline fun Document.getText(range: IntRange) = getText(TextRange(range.first, range.last))
+inline operator fun Document.get(index: Int) = immutableCharSequence[index]
 
 fun Document.getLineIndent(line: Int) = getText(getLineStartOffset(line)..getLineEndOffset(line)).takeWhile { it in " \t" }
 

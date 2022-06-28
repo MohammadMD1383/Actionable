@@ -23,7 +23,7 @@ class CaretUtil(private val caret: Caret) {
 		const val BACKWARD = -1
 	}
 	
-	private val document = caret.editor.document
+	val document = caret.editor.document
 	
 	/**
 	 * temporary caret offset
@@ -33,7 +33,7 @@ class CaretUtil(private val caret: Caret) {
 	inline val nextChar: Char? get() = peek(+1)
 	inline val prevChar: Char? get() = peek(-1)
 	
-	private fun reset() {
+	fun reset() {
 		offset = caret.offset
 	}
 	
