@@ -1,7 +1,6 @@
 package ir.mmd.intellijDev.Actionable.caret.movement.settings;
 
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
@@ -42,11 +41,6 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	
 	@Keep
 	public @NotNull String hardStopCharacters = Defaults.hardStopSeparators;
-	
-	@SuppressWarnings("deprecation")
-	public static SettingsState getInstance() {
-		return ServiceManager.getService(SettingsState.class);
-	}
 	
 	@Override
 	public @Nullable SettingsState getState() {

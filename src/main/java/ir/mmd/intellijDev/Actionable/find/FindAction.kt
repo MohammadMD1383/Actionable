@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.by
 import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.service
 import ir.mmd.intellijDev.Actionable.util.withService
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState as MovementSettingsState
 
@@ -25,7 +26,7 @@ abstract class FindAction(private val searchForward: Boolean) : AnAction() {
 			if (searchForward) caret.selectionEnd else caret.selectionStart,
 			FindModel().apply {
 				isForward = searchForward
-				isCaseSensitive = SettingsState.getInstance().isCaseSensitive
+				isCaseSensitive = service<SettingsState>().isCaseSensitive
 				stringToFind = caret.selectedText!!
 			}
 		)
