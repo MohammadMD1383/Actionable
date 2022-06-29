@@ -26,6 +26,10 @@
 			<li>Select Text Between Quotes (Single-Line)</li>
 			<li>Select Text Between Double-Quotes (Single-Line)</li>
 			<li>Select Text Between Backticks (Single-Line)</li>
+			<li>Move First Selection to Previous Occurrence</li>
+			<li>Move First Selection to Next Occurrence</li>
+			<li>Move Last Selection to Previous Occurrence</li>
+			<li>Move Last Selection to Next Occurrence</li>
 			<li>Move Selection Up</li>
 			<li>Move Selection Down</li>
 			<li>Move Selection Left</li>
@@ -385,30 +389,56 @@
 					text="Select Text Between Backticks (Single-Line)"
 					description="Selects the text between two backticks in a line"/>
 				
-				<group id="ir.mmd.intellijDev.Actionable.selection.BoxMovementGroup" text="Box Movement" popup="true">
+				<group id="ir.mmd.intellijDev.Actionable.selection.MovementGroup" text="Movement" popup="true">
 					<action
-						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionUp"
-						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionUp"
-						text="Move Selection Up"
-						description="Moves selection up (Box Movement)"/>
+						class="ir.mmd.intellijDev.Actionable.selection.movement.MoveFirstSelectionToPreviousOccurrence"
+						id="ir.mmd.intellijDev.Actionable.selection.movement.MoveFirstSelectionToPreviousOccurrence"
+						text="Move First Selection to Previous Occurrence"
+						description="Moves the first selection to previous occurrence"/>
 					
 					<action
-						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionDown"
-						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionDown"
-						text="Move Selection Down"
-						description="Moves selection down (Box Movement)"/>
+						class="ir.mmd.intellijDev.Actionable.selection.movement.MoveFirstSelectionToNextOccurrence"
+						id="ir.mmd.intellijDev.Actionable.selection.movement.MoveFirstSelectionToNextOccurrence"
+						text="Move First Selection to Next Occurrence"
+						description="Moves the first selection to next occurrence"/>
 					
 					<action
-						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionLeft"
-						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionLeft"
-						text="Move Selection Left"
-						description="Moves selection left (Box Movement)"/>
+						class="ir.mmd.intellijDev.Actionable.selection.movement.MoveLastSelectionToPreviousOccurrence"
+						id="ir.mmd.intellijDev.Actionable.selection.movement.MoveLastSelectionToPreviousOccurrence"
+						text="Move Last Selection to Previous Occurrence"
+						description="Moves the last selection to previous occurrence"/>
 					
 					<action
-						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionRight"
-						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionRight"
-						text="Move Selection Right"
-						description="Moves selection right (Box Movement)"/>
+						class="ir.mmd.intellijDev.Actionable.selection.movement.MoveLastSelectionToNextOccurrence"
+						id="ir.mmd.intellijDev.Actionable.selection.movement.MoveLastSelectionToNextOccurrence"
+						text="Move Last Selection to Next Occurrence"
+						description="Moves the last selection to next occurrence"/>
+					
+					<group id="ir.mmd.intellijDev.Actionable.selection.BoxMovementGroup" text="Box Movement" popup="true">
+						<action
+							class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionUp"
+							id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionUp"
+							text="Move Selection Up"
+							description="Moves selection up (Box Movement)"/>
+						
+						<action
+							class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionDown"
+							id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionDown"
+							text="Move Selection Down"
+							description="Moves selection down (Box Movement)"/>
+						
+						<action
+							class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionLeft"
+							id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionLeft"
+							text="Move Selection Left"
+							description="Moves selection left (Box Movement)"/>
+						
+						<action
+							class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionRight"
+							id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionRight"
+							text="Move Selection Right"
+							description="Moves selection right (Box Movement)"/>
+					</group>
 				</group>
 			</group>
 			
