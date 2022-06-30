@@ -4,6 +4,7 @@ import com.intellij.find.FindManager
 import com.intellij.find.FindModel
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.editor.ScrollType
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.by
 import ir.mmd.intellijDev.Actionable.util.ext.*
@@ -31,10 +32,11 @@ abstract class FindAction(private val searchForward: Boolean) : AnAction() {
 			}
 		)
 		
-		if (found) caretModel.addCaret(
-			editor.offsetToVisualPosition(startOffset + (caret.offset - caret.selectionStart)),
-			false
-		)!!.setSelection(startOffset, endOffset)
+		if (found) {
+			val logicalPosition = editor.offsetToLogicalPosition(startOffset + (caret.offset - caret.selectionStart))
+			caretModel.addCaret(logicalPosition, false)!!.setSelection(startOffset, endOffset)
+			editor.scrollingModel.scrollTo(logicalPosition, ScrollType.RELATIVE)
+		}
 	}
 	
 	override fun isDumbAware() = true
