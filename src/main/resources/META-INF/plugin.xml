@@ -26,6 +26,8 @@
 			<li>Select Text Between Quotes (Single-Line)</li>
 			<li>Select Text Between Double-Quotes (Single-Line)</li>
 			<li>Select Text Between Backticks (Single-Line)</li>
+			<li>Unselect First Selection</li>
+			<li>Unselect Last Selection</li>
 			<li>Move Selection Up</li>
 			<li>Move Selection Down</li>
 			<li>Move Selection Left</li>
@@ -64,6 +66,10 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.10.0:</b><br>
+				Added 'Unselect First/Last Selection' actions<br>
+				Now adding selection to previous/next occurrence will scroll the editor if necessary
+			</li>
 			<li><b>3.9.1:</b><br>
 				upgrade to use kotlin 1.7.0<br>
 				changed functionality of SelectLiteralElementUnderCaretAction (language aware; not supporting all yet)<br>
