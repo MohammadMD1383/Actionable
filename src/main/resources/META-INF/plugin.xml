@@ -8,7 +8,7 @@
 		<b>For a detailed description about all the actions, please visit the <a href="https://mohammadmd1383.github.io/Actionable/">documentation</a></b>
 		
 		<div>Features:</div>
-		<ul>			
+		<ul>
 			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
@@ -367,6 +367,8 @@
 					text="Select Literal Element Under Caret"
 					description="Selects the literal element under the caret"/>
 				
+				<separator/>
+				
 				<action
 					class="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenQuotesAction"
 					id="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenQuotesAction"
@@ -384,6 +386,20 @@
 					id="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenBackticksAction"
 					text="Select Text Between Backticks (Single-Line)"
 					description="Selects the text between two backticks in a line"/>
+				
+				<separator/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.UnselectFirstSelectionAction"
+					id="ir.mmd.intellijDev.Actionable.selection.UnselectFirstSelectionAction"
+					text="Unselect First Selection"
+					description="Removes the first selection in the editor"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.UnselectLastSelectionAction"
+					id="ir.mmd.intellijDev.Actionable.selection.UnselectLastSelectionAction"
+					text="Unselect Last Selection"
+					description="Removes the last selection in the editor"/>
 				
 				<group id="ir.mmd.intellijDev.Actionable.selection.BoxMovementGroup" text="Box Movement" popup="true">
 					<action
