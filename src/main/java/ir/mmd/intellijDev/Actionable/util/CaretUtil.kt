@@ -30,8 +30,11 @@ class CaretUtil(private val caret: Caret) {
 	 */
 	var offset = caret.offset
 	
-	inline val nextChar: Char? get() = peek(+1)
-	inline val prevChar: Char? get() = peek(-1)
+	inline val nextChar get() = peek(+1)
+	inline val prevChar get() = peek(-1)
+	
+	inline val nextCharOffset get() = offset
+	inline val prevCharOffset get() = offset - 1
 	
 	fun reset() {
 		offset = caret.offset

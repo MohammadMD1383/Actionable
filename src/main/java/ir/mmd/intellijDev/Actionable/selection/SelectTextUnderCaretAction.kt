@@ -10,7 +10,6 @@ abstract class SelectTextUnderCaretAction : AnAction() {
 	abstract fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange?
 	
 	override fun actionPerformed(e: AnActionEvent) = e.editor.allCarets.forEach { caret ->
-		if (caret.hasSelection()) return@forEach
 		caret.setSelection(getSelectionRange(caret, e.psiFile) ?: return@forEach)
 	}
 	

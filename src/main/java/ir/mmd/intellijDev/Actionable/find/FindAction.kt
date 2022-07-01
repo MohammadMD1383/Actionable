@@ -33,9 +33,9 @@ abstract class FindAction(private val searchForward: Boolean) : AnAction() {
 		)
 		
 		if (found) {
-			val logicalPosition = editor.offsetToLogicalPosition(startOffset + (caret.offset - caret.selectionStart))
-			caretModel.addCaret(logicalPosition, false)!!.setSelection(startOffset, endOffset)
-			editor.scrollingModel.scrollTo(logicalPosition, ScrollType.RELATIVE)
+			val visualPosition = editor.offsetToVisualPosition(startOffset + (caret.offset - caret.selectionStart))
+			caretModel.addCaret(visualPosition, false)!!.setSelection(startOffset, endOffset)
+			editor.scrollingModel.scrollTo(editor.visualToLogicalPosition(visualPosition), ScrollType.RELATIVE)
 		}
 	}
 	

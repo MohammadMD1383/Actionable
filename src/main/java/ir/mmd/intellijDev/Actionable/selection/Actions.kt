@@ -35,40 +35,63 @@ class SelectElementUnderCaretAction : SelectTextUnderCaretAction() {
 class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
 	private fun rawSelectionRange(caret: Caret) = caret.util.run {
 		if (!moveUntilReached("\"'`", "\n", BACKWARD)) return@run null
-		val startCandidateOffset = offset - 1
+		val startCandidateOffset = prevCharOffset
+		val startCandidateChar = prevChar!!
 		val backwardDistance = (caret.offset - startCandidateOffset).absoluteValue
-		val startCandidateChar = document[startCandidateOffset]
 		reset()
 		
 		if (!moveUntilReached("\"'`", "\n", FORWARD)) return@run null
-		val endCandidateOffset = offset + 1
+		val endCandidateOffset = nextCharOffset
+		val endCandidateChar = nextChar!!
 		val forwardDistance = (caret.offset - endCandidateOffset).absoluteValue
-		val endCandidateChar = document[endCandidateOffset]
 		reset()
 		
 		if (startCandidateChar == endCandidateChar)
-			return@run startCandidateOffset..endCandidateOffset
+			return@run startCandidateOffset..endCandidateOffset + 1
 		
 		if (backwardDistance < forwardDistance) {
 			if (!moveUntilReached(startCandidateChar.toString(), "\n", FORWARD)) return@run null
-			return@run startCandidateOffset..offset + 1
+			return@run startCandidateOffset..nextCharOffset + 1
 		}
 		
 		if (backwardDistance > forwardDistance) {
 			if (!moveUntilReached(endCandidateChar.toString(), "\n", BACKWARD)) return@run null
-			return@run offset - 1..endCandidateOffset
+			return@run prevCharOffset..endCandidateOffset + 1
 		}
 		
 		return@run null
 	}
 	
+	private fun shrinkSelection(caret: Caret): IntRange? {
+		val text = caret.selectedText!!
+		val first = text.first()
+		val last = text.last()
+		
+		if (
+			first == '"' && last == '"' ||
+			first == '\'' && last == '\'' ||
+			first == '`' && last == '`'
+		) {
+			val oldStart = caret.selectionStart
+			val start = text.indexOfFirst { it != first }
+			val end = text.indexOfLast { it != last }
+			
+			return (oldStart + start)..(oldStart + end + 1)
+		}
+		
+		return null
+	}
+	
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange? {
+		if (caret.hasSelection())
+			shrinkSelection(caret)?.let { return it }
+		
 		val element = psiFile.elementAt(caret)
 		
 		return when (psiFile.fileType.name.lowercase()) {
 			"java" -> (element as? PsiLiteralExpression)?.textRange?.intRange
 			
-			"kotlin" -> (element as? KtStringTemplateExpression)?.textRange?.intRange
+			"kotlin" -> element?.parentOfType<KtStringTemplateExpression>(true)?.textRange?.intRange
 			
 			"javascript" -> element?.parentOfTypes(
 				JSStringTemplateExpression::class,

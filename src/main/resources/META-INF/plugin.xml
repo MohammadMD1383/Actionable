@@ -66,6 +66,10 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.10.1:</b><br>
+				fixed a bug in add selection to next/previous occurrence<br>
+				Select Literal Element Under Caret: solves #3 and improvement to kotlin selection
+			</li>
 			<li><b>3.10.0:</b><br>
 				Added 'Unselect First/Last Selection' actions<br>
 				Now adding selection to previous/next occurrence will scroll the editor if necessary
