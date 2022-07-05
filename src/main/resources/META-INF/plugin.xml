@@ -8,7 +8,7 @@
 		<b>For a detailed description about all the actions, please visit the <a href="https://mohammadmd1383.github.io/Actionable/">documentation</a></b>
 		
 		<div>Features:</div>
-		<ul>			
+		<ul>
 			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
@@ -26,12 +26,12 @@
 			<li>Select Text Between Quotes (Single-Line)</li>
 			<li>Select Text Between Double-Quotes (Single-Line)</li>
 			<li>Select Text Between Backticks (Single-Line)</li>
+			<li>Unselect First Selection</li>
+			<li>Unselect Last Selection</li>
 			<li>Move First Selection to Previous Occurrence</li>
 			<li>Move First Selection to Next Occurrence</li>
 			<li>Move Last Selection to Previous Occurrence</li>
 			<li>Move Last Selection to Next Occurrence</li>
-			<li>Unselect First Selection</li>
-			<li>Unselect Last Selection</li>
 			<li>Move Selection Up</li>
 			<li>Move Selection Down</li>
 			<li>Move Selection Left</li>
@@ -70,6 +70,16 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.11.0:</b><br>
+				fixed issue #10<br>
+				four new actions:<br>
+				<ul>
+					<li>Move First Selection to Previous Occurrence</li>
+					<li>Move First Selection to Next Occurrence</li>
+					<li>Move Last Selection to Previous Occurrence</li>
+					<li>Move Last Selection to Next Occurrence</li>
+				</ul>
+			</li>
 			<li><b>3.10.1:</b><br>
 				fixed a bug in add selection to next/previous occurrence<br>
 				Select Literal Element Under Caret: solves #3 and improvement to kotlin selection
@@ -415,30 +425,8 @@
 					text="Unselect Last Selection"
 					description="Removes the last selection in the editor"/>
 				
-				<group id="ir.mmd.intellijDev.Actionable.selection.BoxMovementGroup" text="Box Movement" popup="true">
-					<action
-						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionUp"
-						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionUp"
-						text="Move Selection Up"
-						description="Moves selection up (Box Movement)"/>
-					
-					<action
-						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionDown"
-						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionDown"
-						text="Move Selection Down"
-						description="Moves selection down (Box Movement)"/>
-					
-					<action
-						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionLeft"
-						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionLeft"
-						text="Move Selection Left"
-						description="Moves selection left (Box Movement)"/>
-					
-					<action
-						class="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionRight"
-						id="ir.mmd.intellijDev.Actionable.selection.movement.box.MoveSelectionRight"
-						text="Move Selection Right"
-						description="Moves selection right (Box Movement)"/>
+				<separator/>
+				
 				<group id="ir.mmd.intellijDev.Actionable.selection.MovementGroup" text="Movement" popup="true">
 					<action
 						class="ir.mmd.intellijDev.Actionable.selection.movement.MoveFirstSelectionToPreviousOccurrence"
