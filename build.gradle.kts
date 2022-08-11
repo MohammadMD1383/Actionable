@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-	id("org.jetbrains.intellij") version "1.6.0"
+	id("org.jetbrains.intellij") version "1.8.0"
 	kotlin("jvm") version "1.7.0"
 	java
 }
@@ -68,7 +68,7 @@ intellij {
 	// localPath.set("/Files/jetbrains/studio")
 	
 	// version.set("IU-2022.1")
-	version.set("2022.1")
+	version.set("2022.2")
 	// version.set("2021.3.1")
 	// version.set("2019.1.4")
 	// version.set("IU-2018.1")
@@ -124,7 +124,7 @@ task<ProGuardTask>("minify") {
 	dependsOn(tasks.buildPlugin)
 	outputs.upToDateWhen { false }
 	
-	val javaModulesPath = "/usr/lib/jvm/java-18-openjdk-amd64/jmods"
+	val javaModulesPath = "/usr/lib/jvm/java-17-openjdk-amd64/jmods"
 	val inFile = tasks.buildPlugin.get().archiveFile.get().asFile
 	val outFile = "build/minified/${inFile.name}"
 	

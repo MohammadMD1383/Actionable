@@ -4,6 +4,8 @@ import re
 from re import compile
 from textwrap import dedent
 
+from util import all_files
+
 
 class Documentation:
 	def __init__(self, name: str, title: str, description: str, example: str):
@@ -27,12 +29,6 @@ doc_pattern = compile(
 	re.DOTALL | re.MULTILINE
 )
 documentations: list[Documentation] = []
-
-
-def all_files():
-	for path in glob.iglob("src/main/java/ir/mmd/intellijDev/Actionable/**", recursive=True):
-		if os.path.isfile(path):
-			yield path
 
 
 def process_annotation(content: str):
