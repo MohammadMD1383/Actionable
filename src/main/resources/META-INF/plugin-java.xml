@@ -48,5 +48,16 @@
 				text="Add Import"
 				description="Add import to current file using a popup dialog with ease"/>
 		</group>
+		
+		<group>
+			<add-to-group group-id="ir.mmd.intellijDev.Actionable.PsiGroup"/>
+			<separator text="Java"/>
+			
+			<action
+				class="ir.mmd.intellijDev.Actionable.psi.JavaDeleteParameterAtCaretAction"
+				id="ir.mmd.intellijDev.Actionable.psi.JavaDeleteParameterAtCaretAction"
+				text="Delete Parameter at Caret"
+				description="Deletes the parameter located under the caret"/>
+		</group>
 	</actions>
 </idea-plugin>

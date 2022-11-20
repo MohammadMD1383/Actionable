@@ -64,6 +64,7 @@
 			<li>Auto Class Case</li>
 			<li>Just in Time Refactoring</li>
 			<li>Add Import</li>
+			<li>Delete Parameter at Caret</li>
 			<li>Start Line Up</li>
 		</ul>
 		]]></description>
@@ -478,6 +479,10 @@
 							description="Moves selection right (Box Movement)"/>
 					</group>
 				</group>
+			</group>
+			
+			<group id="ir.mmd.intellijDev.Actionable.PsiGroup" text="Psi" popup="true">
+			
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.FindGroup" text="Find" popup="true">
