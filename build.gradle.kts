@@ -11,13 +11,13 @@ buildscript {
 	}
 	
 	dependencies {
-		classpath("com.guardsquare:proguard-gradle:7.2.1")
+		classpath("com.guardsquare:proguard-gradle:7.3.0")
 	}
 }
 
 plugins {
-	id("org.jetbrains.intellij") version "1.8.0"
-	kotlin("jvm") version "1.7.0"
+	id("org.jetbrains.intellij") version "1.10.0"
+	kotlin("jvm") version "1.7.21"
 	java
 }
 
@@ -26,12 +26,10 @@ repositories {
 }
 
 dependencies {
-	implementation("org.jetbrains.kotlin:kotlin-stdlib:1.7.0")
+	classpath("/Files/JetBrains/idea/223.7571.4/plugins/javascript-impl")
 	
-	classpath("/Files/jetbrains/idea/plugins/JavaScriptLanguage")
-	
-	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
-	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
 }
 
 fun DependencyHandlerScope.classpath(path: String) {
@@ -67,12 +65,11 @@ intellij {
 	// localPath.set("/Files/jetbrains/clion")
 	// localPath.set("/Files/jetbrains/studio")
 	
-	// version.set("IU-2022.1")
+	type.set("IC")
+	
 	version.set("2022.2")
 	// version.set("2021.3.1")
-	// version.set("2019.1.4")
-	// version.set("IU-2018.1")
-	// version.set("2017.1")
+	// version.set("2020.1")
 }
 
 tasks.withType<RunIdeTask> {
@@ -108,7 +105,7 @@ task("patchPluginXmlFeatures") {
 tasks.withType<PatchPluginXmlTask> {
 	dependsOn("patchPluginXmlFeatures")
 	version.set(project.version.toString())
-	sinceBuild.set("181")
+	sinceBuild.set("201")
 	untilBuild.set("") // to be always the latest version
 }
 
