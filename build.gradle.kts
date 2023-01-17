@@ -16,8 +16,8 @@ buildscript {
 }
 
 plugins {
-	id("org.jetbrains.intellij") version "1.10.0"
-	kotlin("jvm") version "1.7.21"
+	id("org.jetbrains.intellij") version "1.12.0"
+	kotlin("jvm") version "1.8.0"
 	java
 }
 
@@ -37,7 +37,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "3.11.0"
+version = "3.12.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
@@ -67,7 +67,7 @@ intellij {
 	
 	type.set("IC")
 	
-	version.set("2022.2")
+	version.set("2022.3")
 	// version.set("2021.3.1")
 	// version.set("2020.1")
 }

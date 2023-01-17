@@ -10,7 +10,7 @@ import ir.mmd.intellijDev.Actionable.util.service
 
 @Keep
 class Startup : PreloadingActivity() {
-	override fun preload(indicator: ProgressIndicator) {
+	override fun preload(indicator: ProgressIndicator?) {
 		initMacros()
 	}
 	

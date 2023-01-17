@@ -9,3 +9,5 @@ inline operator fun TextRange.component2(): Int = endOffset
 inline val TextRange.exclusiveBothAsIntRange get() = startOffset + 1..endOffset - 1
 
 inline val TextRange.intRange get() = startOffset..endOffset
+
+inline operator fun TextRange?.contains(i: Int) = this != null && i in this

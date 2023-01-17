@@ -8,7 +8,7 @@
 		<b>For a detailed description about all the actions, please visit the <a href="https://mohammadmd1383.github.io/Actionable/">documentation</a></b>
 		
 		<div>Features:</div>
-		<ul>
+		<ul>			
 			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
@@ -38,6 +38,7 @@
 			<li>Move Selection Right</li>
 			<li>Add Selection to Next Occurrence</li>
 			<li>Add Selection to Previous Occurrence</li>
+			<li>Remove Carets on Empty Lines</li>
 			<li>Justify Carets Start</li>
 			<li>Justify Carets End</li>
 			<li>Justify Carets End and Shift Text</li>
@@ -495,6 +496,14 @@
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.CaretGroup" text="Caret Actions" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.manipulation.RemoveCaretsOnEmptyLinesAction"
+					id="ir.mmd.intellijDev.Actionable.caret.manipulation.RemoveCaretsOnEmptyLinesAction"
+					text="Remove Carets on Empty Lines"
+					description="Removes all carets that are on empty/blank lines"/>
+				
+				<separator/>
+				
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
 					id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsStart"
