@@ -14,11 +14,16 @@ class DeleteToIndentedLineStartAction : AnAction() {
 		e.allCarets.forEach {
 			val lineNumber = document.getLineNumber(it.offset)
 			val lineStartOffset = document.getLineStartOffset(lineNumber)
+			val lineEndOffset = document.getLineEndOffset(lineNumber)
 			val lineIndentEndOffset = lineStartOffset + document.getLineIndentCharCount(lineNumber)
+			val line = document.getText(lineStartOffset..lineEndOffset)
 			
-			if (lineIndentEndOffset > it.offset) return@forEach
 			e.project.runWriteCommandAction {
-				document.deleteString(lineIndentEndOffset, it.offset)
+				if (line.isBlank()) {
+					document.deleteString(lineStartOffset, lineEndOffset)
+				} else if (it.offset > lineIndentEndOffset) {
+					document.deleteString(lineIndentEndOffset, it.offset)
+				}
 			}
 		}
 	}

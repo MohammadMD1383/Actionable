@@ -16,10 +16,15 @@ class IndentPreservingEmptyLineAction : AnAction() {
 			val lineStartOffset = document.getLineStartOffset(lineNumber)
 			val lineEndOffset = document.getLineEndOffset(lineNumber)
 			val lineIndentEndOffset = lineStartOffset + document.getLineIndentCharCount(lineNumber)
+			val line = document.getText(lineStartOffset..lineEndOffset)
 			
-			it moveTo lineIndentEndOffset
 			e.project.runWriteCommandAction {
-				document.deleteString(lineIndentEndOffset, lineEndOffset)
+				if (line.isBlank()) {
+					document.deleteString(lineStartOffset, lineEndOffset)
+				} else {
+					it moveTo lineIndentEndOffset
+					document.deleteString(lineIndentEndOffset, lineEndOffset)
+				}
 			}
 		}
 	}
