@@ -74,6 +74,17 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.12.0:</b><br>
+				<b>Minimum IDE support version changed to 201.*</b><br>
+				fixed issues #15 #17 #18 #22<br>
+				new actions:<br>
+				<ul>
+					<li>Empty Line</li>
+					<li>Indent Preserving Empty Line</li>
+					<li>Delete to Indented Line Start</li>
+					<li>Remove Carets on Empty Lines</li>
+				</ul>
+			</li>
 			<li><b>3.11.0:</b><br>
 				fixed issue #10<br>
 				four new actions:<br>
