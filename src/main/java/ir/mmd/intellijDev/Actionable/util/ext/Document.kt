@@ -13,6 +13,7 @@ inline fun Document.getText(range: IntRange) = getText(TextRange(range.first, ra
 inline operator fun Document.get(index: Int) = immutableCharSequence[index]
 
 fun Document.getLineIndent(line: Int) = getText(getLineStartOffset(line)..getLineEndOffset(line)).takeWhile { it in " \t" }
+inline fun Document.getLineIndentCharCount(line: Int) = getLineIndent(line).length
 
 fun Document.getWordBoundaries(
 	offset: Int,

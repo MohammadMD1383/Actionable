@@ -17,6 +17,7 @@
 			<li>Predict Words: Kebab-Case</li>
 			<li>Predict Words: Spaced</li>
 			<li>Add Selection to Macros</li>
+			<li>Delete to Indented Line Start</li>
 			<li>Duplicate Lines Up</li>
 			<li>Duplicate Lines Down</li>
 			<li>Remove Duplicate Selections</li>
@@ -349,6 +350,14 @@
 					text="Macros"
 					description="Recorded macros"
 					searchable="true"/>
+			</group>
+			
+			<group id="ir.mmd.intellijDev.Actionable.EditingGroup" text="Editing" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.editing.DeleteToIndentedLineStartAction"
+					id="ir.mmd.intellijDev.Actionable.editing.DeleteToIndentedLineStartAction"
+					text="Delete to Indented Line Start"
+					description="Deletes from caret to start of the line, but won't remove the indentation"/>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate" popup="true">
