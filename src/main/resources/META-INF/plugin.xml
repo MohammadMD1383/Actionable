@@ -18,6 +18,7 @@
 			<li>Predict Words: Spaced</li>
 			<li>Add Selection to Macros</li>
 			<li>Delete to Indented Line Start</li>
+			<li>Empty Line Preserving the Indent</li>
 			<li>Duplicate Lines Up</li>
 			<li>Duplicate Lines Down</li>
 			<li>Remove Duplicate Selections</li>
@@ -358,6 +359,12 @@
 					id="ir.mmd.intellijDev.Actionable.editing.DeleteToIndentedLineStartAction"
 					text="Delete to Indented Line Start"
 					description="Deletes from caret to start of the line, but won't remove the indentation"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.editing.IndentPreservingEmptyLineAction"
+					id="ir.mmd.intellijDev.Actionable.editing.IndentPreservingEmptyLineAction"
+					text="Empty Line Preserving the Indent"
+					description="Empties the line while preserves the line start indentation"/>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.DuplicateGroup" text="Duplicate" popup="true">
