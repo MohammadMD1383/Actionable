@@ -48,7 +48,7 @@ abstract class MoveSelectionAction : AnAction() {
 				carets.getOrNull(i - 1)?.logicalPosition?.line == upperLine
 			) return@forEachIndexed
 			
-			var (start, end) = caret.selectionRange
+			var (start, end) = caret.selectionRangeCompat
 			val startCol = offsetToLogicalPosition(start).column
 			val endCol = offsetToLogicalPosition(end).column
 			val upperLineEnd = document.getLineEndOffset(upperLine)
@@ -73,7 +73,7 @@ abstract class MoveSelectionAction : AnAction() {
 			val (line, column) = caret.logicalPosition
 			val bottomLine = line + 1
 			
-			val (start, end) = caret.selectionRange
+			val (start, end) = caret.selectionRangeCompat
 			val startCol = offsetToLogicalPosition(start).column
 			val endCol = offsetToLogicalPosition(end).column
 			
@@ -98,12 +98,12 @@ abstract class MoveSelectionAction : AnAction() {
 		val document = document
 		
 		carets.forEachIndexed { i, caret ->
-			val (start, end) = caret.selectionRange
+			val (start, end) = caret.selectionRangeCompat
 			val char = document.charAtOrNull(start - 1) ?: return@forEachIndexed
 			
 			if (
 				char == '\n' ||
-				start in carets.getOrNull(i - 1)?.selectionRange
+				start in carets.getOrNull(i - 1)?.selectionRangeCompat
 			) return@forEachIndexed
 			
 			project!!.runWriteCommandAction {
@@ -120,7 +120,7 @@ abstract class MoveSelectionAction : AnAction() {
 		val document = document
 		
 		allCarets.asReversed().forEach { caret ->
-			val (start, end) = caret.selectionRange
+			val (start, end) = caret.selectionRangeCompat
 			val char = document.charAtOrNull(end)
 			val newOffset = caret.offset + 1
 			

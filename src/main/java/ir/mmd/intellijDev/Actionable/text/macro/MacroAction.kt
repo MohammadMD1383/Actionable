@@ -11,7 +11,7 @@ class MacroAction(name: String, private val macro: String) : AnAction(name) {
 		e.project!!.runWriteCommandActionWith(document) { document ->
 			allCarets.forEach { caret ->
 				caret moveTo macroLength + if (caret.hasSelection()) {
-					val (start, end) = caret.selectionRange
+					val (start, end) = caret.selectionRangeCompat
 					caret.removeSelection()
 					document.replaceString(start, end, macro)
 					start

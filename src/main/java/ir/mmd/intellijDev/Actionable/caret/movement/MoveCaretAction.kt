@@ -50,7 +50,7 @@ abstract class MoveCaretAction : AnAction() {
 			val offset = targetOffset(caret)
 			
 			carets.getOrNull(i + 1)?.let { nextCaret ->
-				if (offset in nextCaret.selectionRange) return@forEachIndexed after {
+				if (offset in nextCaret.selectionRangeCompat) return@forEachIndexed after {
 					nextCaret.setSelection(selectionStarts[i], nextCaret.offset)
 					selectionStarts[i + 1] = selectionStarts[i]
 				}
