@@ -17,6 +17,8 @@
 			<li>Predict Words: Kebab-Case</li>
 			<li>Predict Words: Spaced</li>
 			<li>Add Selection to Macros</li>
+			<li>Add Line Above Caret Without Moving Caret</li>
+			<li>Add Line Below Caret Without Moving Caret</li>
 			<li>Empty Line</li>
 			<li>Empty Line Preserving the Indent</li>
 			<li>Delete to Indented Line Start</li>
@@ -366,6 +368,20 @@
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.EditingGroup" text="Editing" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.editing.AddLineAboveCaretWMAction"
+					id="ir.mmd.intellijDev.Actionable.editing.AddLineAboveCaretWMAction"
+					text="Add Line Above Caret Without Moving Caret"
+					description="Adds a line above the caret but won't move the caret to the above line"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.editing.AddLineBelowCaretWMAction"
+					id="ir.mmd.intellijDev.Actionable.editing.AddLineBelowCaretWMAction"
+					text="Add Line Below Caret Without Moving Caret"
+					description="Adds a line below the caret but won't move the caret to the below line"/>
+				
+				<separator/>
+				
 				<action
 					class="ir.mmd.intellijDev.Actionable.editing.EmptyLineAction"
 					id="ir.mmd.intellijDev.Actionable.editing.EmptyLineAction"

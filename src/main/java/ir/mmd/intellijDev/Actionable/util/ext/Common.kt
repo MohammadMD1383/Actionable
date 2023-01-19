@@ -21,6 +21,7 @@ inline val <T> T.isNotNull: Boolean get() = this != null
 
 inline fun <T, O1, O2> T.applyWith(o1: O1, o2: O2, block: T.(O1, O2) -> Unit) = apply { block(o1, o2) }
 
+inline fun <T, R> Iterable<T>.forEachWith(receiver: R, block: R.(T) -> Unit) = forEach { receiver.block(it) }
 inline fun <T> Iterable<T>.withEach(block: T.() -> Unit) = forEach { it.block() }
 inline fun <T> Iterable<T>.forEachIf(condition: T.() -> Boolean, block: (T) -> Unit) = forEach { if (it.condition()) block(it) }
 
