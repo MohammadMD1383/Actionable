@@ -67,11 +67,7 @@ class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
 		val first = text.first()
 		val last = text.last()
 		
-		if (
-			first == '"' && last == '"' ||
-			first == '\'' && last == '\'' ||
-			first == '`' && last == '`'
-		) {
+		if (first == last && first in "`'\"") {
 			val oldStart = caret.selectionStart
 			val start = text.indexOfFirst { it != first }
 			val end = text.indexOfLast { it != last }
