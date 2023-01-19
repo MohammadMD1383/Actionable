@@ -80,6 +80,15 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.13.0:</b><br>
+				fixed issues #16 #18 #24 #27<br>
+				other minor fixes<br>
+				new actions:<br>
+				<ul>
+					<li>Add Line Above/Below Caret Without Moving Caret</li>
+					<li>Change Editor Tab Placement Shortcuts</li>
+				</ul>
+			</li>
 			<li><b>3.12.0:</b><br>
 				<b>Minimum IDE support version changed to 201.*</b><br>
 				fixed issues #15 #17 #18 #22<br>

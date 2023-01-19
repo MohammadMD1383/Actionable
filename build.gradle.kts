@@ -37,7 +37,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "3.12.0"
+version = "3.13.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
