@@ -11,12 +11,12 @@ class EmptyLineAction : AnAction() {
 		val editor = e.editor
 		val document = editor.document
 		
-		e.allCarets.forEach {
-			val lineNumber = document.getLineNumber(it.offset)
-			val lineStartOffset = document.getLineStartOffset(lineNumber)
-			val lineEndOffset = document.getLineEndOffset(lineNumber)
-			
-			e.project.runWriteCommandAction {
+		e.project.runWriteCommandAction {
+			e.allCarets.forEach {
+				val lineNumber = document.getLineNumber(it.offset)
+				val lineStartOffset = document.getLineStartOffset(lineNumber)
+				val lineEndOffset = document.getLineEndOffset(lineNumber)
+				
 				document.deleteString(lineStartOffset, lineEndOffset)
 			}
 		}
