@@ -65,6 +65,10 @@
 			<li>Move Caret to Next Element with Selection</li>
 			<li>Move Caret to Previous Element</li>
 			<li>Move Caret to Previous Element with Selection</li>
+			<li>Set Editor Tab Placement to Top</li>
+			<li>Set Editor Tab Placement to Left</li>
+			<li>Set Editor Tab Placement to Bottom</li>
+			<li>Set Editor Tab Placement to Right</li>
 			<li>Find Is Case-Sensitive</li>
 			<li>Auto Insert Semicolons</li>
 			<li>Auto Class Case</li>
@@ -690,6 +694,32 @@
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.GlobalToggles" text="Global Toggles" popup="true">
+				<separator text="Editor"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.toggle.SetEditorTabPlacementToTop"
+					id="ir.mmd.intellijDev.Actionable.toggle.SetEditorTabPlacementToTop"
+					text="Set Editor Tab Placement to Top"
+					description="Sets editor tab placement to top"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.toggle.SetEditorTabPlacementToLeft"
+					id="ir.mmd.intellijDev.Actionable.toggle.SetEditorTabPlacementToLeft"
+					text="Set Editor Tab Placement to Left"
+					description="Sets editor tab placement to left"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.toggle.SetEditorTabPlacementToBottom"
+					id="ir.mmd.intellijDev.Actionable.toggle.SetEditorTabPlacementToBottom"
+					text="Set Editor Tab Placement to Bottom"
+					description="Sets editor tab placement to bottom"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.toggle.SetEditorTabPlacementToRight"
+					id="ir.mmd.intellijDev.Actionable.toggle.SetEditorTabPlacementToRight"
+					text="Set Editor Tab Placement to Right"
+					description="Sets editor tab placement to right"/>
+				
 				<separator text="Find"/>
 				
 				<action
