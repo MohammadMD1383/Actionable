@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.duplicate
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
@@ -50,4 +51,5 @@ class RemoveDuplicates : AnAction() {
 	
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { caretCount > 1 && allCaretsHasSelection } }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

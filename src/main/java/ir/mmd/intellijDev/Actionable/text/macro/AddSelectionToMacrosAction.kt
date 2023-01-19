@@ -1,6 +1,7 @@
 package ir.mmd.intellijDev.Actionable.text.macro
 
 import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.ui.Messages
@@ -40,4 +41,5 @@ class AddSelectionToMacrosAction : AnAction() {
 	
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasEditorWith { caretModel.run { caretCount == 1 && primaryCaret.hasSelection() } } }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

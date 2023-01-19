@@ -1,6 +1,7 @@
 package ir.mmd.intellijDev.Actionable.extra.java
 
 import com.intellij.ide.highlighter.JavaFileType
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.ui.DialogBuilder
@@ -45,4 +46,5 @@ class AddImportDialogAction : AnAction() {
 	}
 	
 	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && psiFile.fileType is JavaFileType }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

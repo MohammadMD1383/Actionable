@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.text.macro
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import ir.mmd.intellijDev.Actionable.util.ext.*
@@ -26,4 +27,5 @@ class MacroAction(name: String, private val macro: String) : AnAction(name) {
 	
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

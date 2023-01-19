@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.selection.movement.box
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
@@ -139,4 +140,5 @@ abstract class MoveSelectionAction : AnAction() {
 	
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasEditorWith { allCaretsHasSelection } }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

@@ -13,7 +13,6 @@ import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.falseAfter
-import ir.mmd.intellijDev.Actionable.util.trueAfter
 
 @Keep
 class JITRefactoringInsert : TypedHandlerDelegate() {

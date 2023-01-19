@@ -1,6 +1,7 @@
 package ir.mmd.intellijDev.Actionable.toggle
 
 import com.intellij.ide.ui.UISettings
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
@@ -17,6 +18,7 @@ abstract class ChangeEditorTabPlacementShortcut(private val placement: Int) : An
 	
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
 @Keep

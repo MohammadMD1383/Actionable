@@ -1,7 +1,6 @@
 package ir.mmd.intellijDev.Actionable.typing.java.state;
 
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import ir.mmd.intellijDev.Actionable.internal.proguard.Keep;
@@ -22,11 +21,6 @@ public class State implements PersistentStateComponent<State> {
 	
 	@Keep
 	public boolean jitRefactoringEnabled = false;
-	
-	@SuppressWarnings("deprecation")
-	public static @NotNull State getInstance() {
-		return ServiceManager.getService(State.class);
-	}
 	
 	@Override
 	public @Nullable State getState() {

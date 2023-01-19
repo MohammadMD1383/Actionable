@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.fix.rider
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_ENTER
@@ -30,4 +31,5 @@ class StartLineUp : AnAction() {
 	
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

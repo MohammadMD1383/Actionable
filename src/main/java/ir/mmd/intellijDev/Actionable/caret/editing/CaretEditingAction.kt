@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.caret.editing
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Editor
@@ -124,4 +125,5 @@ abstract class CaretEditingAction : AnAction() {
 	}
 	
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { caretCount == 1 } }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

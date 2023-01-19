@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.selection
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
@@ -22,6 +23,7 @@ abstract class UnselectAction : AnAction() {
 	
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasEditorWith { caretCount > 1 } }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
 @Keep

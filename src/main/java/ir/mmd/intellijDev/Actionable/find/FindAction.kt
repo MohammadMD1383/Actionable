@@ -2,6 +2,7 @@ package ir.mmd.intellijDev.Actionable.find
 
 import com.intellij.find.FindManager
 import com.intellij.find.FindModel
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.ScrollType
@@ -41,4 +42,5 @@ abstract class FindAction(private val searchForward: Boolean) : AnAction() {
 	
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

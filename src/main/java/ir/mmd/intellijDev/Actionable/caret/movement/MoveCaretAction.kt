@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.caret.movement
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
@@ -62,4 +63,5 @@ abstract class MoveCaretAction : AnAction() {
 	}
 	
 	override fun update(e: AnActionEvent) = e.enableIf { hasEditor }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.selection
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
@@ -14,4 +15,5 @@ abstract class SelectTextUnderCaretAction : AnAction() {
 	}
 	
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
