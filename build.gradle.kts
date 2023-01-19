@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-	classpath("/Files/jetbrains/idea/plugins/JavaScriptLanguage")
+	classpath("/Files/JetBrains/idea/223.7571.4/plugins/javascript-impl")
 	
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
