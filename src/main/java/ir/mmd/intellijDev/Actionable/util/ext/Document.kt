@@ -6,18 +6,56 @@ import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.returnBy
 import ir.mmd.intellijDev.Actionable.util.withService
 
+/**
+ * Returns char at [offset] or `null` if [offset] is out of bounds
+ */
+@Suppress("NOTHING_TO_INLINE")
 inline fun Document.charAtOrNull(offset: Int) = charsSequence.getOrNull(offset)
-inline fun Document.replaceCharAt(offset: Int, c: Char) = replaceString(offset, offset + 1, c.toString())
-inline fun Document.replaceString(range: TextRange, s: CharSequence) = replaceString(range.startOffset, range.endOffset, s)
+
+/**
+ * Just another overload for [Document.getText]
+ */
+@Suppress("NOTHING_TO_INLINE")
 inline fun Document.getText(range: IntRange) = getText(TextRange(range.first, range.last))
+
+/**
+ * The [] syntax support for [Document]
+ */
+@Suppress("NOTHING_TO_INLINE")
 inline operator fun Document.get(index: Int) = immutableCharSequence[index]
 
+/**
+ * Returns the text of [line] in [Document]
+ */
 fun Document.getLineText(line: Int) = getText(getLineStartOffset(line)..getLineEndOffset(line))
-fun Document.getLineStartIndent(line: Int) = getLineText(line).takeWhile { it in " \t" }
-fun Document.getLineEndIndent(line: Int) = getLineText(line).takeLastWhile { it in " \t" }
-inline fun Document.getLineStartIndentCharCount(line: Int) = getLineStartIndent(line).length
-inline fun Document.getLineEndIndentCharCount(line: Int) = getLineEndIndent(line).length
 
+/**
+ * Returns starting indentation of the [line] in the [Document]
+ */
+fun Document.getLineStartIndent(line: Int) = getLineText(line).takeWhile { it in " \t" }
+
+/**
+ * Returns trailing whitespace of the [line] in the [Document]
+ */
+fun Document.getLineTrailingWhitespace(line: Int) = getLineText(line).takeLastWhile { it in " \t" }
+
+/**
+ * Returns starting indentation characters count (count of whitespaces) of the [line] in the [Document]
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun Document.getLineStartIndentLength(line: Int) = getLineStartIndent(line).length
+
+/**
+ * Returns trailing whitespace characters of the [line] in the [Document]
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun Document.getLineTrailingWhitespaceLength(line: Int) = getLineTrailingWhitespace(line).length
+
+/**
+ * Returns word boundaries located at [offset] in the [Document]
+ *
+ * @param separators characters that are known as **word delimiters**
+ */
 fun Document.getWordBoundaries(
 	offset: Int,
 	separators: String
@@ -27,6 +65,12 @@ fun Document.getWordBoundaries(
 	set(1, sequence.indexOfAny(chars, offset + 1).let { if (it == -1) sequence.lastIndex else it })
 }
 
+/**
+ * Returns word at [offset] in the [Document]
+ *
+ * @param boundaries (Optional) you can set this to get word boundaries (start and end offset in the [Document]) in addition to the word itself
+ * @see [Document.getWordBoundaries]
+ */
 fun Document.getWordAtOffset(
 	offset: Int,
 	boundaries: IntArray? = null

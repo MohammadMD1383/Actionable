@@ -20,8 +20,8 @@ class SelectLineWithoutIndentAction : SelectTextUnderCaretAction() {
 	
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile) = with(caret.editor.document) {
 		val lineNumber = getLineNumber(caret.offset)
-		val start = getLineStartOffset(lineNumber) + getLineStartIndentCharCount(lineNumber)
-		val end = getLineEndOffset(lineNumber) - getLineEndIndentCharCount(lineNumber)
+		val start = getLineStartOffset(lineNumber) + getLineStartIndentLength(lineNumber)
+		val end = getLineEndOffset(lineNumber) - getLineTrailingWhitespaceLength(lineNumber)
 		
 		return@with if (start != end) start..end else null
 	}
