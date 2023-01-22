@@ -12,8 +12,11 @@ inline fun Document.replaceString(range: TextRange, s: CharSequence) = replaceSt
 inline fun Document.getText(range: IntRange) = getText(TextRange(range.first, range.last))
 inline operator fun Document.get(index: Int) = immutableCharSequence[index]
 
-fun Document.getLineIndent(line: Int) = getText(getLineStartOffset(line)..getLineEndOffset(line)).takeWhile { it in " \t" }
-inline fun Document.getLineIndentCharCount(line: Int) = getLineIndent(line).length
+fun Document.getLineText(line: Int) = getText(getLineStartOffset(line)..getLineEndOffset(line))
+fun Document.getLineStartIndent(line: Int) = getLineText(line).takeWhile { it in " \t" }
+fun Document.getLineEndIndent(line: Int) = getLineText(line).takeLastWhile { it in " \t" }
+inline fun Document.getLineStartIndentCharCount(line: Int) = getLineStartIndent(line).length
+inline fun Document.getLineEndIndentCharCount(line: Int) = getLineEndIndent(line).length
 
 fun Document.getWordBoundaries(
 	offset: Int,

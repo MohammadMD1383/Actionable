@@ -15,6 +15,19 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import kotlin.math.absoluteValue
 
 @Keep
+class SelectLineWithoutIndentAction : SelectTextUnderCaretAction() {
+	override fun isDumbAware() = true
+	
+	override fun getSelectionRange(caret: Caret, psiFile: PsiFile) = with(caret.editor.document) {
+		val lineNumber = getLineNumber(caret.offset)
+		val start = getLineStartOffset(lineNumber) + getLineStartIndentCharCount(lineNumber)
+		val end = getLineEndOffset(lineNumber) - getLineEndIndentCharCount(lineNumber)
+		
+		return@with if (start != end) start..end else null
+	}
+}
+
+@Keep
 class SelectWordUnderCaretAction : SelectTextUnderCaretAction() {
 	override fun isDumbAware() = true
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile) = withService<SettingsState, IntRange?> {

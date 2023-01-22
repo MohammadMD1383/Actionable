@@ -25,6 +25,7 @@
 			<li>Duplicate Lines Up</li>
 			<li>Duplicate Lines Down</li>
 			<li>Remove Duplicate Selections</li>
+			<li>Select Line Under Caret (Without Indent)</li>
 			<li>Select Word Under Caret</li>
 			<li>Select Element Under Caret</li>
 			<li>Select Literal Element Under Caret</li>
@@ -437,6 +438,14 @@
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.SelectionGroup" text="Selection" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.SelectLineWithoutIndentAction"
+					id="ir.mmd.intellijDev.Actionable.selection.SelectLineWithoutIndentAction"
+					text="Select Line Under Caret (Without Indent)"
+					description="Selects line under caret without starting indent (whitespace) of that line"/>
+				
+				<separator/>
+				
 				<action
 					class="ir.mmd.intellijDev.Actionable.selection.SelectWordUnderCaretAction"
 					id="ir.mmd.intellijDev.Actionable.selection.SelectWordUnderCaretAction"

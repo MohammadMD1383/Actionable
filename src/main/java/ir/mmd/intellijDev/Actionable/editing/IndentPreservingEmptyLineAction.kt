@@ -17,7 +17,7 @@ class IndentPreservingEmptyLineAction : AnAction() {
 				val lineNumber = document.getLineNumber(it.offset)
 				val lineStartOffset = document.getLineStartOffset(lineNumber)
 				val lineEndOffset = document.getLineEndOffset(lineNumber)
-				val lineIndentEndOffset = lineStartOffset + document.getLineIndentCharCount(lineNumber)
+				val lineIndentEndOffset = lineStartOffset + document.getLineStartIndentCharCount(lineNumber)
 				val line = document.getText(lineStartOffset..lineEndOffset)
 				
 				if (line.isBlank()) {
