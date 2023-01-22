@@ -2,31 +2,41 @@ package ir.mmd.intellijDev.Actionable.util
 
 import com.intellij.openapi.components.ServiceManager
 
-inline fun <T> by(receiver: T, block: (T) -> Unit) = block(receiver)
-inline fun <T, R> returnBy(obj: T, block: (T) -> R) = block(obj)
-inline fun <T1, T2, R> returnBy(obj1: T1, obj2: T2, block: (T1, T2) -> R) = block(obj1, obj2)
-
-inline fun <T, O, R> with(receiver: T, obj: O, block: T.(O) -> R) = receiver.block(obj)
-
+/**
+ * You can use this to beatify the code like this:
+ * ```kotlin
+ * if (...) {
+ *   // do some stuff ...
+ *   return
+ * }
+ * ```
+ * change that to:
+ * ```kotlin
+ * if (...) return after {
+ *   // do some stuff ...
+ * }
+ * ```
+ */
 inline fun after(block: () -> Unit) = block()
 
-inline fun trueAfter(block: () -> Unit): Boolean {
-	block()
-	return true
-}
+/**
+ * example:
+ * ```kotlin
+ * if (...) return true after {
+ *   // some cleanup ...
+ * }
+ * ```
+ *
+ * @see [after]
+ */
+inline infix fun Boolean.after(block: () -> Unit) = this.also { block() }
 
-inline fun falseAfter(block: () -> Unit): Boolean {
-	block()
-	return false
-}
-
-inline fun <T> nonnull(receiver: T?, block: (T) -> Unit) {
-	if (receiver != null) block(receiver)
-}
-
+/**
+ * Try and ignore any exceptions happens inside [block]
+ */
 inline fun tryCatching(block: () -> Unit) = try {
 	block()
-} catch (_: Throwable) {
+} catch (_: Exception) {
 }
 
 inline fun <reified T> service(): T = ServiceManager.getService(T::class.java)

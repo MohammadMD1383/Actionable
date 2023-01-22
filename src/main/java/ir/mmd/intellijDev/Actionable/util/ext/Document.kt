@@ -3,8 +3,7 @@ package ir.mmd.intellijDev.Actionable.util.ext
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.util.returnBy
-import ir.mmd.intellijDev.Actionable.util.withService
+import ir.mmd.intellijDev.Actionable.util.service
 
 /**
  * Returns char at [offset] or `null` if [offset] is out of bounds
@@ -74,15 +73,19 @@ fun Document.getWordBoundaries(
 fun Document.getWordAtOffset(
 	offset: Int,
 	boundaries: IntArray? = null
-): String? = withService<SettingsState, String?> {
-	returnBy(getWordBoundaries(offset, wordSeparators + hardStopCharacters)) { (startOffset, endOffset) ->
-		if (startOffset == endOffset) null else {
-			boundaries?.let {
-				it[0] = startOffset
-				it[1] = endOffset
-			}
-			
-			charsSequence.substring(startOffset, endOffset)
+): String? {
+	val settings = service<SettingsState>()
+	val (startOffset, endOffset) = getWordBoundaries(
+		offset,
+		settings.wordSeparators + settings.hardStopCharacters
+	)
+	
+	return if (startOffset == endOffset) null else {
+		boundaries?.let {
+			it[0] = startOffset
+			it[1] = endOffset
 		}
+		
+		immutableCharSequence.substring(startOffset, endOffset)
 	}
 }

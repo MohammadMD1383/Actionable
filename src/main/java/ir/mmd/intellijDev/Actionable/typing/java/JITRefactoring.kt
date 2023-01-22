@@ -11,8 +11,8 @@ import com.intellij.psi.PsiLocalVariable
 import com.intellij.psi.search.searches.ReferencesSearch
 import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
+import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.falseAfter
 
 @Keep
 class JITRefactoringInsert : TypedHandlerDelegate() {
@@ -49,16 +49,16 @@ class JITRefactoringInsert : TypedHandlerDelegate() {
 @Keep
 class JITRefactoringDelete : BackspaceHandlerDelegate() {
 	override fun beforeCharDeleted(c: Char, file: PsiFile, editor: Editor) {}
-	override fun charDeleted(c: Char, file: PsiFile, editor: Editor) = falseAfter {
+	override fun charDeleted(c: Char, file: PsiFile, editor: Editor) = false after {
 		if (
 			!editor.project!!.service<State>().jitRefactoringEnabled ||
 			file.fileType !is JavaFileType
-		) return@falseAfter
+		) return@after
 		
 		val document = editor.document
 		val offset = editor.caretModel.primaryCaret.offset
-		val element = file.findElementAt(offset) ?: return@falseAfter
-		val localVariable = element.parentOfType<PsiLocalVariable>() ?: return@falseAfter
+		val element = file.findElementAt(offset) ?: return@after
+		val localVariable = element.parentOfType<PsiLocalVariable>() ?: return@after
 		val newIdentifier = element.textRange.run {
 			document.getText(startOffset until endOffset)
 		}

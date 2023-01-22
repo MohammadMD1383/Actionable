@@ -10,30 +10,43 @@ import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.returnBy
-import ir.mmd.intellijDev.Actionable.util.withService
+import ir.mmd.intellijDev.Actionable.util.service
 
 abstract class MoveCaretAction : AnAction() {
 	fun moveCaretVirtually(
 		caret: Caret,
 		forward: Boolean,
 		psiFile: PsiFile? = null
-	): Int = if (psiFile == null) withService<SettingsState, Int> {
-		val cutil = caret.util
-		cutil.moveCaret(
-			wordSeparators,
-			hardStopCharacters,
-			wordSeparatorsBehaviour,
-			if (forward) FORWARD else BACKWARD
-		)
-		cutil.offset
-	} else returnBy(caret.offset, caret.editor.document.textLength) { offset, length ->
-		if (offset == length) {
-			if (forward) offset
-			else psiFile.findElementAt(offset - 1)!!.textRange.startOffset
-		} else psiFile.findElementAt(offset)!!.run {
-			if (forward) nextLeaf(true)?.textRange?.startOffset ?: textRange.endOffset
-			else prevLeaf(true)?.textRange?.startOffset ?: 0
+	): Int {
+		if (psiFile == null) {
+			val settings = service<SettingsState>()
+			val cutil = caret.util
+			
+			cutil.moveCaret(
+				settings.wordSeparators,
+				settings.hardStopCharacters,
+				settings.wordSeparatorsBehaviour,
+				if (forward) FORWARD else BACKWARD
+			)
+			
+			return cutil.offset
+		} else {
+			val offset = caret.offset
+			val documentLength = caret.editor.document.textLength
+			
+			return if (offset == documentLength) {
+				if (forward) {
+					offset
+				} else {
+					psiFile.findElementAt(offset - 1)!!.textRange.startOffset
+				}
+			} else with(psiFile.findElementAt(offset)!!) {
+				if (forward) {
+					nextLeaf(true)?.textRange?.startOffset ?: textRange.endOffset
+				} else {
+					prevLeaf(true)?.textRange?.startOffset ?: 0
+				}
+			}
 		}
 	}
 	
@@ -41,10 +54,12 @@ abstract class MoveCaretAction : AnAction() {
 		carets: MutableList<Caret>,
 		forward: Boolean,
 		targetOffset: (Caret) -> Int
-	) = returnBy(carets.map { it.leadSelectionOffset } as MutableList) { selectionStarts ->
+	) {
+		val selectionsStart = carets.map { it.leadSelectionOffset } as MutableList
+		
 		if (!forward) {
 			carets.reverse()
-			selectionStarts.reverse()
+			selectionsStart.reverse()
 		}
 		
 		carets.forEachIndexed { i, caret ->
@@ -52,13 +67,13 @@ abstract class MoveCaretAction : AnAction() {
 			
 			carets.getOrNull(i + 1)?.let { nextCaret ->
 				if (offset in nextCaret.selectionRangeCompat) return@forEachIndexed after {
-					nextCaret.setSelection(selectionStarts[i], nextCaret.offset)
-					selectionStarts[i + 1] = selectionStarts[i]
+					nextCaret.setSelection(selectionsStart[i], nextCaret.offset)
+					selectionsStart[i + 1] = selectionsStart[i]
 				}
 			}
 			
 			caret.moveToOffset(offset)
-			caret.setSelection(selectionStarts[i], caret.offset)
+			caret.setSelection(selectionsStart[i], caret.offset)
 		}
 	}
 	

@@ -13,7 +13,6 @@ import com.intellij.openapi.editor.markup.RangeHighlighter
 import com.intellij.openapi.util.Key
 import ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.after
-import ir.mmd.intellijDev.Actionable.util.by
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.service
 import ir.mmd.intellijDev.Actionable.util.withService
@@ -99,10 +98,15 @@ abstract class CaretEditingAction : AnAction() {
 	fun copyWordAtCaret(
 		e: AnActionEvent,
 		deleteWord: Boolean
-	) = by(IntArray(2)) {
-		e.primaryCaret.util.getAssociatedWord(it)?.run {
-			copyToClipboard()
-			if (deleteWord) e.project!!.runWriteCommandAction { e.editor.document.deleteString(it[0], it[1]) }
+	) {
+		val boundaries = IntArray(2)
+		val word = e.primaryCaret.util.getAssociatedWord(boundaries) ?: return
+		
+		word.copyToClipboard()
+		if (deleteWord) {
+			e.project.runWriteCommandAction {
+				e.editor.document.deleteString(boundaries[0], boundaries[1])
+			}
 		}
 	}
 	
@@ -113,10 +117,11 @@ abstract class CaretEditingAction : AnAction() {
 		val caret = caretModel.primaryCaret
 		
 		if (actionName == getUserData(scheduledPasteActionKind)) return after {
-			if (caret.offset == getUserData(scheduledPasteActionOffset))
+			if (caret.offset == getUserData(scheduledPasteActionOffset)) {
 				removeScheduledPasteAction()
-			else
+			} else {
 				putUserData(scheduledPasteActionOffset, caret.offset)
+			}
 		}
 		
 		putUserData(scheduledPasteActionKind, actionName)

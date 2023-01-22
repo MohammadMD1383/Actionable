@@ -81,20 +81,36 @@ class CaretUtil(private val caret: Caret) {
 		mode: Int,
 		dir: Int,
 		commit: Boolean = true
-	) = nonnull(peek(dir)) {
-		if (!move(dir, hardStops)) return@nonnull after { if (commit) commit() }
-		when (mode) {
-			SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE -> if (it in separators)
-				moveWhileFacing(separators, hardStops, dir)
-			else
-				moveUntilReached(separators, hardStops, dir)
-			
-			SettingsState.WSBehaviour.STOP_AT_NEXT_SAME_CHAR_TYPE -> if (it in separators)
-				moveWhileFacing(separators, hardStops, dir) and moveUntilReached(separators, hardStops, dir)
-			else
-				moveUntilReached(separators, hardStops, dir) and moveWhileFacing(separators, hardStops, dir)
+	) {
+		val char = peek(dir) ?: return
+		
+		if (!move(dir, hardStops)) return after {
+			if (commit) {
+				commit()
+			}
 		}
-		if (commit) commit()
+		
+		when (mode) {
+			SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE -> {
+				if (char in separators) {
+					moveWhileFacing(separators, hardStops, dir)
+				} else {
+					moveUntilReached(separators, hardStops, dir)
+				}
+			}
+			
+			SettingsState.WSBehaviour.STOP_AT_NEXT_SAME_CHAR_TYPE -> {
+				if (char in separators) {
+					moveWhileFacing(separators, hardStops, dir) and moveUntilReached(separators, hardStops, dir)
+				} else {
+					moveUntilReached(separators, hardStops, dir) and moveWhileFacing(separators, hardStops, dir)
+				}
+			}
+		}
+		
+		if (commit) {
+			commit()
+		}
 	}
 	
 	fun getWordBoundaries(
@@ -111,15 +127,15 @@ class CaretUtil(private val caret: Caret) {
 	}
 	
 	fun getAssociatedWord(boundaries: IntArray? = null): String? = withService<SettingsState, String?> {
-		returnBy(getWordBoundaries(wordSeparators, hardStopCharacters)) { (startOffset, endOffset) ->
-			return@returnBy if (startOffset == endOffset) null else {
-				boundaries?.let {
-					it[0] = startOffset
-					it[1] = endOffset
-				}
-				
-				document.charsSequence.substring(startOffset, endOffset)
+		val (startOffset, endOffset) = getWordBoundaries(wordSeparators, hardStopCharacters)
+		
+		return if (startOffset == endOffset) null else {
+			boundaries?.let {
+				it[0] = startOffset
+				it[1] = endOffset
 			}
+			
+			document.immutableCharSequence.substring(startOffset, endOffset)
 		}
 	}
 }
