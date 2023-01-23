@@ -1,6 +1,6 @@
 package ir.mmd.intellijDev.Actionable.util
 
-import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.application.ApplicationManager
 
 /**
  * You can use this to beatify the code like this:
@@ -12,12 +12,14 @@ import com.intellij.openapi.components.ServiceManager
  * ```
  * change that to:
  * ```kotlin
- * if (...) return after {
+ * if (...) return afterDoing {
  *   // do some stuff ...
  * }
  * ```
+ *
+ * @see [Any.after]
  */
-inline fun after(block: () -> Unit) = block()
+inline fun afterDoing(block: () -> Unit) = block()
 
 /**
  * example:
@@ -27,9 +29,9 @@ inline fun after(block: () -> Unit) = block()
  * }
  * ```
  *
- * @see [after]
+ * @see [afterDoing]
  */
-inline infix fun Boolean.after(block: () -> Unit) = this.also { block() }
+inline infix fun <T> T.after(block: () -> Unit) = also { block() }
 
 /**
  * Try and ignore any exceptions happens inside [block]
@@ -39,6 +41,20 @@ inline fun tryCatching(block: () -> Unit) = try {
 } catch (_: Exception) {
 }
 
-inline fun <reified T> service(): T = ServiceManager.getService(T::class.java)
-inline fun <reified T, R> withService(block: T.() -> R) = ServiceManager.getService(T::class.java).block()
-inline fun <T, R> withService(clazz: Class<T>, block: T.() -> R) = ServiceManager.getService(clazz).block()
+/**
+ * Helper method to get application-wide service
+ */
+inline fun <reified T> service(): T = ApplicationManager.getApplication().getService(T::class.java)
+
+/**
+ * brings an application-wide service to scope of [block]
+ *
+ * @see [service]
+ * @see [withService]
+ */
+inline fun <reified T, R> withService(block: T.() -> R) = ApplicationManager.getApplication().getService(T::class.java).block()
+
+/**
+ * @see [withService]
+ */
+inline fun <T, R> withService(clazz: Class<T>, block: T.() -> R) = ApplicationManager.getApplication().getService(clazz).block()

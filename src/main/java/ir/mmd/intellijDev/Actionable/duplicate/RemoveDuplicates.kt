@@ -37,9 +37,10 @@ import ir.mmd.intellijDev.Actionable.util.withService
 class RemoveDuplicates : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) = withService<SettingsState, Unit> {
 		val editor = e.editor
+		val document = editor.document
 		val strings = HashSet<String>()
 		
-		e.project!!.runWriteCommandActionWith(editor.document) { document ->
+		e.project.runWriteCommandAction {
 			editor.allCarets.forEach { caret ->
 				val text = caret.selectedText!!
 				strings.find { it.equals(text, ignoreCase = !isCaseSensitive) }?.letOnly {

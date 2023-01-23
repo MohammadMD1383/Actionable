@@ -6,6 +6,12 @@ import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.service
 
 /**
+ * Removes a character at [offset] in the [Document]
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun Document.removeCharAt(offset: Int) = deleteString(offset, offset + 1)
+
+/**
  * Returns char at [offset] or `null` if [offset] is out of bounds
  */
 @Suppress("NOTHING_TO_INLINE")

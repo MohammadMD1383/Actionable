@@ -7,7 +7,7 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.ScrollType
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.util.after
+import ir.mmd.intellijDev.Actionable.util.afterDoing
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.service
 import ir.mmd.intellijDev.Actionable.util.withService
@@ -19,7 +19,7 @@ abstract class FindAction(private val searchForward: Boolean) : AnAction() {
 		val caretModel = editor.caretModel
 		val caret = caretModel.allCarets.run { if (searchForward) last() else first() }
 		
-		if (!caret.hasSelection()) return after {
+		if (!caret.hasSelection()) return afterDoing {
 			val (startOffset, endOffset) = caret.util.getWordBoundaries(wordSeparators, hardStopCharacters)
 			
 			if (startOffset != endOffset) {

@@ -10,6 +10,7 @@ import com.intellij.psi.PsiModifier.ABSTRACT
 import com.intellij.psi.PsiModifier.DEFAULT
 import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
+import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
 @Keep
@@ -20,24 +21,24 @@ class AutoInsertSemicolon : TypedHandlerDelegate() {
 		editor: Editor,
 		file: PsiFile,
 		fileType: FileType
-	) = Result.CONTINUE.also {
+	) = Result.CONTINUE after {
 		if (
 			!project.service<State>().autoInsertSemicolonEnabled ||
 			file.fileType !is JavaFileType ||
 			c != '('
-		) return@also
+		) return@after
 		
 		val caret = editor.caretModel.primaryCaret
-		val element = file.elementAt(caret)?.prevLeaf(true)?.parentOfType<PsiField>(true) ?: return@also
+		val element = file.elementAt(caret)?.prevLeaf(true)?.parentOfType<PsiField>(true) ?: return@after
 		val clazz = element.containingClass!!
 		
 		if (
 			(clazz.isInterface and !element.hasModifierProperty(DEFAULT)) or
 			element.hasModifierProperty(ABSTRACT)
-		) return@also
+		) return@after
 		
-		if (caret.util.nextChar == ';') project.runWriteCommandActionWith(caret.offset) {
-			editor.document.deleteString(it, it + 1)
+		if (caret.util.nextChar == ';') project.runWriteCommandAction {
+			editor.document.removeCharAt(caret.offset)
 		}
 	}
 	

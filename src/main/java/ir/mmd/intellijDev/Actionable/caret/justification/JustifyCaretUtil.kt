@@ -2,18 +2,16 @@ package ir.mmd.intellijDev.Actionable.caret.justification
 
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.LogicalPosition
-import ir.mmd.intellijDev.Actionable.util.ext.doIf
 import ir.mmd.intellijDev.Actionable.util.ext.forEachIf
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandActionWith
 
 class JustifyCaretUtil(private val editor: Editor) {
 	private val project = editor.project!!
 	private val document = editor.document
 	private val carets = editor.caretModel.allCarets
 	
-	private val leftmostColumn: Int get() = carets.minOf { it.visualPosition.column }
-	private val rightmostColumn: Int get() = carets.maxOf { it.logicalPosition.column }
+	private fun getLeftmostColumn(): Int = carets.minOf { it.visualPosition.column }
+	private fun getRightmostColumn(): Int = carets.maxOf { it.logicalPosition.column }
 	private val hasJustOneCaretOnEachLine get() = carets.distinctBy { it.logicalPosition.line }.size == carets.size
 	
 	/**
@@ -35,12 +33,12 @@ class JustifyCaretUtil(private val editor: Editor) {
 	 * the third |one with a caret
 	 * ```
 	 */
-	fun justifyCaretsStart() = justify(leftmostColumn)
+	fun justifyCaretsStart() = justify(getLeftmostColumn())
 	
 	/**
 	 * same as [JustifyCaretUtil.justifyCaretsStart] but moves the carets to rightmost active column
 	 */
-	fun justifyCaretsEnd() = justify(rightmostColumn)
+	fun justifyCaretsEnd() = justify(getRightmostColumn())
 	
 	/**
 	 * aligns given carets across target column
@@ -62,7 +60,7 @@ class JustifyCaretUtil(private val editor: Editor) {
 	 *
 	 * example:
 	 *
-	 * ```
+	 * ```java
 	 * int short |= 12;
 	 * int mediumMedium |= 12;
 	 * int largeLargeLarge |= 12;
@@ -70,14 +68,17 @@ class JustifyCaretUtil(private val editor: Editor) {
 	 *
 	 * will change to <br></br>
 	 *
-	 * ```
+	 * ```java
 	 * int short           |= 12;
 	 * int mediumMedium    |= 12;
 	 * int largeLargeLarge |= 12;
 	 * ```
 	 */
-	fun justifyCaretsEndWithShifting() = doIf({ hasJustOneCaretOnEachLine }) {
-		project.runWriteCommandActionWith(rightmostColumn) { targetColumn ->
+	fun justifyCaretsEndWithShifting() {
+		if (!hasJustOneCaretOnEachLine) return
+		
+		val targetColumn = getRightmostColumn()
+		project.runWriteCommandAction {
 			carets.forEach {
 				document.insertString(
 					it.offset,

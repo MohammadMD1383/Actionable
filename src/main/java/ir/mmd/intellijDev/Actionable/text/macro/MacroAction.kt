@@ -8,9 +8,12 @@ import ir.mmd.intellijDev.Actionable.util.ext.*
 class MacroAction(name: String, private val macro: String) : AnAction(name) {
 	private val macroLength = macro.length
 	
-	override fun actionPerformed(e: AnActionEvent) = with(e.editor) {
-		e.project!!.runWriteCommandActionWith(document) { document ->
-			allCarets.forEach { caret ->
+	override fun actionPerformed(e: AnActionEvent) {
+		val editor = e.editor
+		val document = editor.document
+		
+		e.project.runWriteCommandAction {
+			editor.allCarets.forEach { caret ->
 				caret moveTo macroLength + if (caret.hasSelection()) {
 					val (start, end) = caret.selectionRangeCompat
 					caret.removeSelection()

@@ -10,7 +10,7 @@ import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 import ir.mmd.intellijDev.Actionable.typing.html.state.State
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.ext.getText
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandActionWith
+import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 import ir.mmd.intellijDev.Actionable.util.ext.service
 import ir.mmd.intellijDev.Actionable.util.ext.util
 import ir.mmd.intellijDev.Actionable.util.service
@@ -52,12 +52,12 @@ class ExpandTagOnType : TypedHandlerDelegate() {
 		val cutil = caret.util
 		val movementSettings = service<SettingsState>()
 		cutil.moveUntilReached(movementSettings.wordSeparators, movementSettings.hardStopCharacters, BACKWARD)
-		val tag = document.getText(cutil.offset..caret.offset)
+		val tag = document.getText(cutil.offset..offset)
 		
 		TAGS.find { it == tag }?.let { t ->
-			project.runWriteCommandActionWith(cutil.offset) {
-				document.deleteString(it, caret.offset)
-				document.insertString(it, "<$t></$t>")
+			project.runWriteCommandAction {
+				document.deleteString(cutil.offset, offset)
+				document.insertString(cutil.offset, "<$t></$t>")
 				caret.moveToOffset(offset + 2)
 			}
 		}
