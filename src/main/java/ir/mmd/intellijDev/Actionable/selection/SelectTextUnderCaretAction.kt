@@ -11,7 +11,8 @@ abstract class SelectTextUnderCaretAction : AnAction() {
 	abstract fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange?
 	
 	override fun actionPerformed(e: AnActionEvent) = e.editor.allCarets.forEach { caret ->
-		caret.setSelection(getSelectionRange(caret, e.psiFile) ?: return@forEach)
+		val range = getSelectionRange(caret, e.psiFile) ?: return@forEach
+		caret.setSelection(range.first, range.last)
 	}
 	
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
