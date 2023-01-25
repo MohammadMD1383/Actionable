@@ -48,6 +48,8 @@
 			<li>Justify Carets Start</li>
 			<li>Justify Carets End</li>
 			<li>Justify Carets End and Shift Text</li>
+			<li>Copy Line Without Extra Whitespace</li>
+			<li>Cut Line Without Extra Whitespace</li>
 			<li>Copy Word At Caret</li>
 			<li>Cut Word At Caret</li>
 			<li>Copy Element At Caret</li>
@@ -593,6 +595,20 @@
 					id="ir.mmd.intellijDev.Actionable.caret.justification.JustifyCaretsEndAndShift"
 					text="Justify Carets End and Shift Text"
 					description="Justifies carets to the rightmost (needs more than one active caret) and shifts the text with the carets"/>
+				
+				<separator/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CopyLineWithoutExtraWhitespaceAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CopyLineWithoutExtraWhitespaceAtCaretAction"
+					text="Copy Line Without Extra Whitespace"
+					description="Copies the line content (where caret is) without leading/trailing whitespace/indent"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CutLineWithoutExtraWhitespaceAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CutLineWithoutExtraWhitespaceAtCaretAction"
+					text="Cut Line Without Extra Whitespace"
+					description="Cuts the line content (where caret is) without leading/trailing whitespace/indent"/>
 				
 				<separator/>
 				
