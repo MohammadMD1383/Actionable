@@ -8,7 +8,7 @@ import com.intellij.psi.PsiFile
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
-import ir.mmd.intellijDev.Actionable.util.after
+import ir.mmd.intellijDev.Actionable.util.afterDoing
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.service
 
@@ -66,7 +66,7 @@ abstract class MoveCaretAction : AnAction() {
 			val offset = targetOffset(caret)
 			
 			carets.getOrNull(i + 1)?.let { nextCaret ->
-				if (offset in nextCaret.selectionRangeCompat) return@forEachIndexed after {
+				if (offset in nextCaret.selectionRangeCompat) return@forEachIndexed afterDoing {
 					nextCaret.setSelection(selectionsStart[i], nextCaret.offset)
 					selectionsStart[i + 1] = selectionsStart[i]
 				}

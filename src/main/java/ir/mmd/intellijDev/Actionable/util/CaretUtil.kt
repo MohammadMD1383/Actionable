@@ -84,7 +84,7 @@ class CaretUtil(private val caret: Caret) {
 	) {
 		val char = peek(dir) ?: return
 		
-		if (!move(dir, hardStops)) return after {
+		if (!move(dir, hardStops)) return afterDoing {
 			if (commit) {
 				commit()
 			}

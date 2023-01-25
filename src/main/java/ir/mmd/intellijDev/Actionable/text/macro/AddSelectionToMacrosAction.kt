@@ -8,7 +8,7 @@ import com.intellij.openapi.ui.Messages
 import ir.mmd.intellijDev.Actionable.action.registerMacro
 import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 import ir.mmd.intellijDev.Actionable.text.macro.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.util.after
+import ir.mmd.intellijDev.Actionable.util.afterDoing
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.hasEditorWith
 import ir.mmd.intellijDev.Actionable.util.ext.primaryCaret
@@ -26,7 +26,7 @@ class AddSelectionToMacrosAction : AnAction() {
 			null
 		) ?: return@withService
 		
-		if (macros[macroName] != null) return@withService after {
+		if (macros[macroName] != null) return@withService afterDoing {
 			Messages.showErrorDialog(
 				project,
 				"A macro with the name '$macroName' already exists",

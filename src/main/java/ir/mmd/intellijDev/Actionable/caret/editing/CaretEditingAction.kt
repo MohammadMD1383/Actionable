@@ -12,7 +12,7 @@ import com.intellij.openapi.editor.markup.HighlighterTargetArea
 import com.intellij.openapi.editor.markup.RangeHighlighter
 import com.intellij.openapi.util.Key
 import ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.util.after
+import ir.mmd.intellijDev.Actionable.util.afterDoing
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.service
 import ir.mmd.intellijDev.Actionable.util.withService
@@ -116,7 +116,7 @@ abstract class CaretEditingAction : AnAction() {
 	) = with(e.editor) {
 		val caret = caretModel.primaryCaret
 		
-		if (actionName == getUserData(scheduledPasteActionKind)) return after {
+		if (actionName == getUserData(scheduledPasteActionKind)) return afterDoing {
 			if (caret.offset == getUserData(scheduledPasteActionOffset)) {
 				removeScheduledPasteAction()
 			} else {
