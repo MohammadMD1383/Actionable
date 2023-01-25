@@ -6,7 +6,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.typing.html.state.State
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.ext.getText
@@ -15,7 +15,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.service
 import ir.mmd.intellijDev.Actionable.util.ext.util
 import ir.mmd.intellijDev.Actionable.util.service
 
-@Keep
+
 class ExpandTagOnType : TypedHandlerDelegate() {
 	companion object {
 		private val TAGS = listOf(

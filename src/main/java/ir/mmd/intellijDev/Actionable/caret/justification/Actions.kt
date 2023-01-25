@@ -1,10 +1,8 @@
 package ir.mmd.intellijDev.Actionable.caret.justification
 
 import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 
 
-@Keep
 @Documentation(
 	title = "Justify Carets End and Shift Text",
 	description = "Aligns carets to the rightmost one, and also shifts the text with moved carets",
@@ -27,7 +25,7 @@ import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
 )
 class JustifyCaretsEndAndShift : JustifyAction(JustifyCaretUtil::justifyCaretsEndWithShifting)
 
-@Keep
+
 @Documentation(
 	title = "Justify Carets Start",
 	description = "Aligns the carets to the leftmost one",
@@ -78,5 +76,5 @@ class JustifyCaretsStart : JustifyAction(JustifyCaretUtil::justifyCaretsStart)
 		```
 	"""
 )
-@Keep
+
 class JustifyCaretsEnd : JustifyAction(JustifyCaretUtil::justifyCaretsEnd)

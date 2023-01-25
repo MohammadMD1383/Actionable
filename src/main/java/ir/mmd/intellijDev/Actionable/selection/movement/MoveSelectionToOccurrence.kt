@@ -7,7 +7,7 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.ScrollType
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.service
 
@@ -46,14 +46,14 @@ abstract class MoveSelectionToOccurrence(
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
-@Keep
+
 class MoveFirstSelectionToPreviousOccurrence : MoveSelectionToOccurrence(true, false)
 
-@Keep
+
 class MoveFirstSelectionToNextOccurrence : MoveSelectionToOccurrence(true, true)
 
-@Keep
+
 class MoveLastSelectionToPreviousOccurrence : MoveSelectionToOccurrence(false, false)
 
-@Keep
+
 class MoveLastSelectionToNextOccurrence : MoveSelectionToOccurrence(false, true)

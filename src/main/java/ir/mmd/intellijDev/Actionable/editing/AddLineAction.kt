@@ -3,7 +3,7 @@ package ir.mmd.intellijDev.Actionable.editing
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
 abstract class AddLineAction(private val above: Boolean) : AnAction() {
@@ -27,8 +27,8 @@ abstract class AddLineAction(private val above: Boolean) : AnAction() {
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
-@Keep
+
 class AddLineAboveCaretWMAction : AddLineAction(true)
 
-@Keep
+
 class AddLineBelowCaretWMAction : AddLineAction(false)

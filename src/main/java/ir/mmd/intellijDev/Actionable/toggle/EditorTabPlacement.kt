@@ -4,7 +4,7 @@ import com.intellij.ide.ui.UISettings
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.hasProject
 import ir.mmd.intellijDev.Actionable.util.service
@@ -21,14 +21,14 @@ abstract class ChangeEditorTabPlacementShortcut(private val placement: Int) : An
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
-@Keep
+
 class SetEditorTabPlacementToTop : ChangeEditorTabPlacementShortcut(SwingConstants.TOP)
 
-@Keep
+
 class SetEditorTabPlacementToLeft : ChangeEditorTabPlacementShortcut(SwingConstants.LEFT)
 
-@Keep
+
 class SetEditorTabPlacementToBottom : ChangeEditorTabPlacementShortcut(SwingConstants.BOTTOM)
 
-@Keep
+
 class SetEditorTabPlacementToRight : ChangeEditorTabPlacementShortcut(SwingConstants.RIGHT)

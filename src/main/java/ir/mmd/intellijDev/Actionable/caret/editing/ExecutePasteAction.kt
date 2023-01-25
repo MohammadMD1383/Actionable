@@ -5,11 +5,11 @@ import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.withService
 
-@Keep
+
 class ExecutePasteAction : CaretEditingAction() {
 	override fun actionPerformed(e: AnActionEvent) = withService<SettingsState, Unit> {
 		val editor = e.editor

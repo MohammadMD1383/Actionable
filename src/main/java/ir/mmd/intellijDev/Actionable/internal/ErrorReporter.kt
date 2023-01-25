@@ -4,14 +4,14 @@ import com.intellij.openapi.diagnostic.ErrorReportSubmitter
 import com.intellij.openapi.diagnostic.IdeaLoggingEvent
 import com.intellij.openapi.diagnostic.SubmittedReportInfo
 import com.intellij.util.Consumer
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import java.awt.Component
 import java.awt.Desktop
 import java.io.IOException
 import java.net.URI
 import java.net.URLEncoder
 
-@Keep
+
 class ErrorReporter : ErrorReportSubmitter() {
 	override fun getReportActionText() = "Create Issue on Github"
 	

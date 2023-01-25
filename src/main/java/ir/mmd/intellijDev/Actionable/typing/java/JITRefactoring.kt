@@ -9,12 +9,12 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiIdentifier
 import com.intellij.psi.PsiLocalVariable
 import com.intellij.psi.search.searches.ReferencesSearch
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
 import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
-@Keep
+
 class JITRefactoringInsert : TypedHandlerDelegate() {
 	override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile) = Result.CONTINUE.also {
 		if (
@@ -46,7 +46,7 @@ class JITRefactoringInsert : TypedHandlerDelegate() {
 	}
 }
 
-@Keep
+
 class JITRefactoringDelete : BackspaceHandlerDelegate() {
 	override fun beforeCharDeleted(c: Char, file: PsiFile, editor: Editor) {}
 	override fun charDeleted(c: Char, file: PsiFile, editor: Editor) = false after {

@@ -2,16 +2,11 @@ import org.jetbrains.intellij.tasks.BuildSearchableOptionsTask
 import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 import org.jetbrains.intellij.tasks.RunIdeTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import proguard.gradle.ProGuardTask
 import kotlin.text.RegexOption.MULTILINE
 
 buildscript {
 	repositories {
 		mavenCentral()
-	}
-	
-	dependencies {
-		classpath("com.guardsquare:proguard-gradle:7.3.0")
 	}
 }
 
@@ -115,39 +110,6 @@ tasks.withType<BuildSearchableOptionsTask> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-}
-
-task<ProGuardTask>("minify") {
-	dependsOn(tasks.buildPlugin)
-	outputs.upToDateWhen { false }
-	
-	val javaModulesPath = "/usr/lib/jvm/java-17-openjdk-amd64/jmods"
-	val inFile = tasks.buildPlugin.get().archiveFile.get().asFile
-	val outFile = "build/minified/${inFile.name}"
-	
-	optimizationpasses(5)
-	printmapping(outFile.replace(".zip", ".mapping"))
-	
-	dontnote()
-	dontwarn("kotlin.**")
-	
-	libraryjars("$javaModulesPath/java.base.jmod")
-	libraryjars("$javaModulesPath/java.desktop.jmod")
-	libraryjars("$javaModulesPath/java.datatransfer.jmod")
-	
-	libraryjars("/Files/jetbrains/idea/lib")
-	libraryjars("/Files/jetbrains/idea/plugins/java/lib")
-	libraryjars("/Files/jetbrains/idea/plugins/Kotlin/lib")
-	libraryjars("/Files/jetbrains/idea/plugins/JavaScriptLanguage/lib")
-	
-	injars(inFile)
-	outjars(outFile)
-	
-	keepattributes("RuntimeVisibleAnnotations,Signature")
-	keep("class kotlin.reflect.**")
-	
-	keep("@ir.mmd.intellijDev.Actionable.internal.proguard.Keep class *")
-	keepclassmembers("class * { @ir.mmd.intellijDev.Actionable.internal.proguard.Keep *; }")
 }
 
 // Helpers

@@ -6,7 +6,7 @@ import com.intellij.openapi.editor.Caret
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiLiteralExpression
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.util.ext.*
@@ -14,7 +14,7 @@ import ir.mmd.intellijDev.Actionable.util.withService
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import kotlin.math.absoluteValue
 
-@Keep
+
 class SelectLineWithoutIndentAction : SelectTextUnderCaretAction() {
 	override fun isDumbAware() = true
 	
@@ -27,7 +27,7 @@ class SelectLineWithoutIndentAction : SelectTextUnderCaretAction() {
 	}
 }
 
-@Keep
+
 class SelectWordUnderCaretAction : SelectTextUnderCaretAction() {
 	override fun isDumbAware() = true
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile) = withService<SettingsState, IntRange?> {
@@ -36,7 +36,7 @@ class SelectWordUnderCaretAction : SelectTextUnderCaretAction() {
 	}
 }
 
-@Keep
+
 class SelectElementUnderCaretAction : SelectTextUnderCaretAction() {
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange? {
 		val (start, end) = psiFile.elementAt(caret)?.textRange ?: return null
@@ -44,7 +44,7 @@ class SelectElementUnderCaretAction : SelectTextUnderCaretAction() {
 	}
 }
 
-@Keep
+
 class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
 	private fun rawSelectionRange(caret: Caret) = caret.util.run {
 		if (!moveUntilReached("\"'`", "\n", BACKWARD)) return@run null
@@ -113,11 +113,11 @@ class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
 	}
 }
 
-@Keep
+
 class SelectTextBetweenQuotesAction : SelectTextBetweenAction("'")
 
-@Keep
+
 class SelectTextBetweenDoubleQuotesAction : SelectTextBetweenAction("\"")
 
-@Keep
+
 class SelectTextBetweenBackticksAction : SelectTextBetweenAction("`")

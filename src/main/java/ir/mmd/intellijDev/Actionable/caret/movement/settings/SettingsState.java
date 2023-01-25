@@ -4,11 +4,10 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Keep
+
 @State(
 	name = "ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState",
 	storages = @Storage("Actionable.CaretMovementSettingsState.xml")
@@ -33,13 +32,13 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 		public static final @NotNull String hardStopSeparators = " ";
 	}
 	
-	@Keep
+	
 	public @NotNull String wordSeparators = Defaults.wordSeparators;
 	
-	@Keep
+	
 	public int wordSeparatorsBehaviour = Defaults.wordSeparatorsBehaviour;
 	
-	@Keep
+	
 	public @NotNull String hardStopCharacters = Defaults.hardStopSeparators;
 	
 	@Override

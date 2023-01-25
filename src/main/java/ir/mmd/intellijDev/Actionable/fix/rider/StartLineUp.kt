@@ -5,10 +5,10 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.IdeActions.ACTION_EDITOR_ENTER
 import ir.mmd.intellijDev.Actionable.action.action
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
-@Keep
+
 class StartLineUp : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) {
 		val editor = e.editor

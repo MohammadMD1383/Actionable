@@ -8,11 +8,11 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.xml.XmlTag
 import com.intellij.psi.xml.XmlToken
 import com.intellij.psi.xml.XmlTokenType
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.typing.xml.state.State
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
-@Keep
+
 class CollapseEmptyTagOnBackspace : BackspaceHandlerDelegate() {
 	private var caretOffset: Int? = null
 	

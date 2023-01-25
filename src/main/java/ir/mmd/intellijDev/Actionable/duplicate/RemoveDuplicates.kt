@@ -5,11 +5,11 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.withService
 
-@Keep
+
 @Documentation(
 	title = "Remove Duplicate Selections",
 	description = "This action will remove duplicate selections (should be used with multi-caret mode)",

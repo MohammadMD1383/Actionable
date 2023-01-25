@@ -3,10 +3,10 @@ package ir.mmd.intellijDev.Actionable.caret.manipulation
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
-@Keep
+
 class RemoveCaretsOnEmptyLinesAction : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) {
 		val editor = e.editor

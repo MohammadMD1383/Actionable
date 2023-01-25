@@ -4,11 +4,11 @@ import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.options.Configurable
 import ir.mmd.intellijDev.Actionable.action.registerMacro
 import ir.mmd.intellijDev.Actionable.action.unregisterMacro
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.util.withService
 import javax.swing.JComponent
 
-@Keep
+
 class Settings : Configurable {
 	private var ui: UI? = null
 	

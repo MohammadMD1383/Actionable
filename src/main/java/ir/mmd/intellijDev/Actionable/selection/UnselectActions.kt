@@ -4,7 +4,7 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
-import ir.mmd.intellijDev.Actionable.internal.proguard.Keep
+
 import ir.mmd.intellijDev.Actionable.util.ext.caretCount
 import ir.mmd.intellijDev.Actionable.util.ext.editor
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
@@ -26,12 +26,12 @@ abstract class UnselectAction : AnAction() {
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
-@Keep
+
 class UnselectFirstSelectionAction : UnselectAction() {
 	override fun getTargetCaret(carets: List<Caret>) = carets.first { it.hasSelection() }
 }
 
-@Keep
+
 class UnselectLastSelectionAction : UnselectAction() {
 	override fun getTargetCaret(carets: List<Caret>) = carets.last { it.hasSelection() }
 }
