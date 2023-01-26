@@ -83,6 +83,16 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.14.0:</b><br>
+				fixed issue #28<br>
+				other minor fixes<br>
+				new actions:<br>
+				<ul>
+					<li>Select Line Without Extra Whitespace (both start/end)</li>
+					<li>Copy Line Content Without Extra Whitespace (both start/end)</li>
+					<li>Cut Line Content Without Extra Whitespace (both start/end)</li>
+				</ul>
+			</li>
 			<li><b>3.13.0:</b><br>
 				fixed issues #16 #18 #24 #27<br>
 				other minor fixes<br>
