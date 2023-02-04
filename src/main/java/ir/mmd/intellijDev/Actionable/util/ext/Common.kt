@@ -24,6 +24,8 @@ inline fun <T, O1, O2> T.applyWith(o1: O1, o2: O2, block: T.(O1, O2) -> Unit) = 
 inline fun <T, R> Iterable<T>.forEachWith(receiver: R, block: R.(T) -> Unit) = forEach { receiver.block(it) }
 inline fun <T> Iterable<T>.withEach(block: T.() -> Unit) = forEach { it.block() }
 inline fun <T> Iterable<T>.forEachIf(condition: T.() -> Boolean, block: (T) -> Unit) = forEach { if (it.condition()) block(it) }
+inline fun <T, R> Iterable<T>.forEachMapped(map: (T) -> R, block: (R) -> Unit) = forEach { block(map(it)) }
+inline fun <T, R> Iterable<T>.withEachMapped(map: (T) -> R, block: R.() -> Unit) = forEach { map(it).block() }
 
 inline operator fun IntRange.component1() = first
 inline operator fun IntRange.component2() = last
