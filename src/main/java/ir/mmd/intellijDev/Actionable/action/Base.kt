@@ -28,7 +28,10 @@ class LazyEventContext(val event: AnActionEvent) {
 /**
  * This kind of action will be triggered for each [com.intellij.openapi.editor.Caret]
  */
-abstract class MultiCaretAction : AnAction() {
+abstract class MultiCaretAction : AnAction {
+	constructor(name: String) : super(name)
+	constructor() : super()
+	
 	/**
 	 * This method will be called for each [Caret]
 	 */
@@ -47,7 +50,10 @@ abstract class MultiCaretAction : AnAction() {
  *
  * @see MultiCaretAction
  */
-abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction() {
+abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction {
+	constructor(name: String) : super(name)
+	constructor() : super()
+	
 	private var _data: T? = null
 	protected val data: T & Any get() = _data!!
 	
