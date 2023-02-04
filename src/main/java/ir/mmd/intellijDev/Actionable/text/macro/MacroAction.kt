@@ -1,29 +1,27 @@
 package ir.mmd.intellijDev.Actionable.text.macro
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.editor.Caret
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
+import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
-class MacroAction(name: String, private val macro: String) : AnAction(name) {
+class MacroAction(name: String, private val macro: String) : MultiCaretAction(name) {
 	private val macroLength = macro.length
 	
-	override fun actionPerformed(e: AnActionEvent) {
-		val editor = e.editor
-		val document = editor.document
-		
-		e.project.runWriteCommandAction {
-			editor.allCarets.forEach { caret ->
-				caret moveTo macroLength + if (caret.hasSelection()) {
-					val (start, end) = caret.selectionRangeCompat
-					caret.removeSelection()
-					document.replaceString(start, end, macro)
-					start
-				} else {
-					val offset = caret.offset
-					document.insertString(offset, macro)
-					offset
-				}
+	context (LazyEventContext)
+	override fun perform(caret: Caret) {
+		project.runWriteCommandAction {
+			if (caret.hasSelection()) {
+				val (start, end) = caret.selectionRangeCompat
+				caret.removeSelection()
+				document.replaceString(start, end, macro)
+				caret moveTo macroLength + start
+			} else {
+				val offset = caret.offset
+				document.insertString(offset, macro)
+				caret moveTo macroLength + offset
 			}
 		}
 	}
