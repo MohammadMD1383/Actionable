@@ -41,7 +41,9 @@ abstract class MultiCaretAction : AnAction() {
 }
 
 /**
- * Use this if you want to initialize something that should be accessible by all of the [perform] calls
+ * Use this if you want to [initialize] something that should be accessible by all of the [perform] calls
+ *
+ * Also, there is a [finalize] method to help you do something at the end of all [perform] calls
  *
  * @see MultiCaretAction
  */
@@ -52,9 +54,13 @@ abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction() {
 	context (LazyEventContext)
 	abstract fun initialize(): T & Any
 	
+	context (LazyEventContext)
+	open fun finalize() = Unit
+	
 	override fun actionPerformed(e: AnActionEvent) = LazyEventContext(e).run {
 		_data = initialize()
 		allCarets.forEach { perform(it) }
+		finalize()
 		_data = null
 	}
 }
