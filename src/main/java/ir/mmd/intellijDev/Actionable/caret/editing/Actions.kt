@@ -1,9 +1,13 @@
 package ir.mmd.intellijDev.Actionable.caret.editing
 
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.editor.Caret
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
-
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.hasEditorWith
+import ir.mmd.intellijDev.Actionable.util.ext.hasProject
+import ir.mmd.intellijDev.Actionable.util.ext.isNotNull
 
 
 @Documentation(
@@ -15,7 +19,8 @@ import ir.mmd.intellijDev.Actionable.util.ext.*
 )
 class CutWordAtCaret : CaretEditingAction() {
 	override fun isDumbAware() = true
-	override fun actionPerformed(e: AnActionEvent) = copyWordAtCaret(e, true)
+	context (LazyEventContext)
+	override fun perform(caret: Caret) = copyWordAtCaret(true)
 }
 
 @Documentation(
@@ -39,7 +44,8 @@ class CutWordAtCaret : CaretEditingAction() {
 )
 
 class CutElementAtCaret : CaretEditingAction() {
-	override fun actionPerformed(e: AnActionEvent) = copyElementAtCaret(e, true)
+	context(LazyEventContext)
+	override fun perform(caret: Caret) = copyElementAtCaret(true)
 }
 
 @Documentation(
@@ -52,7 +58,8 @@ class CutElementAtCaret : CaretEditingAction() {
 
 class CopyWordAtCaret : CaretEditingAction() {
 	override fun isDumbAware() = true
-	override fun actionPerformed(e: AnActionEvent) = copyWordAtCaret(e, false)
+	context(LazyEventContext)
+	override fun perform(caret: Caret) = copyWordAtCaret(false)
 }
 
 @Documentation(
@@ -76,31 +83,38 @@ class CopyWordAtCaret : CaretEditingAction() {
 )
 
 class CopyElementAtCaret : CaretEditingAction() {
-	override fun actionPerformed(e: AnActionEvent) = copyElementAtCaret(e, false)
+	context(LazyEventContext)
+	override fun perform(caret: Caret) = copyElementAtCaret(false)
 }
 
 
 class SetWordCutPasteOffset : CaretEditingAction() {
-	override fun actionPerformed(e: AnActionEvent) = setPasteOffset(e, "wd;ct")
+	context(LazyEventContext)
+	override fun perform(caret: Caret) = setPasteOffset("wd;ct")
 }
 
 
 class SetWordCopyPasteOffset : CaretEditingAction() {
-	override fun actionPerformed(e: AnActionEvent) = setPasteOffset(e, "wd;cp")
+	context(LazyEventContext)
+	override fun perform(caret: Caret) = setPasteOffset("wd;cp")
 }
 
 
 class SetElementCutPasteOffset : CaretEditingAction() {
-	override fun actionPerformed(e: AnActionEvent) = setPasteOffset(e, "el;ct")
+	context(LazyEventContext)
+	override fun perform(caret: Caret) = setPasteOffset("el;ct")
 }
 
 
 class SetElementCopyPasteOffset : CaretEditingAction() {
-	override fun actionPerformed(e: AnActionEvent) = setPasteOffset(e, "el;cp")
+	context(LazyEventContext)
+	override fun perform(caret: Caret) = setPasteOffset("el;cp")
 }
 
 
 class CancelPasteAction : CaretEditingAction() {
-	override fun actionPerformed(e: AnActionEvent) = e.editor.removeScheduledPasteAction()
+	context(LazyEventContext)
+	override fun perform(caret: Caret) = editor.removeScheduledPasteAction()
+	
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { getUserData(scheduledPasteActionKind).isNotNull } }
 }

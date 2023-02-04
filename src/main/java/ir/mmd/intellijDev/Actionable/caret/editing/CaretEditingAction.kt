@@ -1,7 +1,6 @@
 package ir.mmd.intellijDev.Actionable.caret.editing
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.EditorColors
@@ -11,6 +10,8 @@ import com.intellij.openapi.editor.markup.HighlighterLayer
 import com.intellij.openapi.editor.markup.HighlighterTargetArea
 import com.intellij.openapi.editor.markup.RangeHighlighter
 import com.intellij.openapi.util.Key
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
+import ir.mmd.intellijDev.Actionable.action.SingleCaretAction
 import ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.afterDoing
 import ir.mmd.intellijDev.Actionable.util.ext.*
@@ -18,7 +19,7 @@ import ir.mmd.intellijDev.Actionable.util.service
 import ir.mmd.intellijDev.Actionable.util.withService
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState as MovementSettingsState
 
-abstract class CaretEditingAction : AnAction() {
+abstract class CaretEditingAction : SingleCaretAction() {
 	companion object {
 		@JvmStatic
 		protected val scheduledPasteActionKind = Key<String>("scheduledPasteAction.kink")
@@ -87,48 +88,43 @@ abstract class CaretEditingAction : AnAction() {
 		putUserData(scheduledPasteActionOffset, null)
 	}
 	
-	fun copyElementAtCaret(
-		e: AnActionEvent,
-		deleteElement: Boolean
-	) = e.psiFile.elementAt(e.primaryCaret)!!.runOnly {
+	context (LazyEventContext)
+	fun copyElementAtCaret(deleteElement: Boolean) = psiFile.elementAt(primaryCaret)!!.runOnly {
 		text.copyToClipboard()
-		if (deleteElement) e.project!!.runWriteCommandAction(::delete)
+		if (deleteElement) project.runWriteCommandAction(::delete)
 	}
 	
-	fun copyWordAtCaret(
-		e: AnActionEvent,
-		deleteWord: Boolean
-	) {
+	context (LazyEventContext)
+	fun copyWordAtCaret(deleteWord: Boolean) {
 		val boundaries = IntArray(2)
-		val word = e.primaryCaret.util.getAssociatedWord(boundaries) ?: return
+		val word = primaryCaret.util.getAssociatedWord(boundaries) ?: return
 		
 		word.copyToClipboard()
 		if (deleteWord) {
-			e.project.runWriteCommandAction {
-				e.editor.document.deleteString(boundaries[0], boundaries[1])
+			project.runWriteCommandAction {
+				document.deleteString(boundaries[0], boundaries[1])
 			}
 		}
 	}
 	
-	fun setPasteOffset(
-		e: AnActionEvent,
-		actionName: String
-	) = with(e.editor) {
-		val caret = caretModel.primaryCaret
-		
+	context (LazyEventContext)
+	fun setPasteOffset(actionName: String) = with(editor) {
 		if (actionName == getUserData(scheduledPasteActionKind)) return afterDoing {
-			if (caret.offset == getUserData(scheduledPasteActionOffset)) {
+			if (primaryCaret.offset == getUserData(scheduledPasteActionOffset)) {
 				removeScheduledPasteAction()
 			} else {
-				putUserData(scheduledPasteActionOffset, caret.offset)
+				putUserData(scheduledPasteActionOffset, primaryCaret.offset)
 			}
 		}
 		
 		putUserData(scheduledPasteActionKind, actionName)
-		putUserData(scheduledPasteActionOffset, caret.offset)
+		putUserData(scheduledPasteActionOffset, primaryCaret.offset)
 		if (service<SettingsState>().showPasteActionHints) addEditorMouseMotionListener(motionListener)
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { caretCount == 1 } }
+	context(AnActionEvent)
+	override val actionEnabled: Boolean
+		get() = hasProject
+	
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
