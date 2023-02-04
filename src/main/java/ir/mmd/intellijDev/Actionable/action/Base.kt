@@ -41,6 +41,25 @@ abstract class MultiCaretAction : AnAction() {
 }
 
 /**
+ * Use this if you want to initialize something that should be accessible by all of the [perform] calls
+ *
+ * @see MultiCaretAction
+ */
+abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction() {
+	private var _data: T? = null
+	protected val data: T & Any get() = _data!!
+	
+	context (LazyEventContext)
+	abstract fun initialize(): T & Any
+	
+	override fun actionPerformed(e: AnActionEvent) = LazyEventContext(e).run {
+		_data = initialize()
+		allCarets.forEach { perform(it) }
+		_data = null
+	}
+}
+
+/**
  * Runs only if there is one [Caret] in the [Editor]
  *
  * @param forceSingleCaret force to have single caret in [AnAction.update]
