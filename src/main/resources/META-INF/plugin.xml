@@ -25,6 +25,7 @@
 			<li>Duplicate Lines Up</li>
 			<li>Duplicate Lines Down</li>
 			<li>Remove Duplicate Selections</li>
+			<li>Select Until ...</li>
 			<li>Select Line Under Caret (Without Indent)</li>
 			<li>Select Word Under Caret</li>
 			<li>Select Element Under Caret</li>
@@ -450,6 +451,14 @@
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.SelectionGroup" text="Selection" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.SelectUntilAction"
+					id="ir.mmd.intellijDev.Actionable.selection.SelectUntilAction"
+					text="Select Until ..."
+					description="Select until the next character you will type"/>
+				
+				<separator/>
+				
 				<action
 					class="ir.mmd.intellijDev.Actionable.selection.SelectLineWithoutIndentAction"
 					id="ir.mmd.intellijDev.Actionable.selection.SelectLineWithoutIndentAction"
