@@ -4,25 +4,27 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.util.TextRange
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
 abstract class ExtractLineWithoutExtraWhitespaceAtCaret(private val cut: Boolean) : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) {
-		val editor = e.editor
-		val document = editor.document
+	override fun actionPerformed(e: AnActionEvent) = with(LazyEventContext(e)) {
+		val texts = mutableListOf<String>()
 		
-		e.project.runWriteCommandAction {
-			editor.caretModel.allCarets.forEach {
+		project.runWriteCommandAction {
+			allCarets.forEach {
 				val lineNumber = document.getLineNumber(it.offset)
 				val start = document.getLineStartOffset(lineNumber) + document.getLineStartIndentLength(lineNumber)
 				val end = document.getLineEndOffset(lineNumber) - document.getLineTrailingWhitespaceLength(lineNumber)
 				
-				document.getText(TextRange(start, end)).copyToClipboard()
+				texts += document.getText(TextRange(start, end))
 				if (cut) {
 					document.deleteString(start, end)
 				}
 			}
 		}
+		
+		texts.joinToString(separator = "\n").copyToClipboard()
 	}
 	
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
