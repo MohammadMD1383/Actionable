@@ -61,6 +61,7 @@
 			<li>Set Cut-Paste Element Offset At Caret</li>
 			<li>Execute Paste</li>
 			<li>Cancel Paste</li>
+			<li>Move Caret Up the Tree</li>
 			<li>Move Caret to Next Word</li>
 			<li>Move Caret to Next Word with Selection</li>
 			<li>Move Caret to Previous Word</li>
@@ -694,6 +695,14 @@
 					id="ir.mmd.intellijDev.Actionable.caret.editing.CancelPasteAction"
 					text="Cancel Paste"
 					description="Cancels the scheduled paste action"/>
+				
+				<separator/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretUpTheTreeAction"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretUpTheTreeAction"
+					text="Move Caret Up the Tree"
+					description="Moves the caret to start of parent psi element"/>
 				
 				<separator/>
 				
