@@ -25,23 +25,46 @@ class CaretUtil(private val caret: Caret) {
 		const val BACKWARD = -1
 	}
 	
+	/**
+	 * [Document] associated with [caret]
+	 */
 	val document = caret.editor.document
 	
 	/**
-	 * temporary caret offset
+	 * temporary [caret] offset
 	 */
 	var offset = caret.offset
 	
+	/**
+	 * Peeks next character (in front of [caret]) or `null` if there is no character in front of the [caret]
+	 */
 	inline val nextChar get() = peek(+1)
+	
+	/**
+	 * Peeks previous character (in back of [caret]) or `null` if there is no character in back of the [caret]
+	 */
 	inline val prevChar get() = peek(-1)
 	
+	/**
+	 * Returns the offset of the next character (in front of the [caret]) in the [document]
+	 */
 	inline val nextCharOffset get() = offset
+	
+	/**
+	 * Returns the offset of the previous character (in back of the [caret]) in the [document]
+	 */
 	inline val prevCharOffset get() = offset - 1
 	
+	/**
+	 * reset [offset] to [Caret.getOffset]
+	 */
 	fun reset() {
 		offset = caret.offset
 	}
 	
+	/**
+	 * Move the [caret] to the [offset]
+	 */
 	fun commit() = caret.moveToOffset(offset)
 	
 	/**
@@ -54,6 +77,18 @@ class CaretUtil(private val caret: Caret) {
 		caret.setSelection(min(caretOffset, offset), max(caretOffset, offset))
 	}
 	
+	/**
+	 * Translates a character relative position to a relative caret offset
+	 *
+	 * Example: *(| is caret)*
+	 * ```kotlin
+	 * class Hello|World { ... }
+	 * ```
+	 * the relative `W` position (in `World`) to caret is `+1` but it will be translated to `0`
+	 * as a relative offset
+	 *
+	 * @see peek
+	 */
 	private fun relativePositionToOffset(pos: Int): Int = offset + if (pos.isPositive) pos - 1 else pos
 	
 	/**
@@ -71,6 +106,12 @@ class CaretUtil(private val caret: Caret) {
 		}
 	}
 	
+	/**
+	 * Moves the caret **(virtually)** while facing [chars] but immediately stop if reached any of [hardStops]
+	 *
+	 * @return `false` if we reached a [hardStops] otherwise `true`
+	 * @see offset
+	 */
 	private fun moveWhileFacing(chars: String, hardStops: String, step: Int): Boolean {
 		while (true) when (peek(step) ?: return false) {
 			in hardStops -> return false
@@ -79,6 +120,12 @@ class CaretUtil(private val caret: Caret) {
 		}
 	}
 	
+	/**
+	 * Moves the caret **(virtually)** until reaching any of the [chars] but immediately stop if reached any of [hardStops]
+	 *
+	 * @return `false` if we reached a [hardStops] otherwise `true`
+	 * @see offset
+	 */
 	fun moveUntilReached(chars: String, hardStops: String, step: Int): Boolean {
 		while (true) when (peek(step) ?: return false) {
 			in hardStops -> return false
@@ -87,6 +134,15 @@ class CaretUtil(private val caret: Caret) {
 		}
 	}
 	
+	/**
+	 * Moves the caret in a complex scenario
+	 *
+	 * @param separators word separators
+	 * @param hardStops immediately stop at these characters no matter where
+	 * @param mode see [SettingsState.WSBehaviour]
+	 * @param dir [FORWARD] or [BACKWARD]
+	 * @param commit (Optional) whether to [commit] the new [offset] or not after moving
+	 */
 	fun moveCaret(
 		separators: String,
 		hardStops: String,
@@ -125,6 +181,11 @@ class CaretUtil(private val caret: Caret) {
 		}
 	}
 	
+	/**
+	 * Returns boundaries of the work which is under the caret
+	 *
+	 * @see moveCaret
+	 */
 	fun getWordBoundaries(
 		wordSeparators: String,
 		hardStops: String
@@ -138,6 +199,12 @@ class CaretUtil(private val caret: Caret) {
 		reset()
 	}
 	
+	/**
+	 * Returns the word under the caret or `null` if there is no word
+	 *
+	 * @param boundaries specify an `int[2]` if you want to get the word boundaries too
+	 * @see getWordBoundaries
+	 */
 	fun getAssociatedWord(boundaries: IntArray? = null): String? = withService<SettingsState, String?> {
 		val (startOffset, endOffset) = getWordBoundaries(wordSeparators, hardStopCharacters)
 		
