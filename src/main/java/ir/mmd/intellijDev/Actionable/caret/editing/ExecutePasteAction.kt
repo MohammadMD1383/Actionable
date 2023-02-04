@@ -4,23 +4,22 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.withService
 
 
 class ExecutePasteAction : CaretEditingAction() {
-	override fun actionPerformed(e: AnActionEvent) = withService<SettingsState, Unit> {
-		val editor = e.editor
-		val caret = e.primaryCaret
+	context (LazyEventContext)
+	override fun perform(caret: Caret) = withService<SettingsState, Unit> {
 		val (target, action) = (editor.getUserData(scheduledPasteActionKind) ?: return).split(';')
 		
 		val startOffset: Int
 		val endOffset: Int
 		
 		when (target) {
-			"el" -> e.psiFile.elementAt(caret)!!.textRange.let { (start, end) ->
+			"el" -> psiFile.elementAt(caret)!!.textRange.let { (start, end) ->
 				startOffset = start
 				endOffset = end
 			}
@@ -33,9 +32,9 @@ class ExecutePasteAction : CaretEditingAction() {
 			else -> throw Exception("Unknown scheduled paste action target")
 		}
 		
-		e.project!!.runWriteCommandAction {
+		project.runWriteCommandAction {
 			paste(
-				editor.document,
+				document,
 				caret,
 				startOffset,
 				endOffset,
