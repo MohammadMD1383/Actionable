@@ -6,18 +6,24 @@ import com.intellij.openapi.editor.VisualPosition
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
-// todo rewrite with caret access here
+/**
+ * Duplicates line(s) up/down
+ */
 class DuplicateUtil(private val editor: Editor) {
+	/**
+	 * [com.intellij.openapi.project.Project] associated with the [editor]
+	 */
 	private val project = editor.project!!
+	/**
+	 * [com.intellij.openapi.editor.Document] associated with the [editor]
+	 */
 	private val document = editor.document
 	
 	/**
-	 * duplicate line(s) up <br></br>
-	 *
+	 * duplicate line(s) up
 	 *
 	 *  * if `start offset` and `end offset` are same, then the line will be duplicated <br></br>
 	 *  * if not, then the **lines including start offset and end offset** will be duplicated
-	 *
 	 *
 	 * *start offset and end offset are caret offsets in the active editor document*
 	 *
