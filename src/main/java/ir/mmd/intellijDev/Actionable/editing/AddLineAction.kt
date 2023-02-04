@@ -1,24 +1,25 @@
 package ir.mmd.intellijDev.Actionable.editing
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.editor.Caret
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
+import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.hasEditor
+import ir.mmd.intellijDev.Actionable.util.ext.hasProject
+import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
-import ir.mmd.intellijDev.Actionable.util.ext.*
-
-abstract class AddLineAction(private val above: Boolean) : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) {
-		val editor = e.editor
-		val document = editor.document
+abstract class AddLineAction(private val above: Boolean) : MultiCaretAction() {
+	context (LazyEventContext)
+	override fun perform(caret: Caret) {
+		val lineNumber = document.getLineNumber(caret.offset)
 		
-		e.project.runWriteCommandAction {
-			e.allCarets.forEachWith(document) {
-				val lineNumber = getLineNumber(it.offset)
-				insertString(
-					if (above) getLineStartOffset(lineNumber) else getLineEndOffset(lineNumber),
-					"\n"
-				)
-			}
+		project.runWriteCommandAction {
+			document.insertString(
+				if (above) document.getLineStartOffset(lineNumber) else document.getLineEndOffset(lineNumber),
+				"\n"
+			)
 		}
 	}
 	
