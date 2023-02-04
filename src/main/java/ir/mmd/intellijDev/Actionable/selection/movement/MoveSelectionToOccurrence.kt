@@ -11,8 +11,6 @@ import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.service
 
-// TODO: see move to next occurrence for more info on how the native action is implemented
-
 abstract class MoveSelectionToOccurrence(
 	private val isFirst: Boolean,
 	private val isForward: Boolean
