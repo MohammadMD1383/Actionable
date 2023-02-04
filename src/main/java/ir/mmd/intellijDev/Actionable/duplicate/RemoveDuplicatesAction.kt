@@ -1,11 +1,12 @@
 package ir.mmd.intellijDev.Actionable.duplicate
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.editor.Caret
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
+import ir.mmd.intellijDev.Actionable.action.MultiCaretActionWithInitialization
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
-
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.withService
 
@@ -34,20 +35,18 @@ import ir.mmd.intellijDev.Actionable.util.withService
 		```
 	"""
 )
-class RemoveDuplicates : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) = withService<SettingsState, Unit> {
-		val editor = e.editor
-		val document = editor.document
-		val strings = HashSet<String>()
-		
-		e.project.runWriteCommandAction {
-			editor.allCarets.forEach { caret ->
-				val text = caret.selectedText!!
-				strings.find { it.equals(text, ignoreCase = !isCaseSensitive) }?.letOnly {
-					document.deleteString(caret.selectionStart, caret.selectionEnd)
-				} ?: strings.add(text)
+class RemoveDuplicatesAction : MultiCaretActionWithInitialization<HashSet<String>>() {
+	context(LazyEventContext)
+	override fun initialize(): HashSet<String> = HashSet()
+	
+	context (LazyEventContext)
+	override fun perform(caret: Caret) = withService<SettingsState, Unit> {
+		val text = caret.selectedText!!
+		data.find { it.equals(text, ignoreCase = !isCaseSensitive) }?.letOnly {
+			project.runWriteCommandAction {
+				document.deleteString(caret.selectionStart, caret.selectionEnd)
 			}
-		}
+		} ?: data.add(text)
 	}
 	
 	override fun isDumbAware() = true

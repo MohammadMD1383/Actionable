@@ -445,8 +445,8 @@
 				<separator/>
 				
 				<action
-					class="ir.mmd.intellijDev.Actionable.duplicate.RemoveDuplicates"
-					id="ir.mmd.intellijDev.Actionable.duplicate.RemoveDuplicates"
+					class="ir.mmd.intellijDev.Actionable.duplicate.RemoveDuplicatesAction"
+					id="ir.mmd.intellijDev.Actionable.duplicate.RemoveDuplicatesAction"
 					text="Remove Duplicate Selections"
 					description="Removes duplicate selections"/>
 			</group>
