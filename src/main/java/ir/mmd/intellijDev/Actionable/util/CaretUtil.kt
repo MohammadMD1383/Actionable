@@ -6,6 +6,8 @@ import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.charAtOrNull
 import ir.mmd.intellijDev.Actionable.util.ext.contains
 import ir.mmd.intellijDev.Actionable.util.ext.isPositive
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * This is a wrapper class over [Caret] for convenient movement
@@ -40,7 +42,17 @@ class CaretUtil(private val caret: Caret) {
 		offset = caret.offset
 	}
 	
-	private fun commit() = caret.moveToOffset(offset)
+	fun commit() = caret.moveToOffset(offset)
+	
+	/**
+	 * Makes a caret selection from [Caret.getOffset] to [CaretUtil.offset]
+	 *
+	 * **This method will take care of selection offsets to be from lower to higher**
+	 */
+	fun makeOffsetDiffSelection() {
+		val caretOffset = caret.offset
+		caret.setSelection(min(caretOffset, offset), max(caretOffset, offset))
+	}
 	
 	private fun relativePositionToOffset(pos: Int): Int = offset + if (pos.isPositive) pos - 1 else pos
 	
