@@ -35,6 +35,16 @@ inline fun <reified T : PsiElement> PsiElement.parentOfType(withSelf: Boolean = 
 	return PsiTreeUtil.getParentOfType(this, T::class.java, !withSelf)
 }
 
+inline val PsiElement.parentNoWhitespace: PsiElement?
+	get() {
+		var parent: PsiElement? = parent
+		while (parent is PsiWhiteSpace) {
+			parent = parent.parent
+		}
+		
+		return parent
+	}
+
 inline fun psiElementVisitor(crossinline block: (PsiElement) -> Unit) = object : PsiElementVisitor() {
 	override fun visitElement(element: PsiElement) = block(element)
 }
