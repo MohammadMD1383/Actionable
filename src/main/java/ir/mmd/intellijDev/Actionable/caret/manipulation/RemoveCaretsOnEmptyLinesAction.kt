@@ -1,27 +1,23 @@
 package ir.mmd.intellijDev.Actionable.caret.manipulation
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-
+import com.intellij.openapi.editor.Caret
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
+import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
 
-class RemoveCaretsOnEmptyLinesAction : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) {
-		val editor = e.editor
-		val document = editor.document
-		val caretModel = editor.caretModel
+class RemoveCaretsOnEmptyLinesAction : MultiCaretAction() {
+	context (LazyEventContext)
+	override fun perform(caret: Caret) {
+		val lineNumber = document.getLineNumber(caret.offset)
+		val startOffset = document.getLineStartOffset(lineNumber)
+		val endOffset = document.getLineEndOffset(lineNumber)
+		val line = document.getText(startOffset..endOffset)
 		
-		caretModel.allCarets.forEach {
-			val lineNumber = document.getLineNumber(it.offset)
-			val startOffset = document.getLineStartOffset(lineNumber)
-			val endOffset = document.getLineEndOffset(lineNumber)
-			val line = document.getText(startOffset..endOffset)
-			
-			if (line.isBlank()) {
-				caretModel.removeCaret(it)
-			}
+		if (line.isBlank()) {
+			caretModel.removeCaret(caret)
 		}
 	}
 	
