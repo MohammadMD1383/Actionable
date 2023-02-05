@@ -85,6 +85,15 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.15.0:</b><br>
+				fixed issues #21 #26 #29<br>
+				other major fixes and cleanups<br>
+				new actions:<br>
+				<ul>
+					<li>Select Until ...</li>
+					<li>Move Caret Up The Tree</li>
+				</ul>
+			</li>
 			<li><b>3.14.0:</b><br>
 				fixed issue #28<br>
 				other minor fixes<br>
