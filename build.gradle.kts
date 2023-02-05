@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-	classpath("/Files/JetBrains/idea/223.7571.4/plugins/javascript-impl")
+	classpath("lib")
 	
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
@@ -55,16 +55,8 @@ intellij {
 		"Kotlin"
 	)
 	
-	// localPath.set("/Files/jetbrains/rider")
-	// localPath.set("/Files/jetbrains/idea")
-	// localPath.set("/Files/jetbrains/clion")
-	// localPath.set("/Files/jetbrains/studio")
-	
 	type.set("IC")
-	
 	version.set("2022.3")
-	// version.set("2021.3.1")
-	// version.set("2020.1")
 }
 
 tasks.withType<RunIdeTask> {
