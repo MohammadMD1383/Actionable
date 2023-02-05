@@ -64,10 +64,27 @@ inline fun Document.getLineTrailingWhitespaceLength(line: Int) = getLineTrailing
 fun Document.getWordBoundaries(
 	offset: Int,
 	separators: String
-): IntArray = intArrayOf(0, 0).applyWith(separators.toCharArray(), charsSequence) { chars, sequence ->
-	if ((charAtOrNull(offset) ?: return@applyWith) in separators) return@applyWith
-	set(0, sequence.lastIndexOfAny(chars, offset - 1).let { if (it == -1) 0 else it + 1 })
-	set(1, sequence.indexOfAny(chars, offset + 1).let { if (it == -1) sequence.lastIndex else it })
+): IntArray = intArrayOf(0, 0).apply {
+	val chars = separators.toCharArray()
+	val sequence = charsSequence
+	
+	if ((charAtOrNull(offset) ?: return@apply) in separators) {
+		return@apply
+	}
+	
+	set(
+		0,
+		sequence.lastIndexOfAny(chars, offset - 1).let {
+			if (it == -1) 0 else it + 1
+		}
+	)
+	
+	set(
+		1,
+		sequence.indexOfAny(chars, offset + 1).let {
+			if (it == -1) sequence.lastIndex else it
+		}
+	)
 }
 
 /**

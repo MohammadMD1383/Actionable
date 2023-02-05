@@ -6,13 +6,17 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
+/**
+ * State for html typing actions
+ */
 @com.intellij.openapi.components.State(
 	name = "ir.mmd.intellijDev.Actionable.typing.html.state.State",
 	storages = @Storage("Actionable.Typing.HTML.State.xml")
 )
 public class State implements PersistentStateComponent<State> {
-	
+	/**
+	 * @see ir.mmd.intellijDev.Actionable.typing.html.ExpandTagOnType
+	 */
 	public boolean expandTagOnTypeEnabled = false;
 	
 	@Override

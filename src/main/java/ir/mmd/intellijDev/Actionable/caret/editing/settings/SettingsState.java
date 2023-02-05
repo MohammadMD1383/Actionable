@@ -7,7 +7,9 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
+/**
+ * Settings State for {@code Actionable > Caret > Editing}
+ */
 @State(
 	name = "ir.mmd.intellijDev.Actionable.caret.editing.settings",
 	storages = @Storage("Actionable.CaretEditingSettingsState.xml")

@@ -4,7 +4,6 @@ import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.charAtOrNull
-import ir.mmd.intellijDev.Actionable.util.ext.contains
 import ir.mmd.intellijDev.Actionable.util.ext.isPositive
 import kotlin.math.max
 import kotlin.math.min

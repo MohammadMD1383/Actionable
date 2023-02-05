@@ -1,13 +1,18 @@
 package ir.mmd.intellijDev.Actionable.typing
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.project.Project
 import com.intellij.spellchecker.SpellCheckerManager
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
+import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
+import ir.mmd.intellijDev.Actionable.util.ext.allCaretsHaveSelection
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.hasEditorWith
+import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
-abstract class PredictWordsAction : AnAction() {
+abstract class PredictWordsAction : MultiCaretAction() {
 	abstract fun transformWords(words: MutableList<String>): String
 	
 	private fun predictWords(project: Project, text: String) = mutableListOf<String>().apply {
@@ -38,20 +43,18 @@ abstract class PredictWordsAction : AnAction() {
 		}
 	}
 	
-	override fun actionPerformed(e: AnActionEvent) {
-		val project = e.project!!
-		val editor = e.editor
+	context (LazyEventContext)
+	override fun perform(caret: Caret) {
+		val text = transformWords(predictWords(project!!, caret.selectedText!!))
 		
 		project.runWriteCommandAction {
-			editor.caretModel.allCarets.forEach { caret ->
-				val text = transformWords(predictWords(project, caret.selectedText!!))
-				editor.document.replaceString(caret.selectionStart, caret.selectionEnd, text)
-				caret.setSelection(caret.selectionStart, caret.selectionStart + text.length)
-			}
+			editor.document.replaceString(caret.selectionStart, caret.selectionEnd, text)
 		}
+		
+		caret.setSelection(caret.selectionStart, caret.selectionStart + text.length)
 	}
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditorWith { allCaretsHasSelection } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasEditorWith { allCaretsHaveSelection } }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

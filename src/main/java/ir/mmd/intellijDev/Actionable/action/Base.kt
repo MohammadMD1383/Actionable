@@ -54,12 +54,29 @@ abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction {
 	constructor(name: String) : super(name)
 	constructor() : super()
 	
+	/**
+	 * backing field for [data]
+	 */
 	private var _data: T? = null
+	
+	/**
+	 * return value of [initialize] will be stored in this field per action execution
+	 */
 	protected val data: T & Any get() = _data!!
 	
+	/**
+	 * This method will be called once before any [perform] calls
+	 *
+	 * Return value of this method will be stored in [data] field for later use
+	 */
 	context (LazyEventContext)
 	abstract fun initialize(): T & Any
 	
+	/**
+	 * This method will be executed once after all [perform] calls have finished
+	 *
+	 * This can be used to do cleanup ...
+	 */
 	context (LazyEventContext)
 	open fun finalize() = Unit
 	
@@ -72,7 +89,7 @@ abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction {
 }
 
 /**
- * Runs only if there is one [Caret] in the [Editor]
+ * Runs only if there is one [Caret] in the [Editor] **OR** Runs only for the primary caret
  *
  * @param forceSingleCaret force to have single caret in [AnAction.update]
  */
@@ -91,7 +108,7 @@ abstract class SingleCaretAction(private val forceSingleCaret: Boolean = true) :
 	 * `hasEditorWith { caretCount == 1 }` will automatically be applied to this if [forceSingleCaret] is set to `true`
 	 */
 	context (AnActionEvent)
-	abstract val actionEnabled: Boolean
+	open val actionEnabled: Boolean get() = true
 	
 	override fun update(e: AnActionEvent) = e.enableIf { actionEnabled and (!forceSingleCaret || hasEditorWith { caretCount == 1 }) }
 }

@@ -50,6 +50,6 @@ class RemoveDuplicatesAction : MultiCaretActionWithInitialization<HashSet<String
 	}
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { caretCount > 1 && allCaretsHasSelection } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { caretCount > 1 && allCaretsHaveSelection } }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

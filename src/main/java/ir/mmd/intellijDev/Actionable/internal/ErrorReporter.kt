@@ -11,7 +11,9 @@ import java.io.IOException
 import java.net.URI
 import java.net.URLEncoder
 
-
+/**
+ * Error reporter for plugin
+ */
 class ErrorReporter : ErrorReportSubmitter() {
 	override fun getReportActionText() = "Create Issue on Github"
 	

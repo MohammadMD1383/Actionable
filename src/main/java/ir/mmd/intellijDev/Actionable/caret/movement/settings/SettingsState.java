@@ -7,7 +7,9 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
+/**
+ * Settings State for {@code Actionable > Caret > Editing}
+ */
 @State(
 	name = "ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState",
 	storages = @Storage("Actionable.CaretMovementSettingsState.xml")
@@ -19,7 +21,28 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	 * see {@link UI} for what these constants mean
 	 */
 	public static class WSBehaviour {
+		/**
+		 * example of moving caret with this mode
+		 * <pre>
+		 *     hello| world from java
+		 *     hello |world from java
+		 *     hello world| from java
+		 *     hello world |from java
+		 *     ...
+		 * </pre>
+		 */
 		public static final int STOP_AT_CHAR_TYPE_CHANGE = 0;
+		
+		/**
+		 * example of moving caret with this mode
+		 * <pre>
+		 *     hello| world from java
+		 *     hello world| from java
+		 *     hello world from| java
+		 *     hello world from java|
+		 *     ...
+		 * </pre>
+		 */
 		public static final int STOP_AT_NEXT_SAME_CHAR_TYPE = 1;
 	}
 	
@@ -32,12 +55,9 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 		public static final @NotNull String hardStopSeparators = " ";
 	}
 	
-	
 	public @NotNull String wordSeparators = Defaults.wordSeparators;
 	
-	
 	public int wordSeparatorsBehaviour = Defaults.wordSeparatorsBehaviour;
-	
 	
 	public @NotNull String hardStopCharacters = Defaults.hardStopSeparators;
 	

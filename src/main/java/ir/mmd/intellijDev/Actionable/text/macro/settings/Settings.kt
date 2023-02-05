@@ -9,6 +9,9 @@ import ir.mmd.intellijDev.Actionable.util.withService
 import javax.swing.JComponent
 
 
+/**
+ * Settings [Configurable] UI for `Actionable > Macro`
+ */
 class Settings : Configurable {
 	private var ui: UI? = null
 	

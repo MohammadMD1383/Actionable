@@ -5,7 +5,9 @@ import com.intellij.openapi.options.Configurable
 import ir.mmd.intellijDev.Actionable.util.withService
 import javax.swing.JComponent
 
-
+/**
+ * Settings [Configurable] UI for `Actionable > Find`
+ */
 class Settings : Configurable {
 	private var ui: UI? = null
 	

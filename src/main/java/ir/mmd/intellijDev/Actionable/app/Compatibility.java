@@ -3,10 +3,22 @@ package ir.mmd.intellijDev.Actionable.app;
 import com.intellij.openapi.application.ApplicationInfo;
 import org.jetbrains.annotations.NotNull;
 
-public final class Compatibility {
+/**
+ * This class is used to check compatibility of some actions with IDE versions if some actions have
+ * some functionality that is dependent on the version of the IDE
+ */
+public final class Compatibility{
+	private Compatibility() {
+	}
+	
+	/**
+	 * This class holds different versions of the IDE that are needed
+	 */
 	public static final class Version {
+		/**
+		 * Returns the current IDE version that plugin is running on
+		 */
 		public static final int[] currentVersion;
-		public static final int[] _193_5233_102_ = new int[]{193, 5233, 102};
 		
 		static {
 			final String[] strings = ApplicationInfo.getInstance().getBuild().asStringWithoutProductCodeAndSnapshot().split("\\.");
@@ -18,6 +30,9 @@ public final class Compatibility {
 		}
 	}
 	
+	/**
+	 * This method will check if the current IDE version is higher or equal to the given {@code version}
+	 */
 	public static boolean isCompatibleWith(int @NotNull [] version) {
 		int[] currentVersion = Version.currentVersion;
 		

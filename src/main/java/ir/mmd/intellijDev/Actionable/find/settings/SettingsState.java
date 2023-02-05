@@ -7,7 +7,9 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
+/**
+ * Settings State for {@code Actionable > Find}
+ */
 @State(
 	name = "ir.mmd.intellijDev.Actionable.find.settings.SettingsState",
 	storages = @Storage("Actionable.FindSettingsState.xml")

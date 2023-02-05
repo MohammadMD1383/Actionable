@@ -1,23 +1,31 @@
 package ir.mmd.intellijDev.Actionable.util.ext
 
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.PsiTreeUtil
 import kotlin.reflect.KClass
 
+/**
+ * For Compatibility
+ *
+ * Returns next leaf element
+ */
+@Suppress("NOTHING_TO_INLINE")
 inline fun PsiElement.nextLeaf(skipEmptyElements: Boolean = false) = PsiTreeUtil.nextLeaf(this, skipEmptyElements)
+
+/**
+ * For Compatibility
+ *
+ * Returns previous leaf element
+ */
+@Suppress("NOTHING_TO_INLINE")
 inline fun PsiElement.prevLeaf(skipEmptyElements: Boolean = false) = PsiTreeUtil.prevLeaf(this, skipEmptyElements)
-inline fun PsiElement.acceptChildren(crossinline block: (PsiElement) -> Unit) = acceptChildren(psiElementVisitor(block))
 
-fun PsiElement.prevLeafNoWhitespace(skipEmptyElements: Boolean = false): PsiElement? {
-	var element = prevLeaf(skipEmptyElements)
-	while (element != null && element is PsiWhiteSpace) {
-		element = element.prevLeaf(skipEmptyElements)
-	}
-	return element
-}
-
+/**
+ * For Compatibility
+ *
+ * Returns next leaf element but not a [PsiWhiteSpace]
+ */
 fun PsiElement.nextLeafNoWhitespace(skipEmptyElements: Boolean = false): PsiElement? {
 	var element = nextLeaf(skipEmptyElements)
 	while (element != null && element is PsiWhiteSpace) {
@@ -26,15 +34,41 @@ fun PsiElement.nextLeafNoWhitespace(skipEmptyElements: Boolean = false): PsiElem
 	return element
 }
 
+/**
+ * For Compatibility
+ *
+ * Returns previous leaf element but not a [PsiWhiteSpace]
+ */
+fun PsiElement.prevLeafNoWhitespace(skipEmptyElements: Boolean = false): PsiElement? {
+	var element = prevLeaf(skipEmptyElements)
+	while (element != null && element is PsiWhiteSpace) {
+		element = element.prevLeaf(skipEmptyElements)
+	}
+	return element
+}
+
+/**
+ * For Compatibility
+ *
+ * Returns parent elements of types [classes]
+ */
 fun <T : PsiElement> PsiElement.parentOfTypes(vararg classes: KClass<out T>, withSelf: Boolean = false): T? {
 	val start = if (withSelf) this else this.parent
 	return PsiTreeUtil.getNonStrictParentOfType(start, *classes.map { it.java }.toTypedArray())
 }
 
+/**
+ * For Compatibility
+ *
+ * Returns parent element of type [T]
+ */
 inline fun <reified T : PsiElement> PsiElement.parentOfType(withSelf: Boolean = false): T? {
 	return PsiTreeUtil.getParentOfType(this, T::class.java, !withSelf)
 }
 
+/**
+ * Returns parent element but not a [PsiWhiteSpace]
+ */
 inline val PsiElement.parentNoWhitespace: PsiElement?
 	get() {
 		var parent: PsiElement? = parent
@@ -44,7 +78,3 @@ inline val PsiElement.parentNoWhitespace: PsiElement?
 		
 		return parent
 	}
-
-inline fun psiElementVisitor(crossinline block: (PsiElement) -> Unit) = object : PsiElementVisitor() {
-	override fun visitElement(element: PsiElement) = block(element)
-}

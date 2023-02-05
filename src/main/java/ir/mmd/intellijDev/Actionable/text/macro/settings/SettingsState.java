@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * Settings State for {@code Actionable > Caret > Editing}
+ */
 @State(
 	name = "ir.mmd.intellijDev.Actionable.text.macro.settings.SettingsState",
 	storages = @Storage("Actionable.Text.MacroSettingsState.xml")

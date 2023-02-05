@@ -42,7 +42,6 @@ class CutWordAtCaret : CaretEditingAction() {
 		```
 	"""
 )
-
 class CutElementAtCaret : CaretEditingAction() {
 	context(LazyEventContext)
 	override fun perform(caret: Caret) = copyElementAtCaret(true)
@@ -55,7 +54,6 @@ class CutElementAtCaret : CaretEditingAction() {
 		everything is clear! no need for an example :)
 	"""
 )
-
 class CopyWordAtCaret : CaretEditingAction() {
 	override fun isDumbAware() = true
 	context(LazyEventContext)
@@ -81,7 +79,6 @@ class CopyWordAtCaret : CaretEditingAction() {
 		```
 	"""
 )
-
 class CopyElementAtCaret : CaretEditingAction() {
 	context(LazyEventContext)
 	override fun perform(caret: Caret) = copyElementAtCaret(false)
