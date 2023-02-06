@@ -16,6 +16,7 @@
 			<li>Predict Words: Snake-Case</li>
 			<li>Predict Words: Kebab-Case</li>
 			<li>Predict Words: Spaced</li>
+			<li>Duplicate Line and Paste Contents from Clipboard</li>
 			<li>Add Selection to Macros</li>
 			<li>Add Line Above Caret Without Moving Caret</li>
 			<li>Add Line Below Caret Without Moving Caret</li>
@@ -390,18 +391,28 @@
 			
 			<group id="ir.mmd.intellijDev.Actionable.TextGroup" text="Text" popup="true">
 				<action
-					class="ir.mmd.intellijDev.Actionable.text.macro.AddSelectionToMacrosAction"
-					id="ir.mmd.intellijDev.Actionable.text.macro.AddSelectionToMacrosAction"
-					text="Add Selection to Macros"
-					description="Adds the current selection to the macros"/>
+					class="ir.mmd.intellijDev.Actionable.text.DuplicateLineAndPasteClipboardContentAction"
+					id="ir.mmd.intellijDev.Actionable.text.DuplicateLineAndPasteClipboardContentAction"
+					text="Duplicate Line and Paste Contents from Clipboard"
+					description="Duplicates line under caret for each line of clipboard content and pastes that line at current caret position"/>
 				
-				<separator text="Recorded Macros"/>
+				<separator/>
 				
-				<group
-					id="ir.mmd.intellijDev.Actionable.text.macro.MacrosActionGroup"
-					text="Macros"
-					description="Recorded macros"
-					searchable="true"/>
+				<group id="ir.mmd.intellijDev.Actionable.MacroGroup" text="Macro" popup="true">
+					<action
+						class="ir.mmd.intellijDev.Actionable.text.macro.AddSelectionToMacrosAction"
+						id="ir.mmd.intellijDev.Actionable.text.macro.AddSelectionToMacrosAction"
+						text="Add Selection to Macros"
+						description="Adds the current selection to the macros"/>
+					
+					<separator text="Recorded Macros"/>
+					
+					<group
+						id="ir.mmd.intellijDev.Actionable.text.macro.MacrosActionGroup"
+						text="Macros"
+						description="Recorded macros"
+						searchable="true"/>
+				</group>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.EditingGroup" text="Editing" popup="true">

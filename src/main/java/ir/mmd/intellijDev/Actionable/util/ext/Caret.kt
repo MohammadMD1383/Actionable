@@ -18,28 +18,28 @@ inline val Caret.selectionRangeCompat: IntRange get() = selectionStart..selectio
 inline val Caret.util: CaretUtil get() = CaretUtil(this)
 
 /**
- * Moves the [Caret] one character back
+ * Moves the [Caret] [n] characters back
  */
 @Suppress("NOTHING_TO_INLINE")
-inline fun Caret.moveBackward() = moveToOffset(offset - 1)
+inline fun Caret.moveBackward(n: Int = 1) = moveToOffset(offset - n)
 
 /**
- * Moves the [Caret] one character forward
+ * Moves the [Caret] [n] characters forward
  */
 @Suppress("NOTHING_TO_INLINE")
-inline fun Caret.moveForward() = moveToOffset(offset + 1)
+inline fun Caret.moveForward(n: Int = 1) = moveToOffset(offset + n)
 
 /**
- * Moves the [Caret] one line up
+ * Moves the [Caret] [n] lines up
  */
 @Suppress("NOTHING_TO_INLINE")
-inline fun Caret.moveUp() = moveToLogicalPosition(LogicalPosition(logicalPosition.line - 1, logicalPosition.column))
+inline fun Caret.moveUp(n: Int = 1) = moveToLogicalPosition(LogicalPosition(logicalPosition.line - n, logicalPosition.column))
 
 /**
- * Moves the [Caret] one line down
+ * Moves the [Caret] [n] lines down
  */
 @Suppress("NOTHING_TO_INLINE")
-inline fun Caret.moveDown() = moveToLogicalPosition(LogicalPosition(logicalPosition.line + 1, logicalPosition.column))
+inline fun Caret.moveDown(n: Int = 1) = moveToLogicalPosition(LogicalPosition(logicalPosition.line + n, logicalPosition.column))
 
 /**
  * Simple sugar replacement for [Caret.moveToOffset]
