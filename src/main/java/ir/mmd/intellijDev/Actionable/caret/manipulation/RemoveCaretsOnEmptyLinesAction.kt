@@ -10,7 +10,7 @@ import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
 
 @Documentation(
 	title = "Remove Carets On Empty Lines",
-	description = "Removes all carets that are on empty/blank lines.",
+	description = "Removes all carets that are on empty/blank lines."
 )
 class RemoveCaretsOnEmptyLinesAction : MultiCaretAction() {
 	context (LazyEventContext)
