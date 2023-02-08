@@ -6,6 +6,10 @@ title: Actionable
 
 ## Features:
 
+[Duplicate Line and Paste Contents from Clipboard](DuplicateLineAndPasteClipboardContentAction.md)
+
+[Remove Duplicate Selections](RemoveDuplicatesAction.md)
+
 [Cut Word at Caret](CutWordAtCaret.md)
 
 [Cut Element at Caret](CutElementAtCaret.md)
@@ -14,11 +18,11 @@ title: Actionable
 
 [Copy Element at Caret](CopyElementAtCaret.md)
 
+[Remove Carets On Empty Lines](RemoveCaretsOnEmptyLinesAction.md)
+
 [Justify Carets End and Shift Text](JustifyCaretsEndAndShift.md)
 
 [Justify Carets Start](JustifyCaretsStart.md)
 
 [Justify Carets End](JustifyCaretsEnd.md)
-
-[Remove Duplicate Selections](RemoveDuplicates.md)
 

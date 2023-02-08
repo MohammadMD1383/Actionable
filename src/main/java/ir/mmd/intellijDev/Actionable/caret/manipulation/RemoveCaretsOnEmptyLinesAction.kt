@@ -5,9 +5,14 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
+import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
-
+@Documentation(
+	title = "Remove Carets On Empty Lines",
+	description = "Removes all carets that are on empty/blank lines.",
+	example = """Everything is clear"""
+)
 class RemoveCaretsOnEmptyLinesAction : MultiCaretAction() {
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {
