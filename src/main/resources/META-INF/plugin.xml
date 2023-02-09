@@ -89,6 +89,16 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.16.0:</b><br>
+				fixed issues #19 #33<br>
+				added some documentation in repo<br>
+				new actions:<br>
+				<ul>
+					<li>Open Keymap Settings Page</li>
+					<li>Duplicate Line And Paste Clipboard Content</li>
+				</ul>
+				Thanks to: <a href="https://github.com/j-a-s-o-n-g">Jason</a>
+			</li>
 			<li><b>3.15.0:</b><br>
 				fixed issues #21 #26 #29<br>
 				other major fixes and cleanups<br>
