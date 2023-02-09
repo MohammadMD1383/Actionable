@@ -49,7 +49,11 @@ class DuplicateLineAndPasteClipboardContentAction : SingleCaretAction() {
 		}
 
 		val contents = (Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as String)
-			.split("\n") as MutableList
+			.split("\n").toMutableList()
+		
+		if (contents.isEmpty()) {
+			return
+		}
 
 		val selectionStart = caret.selectionStart
 		val selectionEnd = caret.selectionEnd
