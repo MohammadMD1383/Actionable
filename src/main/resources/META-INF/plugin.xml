@@ -78,6 +78,7 @@
 			<li>Set Editor Tab Placement to Bottom</li>
 			<li>Set Editor Tab Placement to Right</li>
 			<li>Find Is Case-Sensitive</li>
+			<li>Open Keymap Settings</li>
 			<li>Auto Insert Semicolons</li>
 			<li>Auto Class Case</li>
 			<li>Just in Time Refactoring</li>
@@ -813,7 +814,15 @@
 					description="A shortcut for `is find case-sensitive` option in Actionable settings"/>
 			</group>
 			
-			<group id="ir.mmd.intellijDev.Actionable.ExtraGroup" text="Extra" popup="true"/>
+			<group id="ir.mmd.intellijDev.Actionable.ExtraGroup" text="Extra" popup="true">
+				<separator text="IDE"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.extra.ide.keymap.OpenKeymapSettingsAction"
+					id="ir.mmd.intellijDev.Actionable.extra.ide.keymap.OpenKeymapSettingsAction"
+					text="Open Keymap Settings"
+					description="Opens Settings > Keymap dialog"/>
+			</group>
 		</group>
 	</actions>
 </idea-plugin>
