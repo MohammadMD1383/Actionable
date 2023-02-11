@@ -8,25 +8,47 @@ import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
 class MacroAction(name: String, private val macro: String) : MultiCaretAction(name) {
-	private val macroLength = macro.length
-	
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {
+		val evaluatedMacro = LazyMacroContext().run { evaluateMacro() }
+		val selectionStart = caret.selectionStart
+		
 		project.runWriteCommandAction {
-			if (caret.hasSelection()) {
-				val (start, end) = caret.selectionRangeCompat
-				caret.removeSelection()
-				document.replaceString(start, end, macro)
-				caret moveTo macroLength + start
-			} else {
-				val offset = caret.offset
-				document.insertString(offset, macro)
-				caret moveTo macroLength + offset
+			document.replaceString(selectionStart, caret.selectionEnd, evaluatedMacro.text)
+			caret.removeSelection()
+			caret moveTo selectionStart + evaluatedMacro.caretFinalOffset
+		}
+	}
+	
+	context (LazyMacroContext)
+	private fun evaluateMacro(): EvaluatedMacro {
+		var text = macro.replace("""\$([A-Z_]+)\$""".toRegex()) {
+			when (it.groupValues[1]) {
+				"SELECTION" -> selection
+				else -> ""
 			}
 		}
+		
+		var finalOffset = 0
+		text = text.replace("""\$0\$""".toRegex()) {
+			finalOffset = it.range.first
+			""
+		}
+		
+		return EvaluatedMacro(text, finalOffset)
 	}
 	
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	
+	context (LazyEventContext)
+	private class LazyMacroContext {
+		val selection: String by lazy { selectionModel.selectedText ?: "" }
+	}
+	
+	private data class EvaluatedMacro(
+		val text: String,
+		val caretFinalOffset: Int
+	)
 }

@@ -1,44 +1,86 @@
 package ir.mmd.intellijDev.Actionable.text.macro.settings;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.util.HashMap;
-import java.util.Map;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.ui.ListSpeedSearch;
+import com.intellij.ui.components.JBList;
+import ir.mmd.intellijDev.Actionable.text.macro.MacroUtilKt;
+import org.jetbrains.annotations.NotNull;
 
-public class UI {
-	private final Object[] columnNames = new Object[]{"Name", "Macro"};
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class UI implements Disposable {
+	private final Path macroStorePath = MacroUtilKt.getMacroStorePath();
+	private JScrollPane component;
+	private JLabel pathLabel;
+	private JBList<String> macroList;
+	private Editor macroEditor;
+	private JComponent macroEditorComponent;
 	
-	private JPanel component;
-	private JTable macrosTable;
-	
-	public JPanel getComponent() {
+	public JScrollPane getComponent() {
 		return component;
 	}
 	
-	public Map<String, String> getMacros() {
-		Map<String, String> macros = new HashMap<>();
+	public UI() {
+		pathLabel.setText("Macro store path: " + macroStorePath);
 		
-		for (int i = 0; i < macrosTable.getRowCount(); i++) {
-			String name = (String) macrosTable.getValueAt(i, 0);
-			String macro = (String) macrosTable.getValueAt(i, 1);
-			if (name.trim().isEmpty() || macro.isEmpty()) continue;
-			
-			macros.put(name, macro);
+		new ListSpeedSearch<>(macroList);
+		macroList.addListSelectionListener(this::listSelectionChanged);
+		List<String> macroNames = MacroUtilKt.getMacroNames();
+		DefaultListModel<String> model = new DefaultListModel<>();
+		model.addAll(macroNames);
+		macroList.setModel(model);
+		
+		if (macroNames != null && !macroNames.isEmpty()) {
+			macroList.setSelectedIndex(0);
 		}
-		
-		return macros;
 	}
 	
-	public void setMacros(Map<String, String> macros) {
-		Object[][] mappedMacros = new Object[macros.size()][2];
-		int counter = 0;
+	private void createUIComponents() {
+		EditorFactory factory = EditorFactory.getInstance();
+		Document document = factory.createDocument("");
+		macroEditor = factory.createEditor(document);
+		macroEditorComponent = macroEditor.getComponent();
 		
-		for (Map.Entry<String, String> e : macros.entrySet()) {
-			mappedMacros[counter][0] = e.getKey();
-			mappedMacros[counter][1] = e.getValue();
-			counter++;
+		document.addDocumentListener(new DocumentListener() {
+			@Override
+			public void documentChanged(@NotNull DocumentEvent event) {
+				String text = event.getDocument().getText();
+				try {
+					Files.write(Paths.get(macroStorePath.toString(), macroList.getSelectedValue()), text.getBytes());
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		});
+	}
+	
+	void listSelectionChanged(ListSelectionEvent e) {
+		Path selectedMacro = Paths.get(macroStorePath.toString(), macroList.getSelectedValue());
+		try (Stream<String> lines = Files.lines(selectedMacro)) {
+			ApplicationManager.getApplication().runWriteAction(
+				() -> macroEditor.getDocument().setText(lines.collect(Collectors.joining("\n")))
+			);
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
 		}
-		
-		macrosTable.setModel(new DefaultTableModel(mappedMacros, columnNames));
+	}
+	
+	@Override
+	public void dispose() {
+		EditorFactory.getInstance().releaseEditor(macroEditor);
 	}
 }

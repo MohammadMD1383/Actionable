@@ -1,21 +1,13 @@
 package ir.mmd.intellijDev.Actionable.app
 
-import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.application.PreloadingActivity
 import com.intellij.openapi.progress.ProgressIndicator
-import ir.mmd.intellijDev.Actionable.action.registerMacro
-import ir.mmd.intellijDev.Actionable.text.macro.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.util.service
+import ir.mmd.intellijDev.Actionable.text.macro.registerMacros
 
 class Startup : PreloadingActivity() {
-	override fun preload(indicator: ProgressIndicator?) {
-		initMacros()
+	override fun preload() {
+		registerMacros()
 	}
 	
-	private fun initMacros() {
-		val actionManager = ActionManager.getInstance()
-		service<SettingsState>().macros.forEach { (name, macro) ->
-			actionManager.registerMacro(name, macro)
-		}
-	}
+	override fun preload(indicator: ProgressIndicator?) = preload()
 }

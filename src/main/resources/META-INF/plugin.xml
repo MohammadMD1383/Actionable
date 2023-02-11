@@ -19,7 +19,7 @@
 			<li>Predict Words: Kebab-Case</li>
 			<li>Predict Words: Spaced</li>
 			<li>Duplicate Line and Paste Contents from Clipboard</li>
-			<li>Add Selection to Macros</li>
+			<li>Open Macro Settings</li>
 			<li>Add Line Above Caret Without Moving Caret</li>
 			<li>Add Line Below Caret Without Moving Caret</li>
 			<li>Empty Line</li>
@@ -306,8 +306,6 @@
 			serviceImplementation="ir.mmd.intellijDev.Actionable.find.settings.SettingsState"/>
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState"/>
-		<applicationService
-			serviceImplementation="ir.mmd.intellijDev.Actionable.text.macro.settings.SettingsState"/>
 		
 		<projectService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.html.state.State"/>
@@ -413,17 +411,15 @@
 				
 				<group id="ir.mmd.intellijDev.Actionable.MacroGroup" text="Macro" popup="true">
 					<action
-						class="ir.mmd.intellijDev.Actionable.text.macro.AddSelectionToMacrosAction"
-						id="ir.mmd.intellijDev.Actionable.text.macro.AddSelectionToMacrosAction"
-						text="Add Selection to Macros"
-						description="Adds the current selection to the macros"/>
+						class="ir.mmd.intellijDev.Actionable.text.macro.OpenMacroSettingsPageAction"
+						id="ir.mmd.intellijDev.Actionable.text.macro.OpenMacroSettingsPageAction"
+						text="Open Macro Settings"/>
 					
-					<separator text="Recorded Macros"/>
+					<separator text="Available Macros"/>
 					
 					<group
 						id="ir.mmd.intellijDev.Actionable.text.macro.MacrosActionGroup"
-						text="Macros"
-						description="Recorded macros"
+						text="Available Macros"
 						searchable="true"/>
 				</group>
 			</group>
