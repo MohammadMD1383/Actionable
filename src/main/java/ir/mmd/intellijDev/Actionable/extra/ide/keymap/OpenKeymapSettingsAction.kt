@@ -1,6 +1,5 @@
 package ir.mmd.intellijDev.Actionable.extra.ide.keymap
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.keymap.impl.ui.KeymapPanel
@@ -11,6 +10,5 @@ class OpenKeymapSettingsAction : AnAction() {
 		ShowSettingsUtil.getInstance().showSettingsDialog(e.project, KeymapPanel::class.java)
 	}
 	
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 	override fun isDumbAware() = true
 }
