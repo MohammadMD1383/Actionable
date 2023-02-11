@@ -2,10 +2,7 @@ package ir.mmd.intellijDev.Actionable.action
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.editor.Caret
-import com.intellij.openapi.editor.CaretModel
-import com.intellij.openapi.editor.Document
-import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.editor.*
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import ir.mmd.intellijDev.Actionable.util.ext.*
@@ -20,6 +17,7 @@ class LazyEventContext(val event: AnActionEvent) {
 	val editor: Editor by lazy { event.editor }
 	val document: Document by lazy { editor.document }
 	val caretModel: CaretModel by lazy { editor.caretModel }
+	val selectionModel: SelectionModel by lazy { editor.selectionModel }
 	val allCarets: List<Caret> by lazy { caretModel.allCarets }
 	val primaryCaret: Caret by lazy { caretModel.primaryCaret }
 	val psiFile: PsiFile by lazy { event.psiFile }
@@ -108,7 +106,8 @@ abstract class SingleCaretAction(private val forceSingleCaret: Boolean = true) :
 	 * `hasEditorWith { caretCount == 1 }` will automatically be applied to this if [forceSingleCaret] is set to `true`
 	 */
 	context (AnActionEvent)
-	open val actionEnabled: Boolean get() = true
+	open val actionEnabled: Boolean
+		get() = true
 	
 	override fun update(e: AnActionEvent) = e.enableIf { actionEnabled and (!forceSingleCaret || hasEditorWith { caretCount == 1 }) }
 }
