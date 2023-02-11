@@ -13,11 +13,7 @@ import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.codeStyle.JavaCodeStyleManager
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.ui.EditorTextField
-
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.hasEditor
-import ir.mmd.intellijDev.Actionable.util.ext.psiFile
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
+import ir.mmd.intellijDev.Actionable.util.ext.*
 
 
 class AddImportDialogAction : AnAction() {
@@ -45,6 +41,6 @@ class AddImportDialogAction : AnAction() {
 		}
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && psiFile.fileType is JavaFileType }
+	override fun update(e: AnActionEvent) = e.enableIf { hasEditor and hasPsiFileWith { fileType is JavaFileType } }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

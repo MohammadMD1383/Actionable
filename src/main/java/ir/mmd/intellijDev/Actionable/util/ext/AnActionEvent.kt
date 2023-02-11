@@ -7,6 +7,21 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiFile
 
 /**
+ * Checks whether the [AnActionEvent] has a [PsiFile] instance or not
+ *
+ * @see [AnActionEvent.hasPsiFileWith]
+ */
+inline val AnActionEvent.hasPsiFile: Boolean get() = getData(CommonDataKeys.PSI_FILE) != null
+
+/**
+ * Checks whether the [AnActionEvent] has a [PsiFile] **and that psiFile satisfies a given criteria**
+ *
+ * @param block the criteria
+ * @see [AnActionEvent.hasPsiFile]
+ */
+inline fun AnActionEvent.hasPsiFileWith(block: PsiFile.() -> Boolean) = getData(CommonDataKeys.PSI_FILE)?.block() ?: false
+
+/**
  * Checks whether the [AnActionEvent] has an [Editor] instance or not
  *
  * @see [AnActionEvent.hasEditorWith]
