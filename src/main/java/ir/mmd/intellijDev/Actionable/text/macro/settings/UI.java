@@ -44,7 +44,9 @@ public class UI implements Disposable {
 		model.addAll(macroNames);
 		macroList.setModel(model);
 		
-		if (macroNames != null && !macroNames.isEmpty()) {
+		if (macroNames == null || macroNames.isEmpty()) {
+			macroEditorComponent.setVisible(false);
+		} else {
 			macroList.setSelectedIndex(0);
 		}
 	}
