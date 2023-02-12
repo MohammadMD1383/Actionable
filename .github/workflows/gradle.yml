@@ -49,3 +49,4 @@ jobs:
         commit: ${{ env.COMMIT }}
         artifacts: "build/distributions/*.zip"
         token: ${{ secrets.GITHUB_TOKEN }}
+        generateReleaseNotes: true
