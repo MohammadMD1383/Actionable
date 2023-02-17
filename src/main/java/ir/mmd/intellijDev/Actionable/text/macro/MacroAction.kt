@@ -10,7 +10,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.*
 class MacroAction(name: String, private val macro: String) : MultiCaretAction(name) {
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {
-		val evaluatedMacro = LazyMacroContext().run { evaluateMacro() }
+		val evaluatedMacro = LazyMacroContext(caret).run { evaluateMacro() }
 		val selectionStart = caret.selectionStart
 		
 		project.runWriteCommandAction {
@@ -25,6 +25,8 @@ class MacroAction(name: String, private val macro: String) : MultiCaretAction(na
 		var text = macro.replace("""\$([A-Z_]+)\$""".toRegex()) {
 			when (it.groupValues[1]) {
 				"SELECTION" -> selection
+				"ELEMENT" -> element
+				"WORD" -> word
 				else -> ""
 			}
 		}
@@ -43,8 +45,10 @@ class MacroAction(name: String, private val macro: String) : MultiCaretAction(na
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 	
 	context (LazyEventContext)
-	private class LazyMacroContext {
+	private class LazyMacroContext(private val caret: Caret) {
 		val selection: String by lazy { selectionModel.selectedText ?: "" }
+		val element: String by lazy { psiFile.elementAt(caret)?.text ?: "" }
+		val word: String by lazy { document.getWordAtOffset(caret.offset) ?: "" }
 	}
 	
 	private data class EvaluatedMacro(
