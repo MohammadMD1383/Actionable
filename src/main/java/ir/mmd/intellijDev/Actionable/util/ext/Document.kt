@@ -88,6 +88,13 @@ fun Document.getWordBoundaries(
 }
 
 /**
+ * Calls [getWordBoundaries] overload with the default `separators + hardStops` from settings
+ */
+fun Document.getWordBoundaries(offset: Int): IntArray {
+	return getWordBoundaries(offset, service<SettingsState>().run { wordSeparators + hardStopCharacters })
+}
+
+/**
  * Returns word at [offset] in the [Document]
  *
  * @param boundaries (Optional) you can set this to get word boundaries (start and end offset in the [Document]) in addition to the word itself
