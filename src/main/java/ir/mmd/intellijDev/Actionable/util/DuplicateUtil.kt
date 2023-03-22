@@ -14,6 +14,7 @@ class DuplicateUtil(private val editor: Editor) {
 	 * [com.intellij.openapi.project.Project] associated with the [editor]
 	 */
 	private val project = editor.project!!
+	
 	/**
 	 * [com.intellij.openapi.editor.Document] associated with the [editor]
 	 */

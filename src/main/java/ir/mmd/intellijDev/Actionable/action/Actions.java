@@ -12,7 +12,8 @@ public final class Actions {
 	/**
 	 * List of action group names needed bt this plugin
 	 */
-	public static final class Groups {;
+	public static final class Groups {
+		
 		private Groups() {
 		}
 		

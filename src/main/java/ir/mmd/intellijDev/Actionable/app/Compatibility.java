@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * This class is used to check compatibility of some actions with IDE versions if some actions have
  * some functionality that is dependent on the version of the IDE
  */
-public final class Compatibility{
+public final class Compatibility {
 	private Compatibility() {
 	}
 	
