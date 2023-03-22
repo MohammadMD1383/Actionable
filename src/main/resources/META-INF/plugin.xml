@@ -89,6 +89,15 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.17.0:</b><br>
+				fixed issues #35<br>
+				fixed an issue with AddImportDialogAction<br>
+				minor improvements<br>
+				new actions:<br>
+				<ul>
+					<li><a href="https://github.com/MohammadMD1383/Actionable/issues/30"><b>NEW: Macros v2!</b></a></li>
+				</ul>
+			</li>
 			<li><b>3.16.0:</b><br>
 				fixed issues #19 #33<br>
 				added some documentation in repo<br>
