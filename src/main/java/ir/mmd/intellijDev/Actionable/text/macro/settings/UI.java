@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +30,8 @@ public class UI implements Disposable {
 	private JBList<String> macroList;
 	private Editor macroEditor;
 	private JComponent macroEditorComponent;
+	private JButton createNewMacroButton;
+	private JButton removeSelectedMacroButton;
 	
 	public JScrollPane getComponent() {
 		return component;
@@ -49,6 +52,42 @@ public class UI implements Disposable {
 		} else {
 			macroList.setSelectedIndex(0);
 		}
+		
+		createNewMacroButton.addActionListener(e -> {
+			String newMacroName = JOptionPane.showInputDialog(component, "Please enter name for the new macro", "New Macro");
+			
+			try {
+				Files.createFile(Paths.get(macroStorePath.toString(), newMacroName));
+				model.add(0, newMacroName);
+				
+				if (model.size() == 1) {
+					macroEditorComponent.setVisible(true);
+				}
+			} catch (FileAlreadyExistsException ignored) {
+				JOptionPane.showMessageDialog(component, "Macro with the same name already exists", "Error", JOptionPane.ERROR_MESSAGE);
+				
+				if (model.size() == 0) {
+					macroEditorComponent.setVisible(false);
+				}
+			} catch (IOException ex) {
+				throw new RuntimeException(ex);
+			}
+		});
+		
+		removeSelectedMacroButton.addActionListener(e -> {
+			if (macroList.isSelectionEmpty()) {
+				return;
+			}
+			
+			String macroName = macroList.getSelectedValue();
+			
+			try {
+				Files.delete(Paths.get(macroStorePath.toString(), macroName));
+				model.remove(macroList.getSelectedIndex());
+			} catch (IOException ex) {
+				throw new RuntimeException(ex);
+			}
+		});
 	}
 	
 	private void createUIComponents() {
@@ -71,7 +110,12 @@ public class UI implements Disposable {
 	}
 	
 	void listSelectionChanged(ListSelectionEvent e) {
+		if (macroList.isSelectionEmpty()) {
+			return;
+		}
+		
 		Path selectedMacro = Paths.get(macroStorePath.toString(), macroList.getSelectedValue());
+		
 		try (Stream<String> lines = Files.lines(selectedMacro)) {
 			ApplicationManager.getApplication().runWriteAction(
 				() -> macroEditor.getDocument().setText(lines.collect(Collectors.joining("\n")))
