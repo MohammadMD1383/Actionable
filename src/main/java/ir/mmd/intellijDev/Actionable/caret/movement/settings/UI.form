@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ir.mmd.intellijDev.Actionable.caret.movement.settings.UI">
-  <grid id="27dc6" binding="component" layout-manager="GridLayoutManager" row-count="16" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="component" layout-manager="GridLayoutManager" row-count="23" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="666" height="638"/>
+      <xy x="20" y="20" width="753" height="780"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -95,7 +95,7 @@
       </component>
       <vspacer id="9a0eb">
         <constraints>
-          <grid row="15" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <grid row="22" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
       <component id="8114d" class="javax.swing.JLabel">
@@ -185,12 +185,91 @@
         </constraints>
         <properties/>
       </component>
+      <component id="91337" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="15" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="ac62b" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="16" column="0" row-span="6" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="strings" key="caretMovementPanel.sameElementMovementBehaviour.label"/>
+        </properties>
+      </component>
+      <component id="75e40" class="javax.swing.JRadioButton" binding="startRadioButton" default-binding="true">
+        <constraints>
+          <grid row="16" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="strings" key="caretMovementPanel.sameElementMovementBehaviour.option1.label"/>
+        </properties>
+      </component>
+      <component id="f1f0f" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="17" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-6579301"/>
+          <text resource-bundle="strings" key="caretMovementPanel.sameElementMovementBehaviour.option1.comment"/>
+        </properties>
+      </component>
+      <component id="9274c" class="javax.swing.JRadioButton" binding="offsetBasedRadioButton" default-binding="true">
+        <constraints>
+          <grid row="18" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <actionCommand value="Offset"/>
+          <text resource-bundle="strings" key="caretMovementPanel.sameElementMovementBehaviour.option2.label"/>
+        </properties>
+      </component>
+      <component id="ff24e" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="19" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-6579301"/>
+          <text resource-bundle="strings" key="caretMovementPanel.sameElementMovementBehaviour.option2.comment"/>
+        </properties>
+      </component>
+      <component id="a82d6" class="javax.swing.JRadioButton" binding="endRadioButton" default-binding="true">
+        <constraints>
+          <grid row="20" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="strings" key="caretMovementPanel.sameElementMovementBehaviour.option3.label"/>
+        </properties>
+      </component>
+      <component id="7ee87" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="21" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <foreground color="-6579301"/>
+          <text resource-bundle="strings" key="caretMovementPanel.sameElementMovementBehaviour.option3.comment"/>
+        </properties>
+      </component>
+      <component id="afd7c" class="javax.swing.JButton" binding="sameElementMovementBehaviourDefault">
+        <constraints>
+          <grid row="16" column="2" row-span="6" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="strings" key="global.defaultButton.label"/>
+        </properties>
+      </component>
     </children>
   </grid>
   <buttonGroups>
     <group name="wordSeparatorsBehaviourGroup" bound="true">
       <member id="9119"/>
       <member id="1a0c4"/>
+    </group>
+    <group name="sameElementMovementBehaviourGroup" bound="true">
+      <member id="75e40"/>
+      <member id="9274c"/>
+      <member id="a82d6"/>
     </group>
   </buttonGroups>
   <inspectionSuppressions>

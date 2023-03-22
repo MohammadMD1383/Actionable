@@ -2,10 +2,9 @@ package ir.mmd.intellijDev.Actionable.caret.movement
 
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
+import com.intellij.psi.PsiElement
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.util.ext.allCarets
-import ir.mmd.intellijDev.Actionable.util.ext.moveTo
-import ir.mmd.intellijDev.Actionable.util.ext.psiFile
+import ir.mmd.intellijDev.Actionable.util.ext.*
 
 
 class MoveCaretToNextWord : MoveCaretAction() {
@@ -87,4 +86,12 @@ class MoveCaretToPreviousElementWithSelection : MoveCaretAction() {
 	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, false) {
 		moveCaretVirtually(it, false, e.psiFile)
 	}
+}
+
+class MoveCaretToNextSameElement : MoveCaretToSameElement() {
+	override fun PsiElement.getNextLeafElement() = nextLeafNoWhitespace()
+}
+
+class MoveCaretToPreviousSameElement : MoveCaretToSameElement() {
+	override fun PsiElement.getNextLeafElement() = prevLeafNoWhitespace()
 }

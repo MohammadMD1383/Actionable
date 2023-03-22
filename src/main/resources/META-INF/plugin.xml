@@ -10,7 +10,7 @@
 		<h2>I NEED YOUR HELP TO COMPLETE THE DOCUMENTATION - <a href="https://github.com/MohammadMD1383/Actionable/issues/31">more info</a></h2>
 		
 		<div>Features:</div>
-		<ul>			
+		<ul>
 			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
@@ -73,6 +73,8 @@
 			<li>Move Caret to Next Element with Selection</li>
 			<li>Move Caret to Previous Element</li>
 			<li>Move Caret to Previous Element with Selection</li>
+			<li>Move Caret to Next Same Element</li>
+			<li>Move Caret to Previous Same Element</li>
 			<li>Set Editor Tab Placement to Top</li>
 			<li>Set Editor Tab Placement to Left</li>
 			<li>Set Editor Tab Placement to Bottom</li>
@@ -791,6 +793,18 @@
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousElementWithSelection"
 					text="Move Caret to Previous Element with Selection"
 					description="Moves the caret to previous psi element with selection"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextSameElement"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToNextSameElement"
+					text="Move Caret to Next Same Element"
+					description="Moves the caret to next same psi element"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousSameElement"
+					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousSameElement"
+					text="Move Caret to Previous Same Element"
+					description="Moves the caret to previous same psi element"/>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.GlobalToggles" text="Global Toggles" popup="true">

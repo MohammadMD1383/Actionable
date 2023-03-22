@@ -2,8 +2,17 @@ package ir.mmd.intellijDev.Actionable.util.ext
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.PsiUtilCore
 import kotlin.reflect.KClass
+
+/**
+ * For Compatibility
+ *
+ * Returns the element type of the [PsiElement]
+ */
+val PsiElement.elementType: IElementType get() = PsiUtilCore.getElementType(this)
 
 /**
  * For Compatibility

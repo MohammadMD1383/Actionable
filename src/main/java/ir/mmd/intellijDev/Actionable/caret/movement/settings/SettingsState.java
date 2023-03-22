@@ -46,6 +46,10 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 		public static final int STOP_AT_NEXT_SAME_CHAR_TYPE = 1;
 	}
 	
+	public enum SEMBehaviour {
+		Start, Offset, End
+	}
+	
 	/**
 	 * this class holds default values for settings
 	 */
@@ -53,6 +57,7 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 		public static final @NotNull String wordSeparators = "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?\n\t";
 		public static final int wordSeparatorsBehaviour = WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE;
 		public static final @NotNull String hardStopSeparators = " ";
+		public static @NotNull SettingsState.SEMBehaviour sameElementMovementBehaviour = SEMBehaviour.Start;
 	}
 	
 	public @NotNull String wordSeparators = Defaults.wordSeparators;
@@ -60,6 +65,8 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	public int wordSeparatorsBehaviour = Defaults.wordSeparatorsBehaviour;
 	
 	public @NotNull String hardStopCharacters = Defaults.hardStopSeparators;
+	
+	public @NotNull SettingsState.SEMBehaviour sameElementMovementBehaviour = Defaults.sameElementMovementBehaviour;
 	
 	@Override
 	public @Nullable SettingsState getState() {

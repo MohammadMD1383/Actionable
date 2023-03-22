@@ -20,7 +20,8 @@ class Settings : Configurable {
 	override fun isModified() = withService<SettingsState, Boolean> {
 		ui!!.wordSeparators != wordSeparators ||
 			ui!!.wordSeparatorsBehaviour != wordSeparatorsBehaviour ||
-			ui!!.hardStopCharacters != hardStopCharacters
+			ui!!.hardStopCharacters != hardStopCharacters ||
+			ui!!.sameElementMovementBehaviour != sameElementMovementBehaviour
 	}
 	
 	override fun apply() {
@@ -31,6 +32,7 @@ class Settings : Configurable {
 			wordSeparators = ui!!.wordSeparators
 			wordSeparatorsBehaviour = ui!!.wordSeparatorsBehaviour
 			hardStopCharacters = ui!!.hardStopCharacters
+			sameElementMovementBehaviour = ui!!.sameElementMovementBehaviour
 		}
 	}
 	
@@ -38,6 +40,7 @@ class Settings : Configurable {
 		ui!!.wordSeparators = wordSeparators
 		ui!!.wordSeparatorsBehaviour = wordSeparatorsBehaviour
 		ui!!.hardStopCharacters = hardStopCharacters
+		ui!!.sameElementMovementBehaviour = sameElementMovementBehaviour
 	}
 	
 	override fun disposeUIResources() {

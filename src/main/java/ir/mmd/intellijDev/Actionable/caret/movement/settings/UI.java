@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.caret.movement.settings;
 
+import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState.SEMBehaviour;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -20,8 +21,17 @@ public class UI {
 	private JButton hardStopCharactersDefault;
 	private JCheckBox hardStopCharactersIncludeNewLine;
 	private JCheckBox hardStopCharactersIncludeTab;
+	private ButtonGroup sameElementMovementBehaviourGroup;
+	private JRadioButton startRadioButton;
+	private JRadioButton offsetBasedRadioButton;
+	private JRadioButton endRadioButton;
+	private JButton sameElementMovementBehaviourDefault;
 	
 	public UI() {
+		startRadioButton.setActionCommand(SEMBehaviour.Start.name());
+		offsetBasedRadioButton.setActionCommand(SEMBehaviour.Offset.name());
+		endRadioButton.setActionCommand(SEMBehaviour.End.name());
+		
 		initListeners();
 	}
 	
@@ -44,6 +54,13 @@ public class UI {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				UI.this.setHardStopCharacters(SettingsState.Defaults.hardStopSeparators);
+			}
+		});
+		
+		sameElementMovementBehaviourDefault.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				UI.this.setSameElementMovementBehaviour(SettingsState.Defaults.sameElementMovementBehaviour);
 			}
 		});
 	}
@@ -95,5 +112,32 @@ public class UI {
 		hardStopCharactersField.setText(s.replaceAll("[\n\t]", ""));
 		hardStopCharactersIncludeNewLine.setSelected(newLine);
 		hardStopCharactersIncludeTab.setSelected(tab);
+	}
+	
+	public SEMBehaviour getSameElementMovementBehaviour() {
+		return SEMBehaviour.valueOf(sameElementMovementBehaviourGroup.getSelection().getActionCommand());
+	}
+	
+	public void setSameElementMovementBehaviour(SEMBehaviour behaviour) {
+		final ButtonModel targetModel;
+		
+		switch (behaviour) {
+			case Start:
+				targetModel = startRadioButton.getModel();
+				break;
+			
+			case Offset:
+				targetModel = offsetBasedRadioButton.getModel();
+				break;
+			
+			case End:
+				targetModel = endRadioButton.getModel();
+				break;
+			
+			default:
+				throw new IllegalStateException("THIS MUST NEVER HAPPEN!");
+		}
+		
+		sameElementMovementBehaviourGroup.setSelected(targetModel, true);
 	}
 }
