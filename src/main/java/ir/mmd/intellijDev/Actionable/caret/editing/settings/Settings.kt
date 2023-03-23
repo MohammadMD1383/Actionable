@@ -12,7 +12,6 @@ class Settings : Configurable {
 	private var ui: UI? = null
 	
 	override fun getDisplayName() = "Editing"
-	override fun getHelpTopic() = null
 	override fun createComponent(): JComponent = ui?.component ?: UI().run { ui = this; component }
 	
 	override fun isModified() = withService<SettingsState, Boolean> {

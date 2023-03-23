@@ -7,13 +7,12 @@ import javax.swing.JComponent
 
 
 /**
- * Settings [Configurable] UI for `Actionable > Macro`
+ * Settings [Configurable] UI for `Actionable > Text > Macro`
  */
 class Settings : Configurable {
 	private var ui: UI? = null
 	
 	override fun getDisplayName() = "Macro"
-	override fun getHelpTopic() = null
 	override fun createComponent(): JComponent = ui?.component ?: UI().run { ui = this; component }
 	override fun isModified() = true
 	override fun apply() = reRegisterMacros()
