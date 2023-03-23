@@ -83,4 +83,5 @@ class DuplicateLineAndInsertContent : AnAction() {
 	
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	override fun isDumbAware() = true
 }
