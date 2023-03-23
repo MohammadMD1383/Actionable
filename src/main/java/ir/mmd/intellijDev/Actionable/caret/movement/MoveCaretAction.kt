@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
 import com.intellij.psi.PsiFile
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
@@ -77,6 +78,7 @@ abstract class MoveCaretAction : MultiCaretAction() {
 		}
 	}
 	
+	context(LazyEventContext) override fun perform(caret: Caret) = Unit
 	override fun update(e: AnActionEvent) = e.enableIf { hasEditor }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

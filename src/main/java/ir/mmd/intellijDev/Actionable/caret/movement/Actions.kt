@@ -48,9 +48,6 @@ class MoveCaretToPreviousElement : MoveCaretAction() {
 class MoveCaretToNextWordWithSelection : MoveCaretAction() {
 	override fun isDumbAware() = true
 	
-	context(LazyEventContext)
-	override fun perform(caret: Caret) = Unit
-	
 	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, true) {
 		moveCaretVirtually(it, true)
 	}
@@ -60,9 +57,6 @@ class MoveCaretToNextWordWithSelection : MoveCaretAction() {
 class MoveCaretToPreviousWordWithSelection : MoveCaretAction() {
 	override fun isDumbAware() = true
 	
-	context(LazyEventContext)
-	override fun perform(caret: Caret) = Unit
-	
 	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, false) {
 		moveCaretVirtually(it, false)
 	}
@@ -70,9 +64,6 @@ class MoveCaretToPreviousWordWithSelection : MoveCaretAction() {
 
 
 class MoveCaretToNextElementWithSelection : MoveCaretAction() {
-	context(LazyEventContext)
-	override fun perform(caret: Caret) = Unit
-	
 	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, true) {
 		moveCaretVirtually(it, true, e.psiFile)
 	}
@@ -80,9 +71,6 @@ class MoveCaretToNextElementWithSelection : MoveCaretAction() {
 
 
 class MoveCaretToPreviousElementWithSelection : MoveCaretAction() {
-	context(LazyEventContext)
-	override fun perform(caret: Caret) = Unit
-	
 	override fun actionPerformed(e: AnActionEvent) = moveCaretsWithSelection(e.allCarets, false) {
 		moveCaretVirtually(it, false, e.psiFile)
 	}
