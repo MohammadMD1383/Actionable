@@ -36,3 +36,18 @@ fun ActionManager.unregisterMacro(actionId: String) {
  */
 @Suppress("NOTHING_TO_INLINE")
 inline fun action(id: String): AnAction? = ActionManager.getInstance().getAction(id)
+
+/**
+ * Checks whether all carets and their selections are on a single line or not
+ */
+context (LazyEventContext)
+fun caretsAndSelectionsAreOnTheSameLine(): Boolean {
+	val distinctLines = allCarets.map { it.logicalPosition.line }.distinct()
+	if (distinctLines.size != 1) {
+		return false
+	}
+	
+	val line = distinctLines.first()
+	return !(document.getLineNumber(allCarets.first().selectionStart) != line ||
+		document.getLineNumber(allCarets.last().selectionEnd) != line)
+}

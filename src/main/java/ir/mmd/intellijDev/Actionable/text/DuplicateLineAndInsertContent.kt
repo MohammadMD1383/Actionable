@@ -8,28 +8,13 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.util.TextRange
 import com.intellij.ui.components.JBTextArea
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
+import ir.mmd.intellijDev.Actionable.action.caretsAndSelectionsAreOnTheSameLine
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
-class DuplicateLineAndInsertContent : AnAction() {
+open class DuplicateLineAndInsertContent : AnAction() {
 	context (LazyEventContext)
-	private fun caretsAreAtTheSameLine(): Boolean {
-		val distinctLines = allCarets.map { it.logicalPosition.line }.distinct()
-		if (distinctLines.size != 1) {
-			return false
-		}
-		
-		val line = distinctLines.first()
-		return !(document.getLineNumber(allCarets.first().selectionStart) != line ||
-			document.getLineNumber(allCarets.last().selectionEnd) != line)
-	}
-	
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
-		if (!caretsAreAtTheSameLine()) {
-			return
-		}
-		
+	protected open fun getReplacements(): MutableList<String>? {
 		val textArea = JBTextArea(5, 30)
-		
 		val result = DialogBuilder(project).apply {
 			setCenterPanel(textArea)
 			setTitle("Duplicate Line And Insert Content")
@@ -39,14 +24,22 @@ class DuplicateLineAndInsertContent : AnAction() {
 		}.show()
 		
 		if (result != DialogWrapper.OK_EXIT_CODE || textArea.text.isBlank()) {
+			return null
+		}
+		
+		return textArea.text.split('\n').toMutableList()
+	}
+	
+	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+		if (!caretsAndSelectionsAreOnTheSameLine()) {
 			return
 		}
 		
+		val replacements = getReplacements() ?: return
 		val lineNumber = document.getLineNumber(allCarets.first().offset)
 		var lineStartOffset = document.getLineStartOffset(lineNumber)
 		val lineEndOffset = document.getLineEndOffset(lineNumber)
 		val rawLine = document.getText(TextRange(lineStartOffset, lineEndOffset))
-		val replacements = textArea.text.split('\n').toMutableList()
 		val replacementRanges = allCarets.map {
 			it.selectionStart - lineStartOffset..it.selectionEnd - lineStartOffset
 		}
