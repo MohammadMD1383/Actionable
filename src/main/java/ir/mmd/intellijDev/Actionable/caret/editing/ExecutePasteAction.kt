@@ -7,12 +7,12 @@ import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.withService
+import ir.mmd.intellijDev.Actionable.util.service
 
 
 class ExecutePasteAction : CaretEditingAction() {
 	context (LazyEventContext)
-	override fun perform(caret: Caret) = withService<SettingsState, Unit> {
+	override fun perform(caret: Caret) = service<SettingsState>().run {
 		val (target, action) = (editor.getUserData(scheduledPasteActionKind) ?: return).split(';')
 		
 		val startOffset: Int

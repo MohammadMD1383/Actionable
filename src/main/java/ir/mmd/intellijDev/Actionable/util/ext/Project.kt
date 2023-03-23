@@ -27,14 +27,7 @@ inline fun Project.psiFileFor(document: Document) = PsiDocumentManager.getInstan
 inline fun <reified T> Project.service(): T = getService(T::class.java)
 
 /**
- * Brings a project-wide service into scope
- *
- * @see [Project.service]
+ * Returns a project-wide service
  */
-inline fun <reified T, R> Project.withService(block: T.() -> R) = getService(T::class.java).block()
-
-/**
- * @see [Project.withService]
- * @see [Project.service]
- */
-inline fun <T, R> Project.withService(clazz: Class<T>, block: T.() -> R) = getService(clazz).block()
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> Project.service(clazz: Class<T>): T = getService(clazz)

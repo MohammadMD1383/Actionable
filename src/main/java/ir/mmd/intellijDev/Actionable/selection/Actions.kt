@@ -6,11 +6,10 @@ import com.intellij.openapi.editor.Caret
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiLiteralExpression
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.withService
+import ir.mmd.intellijDev.Actionable.util.service
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import kotlin.math.absoluteValue
 
@@ -30,9 +29,9 @@ class SelectLineWithoutIndentAction : SelectTextUnderCaretAction() {
 
 class SelectWordUnderCaretAction : SelectTextUnderCaretAction() {
 	override fun isDumbAware() = true
-	override fun getSelectionRange(caret: Caret, psiFile: PsiFile) = withService<SettingsState, IntRange?> {
+	override fun getSelectionRange(caret: Caret, psiFile: PsiFile) = service<SettingsState>().run {
 		val (start, end) = caret.util.getWordBoundaries(wordSeparators, hardStopCharacters)
-		return if (start != end) start..end else null
+		return@run if (start != end) start..end else null
 	}
 }
 

@@ -8,7 +8,7 @@ import ir.mmd.intellijDev.Actionable.action.MultiCaretActionWithInitialization
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.withService
+import ir.mmd.intellijDev.Actionable.util.service
 
 
 @Documentation(
@@ -40,7 +40,7 @@ class RemoveDuplicatesAction : MultiCaretActionWithInitialization<HashSet<String
 	override fun initialize(): HashSet<String> = HashSet()
 	
 	context (LazyEventContext)
-	override fun perform(caret: Caret) = withService<SettingsState, Unit> {
+	override fun perform(caret: Caret): Unit = service<SettingsState>().run {
 		val text = caret.selectedText!!
 		data.find { it.equals(text, ignoreCase = !isCaseSensitive) }?.letOnly {
 			project.runWriteCommandAction {

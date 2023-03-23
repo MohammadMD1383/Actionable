@@ -16,7 +16,6 @@ import ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.afterDoing
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.service
-import ir.mmd.intellijDev.Actionable.util.withService
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState as MovementSettingsState
 
 abstract class CaretEditingAction : SingleCaretAction() {
@@ -31,7 +30,7 @@ abstract class CaretEditingAction : SingleCaretAction() {
 		protected val previousHighlighterKey = Key<RangeHighlighter>("scheduledPasteAction.motionListener")
 		
 		private val motionListener = object : EditorMouseMotionListener {
-			override fun mouseMoved(e: EditorMouseEvent) = withService<MovementSettingsState, Unit> {
+			override fun mouseMoved(e: EditorMouseEvent) = service<MovementSettingsState>().run {
 				val editor = e.editor
 				val previousHighlighter = editor.getUserData(previousHighlighterKey)
 				val offset = editor.run { logicalPositionToOffset(xyToLogicalPosition(e.mouseEvent.point)) }
@@ -77,7 +76,7 @@ abstract class CaretEditingAction : SingleCaretAction() {
 		}
 	}
 	
-	fun Editor.removeScheduledPasteAction() = withService<SettingsState, Unit> {
+	fun Editor.removeScheduledPasteAction() = service<SettingsState>().run {
 		if (showPasteActionHints) {
 			removeEditorMouseMotionListener(motionListener)
 			getUserData(previousHighlighterKey)?.let { markupModel.removeHighlighter(it) }

@@ -1,8 +1,7 @@
 package ir.mmd.intellijDev.Actionable.caret.editing.settings
 
 import com.intellij.openapi.options.Configurable
-
-import ir.mmd.intellijDev.Actionable.util.withService
+import ir.mmd.intellijDev.Actionable.util.service
 import javax.swing.JComponent
 
 /**
@@ -14,15 +13,15 @@ class Settings : Configurable {
 	override fun getDisplayName() = "Editing"
 	override fun createComponent(): JComponent = ui?.component ?: UI().run { ui = this; component }
 	
-	override fun isModified() = withService<SettingsState, Boolean> {
+	override fun isModified() = service<SettingsState>().run {
 		ui!!.isPasteActionHintsShown != showPasteActionHints
 	}
 	
-	override fun apply() = withService<SettingsState, Unit> {
+	override fun apply() = service<SettingsState>().run {
 		showPasteActionHints = ui!!.isPasteActionHintsShown
 	}
 	
-	override fun reset() = withService<SettingsState, Unit> {
+	override fun reset() = service<SettingsState>().run {
 		ui!!.isPasteActionHintsShown = showPasteActionHints
 	}
 	

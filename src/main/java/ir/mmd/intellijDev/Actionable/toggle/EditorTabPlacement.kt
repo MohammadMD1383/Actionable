@@ -6,11 +6,11 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.hasProject
-import ir.mmd.intellijDev.Actionable.util.withService
+import ir.mmd.intellijDev.Actionable.util.service
 import javax.swing.SwingConstants
 
 abstract class ChangeEditorTabPlacementShortcut(private val placement: Int) : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) = withService<UISettings, Unit> {
+	override fun actionPerformed(e: AnActionEvent) = service<UISettings>().run {
 		editorTabPlacement = placement
 		fireUISettingsChanged()
 	}

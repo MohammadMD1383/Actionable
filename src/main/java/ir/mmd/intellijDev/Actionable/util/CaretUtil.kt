@@ -204,7 +204,7 @@ class CaretUtil(private val caret: Caret) {
 	 * @param boundaries specify an `int[2]` if you want to get the word boundaries too
 	 * @see getWordBoundaries
 	 */
-	fun getAssociatedWord(boundaries: IntArray? = null): String? = withService<SettingsState, String?> {
+	fun getAssociatedWord(boundaries: IntArray? = null): String? = service<SettingsState>().run {
 		val (startOffset, endOffset) = getWordBoundaries(wordSeparators, hardStopCharacters)
 		
 		return if (startOffset == endOffset) null else {

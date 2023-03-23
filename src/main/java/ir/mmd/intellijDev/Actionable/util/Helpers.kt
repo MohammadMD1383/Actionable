@@ -47,14 +47,7 @@ inline fun tryCatching(block: () -> Unit) = try {
 inline fun <reified T> service(): T = ApplicationManager.getApplication().getService(T::class.java)
 
 /**
- * brings an application-wide service to scope of [block]
- *
- * @see [service]
- * @see [withService]
+ * Helper method to get application-wide service
  */
-inline fun <reified T, R> withService(block: T.() -> R) = ApplicationManager.getApplication().getService(T::class.java).block()
-
-/**
- * @see [withService]
- */
-inline fun <T, R> withService(clazz: Class<T>, block: T.() -> R) = ApplicationManager.getApplication().getService(clazz).block()
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> service(clazz: Class<T>): T = ApplicationManager.getApplication().getService(clazz)

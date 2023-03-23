@@ -3,7 +3,7 @@ package ir.mmd.intellijDev.Actionable.util
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.ToggleAction
-import ir.mmd.intellijDev.Actionable.util.ext.withService
+import ir.mmd.intellijDev.Actionable.util.ext.service
 
 /**
  * Base class of [ProjectStateToggleAction] and [GlobalStateToggleAction]
@@ -31,8 +31,8 @@ sealed class StateToggleAction<S>(protected val clazz: Class<S>) : ToggleAction(
  * @param clazz usually a [com.intellij.openapi.components.PersistentStateComponent]
  */
 abstract class ProjectStateToggleAction<S>(clazz: Class<S>) : StateToggleAction<S>(clazz) {
-	override fun isSelected(e: AnActionEvent) = e.project!!.withService(clazz) { get() }
-	override fun setSelected(e: AnActionEvent, state: Boolean) = e.project!!.withService(clazz) { set(state) }
+	override fun isSelected(e: AnActionEvent) = e.project!!.service(clazz).run { get() }
+	override fun setSelected(e: AnActionEvent, state: Boolean) = e.project!!.service(clazz).run { set(state) }
 }
 
 /**
@@ -41,6 +41,6 @@ abstract class ProjectStateToggleAction<S>(clazz: Class<S>) : StateToggleAction<
  * @param clazz usually a [com.intellij.openapi.components.PersistentStateComponent]
  */
 abstract class GlobalStateToggleAction<S>(clazz: Class<S>) : StateToggleAction<S>(clazz) {
-	override fun isSelected(e: AnActionEvent) = withService(clazz) { get() }
-	override fun setSelected(e: AnActionEvent, state: Boolean) = withService(clazz) { set(state) }
+	override fun isSelected(e: AnActionEvent) = service(clazz).run { get() }
+	override fun setSelected(e: AnActionEvent, state: Boolean) = service(clazz).run { set(state) }
 }
