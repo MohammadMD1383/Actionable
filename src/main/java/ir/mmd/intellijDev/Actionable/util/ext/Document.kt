@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.util.ext
 
+import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
@@ -31,8 +32,17 @@ inline operator fun Document.get(index: Int) = immutableCharSequence[index]
 
 /**
  * Returns the text of [line] in [Document]
+ *
+ * @see getLineText
  */
 fun Document.getLineText(line: Int) = getText(getLineStartOffset(line)..getLineEndOffset(line))
+
+/**
+ * Returns the text of the line which [caret] is at, in the [Document]
+ *
+ * @see getLineText
+ */
+fun Document.getLineText(caret: Caret) = getLineText(getLineNumber(caret.offset))
 
 /**
  * Returns starting indentation of the [line] in the [Document]

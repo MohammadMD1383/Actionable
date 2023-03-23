@@ -30,6 +30,50 @@ inline operator fun String.contains(char: Char?) = char != null && indexOf(char)
 inline val String.titleCase: String get() = replaceFirstChar { c -> c.uppercaseChar() }
 
 /**
+ * Replaces all [ranges] in the string with the [replacement]
+ *
+ * **IMPORTANT:** The [ranges] must be sorted
+ *
+ * @return the new string and a new `ranges` that corresponds to replacement ranges in the resulting string
+ */
+fun String.replaceRanges(ranges: List<IntRange>, replacement: String): Pair<String, List<IntRange>> {
+	val firstRange = ranges.firstOrNull() ?: return this to ranges
+	val newRanges = ranges.toMutableList()
+	val replacementLength = replacement.length
+	val builder = StringBuilder()
+	
+	builder.append(substring(0, firstRange.first))
+	builder.append(replacement)
+	newRanges[0] = firstRange.first..firstRange.first + replacementLength
+	
+	if (ranges.size == 1) {
+		builder.append(substring(firstRange.last))
+		return builder.toString() to newRanges
+	}
+	
+	for (i in 1 until ranges.lastIndex) {
+		val text = substring(ranges[i - 1].last, ranges[i].first)
+		builder.append(text)
+		builder.append(replacement)
+		
+		val newRangeStart = newRanges[i - 1].last + text.length
+		newRanges[i] = newRangeStart..newRangeStart + replacementLength
+	}
+	
+	val lastRange = ranges.last()
+	val text = substring(ranges[ranges.lastIndex - 1].last, lastRange.first)
+	
+	builder.append(text)
+	builder.append(replacement)
+	builder.append(substring(lastRange.last))
+	
+	val newRangeStart = newRanges[ranges.lastIndex - 1].last + text.length
+	newRanges[ranges.lastIndex] = newRangeStart..newRangeStart + replacementLength
+	
+	return builder.toString() to newRanges
+}
+
+/**
  * `in` operator for bound checking an [Int] in a nullable [IntRange]
  */
 @Suppress("NOTHING_TO_INLINE")
