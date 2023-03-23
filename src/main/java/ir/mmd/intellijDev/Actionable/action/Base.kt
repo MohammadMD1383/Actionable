@@ -21,6 +21,11 @@ class LazyEventContext(val event: AnActionEvent) {
 	val allCarets: List<Caret> by lazy { caretModel.allCarets }
 	val primaryCaret: Caret by lazy { caretModel.primaryCaret }
 	val psiFile: PsiFile by lazy { event.psiFile }
+	
+	/**
+	 * This can be used to do some stuff in the scope of [LazyEventContext]
+	 */
+	inline operator fun <T> invoke(block: LazyEventContext.() -> T) : T = block()
 }
 
 /**
@@ -36,7 +41,7 @@ abstract class MultiCaretAction : AnAction {
 	context (LazyEventContext)
 	abstract fun perform(caret: Caret)
 	
-	override fun actionPerformed(e: AnActionEvent) = LazyEventContext(e).run {
+	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
 		allCarets.forEach { perform(it) }
 	}
 }
@@ -78,7 +83,7 @@ abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction {
 	context (LazyEventContext)
 	open fun finalize() = Unit
 	
-	override fun actionPerformed(e: AnActionEvent) = LazyEventContext(e).run {
+	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
 		_data = initialize()
 		allCarets.forEach { perform(it) }
 		finalize()
@@ -92,7 +97,7 @@ abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction {
  * @param forceSingleCaret force to have single caret in [AnAction.update]
  */
 abstract class SingleCaretAction(private val forceSingleCaret: Boolean = true) : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) = LazyEventContext(e).run {
+	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
 		perform(primaryCaret)
 	}
 	
