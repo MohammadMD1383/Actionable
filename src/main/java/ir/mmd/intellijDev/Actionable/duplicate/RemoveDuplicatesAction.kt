@@ -7,7 +7,8 @@ import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretActionWithInitialization
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 import ir.mmd.intellijDev.Actionable.util.service
 
 
@@ -42,7 +43,7 @@ class RemoveDuplicatesAction : MultiCaretActionWithInitialization<HashSet<String
 	context (LazyEventContext)
 	override fun perform(caret: Caret): Unit = service<SettingsState>().run {
 		val text = caret.selectedText!!
-		data.find { it.equals(text, ignoreCase = !isCaseSensitive) }?.letOnly {
+		data.find { it.equals(text, ignoreCase = !isCaseSensitive) }?.let {
 			project.runWriteCommandAction {
 				document.deleteString(caret.selectionStart, caret.selectionEnd)
 			}
@@ -50,6 +51,6 @@ class RemoveDuplicatesAction : MultiCaretActionWithInitialization<HashSet<String
 	}
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { caretCount > 1 && allCaretsHaveSelection } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && caretModel.caretCount > 1 && allCarets.all { it.hasSelection() } }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

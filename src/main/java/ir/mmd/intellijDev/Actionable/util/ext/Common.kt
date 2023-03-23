@@ -85,21 +85,6 @@ inline operator fun IntRange?.contains(i: Int) = this != null && contains(i)
 inline val Int.isPositive: Boolean get() = this > 0
 
 /**
- * Same as kotlin `run` but doesn't return anything
- */
-inline fun <T> T.runOnly(block: T.() -> Unit) = block()
-
-/**
- * Same as kotlin `let` but doesn't return anything
- */
-inline fun <T> T.letOnly(block: (T) -> Unit) = block(this)
-
-/**
- * Sugar syntax to check if something is not null
- */
-inline val <T> T.isNotNull: Boolean get() = this != null
-
-/**
  * like `forEach` but brings the receiver to the scope
  */
 inline fun <T> Iterable<T>.withEach(block: T.() -> Unit) = forEach { it.block() }

@@ -4,25 +4,21 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
-
-import ir.mmd.intellijDev.Actionable.util.ext.caretCount
-import ir.mmd.intellijDev.Actionable.util.ext.editor
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.hasEditorWith
 
 abstract class UnselectAction : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) {
-		val caretModel = e.editor.caretModel
-		getTargetCaret(caretModel.allCarets).run {
-			removeSelection()
-			caretModel.removeCaret(this)
+	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+		getTargetCaret(allCarets).let {
+			it.removeSelection()
+			caretModel.removeCaret(it)
 		}
 	}
 	
 	abstract fun getTargetCaret(carets: List<Caret>): Caret
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditorWith { caretCount > 1 } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && caretModel.caretCount > 1 }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 

@@ -5,7 +5,9 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.*
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.editor
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.psiFile
 
 /**
  * This model contains required fields for actions that are lazy-loaded and performance/resource friendly
@@ -13,19 +15,28 @@ import ir.mmd.intellijDev.Actionable.util.ext.*
  * @see AnActionEvent
  */
 class LazyEventContext(val event: AnActionEvent) {
-	val project: Project? by lazy { event.project }
-	val editor: Editor by lazy { event.editor }
+	private val _project: Project? by lazy { event.project }
+	private val _editor: Editor? by lazy { event.editor }
+	private val _psiFile: PsiFile? by lazy { event.psiFile }
+	
+	val project: Project get() = _project!!
+	val editor: Editor get() = _editor!!
+	val psiFile: PsiFile get() = _psiFile!!
+	
 	val document: Document by lazy { editor.document }
 	val caretModel: CaretModel by lazy { editor.caretModel }
 	val selectionModel: SelectionModel by lazy { editor.selectionModel }
 	val allCarets: List<Caret> by lazy { caretModel.allCarets }
 	val primaryCaret: Caret by lazy { caretModel.primaryCaret }
-	val psiFile: PsiFile by lazy { event.psiFile }
 	
 	/**
 	 * This can be used to do some stuff in the scope of [LazyEventContext]
 	 */
-	inline operator fun <T> invoke(block: LazyEventContext.() -> T) : T = block()
+	inline operator fun <T> invoke(block: LazyEventContext.() -> T): T = block()
+	
+	val hasProject get() = _project != null
+	val hasEditor get() = _editor != null
+	val hasPsiFile get() = _psiFile != null
 }
 
 /**
@@ -110,9 +121,9 @@ abstract class SingleCaretAction(private val forceSingleCaret: Boolean = true) :
 	/**
 	 * `hasEditorWith { caretCount == 1 }` will automatically be applied to this if [forceSingleCaret] is set to `true`
 	 */
-	context (AnActionEvent)
+	context (LazyEventContext)
 	open val actionEnabled: Boolean
 		get() = true
 	
-	override fun update(e: AnActionEvent) = e.enableIf { actionEnabled and (!forceSingleCaret || hasEditorWith { caretCount == 1 }) }
+	override fun update(e: AnActionEvent) = e.enableIf { actionEnabled and (!forceSingleCaret || caretModel.caretCount == 1) }
 }

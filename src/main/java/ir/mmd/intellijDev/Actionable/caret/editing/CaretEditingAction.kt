@@ -1,7 +1,6 @@
 package ir.mmd.intellijDev.Actionable.caret.editing
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.EditorColors
 import com.intellij.openapi.editor.event.EditorMouseEvent
@@ -30,7 +29,7 @@ abstract class CaretEditingAction : SingleCaretAction() {
 		protected val previousHighlighterKey = Key<RangeHighlighter>("scheduledPasteAction.motionListener")
 		
 		private val motionListener = object : EditorMouseMotionListener {
-			override fun mouseMoved(e: EditorMouseEvent) = service<MovementSettingsState>().run {
+			override fun mouseMoved(e: EditorMouseEvent): Unit = service<MovementSettingsState>().run {
 				val editor = e.editor
 				val previousHighlighter = editor.getUserData(previousHighlighterKey)
 				val offset = editor.run { logicalPositionToOffset(xyToLogicalPosition(e.mouseEvent.point)) }
@@ -58,7 +57,7 @@ abstract class CaretEditingAction : SingleCaretAction() {
 					else -> throw Exception("Unknown scheduled paste action target")
 				}
 				
-				editor.markupModel.runOnly {
+				editor.markupModel.run {
 					previousHighlighter?.let { removeHighlighter(it) }
 					editor.putUserData(
 						previousHighlighterKey, addRangeHighlighter(
@@ -88,7 +87,7 @@ abstract class CaretEditingAction : SingleCaretAction() {
 	}
 	
 	context (LazyEventContext)
-	fun copyElementAtCaret(deleteElement: Boolean) = psiFile.elementAt(primaryCaret)!!.runOnly {
+	fun copyElementAtCaret(deleteElement: Boolean) = psiFile.elementAt(primaryCaret)!!.run {
 		text.copyToClipboard()
 		if (deleteElement) project.runWriteCommandAction(::delete)
 	}
@@ -121,7 +120,7 @@ abstract class CaretEditingAction : SingleCaretAction() {
 		if (service<SettingsState>().showPasteActionHints) addEditorMouseMotionListener(motionListener)
 	}
 	
-	context(AnActionEvent)
+	context(LazyEventContext)
 	override val actionEnabled: Boolean
 		get() = hasProject
 	

@@ -6,8 +6,6 @@ import com.intellij.openapi.editor.Caret
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.hasEditor
-import ir.mmd.intellijDev.Actionable.util.ext.hasProject
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 abstract class AddLineAction(private val above: Boolean) : MultiCaretAction() {

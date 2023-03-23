@@ -7,8 +7,6 @@ import com.intellij.psi.PsiFile
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.hasEditor
-import ir.mmd.intellijDev.Actionable.util.ext.hasProject
 
 abstract class SelectTextUnderCaretAction : MultiCaretAction() {
 	abstract fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange?

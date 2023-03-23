@@ -5,9 +5,6 @@ import com.intellij.openapi.editor.Caret
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.hasEditorWith
-import ir.mmd.intellijDev.Actionable.util.ext.hasProject
-import ir.mmd.intellijDev.Actionable.util.ext.isNotNull
 
 
 @Documentation(
@@ -113,5 +110,5 @@ class CancelPasteAction : CaretEditingAction() {
 	context(LazyEventContext)
 	override fun perform(caret: Caret) = editor.removeScheduledPasteAction()
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { getUserData(scheduledPasteActionKind).isNotNull } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && editor.getUserData(scheduledPasteActionKind) != null }
 }

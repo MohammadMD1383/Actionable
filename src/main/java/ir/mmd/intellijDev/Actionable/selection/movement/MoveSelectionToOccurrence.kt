@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.ScrollType
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 
 import ir.mmd.intellijDev.Actionable.util.ext.*
@@ -15,10 +16,8 @@ abstract class MoveSelectionToOccurrence(
 	private val isFirst: Boolean,
 	private val isForward: Boolean
 ) : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) {
-		val editor = e.editor
-		val document = editor.document
-		val caret = editor.allCarets.run { if (isFirst) first() else last() }
+	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
+		val caret = allCarets.run { if (isFirst) first() else last() }
 		
 		val (found, start, end) = FindManager.getInstance(e.project).findString(
 			document.immutableCharSequence,
@@ -40,7 +39,7 @@ abstract class MoveSelectionToOccurrence(
 	}
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditorWith { allCaretsHaveSelection } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && allCarets.all { it.hasSelection() } }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 

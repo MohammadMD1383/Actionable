@@ -8,8 +8,6 @@ import ir.mmd.intellijDev.Actionable.action.MultiCaretActionWithInitialization
 import ir.mmd.intellijDev.Actionable.util.DuplicateUtil
 import ir.mmd.intellijDev.Actionable.util.ext.duplicator
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.hasEditor
-import ir.mmd.intellijDev.Actionable.util.ext.hasProject
 
 abstract class DuplicateAction(private val duplicate: DuplicateUtil.(Int, Int) -> Unit) : MultiCaretActionWithInitialization<DuplicateUtil>() {
 	context (LazyEventContext)

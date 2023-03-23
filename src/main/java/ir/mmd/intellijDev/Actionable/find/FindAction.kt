@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.ScrollType
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.afterDoing
 import ir.mmd.intellijDev.Actionable.util.ext.*
@@ -13,33 +14,33 @@ import ir.mmd.intellijDev.Actionable.util.service
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState as MovementSettingsState
 
 abstract class FindAction(private val searchForward: Boolean) : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) = service<MovementSettingsState>().run {
-		val editor = e.editor
-		val caretModel = editor.caretModel
-		val caret = caretModel.allCarets.run { if (searchForward) last() else first() }
-		
-		if (!caret.hasSelection()) return afterDoing {
-			val (startOffset, endOffset) = caret.util.getWordBoundaries(wordSeparators, hardStopCharacters)
+	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
+		service<MovementSettingsState>().run {
+			val caret = allCarets.run { if (searchForward) last() else first() }
 			
-			if (startOffset != endOffset) {
-				caret.setSelection(startOffset, endOffset)
+			if (!caret.hasSelection()) return afterDoing {
+				val (startOffset, endOffset) = caret.util.getWordBoundaries(wordSeparators, hardStopCharacters)
+				
+				if (startOffset != endOffset) {
+					caret.setSelection(startOffset, endOffset)
+				}
 			}
-		}
-		
-		val (found, startOffset, endOffset) = FindManager.getInstance(e.project!!).findString(
-			editor.document.charsSequence,
-			if (searchForward) caret.selectionEnd else caret.selectionStart,
-			FindModel().apply {
-				isForward = searchForward
-				isCaseSensitive = service<SettingsState>().isCaseSensitive
-				stringToFind = caret.selectedText!!
+			
+			val (found, startOffset, endOffset) = FindManager.getInstance(e.project!!).findString(
+				document.charsSequence,
+				if (searchForward) caret.selectionEnd else caret.selectionStart,
+				FindModel().apply {
+					isForward = searchForward
+					isCaseSensitive = service<SettingsState>().isCaseSensitive
+					stringToFind = caret.selectedText!!
+				}
+			)
+			
+			if (found) {
+				val visualPosition = editor.offsetToVisualPosition(startOffset + (caret.offset - caret.selectionStart))
+				caretModel.addCaret(visualPosition, false)!!.setSelection(startOffset, endOffset)
+				editor.scrollingModel.scrollTo(editor.visualToLogicalPosition(visualPosition), ScrollType.RELATIVE)
 			}
-		)
-		
-		if (found) {
-			val visualPosition = editor.offsetToVisualPosition(startOffset + (caret.offset - caret.selectionStart))
-			caretModel.addCaret(visualPosition, false)!!.setSelection(startOffset, endOffset)
-			editor.scrollingModel.scrollTo(editor.visualToLogicalPosition(visualPosition), ScrollType.RELATIVE)
 		}
 	}
 	

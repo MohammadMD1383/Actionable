@@ -7,9 +7,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.spellchecker.SpellCheckerManager
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
-import ir.mmd.intellijDev.Actionable.util.ext.allCaretsHaveSelection
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.hasEditorWith
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 abstract class PredictWordsAction : MultiCaretAction() {
@@ -45,7 +43,7 @@ abstract class PredictWordsAction : MultiCaretAction() {
 	
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {
-		val text = transformWords(predictWords(project!!, caret.selectedText!!))
+		val text = transformWords(predictWords(project, caret.selectedText!!))
 		
 		project.runWriteCommandAction {
 			editor.document.replaceString(caret.selectionStart, caret.selectionEnd, text)
@@ -55,6 +53,6 @@ abstract class PredictWordsAction : MultiCaretAction() {
 	}
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditorWith { allCaretsHaveSelection } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && allCarets.all { it.hasSelection() } }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

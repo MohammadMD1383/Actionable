@@ -6,7 +6,8 @@ import com.intellij.openapi.editor.Caret
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.getText
 
 @Documentation(
 	title = "Remove Carets On Empty Lines",
@@ -26,7 +27,7 @@ class RemoveCaretsOnEmptyLinesAction : MultiCaretAction() {
 		}
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditorWith { caretCount > 1 } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && caretModel.caretCount > 1 }
 	override fun isDumbAware() = true
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
