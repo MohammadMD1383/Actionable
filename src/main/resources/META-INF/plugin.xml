@@ -317,6 +317,8 @@
 			serviceImplementation="ir.mmd.intellijDev.Actionable.find.settings.SettingsState"/>
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState"/>
+		<applicationService
+			serviceImplementation="ir.mmd.intellijDev.Actionable.text.settings.SettingsState"/>
 		
 		<projectService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.html.state.State"/>
