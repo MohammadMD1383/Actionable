@@ -346,14 +346,20 @@
 			</configurable>
 			
 			<configurable
+				id="ir.mmd.intellijDev.Actionable.text.settings.Settings"
+				instance="ir.mmd.intellijDev.Actionable.text.settings.Settings"
+				displayName="Text">
+				
+				<configurable
+					id="ir.mmd.intellijDev.Actionable.text.macro.settings.Settings"
+					instance="ir.mmd.intellijDev.Actionable.text.macro.settings.Settings"
+					displayName="Macro"/>
+			</configurable>
+			
+			<configurable
 				id="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				instance="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				displayName="Find"/>
-			
-			<configurable
-				id="ir.mmd.intellijDev.Actionable.text.macro.settings.Settings"
-				instance="ir.mmd.intellijDev.Actionable.text.macro.settings.Settings"
-				displayName="Macro"/>
 		</applicationConfigurable>
 	</extensions>
 	
