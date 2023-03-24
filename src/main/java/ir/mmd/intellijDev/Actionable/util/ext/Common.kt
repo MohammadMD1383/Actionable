@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.util.ext
 
+import ir.mmd.intellijDev.Actionable.util.StringCaseManipulator
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 
@@ -16,7 +17,7 @@ fun String.isAllDistinct() = toCharArray().distinct().size == length
 /**
  * DSL for building strings using [StringBuilder]
  */
-inline fun stringBuilder(block: StringBuilder.() -> Unit) = StringBuilder().apply(block).toString()
+inline fun buildString(block: StringBuilder.() -> Unit) = StringBuilder().apply(block).toString()
 
 /**
  * `in` operator for checking nullable character existence in a string
@@ -36,15 +37,16 @@ inline val String.titleCase: String get() = replaceFirstChar { c -> c.uppercaseC
  *
  * @return the new string and a new `ranges` that corresponds to replacement ranges in the resulting string
  */
-fun String.replaceRanges(ranges: List<IntRange>, replacement: String): Pair<String, List<IntRange>> {
+fun String.replaceRanges(ranges: List<IntRange>, replacement: String, preserveCase: Boolean = false): Pair<String, List<IntRange>> {
 	val firstRange = ranges.firstOrNull() ?: return this to ranges
 	val newRanges = ranges.toMutableList()
-	val replacementLength = replacement.length
+	val manipulator = StringCaseManipulator(replacement)
 	val builder = StringBuilder()
+	var rpl = if (preserveCase) manipulator.toCaseStyleOf(substring(firstRange)) else replacement
 	
 	builder.append(substring(0, firstRange.first))
-	builder.append(replacement)
-	newRanges[0] = firstRange.first..firstRange.first + replacementLength
+	builder.append(rpl)
+	newRanges[0] = firstRange.first..firstRange.first + rpl.length
 	
 	if (ranges.size == 1) {
 		builder.append(substring(firstRange.last))
@@ -53,22 +55,23 @@ fun String.replaceRanges(ranges: List<IntRange>, replacement: String): Pair<Stri
 	
 	for (i in 1 until ranges.lastIndex) {
 		val text = substring(ranges[i - 1].last, ranges[i].first)
-		builder.append(text)
-		builder.append(replacement)
-		
 		val newRangeStart = newRanges[i - 1].last + text.length
-		newRanges[i] = newRangeStart..newRangeStart + replacementLength
+		rpl = if (preserveCase) manipulator.toCaseStyleOf(substring(ranges[i])) else replacement
+		
+		builder.append(text)
+		builder.append(rpl)
+		newRanges[i] = newRangeStart..newRangeStart + rpl.length
 	}
 	
 	val lastRange = ranges.last()
 	val text = substring(ranges[ranges.lastIndex - 1].last, lastRange.first)
+	val newRangeStart = newRanges[ranges.lastIndex - 1].last + text.length
+	rpl = if (preserveCase) manipulator.toCaseStyleOf(substring(lastRange)) else replacement
 	
 	builder.append(text)
-	builder.append(replacement)
+	builder.append(rpl)
 	builder.append(substring(lastRange.last))
-	
-	val newRangeStart = newRanges[ranges.lastIndex - 1].last + text.length
-	newRanges[ranges.lastIndex] = newRangeStart..newRangeStart + replacementLength
+	newRanges[ranges.lastIndex] = newRangeStart..newRangeStart + rpl.length
 	
 	return builder.toString() to newRanges
 }

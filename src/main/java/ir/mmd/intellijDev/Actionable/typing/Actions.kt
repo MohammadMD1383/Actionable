@@ -1,12 +1,12 @@
 package ir.mmd.intellijDev.Actionable.typing
 
 
-import ir.mmd.intellijDev.Actionable.util.ext.stringBuilder
+import ir.mmd.intellijDev.Actionable.util.ext.buildString
 import ir.mmd.intellijDev.Actionable.util.ext.titleCase
 
 
 class PredictCamelcaseWordsAction : PredictWordsAction() {
-	override fun transformWords(words: MutableList<String>) = stringBuilder {
+	override fun transformWords(words: MutableList<String>) = buildString {
 		append(words.removeFirst())
 		append(words.joinToString("") { it.titleCase })
 	}

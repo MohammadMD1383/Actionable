@@ -9,7 +9,9 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.ui.components.JBTextArea
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.caretsAndSelectionsAreOnTheSameLine
+import ir.mmd.intellijDev.Actionable.text.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.service
 
 open class DuplicateLineAndInsertContent : AnAction() {
 	context (LazyEventContext)
@@ -36,6 +38,7 @@ open class DuplicateLineAndInsertContent : AnAction() {
 		}
 		
 		val replacements = getReplacements() ?: return
+		val preserveCase = service<SettingsState>().preserveCase
 		val lineNumber = document.getLineNumber(allCarets.first().offset)
 		var lineStartOffset = document.getLineStartOffset(lineNumber)
 		val lineEndOffset = document.getLineEndOffset(lineNumber)
@@ -46,7 +49,7 @@ open class DuplicateLineAndInsertContent : AnAction() {
 		
 		project.runWriteCommandAction {
 			replacements.removeFirst().let {
-				val (newLine, ranges) = rawLine.replaceRanges(replacementRanges, it)
+				val (newLine, ranges) = rawLine.replaceRanges(replacementRanges, it, preserveCase)
 				
 				document.replaceString(lineStartOffset, lineEndOffset, newLine)
 				
@@ -60,7 +63,7 @@ open class DuplicateLineAndInsertContent : AnAction() {
 			}
 			
 			replacements.forEach {
-				val (newLine, ranges) = rawLine.replaceRanges(replacementRanges, it)
+				val (newLine, ranges) = rawLine.replaceRanges(replacementRanges, it, preserveCase)
 				
 				document.insertString(lineStartOffset++, "\n$newLine")
 				
