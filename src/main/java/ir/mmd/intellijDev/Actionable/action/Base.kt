@@ -26,6 +26,7 @@ class LazyEventContext(val event: AnActionEvent) {
 	val document: Document by lazy { editor.document }
 	val caretModel: CaretModel by lazy { editor.caretModel }
 	val selectionModel: SelectionModel by lazy { editor.selectionModel }
+	val scrollingModel: ScrollingModel by lazy { editor.scrollingModel }
 	val allCarets: List<Caret> by lazy { caretModel.allCarets }
 	val primaryCaret: Caret by lazy { caretModel.primaryCaret }
 	

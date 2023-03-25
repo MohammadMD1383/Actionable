@@ -39,7 +39,7 @@ abstract class FindAction(private val searchForward: Boolean) : AnAction() {
 			if (found) {
 				val visualPosition = editor.offsetToVisualPosition(startOffset + (caret.offset - caret.selectionStart))
 				caretModel.addCaret(visualPosition, false)!!.setSelection(startOffset, endOffset)
-				editor.scrollingModel.scrollTo(editor.visualToLogicalPosition(visualPosition), ScrollType.RELATIVE)
+				scrollingModel.scrollTo(editor.visualToLogicalPosition(visualPosition), ScrollType.RELATIVE)
 			}
 		}
 	}

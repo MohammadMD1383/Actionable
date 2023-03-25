@@ -33,7 +33,7 @@ abstract class MoveSelectionToOccurrence(
 			val finalPosition = editor.offsetToLogicalPosition(start + (caret.offset - caret.selectionStart))
 			caret.removeSelection()
 			caret moveTo finalPosition
-			editor.scrollingModel.scrollTo(finalPosition, ScrollType.RELATIVE)
+			scrollingModel.scrollTo(finalPosition, ScrollType.RELATIVE)
 			if (caret.isValid) caret.setSelection(start, end)
 		}
 	}
