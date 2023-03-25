@@ -92,6 +92,17 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.18.0:</b><br>
+				fixed issues #39 #40 #42<br>
+				fixed an issue with MoveCaretUpTheTree action that didn't scroll to caret<br>
+				from now DuplicateLineAndPasteContentFromClipboard can work with multiple carets/selection<br>
+				there are two new settings ... check them out in <code>Actionable > Text</code> and <code>Actionable > Caret > Movement</code><br>
+				minor improvements<br>
+				new actions:<br>
+				<ul>
+					<li>Duplicate Line and Insert Content (using a modal dialog)</li>
+				</ul>
+			</li>
 			<li><b>3.17.0:</b><br>
 				fixed issues #35<br>
 				fixed an issue with AddImportDialogAction<br>
