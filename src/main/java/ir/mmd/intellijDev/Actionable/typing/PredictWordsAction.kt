@@ -8,6 +8,7 @@ import com.intellij.spellchecker.SpellCheckerManager
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.haveSelection
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 abstract class PredictWordsAction : MultiCaretAction() {
@@ -53,6 +54,6 @@ abstract class PredictWordsAction : MultiCaretAction() {
 	}
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && allCarets.all { it.hasSelection() } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && allCarets.haveSelection }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

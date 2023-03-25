@@ -18,7 +18,7 @@ abstract class UnselectAction : AnAction() {
 	abstract fun getTargetCaret(carets: List<Caret>): Caret
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && caretModel.caretCount > 1 }
+	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && caretCount > 1 }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 

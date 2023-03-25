@@ -139,6 +139,6 @@ abstract class MoveSelectionAction : AnAction() {
 	}
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && allCarets.all { it.hasSelection() } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && allCarets.haveSelection }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

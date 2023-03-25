@@ -39,7 +39,7 @@ abstract class MoveSelectionToOccurrence(
 	}
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && allCarets.all { it.hasSelection() } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && allCarets.haveSelection }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 

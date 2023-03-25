@@ -79,6 +79,6 @@ class ExecutePasteAction : CaretEditingAction() {
 	}
 	
 	override fun update(e: AnActionEvent) = e.enableIf {
-		hasProject && hasEditor && caretModel.caretCount == 1 && editor.getUserData(scheduledPasteActionKind) != null
+		hasProject && hasEditor && caretCount == 1 && editor.getUserData(scheduledPasteActionKind) != null
 	}
 }

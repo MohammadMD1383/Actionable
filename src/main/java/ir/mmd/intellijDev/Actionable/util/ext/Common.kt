@@ -26,16 +26,27 @@ inline fun buildString(block: StringBuilder.() -> Unit) = StringBuilder().apply(
 inline operator fun String.contains(char: Char?) = char != null && indexOf(char) >= 0
 
 /**
- * transforms first letter to upper-case
+ * Transforms the first letter to upper-case
  */
 inline val String.titleCase: String get() = replaceFirstChar { c -> c.uppercaseChar() }
+
+/**
+ * Converts the case-style of the receiver to the case-style of the [other]
+ *
+ * @see ir.mmd.intellijDev.Actionable.util.StringCaseManipulator.CaseStyle
+ * @see StringCaseManipulator
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline infix fun String.toCaseStyleOf(other: String): String {
+	return StringCaseManipulator(this).toCaseStyleOf(other)
+}
 
 /**
  * Replaces all [ranges] in the string with the [replacement]
  *
  * **IMPORTANT:** The [ranges] must be sorted
  *
- * @return the new string and a new `ranges` that corresponds to replacement ranges in the resulting string
+ * @return the new string and a new `ranges` that corresponds to replacement ranges in the resulting string.
  */
 fun String.replaceRanges(ranges: List<IntRange>, replacement: String, preserveCase: Boolean = false): Pair<String, List<IntRange>> {
 	val firstRange = ranges.firstOrNull() ?: return this to ranges
@@ -91,6 +102,11 @@ inline val Int.isPositive: Boolean get() = this > 0
  * like `forEach` but brings the receiver to the scope
  */
 inline fun <T> Iterable<T>.withEach(block: T.() -> Unit) = forEach { it.block() }
+
+/**
+ * like `forEachIndexed` but brings the receiver to the scope
+ */
+inline fun <T> Iterable<T>.withEachIndexed(block: T.(Int) -> Unit) = forEachIndexed { i, it -> it.block(i) }
 
 /**
  * like `forEach` but iterates over those items that meet the [condition]

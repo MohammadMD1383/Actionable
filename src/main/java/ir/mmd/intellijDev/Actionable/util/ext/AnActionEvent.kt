@@ -19,15 +19,15 @@ inline val AnActionEvent.psiFile: PsiFile? get() = getData(CommonDataKeys.PSI_FI
 /**
  * Sets the presentation of the current action to the result of [block]
  *
- * if [block] throws an exception then it will be evaluated to false
+ * if [block] throws an exception then it will be evaluated to false.
  *
  * Equivalent of [AnActionEvent.getPresentation] and [com.intellij.openapi.actionSystem.Presentation.setEnabled] using result of the [block]
  *
  * @param block the criteria
  */
-inline fun AnActionEvent.enableIf(block: LazyEventContext.() -> Boolean) {
+inline fun AnActionEvent.enableIf(block: context (LazyEventContext) () -> Boolean) {
 	presentation.isEnabled = try {
-		LazyEventContext(this).block()
+		block(LazyEventContext(this))
 	} catch (ignored: Exception) {
 		false
 	}

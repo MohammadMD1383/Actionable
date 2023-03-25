@@ -8,6 +8,7 @@ import ir.mmd.intellijDev.Actionable.action.MultiCaretActionWithInitialization
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.haveSelection
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 import ir.mmd.intellijDev.Actionable.util.service
 
@@ -51,6 +52,6 @@ class RemoveDuplicatesAction : MultiCaretActionWithInitialization<HashSet<String
 	}
 	
 	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && caretModel.caretCount > 1 && allCarets.all { it.hasSelection() } }
+	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && caretCount > 1 && allCarets.haveSelection }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }

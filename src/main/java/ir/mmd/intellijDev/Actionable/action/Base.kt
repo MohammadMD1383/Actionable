@@ -10,7 +10,9 @@ import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.psiFile
 
 /**
- * This model contains required fields for actions that are lazy-loaded and performance/resource friendly
+ * This model contains required fields for actions.
+ *
+ * Fields are lazy-loaded and performance/resource friendly.
  *
  * @see AnActionEvent
  */
@@ -29,6 +31,7 @@ class LazyEventContext(val event: AnActionEvent) {
 	val scrollingModel: ScrollingModel by lazy { editor.scrollingModel }
 	val allCarets: List<Caret> by lazy { caretModel.allCarets }
 	val primaryCaret: Caret by lazy { caretModel.primaryCaret }
+	val caretCount: Int by lazy { caretModel.caretCount }
 	
 	/**
 	 * This can be used to do some stuff in the scope of [LazyEventContext]
@@ -126,5 +129,5 @@ abstract class SingleCaretAction(private val forceSingleCaret: Boolean = true) :
 	open val actionEnabled: Boolean
 		get() = true
 	
-	override fun update(e: AnActionEvent) = e.enableIf { actionEnabled and (!forceSingleCaret || caretModel.caretCount == 1) }
+	override fun update(e: AnActionEvent) = e.enableIf { actionEnabled and (!forceSingleCaret || caretCount == 1) }
 }

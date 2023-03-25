@@ -27,7 +27,7 @@ class RemoveCaretsOnEmptyLinesAction : MultiCaretAction() {
 		}
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && caretModel.caretCount > 1 }
+	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && caretCount > 1 }
 	override fun isDumbAware() = true
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
