@@ -33,7 +33,7 @@ class LazyEventContext(val event: AnActionEvent) {
 	/**
 	 * This can be used to do some stuff in the scope of [LazyEventContext]
 	 */
-	inline operator fun <T> invoke(block: LazyEventContext.() -> T): T = block()
+	inline operator fun <T> invoke(block: context(LazyEventContext) () -> T): T = block(this)
 	
 	val hasProject get() = _project != null
 	val hasEditor get() = _editor != null
