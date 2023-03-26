@@ -21,6 +21,7 @@
 			<li>Duplicate Line and Paste Contents from Clipboard</li>
 			<li>Duplicate Line and Insert Contents</li>
 			<li>Paste Case-Preserving</li>
+			<li>Replace Selections Preserving Case</li>
 			<li>Open Macro Settings</li>
 			<li>Add Line Above Caret Without Moving Caret</li>
 			<li>Add Line Below Caret Without Moving Caret</li>
@@ -452,6 +453,12 @@
 					description="Pastes clipboard contents while preserving the case (if selected text is camelCase then the pasted content will be converted to camelCase)">
 					<add-to-group group-id="Copy.Paste.Special"/>
 				</action>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.text.ReplaceSelectionsPreservingCaseAction"
+					id="ir.mmd.intellijDev.Actionable.text.ReplaceSelectionsPreservingCaseAction"
+					text="Replace Selections Preserving Case"
+					description="Replace selected text with new text that matches its case-style. Enter the new text in a prompt dialog"/>
 				
 				<separator/>
 				

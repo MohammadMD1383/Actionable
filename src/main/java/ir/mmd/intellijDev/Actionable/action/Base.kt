@@ -73,12 +73,12 @@ abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction {
 	constructor() : super()
 	
 	/**
-	 * backing field for [data]
+	 * Backing field for [data]
 	 */
 	private var _data: T? = null
 	
 	/**
-	 * return value of [initialize] will be stored in this field per action execution
+	 * Return value of [initialize] will be stored in this field per action execution.
 	 */
 	protected val data: T & Any get() = _data!!
 	
@@ -93,7 +93,7 @@ abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction {
 	/**
 	 * This method will be executed once after all [perform] calls have finished
 	 *
-	 * This can be used to do cleanup ...
+	 * This can be used to doing cleanup ...
 	 */
 	context (LazyEventContext)
 	open fun finalize() = Unit

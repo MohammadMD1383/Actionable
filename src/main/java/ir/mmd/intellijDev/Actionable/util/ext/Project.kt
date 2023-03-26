@@ -8,7 +8,7 @@ import com.intellij.psi.PsiDocumentManager
 /**
  * Helper method to be used instead of `WriteCommandAction.runWriteCommandAction([Project]) { ... }`
  *
- * @see [WriteCommandAction.runWriteCommandAction]
+ * @see WriteCommandAction.runWriteCommandAction
  */
 @Suppress("NOTHING_TO_INLINE")
 inline fun Project?.runWriteCommandAction(noinline action: () -> Unit) = WriteCommandAction.runWriteCommandAction(this, action)
