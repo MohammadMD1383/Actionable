@@ -94,6 +94,15 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.19.0:</b><br>
+				fixed issues #37 #38<br>
+				minor improvements<br>
+				new actions:<br>
+				<ul>
+					<li>Paste Preserving Case</li>
+					<li>Replace Selections Preserving Case</li>
+				</ul>
+			</li>
 			<li><b>3.18.0:</b><br>
 				fixed issues #39 #40 #42<br>
 				fixed an issue with MoveCaretUpTheTree action that didn't scroll to caret<br>
