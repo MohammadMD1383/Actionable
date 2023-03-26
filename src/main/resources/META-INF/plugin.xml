@@ -20,6 +20,7 @@
 			<li>Predict Words: Spaced</li>
 			<li>Duplicate Line and Paste Contents from Clipboard</li>
 			<li>Duplicate Line and Insert Contents</li>
+			<li>Paste Case-Preserving</li>
 			<li>Open Macro Settings</li>
 			<li>Add Line Above Caret Without Moving Caret</li>
 			<li>Add Line Below Caret Without Moving Caret</li>
@@ -443,6 +444,14 @@
 					id="ir.mmd.intellijDev.Actionable.text.DuplicateLineAndInsertContent"
 					text="Duplicate Line and Insert Contents"
 					description="Duplicates line under caret for each line of user input and pastes that line at current caret position"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.text.PastePreservingCaseAction"
+					id="ir.mmd.intellijDev.Actionable.text.PastePreservingCaseAction"
+					text="Paste Case-Preserving"
+					description="Pastes clipboard contents while preserving the case (if selected text is camelCase then the pasted content will be converted to camelCase)">
+					<add-to-group group-id="Copy.Paste.Special"/>
+				</action>
 				
 				<separator/>
 				
