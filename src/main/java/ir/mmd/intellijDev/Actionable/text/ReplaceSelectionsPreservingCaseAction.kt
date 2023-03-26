@@ -26,7 +26,7 @@ class ReplaceSelectionsPreservingCaseAction : AnAction() {
 			return
 		}
 		
-		project.runWriteCommandAction {
+		runWriteCommandAction {
 			allCarets.withEach {
 				replaceSelectedText { text toCaseStyleOf it }
 			}

@@ -8,6 +8,7 @@ import com.intellij.psi.PsiFile
 import ir.mmd.intellijDev.Actionable.util.ext.editor
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.psiFile
+import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 /**
  * This model contains required fields for actions.
@@ -33,14 +34,21 @@ class LazyEventContext(val event: AnActionEvent) {
 	val primaryCaret: Caret by lazy { caretModel.primaryCaret }
 	val caretCount: Int by lazy { caretModel.caretCount }
 	
+	val hasProject get() = _project != null
+	val hasEditor get() = _editor != null
+	val hasPsiFile get() = _psiFile != null
+	
 	/**
 	 * This can be used to do some stuff in the scope of [LazyEventContext]
 	 */
 	inline operator fun <T> invoke(block: context(LazyEventContext) () -> T): T = block(this)
 	
-	val hasProject get() = _project != null
-	val hasEditor get() = _editor != null
-	val hasPsiFile get() = _psiFile != null
+	/**
+	 * Use this instead of [Project.runWriteCommandAction] to prevent [NullPointerException] when the project can be null.
+	 *
+	 * This method invokes [com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction] with the nullable version of the [project]
+	 */
+	fun runWriteCommandAction(action: () -> Unit) = _project.runWriteCommandAction(action)
 }
 
 /**
