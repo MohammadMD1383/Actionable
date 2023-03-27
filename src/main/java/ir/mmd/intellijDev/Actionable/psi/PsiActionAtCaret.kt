@@ -8,6 +8,7 @@ import com.intellij.psi.PsiElement
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.elementAtOrBefore
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.haveSelection
 
 abstract class PsiActionAtCaret : AnAction() {
 	context (LazyEventContext)
@@ -37,7 +38,7 @@ abstract class PsiActionAtCaret : AnAction() {
 	}
 	
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor }
+	override fun update(e: AnActionEvent) = e.enableIf { hasEditor and !allCarets.haveSelection }
 }
 
 abstract class PsiActionAtCaretWithWriteAction : PsiActionAtCaret() {
