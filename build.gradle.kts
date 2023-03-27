@@ -51,8 +51,8 @@ tasks.withType<KotlinCompile> {
 
 intellij {
 	plugins.set(
-		"java",
-		"Kotlin"
+		"com.intellij.java",
+		"org.jetbrains.kotlin"
 	)
 	
 	type.set("IC")

@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.selection
 
+import com.goide.psi.GoStringLiteral
 import com.intellij.lang.javascript.psi.JSLiteralExpression
 import com.intellij.lang.javascript.psi.ecma6.JSStringTemplateExpression
 import com.intellij.openapi.editor.Caret
@@ -97,15 +98,18 @@ class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
 		val element = psiFile.elementAt(caret)
 		
 		return when (psiFile.fileType.name.lowercase()) {
-			"java" -> (element as? PsiLiteralExpression)?.textRange?.intRange
+			"java" -> element?.parentOfType<PsiLiteralExpression>(true)?.textRange?.intRange
 			
 			"kotlin" -> element?.parentOfType<KtStringTemplateExpression>(true)?.textRange?.intRange
 			
-			"javascript" -> element?.parentOfTypes(
+			"javascript",
+			"typescript" -> element?.parentOfTypes(
 				JSStringTemplateExpression::class,
 				JSLiteralExpression::class,
 				withSelf = true
 			)?.textRange?.intRange
+			
+			"go" -> element?.parentOfType<GoStringLiteral>(true)?.textRange?.intRange
 			
 			else -> rawSelectionRange(caret)
 		}
