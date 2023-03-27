@@ -8,26 +8,25 @@ import com.intellij.psi.PsiElement
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.elementAtOrBefore
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.withEach
 
 abstract class PsiActionAtCaret : AnAction() {
 	context (LazyEventContext)
 	abstract fun doAction(caret: Caret, psiElement: PsiElement)
 	
 	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
-		findCaretsAndPsiElements().withEach {
-			doAction(first, second)
+		findCaretsAndPsiElements().forEach { (caret, psiElement) ->
+			doAction(caret, psiElement)
 		}
 	}
 	
 	context (LazyEventContext)
 	protected fun findCaretsAndPsiElements() = allCarets.mapNotNull {
 		it to (psiFile.elementAtOrBefore(it) ?: return@mapNotNull null)
-	}.distinctBy {
-		it.second
+	}.distinctBy { (_, psiElement) ->
+		psiElement
 	}.also { list ->
-		list.map {
-			it.first
+		list.map { (caret, _) ->
+			caret
 		}.let {
 			allCarets.filter { caret ->
 				caret !in it
@@ -44,8 +43,8 @@ abstract class PsiActionAtCaret : AnAction() {
 abstract class PsiActionAtCaretWithWriteAction : PsiActionAtCaret() {
 	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
 		runWriteCommandAction {
-			findCaretsAndPsiElements().withEach {
-				doAction(first, second)
+			findCaretsAndPsiElements().forEach { (caret, psiElement) ->
+				doAction(caret, psiElement)
 			}
 		}
 	}
