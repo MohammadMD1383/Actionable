@@ -76,7 +76,6 @@ fun Document.getWordBoundaries(
 	separators: String
 ): IntArray = intArrayOf(0, 0).apply {
 	val chars = separators.toCharArray()
-	val sequence = charsSequence
 	
 	if ((charAtOrNull(offset) ?: return@apply) in separators) {
 		return@apply
@@ -84,15 +83,15 @@ fun Document.getWordBoundaries(
 	
 	set(
 		0,
-		sequence.lastIndexOfAny(chars, offset - 1).let {
+		immutableCharSequence.lastIndexOfAny(chars, offset - 1).let {
 			if (it == -1) 0 else it + 1
 		}
 	)
 	
 	set(
 		1,
-		sequence.indexOfAny(chars, offset + 1).let {
-			if (it == -1) sequence.lastIndex else it
+		immutableCharSequence.indexOfAny(chars, offset + 1).let {
+			if (it == -1) immutableCharSequence.lastIndex else it
 		}
 	)
 }
@@ -107,18 +106,14 @@ fun Document.getWordBoundaries(offset: Int): IntArray {
 /**
  * Returns word at [offset] in the [Document]
  *
- * @param boundaries (Optional) you can set this to get word boundaries (start and end offset in the [Document]) in addition to the word itself
+ * @param boundaries (Optional) you can set this to get word boundaries (start and end offset in the [Document]) as well as the word itself.
  * @see [Document.getWordBoundaries]
  */
 fun Document.getWordAtOffset(
 	offset: Int,
 	boundaries: IntArray? = null
 ): String? {
-	val settings = service<SettingsState>()
-	val (startOffset, endOffset) = getWordBoundaries(
-		offset,
-		settings.wordSeparators + settings.hardStopCharacters
-	)
+	val (startOffset, endOffset) = getWordBoundaries(offset)
 	
 	return if (startOffset == endOffset) null else {
 		boundaries?.let {
@@ -128,4 +123,14 @@ fun Document.getWordAtOffset(
 		
 		immutableCharSequence.substring(startOffset, endOffset)
 	}
+}
+
+/**
+ * Same as [Document.getWordAtOffset] but catches the word backward if none found in front of the [offset].
+ */
+fun Document.getWordAtOffsetOrBefore(
+	offset: Int,
+	boundaries: IntArray?
+): String? {
+	return getWordAtOffset(offset, boundaries) ?: getWordAtOffset(offset - 1, boundaries)
 }

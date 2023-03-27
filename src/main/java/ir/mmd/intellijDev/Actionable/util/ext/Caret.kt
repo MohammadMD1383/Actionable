@@ -89,3 +89,8 @@ inline fun Caret.replaceSelectedText(removeSelection: Boolean = false, text: (St
  * Checks whether that all the carets have selection
  */
 inline val List<Caret>.haveSelection get() = all { it.hasSelection() }
+
+/**
+ * Checks whether that all the carets don't have selection
+ */
+inline val List<Caret>.dontHaveSelection get() = !any { it.hasSelection() }

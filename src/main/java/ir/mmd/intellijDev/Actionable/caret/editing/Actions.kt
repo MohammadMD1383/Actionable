@@ -2,12 +2,11 @@ package ir.mmd.intellijDev.Actionable.caret.editing
 
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
-import com.intellij.psi.PsiElement
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.internal.doc.Documentation
-import ir.mmd.intellijDev.Actionable.psi.PsiActionAtCaretWithWriteAction
+import ir.mmd.intellijDev.Actionable.psi.PsiActionAtCaret
+import ir.mmd.intellijDev.Actionable.text.WordActionAtCaret
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 
 
 @Documentation(
@@ -84,11 +83,14 @@ class CopyElementAtCaret : CaretEditingAction() {
 	override fun perform(caret: Caret) = copyElementAtCaret(false)
 }
 
-class DeleteElementAtCaretAction : PsiActionAtCaretWithWriteAction() {
-	context(LazyEventContext) override fun doAction(caret: Caret, psiElement: PsiElement) {
-		caret moveTo psiElement.textRange.startOffset
-		psiElement.delete()
-	}
+class DeleteElementAtCaretAction : PsiActionAtCaret(true) {
+	context(LazyEventContext)
+	override fun doAction(model: Model) = model.psiElement.delete()
+}
+
+class DeleteWordAtCaretAction : WordActionAtCaret(true) {
+	context(LazyEventContext)
+	override fun doAction(model: Model) = document.deleteString(model.boundaries[0], model.boundaries[1])
 }
 
 class SetWordCutPasteOffset : CaretEditingAction() {

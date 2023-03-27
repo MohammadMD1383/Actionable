@@ -62,6 +62,7 @@
 			<li>Copy Element At Caret</li>
 			<li>Cut Element At Caret</li>
 			<li>Delete Element At Caret</li>
+			<li>Delete Word At Caret</li>
 			<li>Set Copy-Paste Word Offset At Caret</li>
 			<li>Set Cut-Paste Word Offset At Caret</li>
 			<li>Set Copy-Paste Element Offset At Caret</li>
@@ -753,6 +754,12 @@
 					id="ir.mmd.intellijDev.Actionable.caret.editing.DeleteElementAtCaretAction"
 					text="Delete Element At Caret"
 					description="Deletes the element under the caret"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.DeleteWordAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.DeleteWordAtCaretAction"
+					text="Delete Word At Caret"
+					description="Deletes the word under the caret"/>
 				
 				<separator/>
 				
