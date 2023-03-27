@@ -80,6 +80,7 @@
 			<li>Move Caret to Previous Element with Selection</li>
 			<li>Move Caret to Next Same Element</li>
 			<li>Move Caret to Previous Same Element</li>
+			<li>Delete Parameter At Caret</li>
 			<li>Set Editor Tab Placement to Top</li>
 			<li>Set Editor Tab Placement to Left</li>
 			<li>Set Editor Tab Placement to Bottom</li>
@@ -870,6 +871,14 @@
 					id="ir.mmd.intellijDev.Actionable.caret.movement.MoveCaretToPreviousSameElement"
 					text="Move Caret to Previous Same Element"
 					description="Moves the caret to previous same psi element"/>
+				
+				<separator/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.DeleteParamAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.DeleteParamAtCaretAction"
+					text="Delete Parameter At Caret"
+					description="Deletes the parameter under the caret"/>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.GlobalToggles" text="Global Toggles" popup="true">
