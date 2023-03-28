@@ -87,3 +87,14 @@ inline val PsiElement.parentNoWhitespace: PsiElement?
 		
 		return parent
 	}
+
+/**
+ * Checks whether that this [PsiElement] exists inside [other] [PsiElement]
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun PsiElement.contains(other: PsiElement): Boolean {
+	val thisRange = textRange
+	val otherRange = other.textRange
+	
+	return thisRange.startOffset <= otherRange.startOffset && thisRange.endOffset >= otherRange.endOffset
+}

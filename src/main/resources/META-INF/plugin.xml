@@ -81,6 +81,7 @@
 			<li>Move Caret to Next Same Element</li>
 			<li>Move Caret to Previous Same Element</li>
 			<li>Delete Parameter At Caret</li>
+			<li>Delete Operand At Caret</li>
 			<li>Set Editor Tab Placement to Top</li>
 			<li>Set Editor Tab Placement to Left</li>
 			<li>Set Editor Tab Placement to Bottom</li>
@@ -881,6 +882,12 @@
 					id="ir.mmd.intellijDev.Actionable.caret.editing.DeleteParamAtCaretAction"
 					text="Delete Parameter At Caret"
 					description="Deletes the parameter under the caret"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.DeleteOperandAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.DeleteOperandAtCaretAction"
+					text="Delete Operand At Caret"
+					description="Deletes the operand (in binary expressions) under the caret"/>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.GlobalToggles" text="Global Toggles" popup="true">

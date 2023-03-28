@@ -134,3 +134,14 @@ inline operator fun IntRange.component1() = first
  */
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun IntRange.component2() = last
+
+/**
+ * Checks whether an [IntRange] [other] is inside this [IntRange]
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun IntRange.contains(other: IntRange) = first <= other.first && last >= other.last
+
+/**
+ * Executes [block] if the receiver is not null and is true.
+ */
+inline fun <R> Boolean?.then(block: () -> R): R? = if (this == true) block() else null
