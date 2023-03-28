@@ -10,7 +10,7 @@
 		<h2>I NEED YOUR HELP TO COMPLETE THE DOCUMENTATION - <a href="https://github.com/MohammadMD1383/Actionable/issues/31">more info</a></h2>
 		
 		<div>Features:</div>
-		<ul>
+		<ul>			
 			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>
@@ -102,6 +102,23 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.20.0:</b><br>
+				<b>FINAL RELEASE OF v3.x.x! v4 IS COMING!!!</b><br>
+				fixed issues #13 #40<br>
+				fixed an issue with SelectLiteralElementUnderCaretAction in Kotlin<br>
+				minor improvements<br>
+				new actions:<br>
+				<ul>
+					<li>Delete Element At Caret</li>
+					<li>Delete Word At Caret</li>
+					<li>Copy Parameter At Caret</li>
+					<li>Cut Parameter At Caret</li>
+					<li>Delete Parameter At Caret</li>
+					<li>Copy Operand At Caret</li>
+					<li>Cut Operand At Caret</li>
+					<li>Delete Operand At Caret</li>
+				</ul>
+			</li>
 			<li><b>3.19.0:</b><br>
 				fixed issues #37 #38<br>
 				minor improvements<br>
