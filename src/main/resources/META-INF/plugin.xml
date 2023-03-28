@@ -883,6 +883,20 @@
 					text="Delete Parameter At Caret"
 					description="Deletes the parameter under the caret"/>
 				
+				<separator/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CopyOperandAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CopyOperandAtCaretAction"
+					text="Copy Operand At Caret"
+					description="Copies the operand (in binary expressions) under the caret"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CutOperandAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CutOperandAtCaretAction"
+					text="Cut Operand At Caret"
+					description="Cuts the operand (in binary expressions) under the caret"/>
+				
 				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.DeleteOperandAtCaretAction"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.DeleteOperandAtCaretAction"

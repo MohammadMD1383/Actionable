@@ -5,15 +5,20 @@ import com.goide.psi.GoAndExpr
 import com.goide.psi.GoMulExpr
 import com.goide.psi.GoOrExpr
 import com.intellij.lang.javascript.psi.JSBinaryExpression
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiPolyadicExpression
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.psi.PsiActionAtCaret
 import ir.mmd.intellijDev.Actionable.util.ext.contains
+import ir.mmd.intellijDev.Actionable.util.ext.copyToClipboard
 import ir.mmd.intellijDev.Actionable.util.ext.parentOfType
 import ir.mmd.intellijDev.Actionable.util.ext.parentOfTypes
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 
-class DeleteOperandAtCaretAction : PsiActionAtCaret(true) {
+abstract class OperandAtCaretAction(inWriteAction: Boolean = false) : PsiActionAtCaret(inWriteAction) {
+	context (LazyEventContext)
+	abstract fun execute(operand: PsiElement)
+	
 	context(LazyEventContext)
 	override fun doAction(model: Model) {
 		when (psiFile.fileType.name.lowercase()) {
@@ -46,6 +51,26 @@ class DeleteOperandAtCaretAction : PsiActionAtCaret(true) {
 			}
 			
 			else -> null
-		}?.delete()
+		}?.let {
+			execute(it)
+		}
+	}
+}
+
+class DeleteOperandAtCaretAction : OperandAtCaretAction(true) {
+	context(LazyEventContext)
+	override fun execute(operand: PsiElement) = operand.delete()
+}
+
+class CopyOperandAtCaretAction : OperandAtCaretAction() {
+	context(LazyEventContext)
+	override fun execute(operand: PsiElement) = operand.text.copyToClipboard()
+}
+
+class CutOperandAtCaretAction : OperandAtCaretAction(true) {
+	context(LazyEventContext)
+	override fun execute(operand: PsiElement) {
+		operand.text.copyToClipboard()
+		operand.delete()
 	}
 }
