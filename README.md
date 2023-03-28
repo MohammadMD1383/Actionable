@@ -1,16 +1,34 @@
 # IntelliJ Platform Actionable Plugin - [Documentation](https://mohammadmd1383.github.io/Actionable/)
 
-This plugin adds some extra functionality that makes it easier to interact with the editor.
+## What Is _Actionable_?
 
-<b>Feel free to extend this plugin by your needs!</b>
+**_Actionable_** is a plugin for all the IntelliJ-Based IDEs that adds
+many extra actions, which makes it easier to interact with the IDE.
 
-## I need help to complete documentation!!!
-Please refer to [#31](https://github.com/MohammadMD1383/Actionable/issues/31) for more info and for asking your questions about it. PRs from everyone is welcomed!
+It provides you simpler ways to do repetitive tasks as well as doing
+interesting things!
 
-## Want to test latest features ASAP?
-Each commit will trigger a github action that will compile and distribute the plugin in releases page that you can install before official release in JB Marketplace!
+Enough here, let’s see the plugin in action! [Getting Started](https://mohammadmd1383.github.io/Actionable/Getting%20Started/)
 
-## How does it work?
+## What's New In v4?
 
-For convenience, I haven't added any hot keys to the actions by default.<br/>
-If you like any of the actions you can add your favorite hotkeys to them. 
+Along with all refactorings, cleanup and documentation changes, I decided to add language-specific actions
+that help you do interesting things with your favorite language.
+
+## Version 3 vs 4
+
+Prior to v4 (up to v3.20.x), the plugin was used to provide a wide compatibility range.
+But as of v4, the compatibility range would be less than it was in v3 and before.
+This is because of providing better quality.
+
+## Test Latest Features ASAP
+
+Want to test the latest features before they officially get released?
+Checkout [releases page](https://github.com/MohammadMD1383/Actionable/releases) for nightly builds.
+
+## How To Help?
+
+* Feel free to open any feature request to help me add more features to this
+  plugin. ([Issue Tracker](https://github.com/MohammadMD1383/Actionable/issues))
+* Report every bug or inconvenience you feel. ([Issue Tracker](https://github.com/MohammadMD1383/Actionable/issues))
+* All the [PRs](https://github.com/MohammadMD1383/Actionable/pulls) are welcomed!

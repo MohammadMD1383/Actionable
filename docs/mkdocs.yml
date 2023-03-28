@@ -1,3 +1,38 @@
-site_name: My Docs
+site_name: Actionable
+repo_name: MohammadMD1383/Actionable
+repo_url: https://github.com/MohammadMD1383/Actionable
 theme:
   name: material
+  
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - announce.dismiss
+  
+  icon:
+    repo: fontawesome/brands/github
+  
+  palette:
+    - scheme: default
+      media: "(prefers-color-scheme: light)"
+      primary: teal
+      accent: deep purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to Dark Mode
+        
+    - scheme: slate
+      media: "(prefers-color-scheme: dark)"
+      primary: teal
+      accent: yellow
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to Light Mode
