@@ -878,6 +878,18 @@
 				<separator/>
 				
 				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CopyParamAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CopyParamAtCaretAction"
+					text="Copy Parameter At Caret"
+					description="Copies the parameter under the caret"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.caret.editing.CutParamAtCaretAction"
+					id="ir.mmd.intellijDev.Actionable.caret.editing.CutParamAtCaretAction"
+					text="Cut Parameter At Caret"
+					description="Cuts the parameter under the caret"/>
+				
+				<action
 					class="ir.mmd.intellijDev.Actionable.caret.editing.DeleteParamAtCaretAction"
 					id="ir.mmd.intellijDev.Actionable.caret.editing.DeleteParamAtCaretAction"
 					text="Delete Parameter At Caret"
