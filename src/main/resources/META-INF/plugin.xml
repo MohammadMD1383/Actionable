@@ -80,7 +80,11 @@
 			<li>Move Caret to Previous Element with Selection</li>
 			<li>Move Caret to Next Same Element</li>
 			<li>Move Caret to Previous Same Element</li>
+			<li>Copy Parameter At Caret</li>
+			<li>Cut Parameter At Caret</li>
 			<li>Delete Parameter At Caret</li>
+			<li>Copy Operand At Caret</li>
+			<li>Cut Operand At Caret</li>
 			<li>Delete Operand At Caret</li>
 			<li>Set Editor Tab Placement to Top</li>
 			<li>Set Editor Tab Placement to Left</li>

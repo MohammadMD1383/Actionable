@@ -2,12 +2,8 @@ package ir.mmd.intellijDev.Actionable.caret.movement
 
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
-import com.intellij.psi.PsiElement
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
-import ir.mmd.intellijDev.Actionable.util.ext.nextLeafNoWhitespace
-import ir.mmd.intellijDev.Actionable.util.ext.prevLeafNoWhitespace
-
 
 class MoveCaretToNextWord : MoveCaretAction() {
 	override fun isDumbAware() = true
@@ -18,7 +14,6 @@ class MoveCaretToNextWord : MoveCaretAction() {
 	}
 }
 
-
 class MoveCaretToPreviousWord : MoveCaretAction() {
 	override fun isDumbAware() = true
 	context (LazyEventContext)
@@ -28,7 +23,6 @@ class MoveCaretToPreviousWord : MoveCaretAction() {
 	}
 }
 
-
 class MoveCaretToNextElement : MoveCaretAction() {
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {
@@ -37,7 +31,6 @@ class MoveCaretToNextElement : MoveCaretAction() {
 	}
 }
 
-
 class MoveCaretToPreviousElement : MoveCaretAction() {
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {
@@ -45,7 +38,6 @@ class MoveCaretToPreviousElement : MoveCaretAction() {
 		caret moveTo moveCaretVirtually(caret, false, psiFile)
 	}
 }
-
 
 class MoveCaretToNextWordWithSelection : MoveCaretAction() {
 	override fun isDumbAware() = true
@@ -57,7 +49,6 @@ class MoveCaretToNextWordWithSelection : MoveCaretAction() {
 	}
 }
 
-
 class MoveCaretToPreviousWordWithSelection : MoveCaretAction() {
 	override fun isDumbAware() = true
 	
@@ -68,7 +59,6 @@ class MoveCaretToPreviousWordWithSelection : MoveCaretAction() {
 	}
 }
 
-
 class MoveCaretToNextElementWithSelection : MoveCaretAction() {
 	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
 		moveCaretsWithSelection(allCarets.toMutableList(), true) {
@@ -76,7 +66,6 @@ class MoveCaretToNextElementWithSelection : MoveCaretAction() {
 		}
 	}
 }
-
 
 class MoveCaretToPreviousElementWithSelection : MoveCaretAction() {
 	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
@@ -86,10 +75,6 @@ class MoveCaretToPreviousElementWithSelection : MoveCaretAction() {
 	}
 }
 
-class MoveCaretToNextSameElement : MoveCaretToSameElement() {
-	override fun PsiElement.getNextLeafElement() = nextLeafNoWhitespace()
-}
+class MoveCaretToNextSameElement : MoveCaretToSameElement(true)
 
-class MoveCaretToPreviousSameElement : MoveCaretToSameElement() {
-	override fun PsiElement.getNextLeafElement() = prevLeafNoWhitespace()
-}
+class MoveCaretToPreviousSameElement : MoveCaretToSameElement(false)

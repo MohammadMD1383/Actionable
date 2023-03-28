@@ -1,46 +1,56 @@
 package ir.mmd.intellijDev.Actionable.caret.movement
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
+import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.editor.Caret
+import com.intellij.openapi.editor.ScrollType
 import com.intellij.psi.PsiElement
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.*
 import ir.mmd.intellijDev.Actionable.util.service
 
-abstract class MoveCaretToSameElement : MultiCaretAction() {
-	protected abstract fun PsiElement.getNextLeafElement(): PsiElement?
+abstract class MoveCaretToSameElement(private val forward: Boolean) : AnAction() {
+	private val getNextLeafElement = if (forward) PsiElement::nextLeafNoWhitespace else PsiElement::prevLeafNoWhitespace
 	
-	context(LazyEventContext)
-	override fun perform(caret: Caret) {
-		val element = psiFile.elementAt(caret) ?: return
-		var targetElement = element.getNextLeafElement()
-		
-		while (targetElement != null && targetElement.elementType != element.elementType) {
-			targetElement = targetElement.getNextLeafElement()
-		}
-		
-		targetElement ?: return
-		
-		val targetOffset: Int
-		val targetElementTextRange = targetElement.textRange
-		
-		targetOffset = when (service<SettingsState>().sameElementMovementBehaviour) {
-			SettingsState.SEMBehaviour.Start -> targetElementTextRange.startOffset
-			SettingsState.SEMBehaviour.End -> targetElementTextRange.endOffset
-			
-			SettingsState.SEMBehaviour.Offset -> {
-				val caretOffset = caret.offset
-				val offset = caretOffset - element.textRange.startOffset
-				val finalOffset = targetElementTextRange.startOffset + offset
-				
-				if (finalOffset > targetElementTextRange.endOffset) targetElementTextRange.endOffset else finalOffset
+	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+		allCarets.forEach { caret ->
+			if (!caret.isValid) {
+				return@forEach
 			}
+			
+			val element = psiFile.elementAt(caret) ?: return@forEach
+			var targetElement = getNextLeafElement(element, false)
+			
+			while (targetElement != null && targetElement.elementType != element.elementType) {
+				targetElement = getNextLeafElement(targetElement, false)
+			}
+			
+			targetElement ?: return@forEach
+			
+			val targetOffset: Int
+			val targetElementTextRange = targetElement.textRange
+			
+			targetOffset = when (service<SettingsState>().sameElementMovementBehaviour) {
+				SettingsState.SEMBehaviour.Start -> targetElementTextRange.startOffset
+				SettingsState.SEMBehaviour.End -> targetElementTextRange.endOffset
+				
+				SettingsState.SEMBehaviour.Offset -> {
+					val caretOffset = caret.offset
+					val offset = caretOffset - element.textRange.startOffset
+					val finalOffset = targetElementTextRange.startOffset + offset
+					
+					if (finalOffset > targetElementTextRange.endOffset) targetElementTextRange.endOffset else finalOffset
+				}
+			}
+			
+			caret moveTo targetOffset
 		}
 		
-		caret moveTo targetOffset
+		scrollingModel.scrollTo(
+			(if (forward) allCarets.last { it.isValid } else allCarets.first { it.isValid }).logicalPosition,
+			ScrollType.MAKE_VISIBLE
+		)
 	}
 	
 	override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
