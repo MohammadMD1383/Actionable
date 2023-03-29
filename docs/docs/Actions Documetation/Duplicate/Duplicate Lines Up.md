@@ -1,5 +1,3 @@
-# Duplicate Lines Up
-
 ## What Does It Do?
 
 * Duplicates the line, where the caret is, up.

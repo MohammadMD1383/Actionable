@@ -1,5 +1,3 @@
-# Remove Duplicate Selections
-
 ## What Does It Do?
 
 Removes duplicate selections :) Look at the example.

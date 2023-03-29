@@ -1,5 +1,3 @@
-# Predict Words Spaced
-
 ## What Does It Do?
 
 Predicts words inside a long text.

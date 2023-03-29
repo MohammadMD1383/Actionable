@@ -1,5 +1,3 @@
-# Predict Words PascalCase
-
 ## What Does It Do?
 
 Predicts words inside a long text.

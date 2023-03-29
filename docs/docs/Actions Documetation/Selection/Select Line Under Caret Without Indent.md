@@ -1,5 +1,3 @@
-# Select Line Under Caret Without Indent
-
 ## What Does It Do?
 
 Selects the line, where the caret is, without leading/trailing white-space.

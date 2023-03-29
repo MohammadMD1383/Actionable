@@ -1,5 +1,3 @@
-# Empty Line
-
 ## What Does It Do?
 
 Empties the line, which caret is located at.

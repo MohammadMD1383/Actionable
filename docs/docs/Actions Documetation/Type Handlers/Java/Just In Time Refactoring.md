@@ -1,5 +1,3 @@
-# Just In Time Refactoring
-
 ## What Does It Do?
 
 Refactors the name of a local variable as you change it.

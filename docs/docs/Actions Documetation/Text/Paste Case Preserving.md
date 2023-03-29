@@ -1,5 +1,3 @@
-# Paste Case Preserving
-
 ## What Does It Do?
 
 Replaces selections with clipboard contents while preserving the case.

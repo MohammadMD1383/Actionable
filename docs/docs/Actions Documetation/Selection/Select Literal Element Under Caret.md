@@ -1,5 +1,3 @@
-# Select Literal Element Under Caret
-
 ## What Does It Do?
 
 Selects a literal element (usually refers to strings) under a caret.

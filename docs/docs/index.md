@@ -28,6 +28,7 @@ Checkout [releases page](https://github.com/MohammadMD1383/Actionable/releases) 
 
 ## How To Help?
 
-* Feel free to open any feature request to help me add more features to this plugin. ([Issue Tracker](https://github.com/MohammadMD1383/Actionable/issues))
+* Feel free to open any feature request to help me add more features to this
+  plugin. ([Issue Tracker](https://github.com/MohammadMD1383/Actionable/issues))
 * Report every bug or inconvenience you feel. ([Issue Tracker](https://github.com/MohammadMD1383/Actionable/issues))
 * All the [PRs](https://github.com/MohammadMD1383/Actionable/pulls) are welcomed!

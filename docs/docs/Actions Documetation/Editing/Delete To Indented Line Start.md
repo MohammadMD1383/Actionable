@@ -1,5 +1,3 @@
-# Delete To Indented Line Start
-
 ## What Does It Do?
 
 Deletes from caret, to line start, but won't remove the indentation.

@@ -1,5 +1,3 @@
-# Replace Selections Preserving Case
-
 ## What Does It Do?
 
 Replaces selections while preserving the case of the source.

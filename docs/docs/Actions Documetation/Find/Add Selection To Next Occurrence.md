@@ -1,5 +1,3 @@
-# Add Selection To Next Occurrence
-
 ## What Does It Do?
 
 This does exactly what IDE does :)

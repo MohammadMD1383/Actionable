@@ -1,5 +1,3 @@
-# Collapse Empty Tag On Backspace
-
 ## What Does It Do?
 
 Smartly helps you to collapse empty `XML` tags by just pressing backspace.

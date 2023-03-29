@@ -1,5 +1,3 @@
-# Auto Class Case
-
 ## What Does It Do?
 
 Automatically converts ==space separated== class name to `PascalCase` format.
@@ -23,5 +21,6 @@ Type ++brace-left++
 ### After
 
 ```java
-class HelloWorld {|}
+class HelloWorld {|
+}
 ```

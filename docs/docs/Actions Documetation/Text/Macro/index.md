@@ -1,5 +1,3 @@
-# Macro
-
 Macros are just keyboard shortcuts to paste content into editor, but with a few other interesting features!
 
 ## Template
