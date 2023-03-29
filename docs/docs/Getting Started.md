@@ -35,7 +35,7 @@ They are just tested once and may have some bugs.
 
 From the menu bar select `Edit > Actionable`, and you will see all the actions are listed there.
 
-You can examine them manually to discover what they do, or refer to the documentation.
+You can examine them manually to discover what they do, or refer to the [documentation](Actions%20Documetation/index.md).
 
 ### Assign Shortcuts
 
