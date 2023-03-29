@@ -3,6 +3,7 @@ package ir.mmd.intellijDev.Actionable.text
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.components.service
 import com.intellij.openapi.ui.DialogBuilder
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.util.TextRange
@@ -11,7 +12,6 @@ import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.caretsAndSelectionsAreOnTheSameLine
 import ir.mmd.intellijDev.Actionable.text.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.service
 
 open class DuplicateLineAndInsertContent : AnAction() {
 	context (LazyEventContext)

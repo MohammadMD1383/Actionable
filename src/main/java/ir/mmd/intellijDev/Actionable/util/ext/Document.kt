@@ -1,10 +1,10 @@
 package ir.mmd.intellijDev.Actionable.util.ext
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.util.service
 
 /**
  * Removes a character at [offset] in the [Document]
@@ -19,12 +19,6 @@ inline fun Document.removeCharAt(offset: Int) = deleteString(offset, offset + 1)
 inline fun Document.charAtOrNull(offset: Int) = charsSequence.getOrNull(offset)
 
 /**
- * Just another overload for [Document.getText]
- */
-@Suppress("NOTHING_TO_INLINE")
-inline fun Document.getText(range: IntRange) = getText(TextRange(range.first, range.last))
-
-/**
  * The [] syntax support for [Document]
  */
 @Suppress("NOTHING_TO_INLINE")
@@ -35,7 +29,7 @@ inline operator fun Document.get(index: Int) = immutableCharSequence[index]
  *
  * @see getLineText
  */
-fun Document.getLineText(line: Int) = getText(getLineStartOffset(line)..getLineEndOffset(line))
+fun Document.getLineText(line: Int) = getText(TextRange(getLineStartOffset(line), getLineEndOffset(line)))
 
 /**
  * Returns the text of the line which [caret] is at, in the [Document]

@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.LogicalPosition
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
 abstract class MoveSelectionAction : AnAction() {
@@ -25,7 +26,7 @@ abstract class MoveSelectionAction : AnAction() {
 	) {
 		val replacementStart = editor.logicalPositionToOffset(LogicalPosition(targetLine, startCol))
 		val replacementEnd = editor.logicalPositionToOffset(LogicalPosition(targetLine, endCol))
-		val replacementStr = document.getText(replacementStart..replacementEnd)
+		val replacementStr = document.getText(TextRange(replacementStart, replacementEnd))
 		
 		project.runWriteCommandAction {
 			document.replaceString(replacementStart, replacementEnd, caret.selectedText!!)
@@ -49,7 +50,7 @@ abstract class MoveSelectionAction : AnAction() {
 				carets.getOrNull(i - 1)?.logicalPosition?.line == upperLine
 			) return@forEachIndexed
 			
-			var (start, end) = caret.selectionRangeCompat
+			var (start, end) = caret.selectionRange
 			val startCol = offsetToLogicalPosition(start).column
 			val endCol = offsetToLogicalPosition(end).column
 			val upperLineEnd = document.getLineEndOffset(upperLine)
@@ -74,7 +75,7 @@ abstract class MoveSelectionAction : AnAction() {
 			val (line, column) = caret.logicalPosition
 			val bottomLine = line + 1
 			
-			val (start, end) = caret.selectionRangeCompat
+			val (start, end) = caret.selectionRange
 			val startCol = offsetToLogicalPosition(start).column
 			val endCol = offsetToLogicalPosition(end).column
 			
@@ -99,12 +100,12 @@ abstract class MoveSelectionAction : AnAction() {
 		val document = document
 		
 		carets.forEachIndexed { i, caret ->
-			val (start, end) = caret.selectionRangeCompat
+			val (start, end) = caret.selectionRange
 			val char = document.charAtOrNull(start - 1) ?: return@forEachIndexed
 			
 			if (
 				char == '\n' ||
-				start in carets.getOrNull(i - 1)?.selectionRangeCompat
+				start in carets.getOrNull(i - 1)?.selectionRange
 			) return@forEachIndexed
 			
 			project!!.runWriteCommandAction {
@@ -121,7 +122,7 @@ abstract class MoveSelectionAction : AnAction() {
 		val document = document
 		
 		allCarets.asReversed().forEach { caret ->
-			val (start, end) = caret.selectionRangeCompat
+			val (start, end) = caret.selectionRange
 			val char = document.charAtOrNull(end)
 			val newOffset = caret.offset + 1
 			

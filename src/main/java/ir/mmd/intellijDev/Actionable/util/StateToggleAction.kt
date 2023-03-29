@@ -36,7 +36,7 @@ abstract class ProjectStateToggleAction<S>(clazz: Class<S>) : StateToggleAction<
 }
 
 /**
- * This class should be inherited for toggle actions that are application-wide
+ * This class should be inherited for toggle actions that are application-wide.
  *
  * @param clazz usually a [com.intellij.openapi.components.PersistentStateComponent]
  */

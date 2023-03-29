@@ -22,7 +22,6 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 		public static final boolean IS_CASE_SENSITIVE = true;
 	}
 	
-	
 	public boolean isCaseSensitive = Defaults.IS_CASE_SENSITIVE;
 	
 	@Override

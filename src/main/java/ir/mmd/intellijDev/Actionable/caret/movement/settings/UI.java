@@ -1,6 +1,7 @@
 package ir.mmd.intellijDev.Actionable.caret.movement.settings;
 
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState.SEMBehaviour;
+import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState.WSBehaviour;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -28,6 +29,8 @@ public class UI {
 	private JButton sameElementMovementBehaviourDefault;
 	
 	public UI() {
+		stopAtCharacterTypeChangeRadioButton.setActionCommand(WSBehaviour.StopAtCharTypeChange.name());
+		stopAtNextSameCharacterTypeRadioButton.setActionCommand(WSBehaviour.StopAtNextSameCharType.name());
 		startRadioButton.setActionCommand(SEMBehaviour.Start.name());
 		offsetBasedRadioButton.setActionCommand(SEMBehaviour.Offset.name());
 		endRadioButton.setActionCommand(SEMBehaviour.End.name());
@@ -70,44 +73,44 @@ public class UI {
 	}
 	
 	public String getWordSeparators() {
-		String ws = wordSeparatorsField.getText();
+		var ws = wordSeparatorsField.getText();
 		if (newLineIncluded.isSelected()) ws += '\n';
 		if (tabIncluded.isSelected()) ws += '\t';
 		return ws;
 	}
 	
 	public void setWordSeparators(@NotNull String s) {
-		boolean newLine = s.contains("\n");
-		boolean tab = s.contains("\t");
+		var newLine = s.contains("\n");
+		var tab = s.contains("\t");
 		
 		wordSeparatorsField.setText(s.replaceAll("[\n\t]", ""));
 		newLineIncluded.setSelected(newLine);
 		tabIncluded.setSelected(tab);
 	}
 	
-	public int getWordSeparatorsBehaviour() {
-		return Integer.parseInt(wordSeparatorsBehaviourGroup.getSelection().getActionCommand());
+	public WSBehaviour getWordSeparatorsBehaviour() {
+		return WSBehaviour.valueOf(wordSeparatorsBehaviourGroup.getSelection().getActionCommand());
 	}
 	
-	public void setWordSeparatorsBehaviour(int i) {
-		wordSeparatorsBehaviourGroup.setSelected(
-			i == SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE ?
-				stopAtCharacterTypeChangeRadioButton.getModel() :
-				stopAtNextSameCharacterTypeRadioButton.getModel(),
-			true
-		);
+	public void setWordSeparatorsBehaviour(WSBehaviour behaviour) {
+		final var targetModel = switch (behaviour) {
+			case StopAtCharTypeChange -> stopAtCharacterTypeChangeRadioButton.getModel();
+			case StopAtNextSameCharType -> stopAtNextSameCharacterTypeRadioButton.getModel();
+		};
+		
+		wordSeparatorsBehaviourGroup.setSelected(targetModel, true);
 	}
 	
 	public String getHardStopCharacters() {
-		String hs = hardStopCharactersField.getText();
+		var hs = hardStopCharactersField.getText();
 		if (hardStopCharactersIncludeNewLine.isSelected()) hs += "\n";
 		if (hardStopCharactersIncludeTab.isSelected()) hs += "\t";
 		return hs;
 	}
 	
 	public void setHardStopCharacters(@NotNull String s) {
-		final boolean newLine = s.contains("\n");
-		final boolean tab = s.contains("\t");
+		final var newLine = s.contains("\n");
+		final var tab = s.contains("\t");
 		
 		hardStopCharactersField.setText(s.replaceAll("[\n\t]", ""));
 		hardStopCharactersIncludeNewLine.setSelected(newLine);
@@ -119,24 +122,11 @@ public class UI {
 	}
 	
 	public void setSameElementMovementBehaviour(SEMBehaviour behaviour) {
-		final ButtonModel targetModel;
-		
-		switch (behaviour) {
-			case Start:
-				targetModel = startRadioButton.getModel();
-				break;
-			
-			case Offset:
-				targetModel = offsetBasedRadioButton.getModel();
-				break;
-			
-			case End:
-				targetModel = endRadioButton.getModel();
-				break;
-			
-			default:
-				throw new IllegalStateException("THIS MUST NEVER HAPPEN!");
-		}
+		final var targetModel = switch (behaviour) {
+			case Start -> startRadioButton.getModel();
+			case Offset -> offsetBasedRadioButton.getModel();
+			case End -> endRadioButton.getModel();
+		};
 		
 		sameElementMovementBehaviourGroup.setSelected(targetModel, true);
 	}

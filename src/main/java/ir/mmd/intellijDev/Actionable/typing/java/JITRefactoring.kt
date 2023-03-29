@@ -3,17 +3,19 @@ package ir.mmd.intellijDev.Actionable.typing.java
 import com.intellij.codeInsight.editorActions.BackspaceHandlerDelegate
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.ide.highlighter.JavaFileType
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiIdentifier
 import com.intellij.psi.PsiLocalVariable
 import com.intellij.psi.search.searches.ReferencesSearch
-
+import com.intellij.psi.util.parentOfType
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
 import ir.mmd.intellijDev.Actionable.util.after
-import ir.mmd.intellijDev.Actionable.util.ext.*
-
+import ir.mmd.intellijDev.Actionable.util.ext.prevLeafNoWhitespace
+import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 class JITRefactoringInsert : TypedHandlerDelegate() {
 	override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile) = Result.CONTINUE.also {
@@ -33,7 +35,7 @@ class JITRefactoringInsert : TypedHandlerDelegate() {
 		
 		val localVariable = element.parentOfType<PsiLocalVariable>() ?: return@also
 		val newIdentifier = element.textRange.run {
-			document.getText(startOffset..endOffset + 1)
+			document.getText(TextRange(startOffset, endOffset + 1))
 		}
 		
 		project.runWriteCommandAction {
@@ -45,7 +47,6 @@ class JITRefactoringInsert : TypedHandlerDelegate() {
 		}
 	}
 }
-
 
 class JITRefactoringDelete : BackspaceHandlerDelegate() {
 	override fun beforeCharDeleted(c: Char, file: PsiFile, editor: Editor) {}
@@ -60,7 +61,7 @@ class JITRefactoringDelete : BackspaceHandlerDelegate() {
 		val element = file.findElementAt(offset) ?: return@after
 		val localVariable = element.parentOfType<PsiLocalVariable>() ?: return@after
 		val newIdentifier = element.textRange.run {
-			document.getText(startOffset until endOffset)
+			document.getText(TextRange(startOffset, endOffset - 1))
 		}
 		
 		editor.project.runWriteCommandAction {

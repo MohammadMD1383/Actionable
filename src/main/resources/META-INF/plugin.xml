@@ -10,7 +10,7 @@
 		<h2>I NEED YOUR HELP TO COMPLETE THE DOCUMENTATION - <a href="https://github.com/MohammadMD1383/Actionable/issues/31">more info</a></h2>
 		
 		<div>Features:</div>
-		<ul>			
+		<ul>
 			<li>Collapse Empty Tag on Backspace</li>
 			<li>Expand Tag on Type</li>
 			<li>Predict Words: Camel-Case</li>

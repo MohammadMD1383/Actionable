@@ -2,14 +2,18 @@ package ir.mmd.intellijDev.Actionable.typing.java
 
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.ide.highlighter.JavaFileType
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiFile
-
+import com.intellij.psi.util.parentOfType
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
-import ir.mmd.intellijDev.Actionable.util.ext.*
-
+import ir.mmd.intellijDev.Actionable.util.ext.elementAtOrBefore
+import ir.mmd.intellijDev.Actionable.util.ext.prevLeafNoWhitespace
+import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
+import ir.mmd.intellijDev.Actionable.util.ext.titleCase
 
 class AutoClassCase : TypedHandlerDelegate() {
 	override fun charTyped(
@@ -33,7 +37,7 @@ class AutoClassCase : TypedHandlerDelegate() {
 		
 		val nameStart = element.nameIdentifier?.textRange?.startOffset ?: return@also
 		val nameEnd = caret.offset
-		val spacedName = document.getText(nameStart..nameEnd).run {
+		val spacedName = document.getText(TextRange(nameStart, nameEnd)).run {
 			val i = indexOfAny(listOf("extends", "implements", "permits", "\n"))
 			if (i != -1) substring(0, i) else this
 		}

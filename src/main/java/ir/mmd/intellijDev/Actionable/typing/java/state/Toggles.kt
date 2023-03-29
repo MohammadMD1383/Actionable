@@ -1,8 +1,6 @@
 package ir.mmd.intellijDev.Actionable.typing.java.state
 
-
 import ir.mmd.intellijDev.Actionable.util.ProjectStateToggleAction
-
 
 class AutoClassCaseState : ProjectStateToggleAction<State>(State::class.java) {
 	override fun State.get() = autoClassCaseEnabled
@@ -11,14 +9,12 @@ class AutoClassCaseState : ProjectStateToggleAction<State>(State::class.java) {
 	}
 }
 
-
 class AutoInsertSemicolonState : ProjectStateToggleAction<State>(State::class.java) {
 	override fun State.get() = autoInsertSemicolonEnabled
 	override fun State.set(b: Boolean) {
 		autoInsertSemicolonEnabled = b
 	}
 }
-
 
 class JITRefactoringEnabled : ProjectStateToggleAction<State>(State::class.java) {
 	override fun State.get() = jitRefactoringEnabled

@@ -26,8 +26,6 @@ abstract class AddLineAction(private val above: Boolean) : MultiCaretAction() {
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
-
 class AddLineAboveCaretWMAction : AddLineAction(true)
-
 
 class AddLineBelowCaretWMAction : AddLineAction(false)

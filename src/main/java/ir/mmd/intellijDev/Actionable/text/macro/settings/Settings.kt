@@ -5,7 +5,6 @@ import com.intellij.openapi.util.Disposer
 import ir.mmd.intellijDev.Actionable.text.macro.reRegisterMacros
 import javax.swing.JComponent
 
-
 /**
  * Settings [Configurable] UI for `Actionable > Text > Macro`
  */

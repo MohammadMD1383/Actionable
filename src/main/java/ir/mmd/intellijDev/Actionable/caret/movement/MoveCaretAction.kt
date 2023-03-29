@@ -2,16 +2,19 @@ package ir.mmd.intellijDev.Actionable.caret.movement
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Caret
 import com.intellij.psi.PsiFile
+import com.intellij.psi.util.nextLeaf
+import com.intellij.psi.util.prevLeaf
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.util.afterDoing
-import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.service
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.util
 
 abstract class MoveCaretAction : MultiCaretAction() {
 	fun moveCaretVirtually(
@@ -67,7 +70,7 @@ abstract class MoveCaretAction : MultiCaretAction() {
 			val offset = targetOffset(caret)
 			
 			carets.getOrNull(i + 1)?.let { nextCaret ->
-				if (offset in nextCaret.selectionRangeCompat) return@forEachIndexed afterDoing {
+				if (offset in nextCaret.selectionRange) return@forEachIndexed afterDoing {
 					nextCaret.setSelection(selectionsStart[i], nextCaret.offset)
 					selectionsStart[i + 1] = selectionsStart[i]
 				}

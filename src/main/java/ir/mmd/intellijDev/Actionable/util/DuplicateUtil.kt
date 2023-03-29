@@ -21,12 +21,12 @@ class DuplicateUtil(private val editor: Editor) {
 	private val document = editor.document
 	
 	/**
-	 * duplicate line(s) up
+	 * Duplicate line(s) up
 	 *
 	 *  * if `start offset` and `end offset` are same, then the line will be duplicated <br></br>
 	 *  * if not, then the **lines including start offset and end offset** will be duplicated
 	 *
-	 * *start offset and end offset are caret offsets in the active editor document*
+	 * *Start offset and end offset are caret offsets in the active editor document*
 	 *
 	 * @param start start offset of duplication range
 	 * @param end   end offset of duplication range
@@ -41,7 +41,7 @@ class DuplicateUtil(private val editor: Editor) {
 	}
 	
 	/**
-	 * please refer to [DuplicateUtil.duplicateUp] for documentation
+	 * Please refer to [DuplicateUtil.duplicateUp] for documentation.
 	 */
 	fun duplicateDown(
 		start: Int,
@@ -50,11 +50,11 @@ class DuplicateUtil(private val editor: Editor) {
 		project.runWriteCommandAction {
 			document.insertString(startOffset, "${text}\n")
 			
-			// check if the caret is at line start,
+			// Check if the caret is at line start,
 			// then move the caret manually.
-			// due to an issue that caret won't move automatically.
-			// to be more clear, you can comment out the statements below and see the effect.
-			// put the caret at the line start and fire the `duplicate down` action.
+			// Due to an issue that caret won't move automatically.
+			// To be more clear, you can comment out the statements below and see the effect.
+			// Put the caret at the line start and fire the `duplicate down` action.
 			if (startOffset == start) (editor.caretModel.getCaretAt(VisualPosition(startingLine, 0)) ?: return@runWriteCommandAction)
 				.moveToLogicalPosition(
 					LogicalPosition(
@@ -66,7 +66,7 @@ class DuplicateUtil(private val editor: Editor) {
 	}
 	
 	/**
-	 * retrieves the line(s) of the document to be duplicated <br></br>
+	 * Retrieves the line(s) of the document to be duplicated.<br></br>
 	 * more info at [DuplicateUtil.duplicateUp]
 	 *
 	 * @param start starting caret offset of duplication range
@@ -104,7 +104,7 @@ class DuplicateUtil(private val editor: Editor) {
 	}
 	
 	/**
-	 * this class contains information about the text that is going to be duplicated
+	 * This class contains information about the text that is going to be duplicated.
 	 */
 	private data class DuplicateString(
 		val startingLine: Int,

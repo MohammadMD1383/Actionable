@@ -1,7 +1,7 @@
 package ir.mmd.intellijDev.Actionable.caret.editing.settings
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.options.Configurable
-import ir.mmd.intellijDev.Actionable.util.service
 import javax.swing.JComponent
 
 /**

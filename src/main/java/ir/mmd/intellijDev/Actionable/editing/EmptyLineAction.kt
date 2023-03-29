@@ -8,7 +8,6 @@ import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
-
 class EmptyLineAction : MultiCaretAction() {
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {

@@ -20,9 +20,9 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	 * for behaviour of <code>move caret ...</code> actions<br>
 	 * see {@link UI} for what these constants mean
 	 */
-	public static class WSBehaviour {
+	public enum WSBehaviour {
 		/**
-		 * example of moving caret with this mode
+		 * Example of moving caret with this mode
 		 * <pre>
 		 *     hello| world from java
 		 *     hello |world from java
@@ -31,10 +31,10 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 		 *     ...
 		 * </pre>
 		 */
-		public static final int STOP_AT_CHAR_TYPE_CHANGE = 0;
+		StopAtCharTypeChange,
 		
 		/**
-		 * example of moving caret with this mode
+		 * Example of moving caret with this mode
 		 * <pre>
 		 *     hello| world from java
 		 *     hello world| from java
@@ -43,7 +43,7 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 		 *     ...
 		 * </pre>
 		 */
-		public static final int STOP_AT_NEXT_SAME_CHAR_TYPE = 1;
+		StopAtNextSameCharType
 	}
 	
 	public enum SEMBehaviour {
@@ -55,14 +55,14 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 	 */
 	public static class Defaults {
 		public static final @NotNull String wordSeparators = "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?\n\t";
-		public static final int wordSeparatorsBehaviour = WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE;
+		public static final @NotNull WSBehaviour wordSeparatorsBehaviour = WSBehaviour.StopAtCharTypeChange;
 		public static final @NotNull String hardStopSeparators = " ";
 		public static @NotNull SettingsState.SEMBehaviour sameElementMovementBehaviour = SEMBehaviour.Start;
 	}
 	
 	public @NotNull String wordSeparators = Defaults.wordSeparators;
 	
-	public int wordSeparatorsBehaviour = Defaults.wordSeparatorsBehaviour;
+	public @NotNull WSBehaviour wordSeparatorsBehaviour = Defaults.wordSeparatorsBehaviour;
 	
 	public @NotNull String hardStopCharacters = Defaults.hardStopSeparators;
 	

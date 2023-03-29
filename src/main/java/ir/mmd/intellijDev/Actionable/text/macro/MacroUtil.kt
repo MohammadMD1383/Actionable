@@ -26,7 +26,7 @@ fun registerMacros() {
 
 fun unregisterMacros() {
 	val actionManager = ActionManager.getInstance()
-	actionManager.getActionIds(Actions.MACRO_PREFIX).forEach(actionManager::unregisterMacro)
+	actionManager.getActionIdList(Actions.MACRO_PREFIX).forEach(actionManager::unregisterMacro)
 }
 
 fun reRegisterMacros() {

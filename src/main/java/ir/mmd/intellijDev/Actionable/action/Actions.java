@@ -7,6 +7,8 @@ public final class Actions {
 	private Actions() {
 	}
 	
+	public static final String PLUGIN_ID = "ir.mmd.intellijDev.Actionable";
+	
 	public static final String MACRO_PREFIX = "Actionable.Macro";
 	
 	/**

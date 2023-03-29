@@ -3,17 +3,18 @@ package ir.mmd.intellijDev.Actionable.selection
 import com.goide.psi.GoStringLiteral
 import com.intellij.lang.javascript.psi.JSLiteralExpression
 import com.intellij.lang.javascript.psi.ecma6.JSStringTemplateExpression
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Caret
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiLiteralExpression
+import com.intellij.psi.util.parentOfType
+import com.intellij.psi.util.parentOfTypes
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.service
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import kotlin.math.absoluteValue
-
 
 class SelectLineWithoutIndentAction : SelectTextUnderCaretAction() {
 	override fun isDumbAware() = true
@@ -27,7 +28,6 @@ class SelectLineWithoutIndentAction : SelectTextUnderCaretAction() {
 	}
 }
 
-
 class SelectWordUnderCaretAction : SelectTextUnderCaretAction() {
 	override fun isDumbAware() = true
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile) = service<SettingsState>().run {
@@ -36,14 +36,12 @@ class SelectWordUnderCaretAction : SelectTextUnderCaretAction() {
 	}
 }
 
-
 class SelectElementUnderCaretAction : SelectTextUnderCaretAction() {
 	override fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange? {
 		val (start, end) = psiFile.elementAt(caret)?.textRange ?: return null
 		return start..end
 	}
 }
-
 
 class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
 	private fun rawSelectionRange(caret: Caret) = caret.util.run {
@@ -116,11 +114,8 @@ class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
 	}
 }
 
-
 class SelectTextBetweenQuotesAction : SelectTextBetweenAction("'")
 
-
 class SelectTextBetweenDoubleQuotesAction : SelectTextBetweenAction("\"")
-
 
 class SelectTextBetweenBackticksAction : SelectTextBetweenAction("`")

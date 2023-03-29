@@ -5,12 +5,12 @@ import com.intellij.find.FindModel
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.ScrollType
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.afterDoing
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.service
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState as MovementSettingsState
 
 abstract class FindAction(private val searchForward: Boolean) : AnAction() {

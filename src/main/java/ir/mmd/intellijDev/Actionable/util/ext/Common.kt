@@ -94,11 +94,6 @@ fun String.replaceRanges(ranges: List<IntRange>, replacement: String, preserveCa
 inline operator fun IntRange?.contains(i: Int) = this != null && contains(i)
 
 /**
- * Checks if the number is **greater** than zero
- */
-inline val Int.isPositive: Boolean get() = this > 0
-
-/**
  * like `forEach` but brings the receiver to the scope
  */
 inline fun <T> Iterable<T>.withEach(block: T.() -> Unit) = forEach { it.block() }
@@ -140,8 +135,3 @@ inline operator fun IntRange.component2() = last
  */
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun IntRange.contains(other: IntRange) = first <= other.first && last >= other.last
-
-/**
- * Executes [block] if the receiver is not null and is true.
- */
-inline fun <R> Boolean?.then(block: () -> R): R? = if (this == true) block() else null

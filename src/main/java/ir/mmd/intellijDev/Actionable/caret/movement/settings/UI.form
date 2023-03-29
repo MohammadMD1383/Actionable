@@ -54,7 +54,6 @@
           <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <actionCommand value="0"/>
           <text resource-bundle="strings" key="caretMovementPanel.wordSeparatorsBehaviour.option1.label"/>
         </properties>
       </component>
@@ -71,7 +70,6 @@
           <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <actionCommand value="1"/>
           <text resource-bundle="strings" key="caretMovementPanel.wordSeparatorsBehaviour.option2.label"/>
         </properties>
       </component>

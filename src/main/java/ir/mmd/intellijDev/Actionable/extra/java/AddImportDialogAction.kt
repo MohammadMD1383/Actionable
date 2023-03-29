@@ -18,7 +18,6 @@ import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.psiFile
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
-
 class AddImportDialogAction : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
 		val psiFacade = JavaPsiFacade.getInstance(project)

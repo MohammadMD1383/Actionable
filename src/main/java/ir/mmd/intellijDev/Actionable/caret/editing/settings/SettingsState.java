@@ -22,7 +22,6 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 		public static final boolean showPasteActionHints = true;
 	}
 	
-	
 	public boolean showPasteActionHints = Defaults.showPasteActionHints;
 	
 	@Override

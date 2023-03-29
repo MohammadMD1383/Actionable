@@ -7,12 +7,12 @@ import com.goide.psi.GoOrExpr
 import com.intellij.lang.javascript.psi.JSBinaryExpression
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiPolyadicExpression
+import com.intellij.psi.util.parentOfType
+import com.intellij.psi.util.parentOfTypes
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.psi.PsiActionAtCaret
 import ir.mmd.intellijDev.Actionable.util.ext.contains
 import ir.mmd.intellijDev.Actionable.util.ext.copyToClipboard
-import ir.mmd.intellijDev.Actionable.util.ext.parentOfType
-import ir.mmd.intellijDev.Actionable.util.ext.parentOfTypes
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 
 abstract class OperandAtCaretAction(inWriteAction: Boolean = false) : PsiActionAtCaret(inWriteAction) {

@@ -22,11 +22,9 @@ abstract class UnselectAction : AnAction() {
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
-
 class UnselectFirstSelectionAction : UnselectAction() {
 	override fun getTargetCaret(carets: List<Caret>) = carets.first { it.hasSelection() }
 }
-
 
 class UnselectLastSelectionAction : UnselectAction() {
 	override fun getTargetCaret(carets: List<Caret>) = carets.last { it.hasSelection() }

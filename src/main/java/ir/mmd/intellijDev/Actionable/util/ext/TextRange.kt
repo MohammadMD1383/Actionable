@@ -18,3 +18,6 @@ inline operator fun TextRange.component2(): Int = endOffset
  * Converts a [TextRange] into an [IntRange]
  */
 inline val TextRange.intRange get() = startOffset..endOffset
+
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun TextRange?.contains(i: Int) = this != null && contains(i)

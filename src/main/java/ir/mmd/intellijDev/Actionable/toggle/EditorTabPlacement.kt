@@ -4,8 +4,9 @@ import com.intellij.ide.ui.UISettings
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.components.service
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.service
+
 import javax.swing.SwingConstants
 
 abstract class ChangeEditorTabPlacementShortcut(private val placement: Int) : AnAction() {

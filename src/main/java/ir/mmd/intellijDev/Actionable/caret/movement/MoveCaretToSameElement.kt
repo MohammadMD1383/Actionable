@@ -3,12 +3,13 @@ package ir.mmd.intellijDev.Actionable.caret.movement
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.ScrollType
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.elementType
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.service
 
 abstract class MoveCaretToSameElement(private val forward: Boolean) : AnAction() {
 	private val getNextLeafElement = if (forward) PsiElement::nextLeafNoWhitespace else PsiElement::prevLeafNoWhitespace

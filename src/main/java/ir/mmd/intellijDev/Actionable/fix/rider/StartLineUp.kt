@@ -10,7 +10,6 @@ import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
-
 class StartLineUp : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
 		val enterAction = action(ACTION_EDITOR_ENTER)!!

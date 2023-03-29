@@ -2,16 +2,19 @@ package ir.mmd.intellijDev.Actionable.typing.xml
 
 import com.intellij.codeInsight.editorActions.BackspaceHandlerDelegate
 import com.intellij.ide.highlighter.XmlFileType
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
+import com.intellij.psi.util.parentOfType
 import com.intellij.psi.xml.XmlTag
 import com.intellij.psi.xml.XmlToken
 import com.intellij.psi.xml.XmlTokenType
-
 import ir.mmd.intellijDev.Actionable.typing.xml.state.State
-import ir.mmd.intellijDev.Actionable.util.ext.*
-
+import ir.mmd.intellijDev.Actionable.util.ext.moveTo
+import ir.mmd.intellijDev.Actionable.util.ext.nextLeafNoWhitespace
+import ir.mmd.intellijDev.Actionable.util.ext.prevLeafNoWhitespace
+import ir.mmd.intellijDev.Actionable.util.ext.util
 
 class CollapseEmptyTagOnBackspace : BackspaceHandlerDelegate() {
 	private var caretOffset: Int? = null

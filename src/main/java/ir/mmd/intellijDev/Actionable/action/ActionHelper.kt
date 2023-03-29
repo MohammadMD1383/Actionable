@@ -3,6 +3,7 @@ package ir.mmd.intellijDev.Actionable.action
 import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.DefaultActionGroup
+import com.intellij.openapi.extensions.PluginId
 import ir.mmd.intellijDev.Actionable.text.macro.MacroAction
 
 /**
@@ -17,7 +18,11 @@ val MacrosActionGroup by lazy {
  */
 fun ActionManager.registerMacro(name: String, macro: String) {
 	val action = MacroAction(name, macro)
-	registerAction("${Actions.MACRO_PREFIX}.$name", action)
+	registerAction(
+		"${Actions.MACRO_PREFIX}.$name",
+		action,
+		PluginId.getId(Actions.PLUGIN_ID)
+	)
 	MacrosActionGroup.add(action)
 }
 
@@ -38,7 +43,7 @@ fun ActionManager.unregisterMacro(actionId: String) {
 inline fun action(id: String): AnAction? = ActionManager.getInstance().getAction(id)
 
 /**
- * Checks whether all carets and their selections are on a single line or not
+ * Checks whether all carets, and their selections are on a single line or not.
  */
 context (LazyEventContext)
 fun caretsAndSelectionsAreOnTheSameLine(): Boolean {

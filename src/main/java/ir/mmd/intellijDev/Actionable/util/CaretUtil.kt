@@ -1,10 +1,11 @@
 package ir.mmd.intellijDev.Actionable.util
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
+import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState.WSBehaviour
 import ir.mmd.intellijDev.Actionable.util.ext.charAtOrNull
-import ir.mmd.intellijDev.Actionable.util.ext.isPositive
 import kotlin.math.max
 import kotlin.math.min
 
@@ -14,12 +15,12 @@ import kotlin.math.min
 class CaretUtil(private val caret: Caret) {
 	companion object {
 		/**
-		 * move caret forward
+		 * Move caret forward
 		 */
 		const val FORWARD = 1
 		
 		/**
-		 * move caret backward
+		 * Move caret backward
 		 */
 		const val BACKWARD = -1
 	}
@@ -88,10 +89,10 @@ class CaretUtil(private val caret: Caret) {
 	 *
 	 * @see peek
 	 */
-	private fun relativePositionToOffset(pos: Int): Int = offset + if (pos.isPositive) pos - 1 else pos
+	private fun relativePositionToOffset(pos: Int): Int = offset + if (pos > 0) pos - 1 else pos
 	
 	/**
-	 * peeks and returns the character at the given offset from current [CaretUtil.offset]
+	 * Peeks and returns the character at the given offset from current [CaretUtil.offset]
 	 *
 	 * @param dir the offset from current **temporary caret position**
 	 * @return the character or null if the evaluated offset is invalid in the parent [Document] of the [Caret]
@@ -145,7 +146,7 @@ class CaretUtil(private val caret: Caret) {
 	fun moveCaret(
 		separators: String,
 		hardStops: String,
-		mode: Int,
+		mode: WSBehaviour,
 		dir: Int,
 		commit: Boolean = true
 	) {
@@ -158,7 +159,7 @@ class CaretUtil(private val caret: Caret) {
 		}
 		
 		when (mode) {
-			SettingsState.WSBehaviour.STOP_AT_CHAR_TYPE_CHANGE -> {
+			WSBehaviour.StopAtCharTypeChange -> {
 				if (char in separators) {
 					moveWhileFacing(separators, hardStops, dir)
 				} else {
@@ -166,7 +167,7 @@ class CaretUtil(private val caret: Caret) {
 				}
 			}
 			
-			SettingsState.WSBehaviour.STOP_AT_NEXT_SAME_CHAR_TYPE -> {
+			WSBehaviour.StopAtNextSameCharType -> {
 				if (char in separators) {
 					moveWhileFacing(separators, hardStops, dir) and moveUntilReached(separators, hardStops, dir)
 				} else {
@@ -181,7 +182,7 @@ class CaretUtil(private val caret: Caret) {
 	}
 	
 	/**
-	 * Returns boundaries of the work which is under the caret
+	 * Returns boundaries of the word, which is under the caret
 	 *
 	 * @see moveCaret
 	 */

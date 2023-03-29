@@ -2,7 +2,6 @@ package ir.mmd.intellijDev.Actionable.text.macro.settings;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -19,9 +18,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class UI implements Disposable {
 	private final Path macroStorePath = MacroUtilKt.getMacroStorePath();
@@ -42,8 +39,8 @@ public class UI implements Disposable {
 		
 		new ListSpeedSearch<>(macroList);
 		macroList.addListSelectionListener(this::listSelectionChanged);
-		List<String> macroNames = MacroUtilKt.getMacroNames();
-		DefaultListModel<String> model = new DefaultListModel<>();
+		var macroNames = MacroUtilKt.getMacroNames();
+		var model = new DefaultListModel<String>();
 		model.addAll(macroNames);
 		macroList.setModel(model);
 		
@@ -54,7 +51,7 @@ public class UI implements Disposable {
 		}
 		
 		createNewMacroButton.addActionListener(e -> {
-			String newMacroName = JOptionPane.showInputDialog(component, "Please enter name for the new macro", "New Macro");
+			var newMacroName = JOptionPane.showInputDialog(component, "Please enter name for the new macro", "New Macro");
 			
 			try {
 				Files.createFile(Paths.get(macroStorePath.toString(), newMacroName));
@@ -79,7 +76,7 @@ public class UI implements Disposable {
 				return;
 			}
 			
-			String macroName = macroList.getSelectedValue();
+			var macroName = macroList.getSelectedValue();
 			
 			try {
 				Files.delete(Paths.get(macroStorePath.toString(), macroName));
@@ -91,15 +88,15 @@ public class UI implements Disposable {
 	}
 	
 	private void createUIComponents() {
-		EditorFactory factory = EditorFactory.getInstance();
-		Document document = factory.createDocument("");
+		var factory = EditorFactory.getInstance();
+		var document = factory.createDocument("");
 		macroEditor = factory.createEditor(document);
 		macroEditorComponent = macroEditor.getComponent();
 		
 		document.addDocumentListener(new DocumentListener() {
 			@Override
 			public void documentChanged(@NotNull DocumentEvent event) {
-				String text = event.getDocument().getText();
+				var text = event.getDocument().getText();
 				try {
 					Files.write(Paths.get(macroStorePath.toString(), macroList.getSelectedValue()), text.getBytes());
 				} catch (IOException e) {
@@ -114,9 +111,9 @@ public class UI implements Disposable {
 			return;
 		}
 		
-		Path selectedMacro = Paths.get(macroStorePath.toString(), macroList.getSelectedValue());
+		var selectedMacro = Paths.get(macroStorePath.toString(), macroList.getSelectedValue());
 		
-		try (Stream<String> lines = Files.lines(selectedMacro)) {
+		try (var lines = Files.lines(selectedMacro)) {
 			ApplicationManager.getApplication().runWriteAction(
 				() -> macroEditor.getDocument().setText(lines.collect(Collectors.joining("\n")))
 			);

@@ -5,10 +5,10 @@ import com.intellij.lang.javascript.psi.JSParameter
 import com.intellij.lang.javascript.psi.ecma6.TypeScriptParameter
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiParameter
+import com.intellij.psi.util.parentOfType
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.psi.PsiActionAtCaret
 import ir.mmd.intellijDev.Actionable.util.ext.copyToClipboard
-import ir.mmd.intellijDev.Actionable.util.ext.parentOfType
 import org.jetbrains.kotlin.psi.KtParameter
 
 abstract class ParamAtCaretAction(inWriteAction: Boolean = false) : PsiActionAtCaret(inWriteAction) {

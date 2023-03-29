@@ -1,14 +1,13 @@
 package ir.mmd.intellijDev.Actionable.caret.editing
 
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.service
-
 
 class ExecutePasteAction : CaretEditingAction() {
 	context (LazyEventContext)

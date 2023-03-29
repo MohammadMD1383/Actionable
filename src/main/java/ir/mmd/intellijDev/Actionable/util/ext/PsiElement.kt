@@ -2,37 +2,10 @@ package ir.mmd.intellijDev.Actionable.util.ext
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
-import com.intellij.psi.tree.IElementType
-import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.PsiUtilCore
-import kotlin.reflect.KClass
+import com.intellij.psi.util.nextLeaf
+import com.intellij.psi.util.prevLeaf
 
 /**
- * For Compatibility
- *
- * Returns the element type of the [PsiElement]
- */
-val PsiElement.elementType: IElementType get() = PsiUtilCore.getElementType(this)
-
-/**
- * For Compatibility
- *
- * Returns next leaf element
- */
-@Suppress("NOTHING_TO_INLINE")
-inline fun PsiElement.nextLeaf(skipEmptyElements: Boolean = false) = PsiTreeUtil.nextLeaf(this, skipEmptyElements)
-
-/**
- * For Compatibility
- *
- * Returns previous leaf element
- */
-@Suppress("NOTHING_TO_INLINE")
-inline fun PsiElement.prevLeaf(skipEmptyElements: Boolean = false) = PsiTreeUtil.prevLeaf(this, skipEmptyElements)
-
-/**
- * For Compatibility
- *
  * Returns next leaf element but not a [PsiWhiteSpace]
  */
 fun PsiElement.nextLeafNoWhitespace(skipEmptyElements: Boolean = false): PsiElement? {
@@ -44,8 +17,6 @@ fun PsiElement.nextLeafNoWhitespace(skipEmptyElements: Boolean = false): PsiElem
 }
 
 /**
- * For Compatibility
- *
  * Returns previous leaf element but not a [PsiWhiteSpace]
  */
 fun PsiElement.prevLeafNoWhitespace(skipEmptyElements: Boolean = false): PsiElement? {
@@ -54,25 +25,6 @@ fun PsiElement.prevLeafNoWhitespace(skipEmptyElements: Boolean = false): PsiElem
 		element = element.prevLeaf(skipEmptyElements)
 	}
 	return element
-}
-
-/**
- * For Compatibility
- *
- * Returns parent elements of types [classes]
- */
-fun <T : PsiElement> PsiElement.parentOfTypes(vararg classes: KClass<out T>, withSelf: Boolean = false): T? {
-	val start = if (withSelf) this else this.parent
-	return PsiTreeUtil.getNonStrictParentOfType(start, *classes.map { it.java }.toTypedArray())
-}
-
-/**
- * For Compatibility
- *
- * Returns parent element of type [T]
- */
-inline fun <reified T : PsiElement> PsiElement.parentOfType(withSelf: Boolean = false): T? {
-	return PsiTreeUtil.getParentOfType(this, T::class.java, !withSelf)
 }
 
 /**

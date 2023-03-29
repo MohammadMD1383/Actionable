@@ -2,17 +2,20 @@ package ir.mmd.intellijDev.Actionable.typing.java
 
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.ide.highlighter.JavaFileType
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.psi.*
 import com.intellij.psi.PsiModifier.ABSTRACT
 import com.intellij.psi.PsiModifier.DEFAULT
+import com.intellij.psi.util.parentOfType
+import com.intellij.psi.util.parentOfTypes
+import com.intellij.psi.util.prevLeaf
 
 import ir.mmd.intellijDev.Actionable.typing.java.state.State
 import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.*
-
 
 class AutoInsertSemicolon : TypedHandlerDelegate() {
 	override fun beforeCharTyped(

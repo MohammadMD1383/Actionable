@@ -5,12 +5,12 @@ import com.intellij.find.FindModel
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.ScrollType
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.service
 
 abstract class MoveSelectionToOccurrence(
 	private val isFirst: Boolean,
@@ -43,14 +43,10 @@ abstract class MoveSelectionToOccurrence(
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
-
 class MoveFirstSelectionToPreviousOccurrence : MoveSelectionToOccurrence(true, false)
-
 
 class MoveFirstSelectionToNextOccurrence : MoveSelectionToOccurrence(true, true)
 
-
 class MoveLastSelectionToPreviousOccurrence : MoveSelectionToOccurrence(false, false)
-
 
 class MoveLastSelectionToNextOccurrence : MoveSelectionToOccurrence(false, true)

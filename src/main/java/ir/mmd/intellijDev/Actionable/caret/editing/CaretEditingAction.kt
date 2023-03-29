@@ -1,6 +1,7 @@
 package ir.mmd.intellijDev.Actionable.caret.editing
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.EditorColors
 import com.intellij.openapi.editor.event.EditorMouseEvent
@@ -14,7 +15,6 @@ import ir.mmd.intellijDev.Actionable.action.SingleCaretAction
 import ir.mmd.intellijDev.Actionable.caret.editing.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.afterDoing
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.service
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState as MovementSettingsState
 
 abstract class CaretEditingAction : SingleCaretAction() {
@@ -61,12 +61,12 @@ abstract class CaretEditingAction : SingleCaretAction() {
 					previousHighlighter?.let { removeHighlighter(it) }
 					editor.putUserData(
 						previousHighlighterKey, addRangeHighlighter(
-							startOffset,
-							endOffset,
-							HighlighterLayer.LAST + 10,
-							EditorColors.IDENTIFIER_UNDER_CARET_ATTRIBUTES.defaultAttributes,
-							HighlighterTargetArea.EXACT_RANGE
-						)
+						startOffset,
+						endOffset,
+						HighlighterLayer.LAST + 10,
+						EditorColors.IDENTIFIER_UNDER_CARET_ATTRIBUTES.defaultAttributes,
+						HighlighterTargetArea.EXACT_RANGE
+					)
 					)
 				}
 			}

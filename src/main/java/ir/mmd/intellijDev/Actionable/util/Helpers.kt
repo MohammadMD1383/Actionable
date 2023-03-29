@@ -34,19 +34,6 @@ inline fun afterDoing(block: () -> Unit) = block()
 inline infix fun <T> T.after(block: () -> Unit) = also { block() }
 
 /**
- * Try and ignore any exceptions happens inside [block]
- */
-inline fun tryCatching(block: () -> Unit) = try {
-	block()
-} catch (_: Exception) {
-}
-
-/**
- * Helper method to get application-wide service
- */
-inline fun <reified T> service(): T = ApplicationManager.getApplication().getService(T::class.java)
-
-/**
  * Helper method to get application-wide service
  */
 @Suppress("NOTHING_TO_INLINE")
