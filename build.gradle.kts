@@ -2,7 +2,6 @@ import org.jetbrains.intellij.tasks.BuildSearchableOptionsTask
 import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 import org.jetbrains.intellij.tasks.RunIdeTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import kotlin.text.RegexOption.MULTILINE
 
 buildscript {
 	repositories {
@@ -11,7 +10,7 @@ buildscript {
 }
 
 plugins {
-	id("org.jetbrains.intellij") version "1.13.2"
+	id("org.jetbrains.intellij") version "1.13.3"
 	kotlin("jvm") version "1.8.10"
 	java
 }
@@ -50,10 +49,8 @@ tasks.withType<KotlinCompile> {
 }
 
 intellij {
-	plugins.set(
-		"com.intellij.java",
-		"org.jetbrains.kotlin"
-	)
+	plugins.add("com.intellij.java")
+	plugins.add("org.jetbrains.kotlin")
 	
 	type.set("IC")
 	version.set("2023.1")
@@ -63,34 +60,7 @@ tasks.withType<RunIdeTask> {
 	autoReloadPlugins.set(true)
 }
 
-task("patchPluginXmlFeatures") {
-	val xmlFiles = listOf(
-		"src/main/resources/META-INF/plugin.xml",
-		"src/main/resources/META-INF/plugin-java.xml",
-		"src/main/resources/META-INF/plugin-rider.xml",
-		"src/main/resources/META-INF/plugin-javascript.xml"
-	)
-	
-	val features = mutableListOf<String>()
-	
-	xmlFiles.forEach { xmlPath ->
-		val xmlFile = file(xmlPath)
-		val text = xmlFile.readText()
-		val featuresPattern = """<action[\s][\S\s]*?text="(.*?)"[\S\s]*?\/>"""
-		features += Regex(featuresPattern, MULTILINE).findAll(text).map { it.groupValues[1] }
-	}
-	
-	val pluginXmlFile = file(xmlFiles[0])
-	val text = pluginXmlFile.readText()
-	val ulPattern = """<description>[\S\s]*?<ul>([\S\s]*?)<\/ul>[\S\s]*?<\/description>"""
-	val range = Regex(ulPattern, MULTILINE).find(text)!!.groups[1]!!.range
-	val featuresStr = "\n${features.joinToString("\n") { "<li>$it</li>" }}".prependIndent("\t\t\t") + "\n\t\t"
-	val newText = text.replaceRange(range, featuresStr)
-	pluginXmlFile.writeText(newText)
-}
-
 tasks.withType<PatchPluginXmlTask> {
-	dependsOn("patchPluginXmlFeatures")
 	version.set(project.version.toString())
 	sinceBuild.set("231")
 	untilBuild.set("241")
@@ -103,7 +73,3 @@ tasks.withType<BuildSearchableOptionsTask> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
-
-// Helpers
-
-fun <T> ListProperty<T>.set(vararg values: T) = set(listOf(*values))
