@@ -32,16 +32,16 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "3.20.0"
+version = "4.0.0"
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
-		jvmTarget = JavaVersion.VERSION_1_8.toString()
+		jvmTarget = JavaVersion.VERSION_17.toString()
 		freeCompilerArgs = freeCompilerArgs + listOf(
 			"-Xjvm-default=all",
 			"-Xcontext-receivers"
@@ -56,7 +56,7 @@ intellij {
 	)
 	
 	type.set("IC")
-	version.set("2022.3")
+	version.set("2023.1")
 }
 
 tasks.withType<RunIdeTask> {
@@ -92,8 +92,8 @@ task("patchPluginXmlFeatures") {
 tasks.withType<PatchPluginXmlTask> {
 	dependsOn("patchPluginXmlFeatures")
 	version.set(project.version.toString())
-	sinceBuild.set("201")
-	untilBuild.set("") // to be always the latest version
+	sinceBuild.set("231")
+	untilBuild.set("241")
 }
 
 tasks.withType<BuildSearchableOptionsTask> {
