@@ -16,6 +16,10 @@ theme:
     - search.suggest
     - search.highlight
     - announce.dismiss
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+    - content.tabs.link
   
   icon:
     repo: fontawesome/brands/github
@@ -28,7 +32,7 @@ theme:
       toggle:
         icon: material/weather-night
         name: Switch to Dark Mode
-        
+    
     - scheme: slate
       media: "(prefers-color-scheme: dark)"
       primary: teal
@@ -36,3 +40,33 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Switch to Light Mode
+
+markdown_extensions:
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.smartsymbols
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - admonition
+  - attr_list
+  - abbr
+  - md_in_html
+  - tables
+  - footnotes
+  - def_list
