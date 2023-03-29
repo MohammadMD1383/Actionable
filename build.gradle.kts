@@ -64,6 +64,9 @@ tasks.withType<PatchPluginXmlTask> {
 	version.set(project.version.toString())
 	sinceBuild.set("231")
 	untilBuild.set("241")
+	changeNotes.set("""
+		Preview Version of 4
+	""".trimIndent())
 }
 
 tasks.withType<BuildSearchableOptionsTask> {

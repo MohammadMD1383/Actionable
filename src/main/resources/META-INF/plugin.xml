@@ -4,341 +4,37 @@
 	<vendor email="ezmmd83@gmail.com" url="https://github.com/MohammadMD1383/Actionable">MMD</vendor>
 	
 	<description><![CDATA[
-		<h3>Adds some favorite/extra actions that are not available in IntelliJ based IDEs.</h3>
-		<b>For a detailed description about all the actions, please visit the <a href="https://mohammadmd1383.github.io/Actionable/">documentation</a></b>
+		<h1>
+			IntelliJ Platform Actionable Plugin -
+			<a href="https://mohammadmd1383.github.io/Actionable/">Documentation</a>
+		</h1>
 		
-		<h2>I NEED YOUR HELP TO COMPLETE THE DOCUMENTATION - <a href="https://github.com/MohammadMD1383/Actionable/issues/31">more info</a></h2>
+		<h2>What Is Actionable?</h2>
+		<p>
+			<b>Actionable</b>
+			is a plugin for all the IntelliJ-Based IDEs that adds many extra actions, which makes it easier to interact with the IDE.
+		</p>
+		<p>It provides you simpler ways to do repetitive tasks as well as doing interesting things!</p>
+		<p>
+			Enough here, let’s see the plugin in action! <a href="https://mohammadmd1383.github.io/Actionable/Getting%20Started/">Getting Started</a>
+		</p>
 		
-		<div>Features:</div>
+		<h2>Test The Latest Features ASAP?</h2>
+		<p>
+			Want to test the latest features before they officially get released?
+			Checkout <a href="https://github.com/MohammadMD1383/Actionable/releases">releases page</a> for nightly builds.
+		</p>
+		
+		<h2 id="how-to-help-">How To Help?</h2>
 		<ul>
-			<li>Collapse Empty Tag on Backspace</li>
-			<li>Expand Tag on Type</li>
-			<li>Predict Words: Camel-Case</li>
-			<li>Predict Words: Pascal-Case</li>
-			<li>Predict Words: Snake-Case</li>
-			<li>Predict Words: Kebab-Case</li>
-			<li>Predict Words: Spaced</li>
-			<li>Duplicate Line and Paste Contents from Clipboard</li>
-			<li>Duplicate Line and Insert Contents</li>
-			<li>Paste Case-Preserving</li>
-			<li>Replace Selections Preserving Case</li>
-			<li>Open Macro Settings</li>
-			<li>Add Line Above Caret Without Moving Caret</li>
-			<li>Add Line Below Caret Without Moving Caret</li>
-			<li>Empty Line</li>
-			<li>Empty Line Preserving the Indent</li>
-			<li>Delete to Indented Line Start</li>
-			<li>Duplicate Lines Up</li>
-			<li>Duplicate Lines Down</li>
-			<li>Remove Duplicate Selections</li>
-			<li>Select Until ...</li>
-			<li>Select Line Under Caret (Without Indent)</li>
-			<li>Select Word Under Caret</li>
-			<li>Select Element Under Caret</li>
-			<li>Select Literal Element Under Caret</li>
-			<li>Select Text Between Quotes (Single-Line)</li>
-			<li>Select Text Between Double-Quotes (Single-Line)</li>
-			<li>Select Text Between Backticks (Single-Line)</li>
-			<li>Unselect First Selection</li>
-			<li>Unselect Last Selection</li>
-			<li>Move First Selection to Previous Occurrence</li>
-			<li>Move First Selection to Next Occurrence</li>
-			<li>Move Last Selection to Previous Occurrence</li>
-			<li>Move Last Selection to Next Occurrence</li>
-			<li>Move Selection Up</li>
-			<li>Move Selection Down</li>
-			<li>Move Selection Left</li>
-			<li>Move Selection Right</li>
-			<li>Add Selection to Next Occurrence</li>
-			<li>Add Selection to Previous Occurrence</li>
-			<li>Remove Carets on Empty Lines</li>
-			<li>Justify Carets Start</li>
-			<li>Justify Carets End</li>
-			<li>Justify Carets End and Shift Text</li>
-			<li>Copy Line Without Extra Whitespace</li>
-			<li>Cut Line Without Extra Whitespace</li>
-			<li>Copy Word At Caret</li>
-			<li>Cut Word At Caret</li>
-			<li>Copy Element At Caret</li>
-			<li>Cut Element At Caret</li>
-			<li>Delete Element At Caret</li>
-			<li>Delete Word At Caret</li>
-			<li>Set Copy-Paste Word Offset At Caret</li>
-			<li>Set Cut-Paste Word Offset At Caret</li>
-			<li>Set Copy-Paste Element Offset At Caret</li>
-			<li>Set Cut-Paste Element Offset At Caret</li>
-			<li>Execute Paste</li>
-			<li>Cancel Paste</li>
-			<li>Move Caret Up the Tree</li>
-			<li>Move Caret to Next Word</li>
-			<li>Move Caret to Next Word with Selection</li>
-			<li>Move Caret to Previous Word</li>
-			<li>Move Caret to Previous Word with Selection</li>
-			<li>Move Caret to Next Element</li>
-			<li>Move Caret to Next Element with Selection</li>
-			<li>Move Caret to Previous Element</li>
-			<li>Move Caret to Previous Element with Selection</li>
-			<li>Move Caret to Next Same Element</li>
-			<li>Move Caret to Previous Same Element</li>
-			<li>Copy Parameter At Caret</li>
-			<li>Cut Parameter At Caret</li>
-			<li>Delete Parameter At Caret</li>
-			<li>Copy Operand At Caret</li>
-			<li>Cut Operand At Caret</li>
-			<li>Delete Operand At Caret</li>
-			<li>Set Editor Tab Placement to Top</li>
-			<li>Set Editor Tab Placement to Left</li>
-			<li>Set Editor Tab Placement to Bottom</li>
-			<li>Set Editor Tab Placement to Right</li>
-			<li>Find Is Case-Sensitive</li>
-			<li>Open Keymap Settings</li>
-			<li>Auto Insert Semicolons</li>
-			<li>Auto Class Case</li>
-			<li>Just in Time Refactoring</li>
-			<li>Add Import</li>
-			<li>Start Line Up</li>
+			<li>
+				Feel free to open any feature request to help me add more features to this plugin.
+				(<a href="https://github.com/MohammadMD1383/Actionable/issues">Issue Tracker</a>)
+			</li>
+			<li>Report every bug or inconvenience you feel. (<a href="https://github.com/MohammadMD1383/Actionable/issues">Issue Tracker</a>)</li>
+			<li>All the <a href="https://github.com/MohammadMD1383/Actionable/pulls">PRs</a> are welcomed!</li>
 		</ul>
 		]]></description>
-	
-	<change-notes><![CDATA[
-		<ul>
-			<li><b>3.20.0:</b><br>
-				<b>FINAL RELEASE OF v3.x.x! v4 IS COMING!!!</b><br>
-				fixed issues #13 #40<br>
-				fixed an issue with SelectLiteralElementUnderCaretAction in Kotlin<br>
-				minor improvements<br>
-				new actions:<br>
-				<ul>
-					<li>Delete Element At Caret</li>
-					<li>Delete Word At Caret</li>
-					<li>Copy Parameter At Caret</li>
-					<li>Cut Parameter At Caret</li>
-					<li>Delete Parameter At Caret</li>
-					<li>Copy Operand At Caret</li>
-					<li>Cut Operand At Caret</li>
-					<li>Delete Operand At Caret</li>
-				</ul>
-			</li>
-			<li><b>3.19.0:</b><br>
-				fixed issues #37 #38<br>
-				minor improvements<br>
-				new actions:<br>
-				<ul>
-					<li>Paste Preserving Case</li>
-					<li>Replace Selections Preserving Case</li>
-				</ul>
-			</li>
-			<li><b>3.18.0:</b><br>
-				fixed issues #39 #40 #42<br>
-				fixed an issue with MoveCaretUpTheTree action that didn't scroll to caret<br>
-				from now DuplicateLineAndPasteContentFromClipboard can work with multiple carets/selection<br>
-				there are two new settings ... check them out in <code>Actionable > Text</code> and <code>Actionable > Caret > Movement</code><br>
-				minor improvements<br>
-				new actions:<br>
-				<ul>
-					<li>Duplicate Line and Insert Content (using a modal dialog)</li>
-				</ul>
-			</li>
-			<li><b>3.17.0:</b><br>
-				fixed issues #35<br>
-				fixed an issue with AddImportDialogAction<br>
-				minor improvements<br>
-				new actions:<br>
-				<ul>
-					<li><a href="https://github.com/MohammadMD1383/Actionable/issues/30"><b>NEW: Macros v2!</b></a></li>
-				</ul>
-			</li>
-			<li><b>3.16.0:</b><br>
-				fixed issues #19 #33<br>
-				added some documentation in repo<br>
-				new actions:<br>
-				<ul>
-					<li>Open Keymap Settings Page</li>
-					<li>Duplicate Line And Paste Clipboard Content</li>
-				</ul>
-				Thanks to: <a href="https://github.com/j-a-s-o-n-g">Jason</a>
-			</li>
-			<li><b>3.15.0:</b><br>
-				fixed issues #21 #26 #29<br>
-				other major fixes and cleanups<br>
-				new actions:<br>
-				<ul>
-					<li>Select Until ...</li>
-					<li>Move Caret Up The Tree</li>
-				</ul>
-			</li>
-			<li><b>3.14.0:</b><br>
-				fixed issue #28<br>
-				other minor fixes<br>
-				new actions:<br>
-				<ul>
-					<li>Select Line Without Extra Whitespace (both start/end)</li>
-					<li>Copy Line Content Without Extra Whitespace (both start/end)</li>
-					<li>Cut Line Content Without Extra Whitespace (both start/end)</li>
-				</ul>
-			</li>
-			<li><b>3.13.0:</b><br>
-				fixed issues #16 #18 #24 #27<br>
-				other minor fixes<br>
-				new actions:<br>
-				<ul>
-					<li>Add Line Above/Below Caret Without Moving Caret</li>
-					<li>Change Editor Tab Placement Shortcuts</li>
-				</ul>
-			</li>
-			<li><b>3.12.0:</b><br>
-				<b>Minimum IDE support version changed to 201.*</b><br>
-				fixed issues #15 #17 #18 #22<br>
-				new actions:<br>
-				<ul>
-					<li>Empty Line</li>
-					<li>Indent Preserving Empty Line</li>
-					<li>Delete to Indented Line Start</li>
-					<li>Remove Carets on Empty Lines</li>
-				</ul>
-			</li>
-			<li><b>3.11.0:</b><br>
-				fixed issue #10<br>
-				four new actions:<br>
-				<ul>
-					<li>Move First Selection to Previous Occurrence</li>
-					<li>Move First Selection to Next Occurrence</li>
-					<li>Move Last Selection to Previous Occurrence</li>
-					<li>Move Last Selection to Next Occurrence</li>
-				</ul>
-			</li>
-			<li><b>3.10.1:</b><br>
-				fixed a bug in add selection to next/previous occurrence<br>
-				Select Literal Element Under Caret: solves #3 and improvement to kotlin selection
-			</li>
-			<li><b>3.10.0:</b><br>
-				Added 'Unselect First/Last Selection' actions<br>
-				Now adding selection to previous/next occurrence will scroll the editor if necessary
-			</li>
-			<li><b>3.9.1:</b><br>
-				upgrade to use kotlin 1.7.0<br>
-				changed functionality of SelectLiteralElementUnderCaretAction (language aware; not supporting all yet)<br>
-				fix in change-notes
-			</li>
-			<li><b>3.9.0:</b><br>
-				Added select text between quotes/double-quotes/backticks action (single-line)<br>
-				Added shortcut for settings as a toggle action (Actionable -> Find -> Is find case-sensitive?)
-			</li>
-			<li><b>3.8.2:</b><br>
-				fixed a bug with start line up (Rider)
-			</li>
-			<li><b>3.8.1:</b><br>
-				fixed a bug
-			</li>
-			<li><b>3.8.0:</b><br>
-				fixed issue with registering macros<br>
-				new java action: add import (from anywhere in the document using a popup dialog)<br>
-				<b>new java typeHandler: just-in-time refactoring for local variables</b><br>
-				fixed issue with CollapseEmptyTagOnBackspace
-			</li>
-			<li><b>3.7.0:</b><br>
-				fixed issue <a href="https://github.com/MohammadMD1383/Actionable/issues/2">#2</a><br>
-				improvements to AutoClassCase and AutoInsertSemicolon (Java)<br>
-				new type handler for xml: collapse empty tag on backspace (when tag is completely empty and caret should be inside the tag)<br>
-				internal improvements
-			</li>
-			<li><b>3.6.0:</b><br>
-				Added macro feature (without simulation of typing)<br>
-				Also there is a setting for editing macros at
-				<pre>Settings -> tools -> Actionable -> Macro</pre>
-			</li>
-			<li><b>3.5.1:</b><br>
-				Improved Start Line Up action (fix for Rider)<br>
-				Now actions are dumb-aware (some are allowed to be executed while indexing)
-			</li>
-			<li><b>3.5.0:</b><br>
-				Added fix for Rider's <i>Start New Line Before Caret</i> in XAML files.<br>
-				Added box selection movement actions.
-			</li>
-			<li><b>3.4.1:</b><br>
-				Improved auto semicolon insertion (java)<br>
-				Bug fixes
-			</li>
-			<li><b>3.4.0:</b><br>
-				Bug fixes<br>
-				Added select literal element under caret action<br>
-				Added type handlers for:
-				<ul>
-					<li><b>HTML</b>
-						<ul>
-							<li>Auto expand tag on type (experimental)</li>
-						</ul>
-					</li>
-					<li><b>Java</b>
-						<ul>
-							<li>Auto insert semicolons</li>
-							<li>Auto Change first character of class name to uppercase</li>
-						</ul>
-					</li>
-				</ul>
-			</li>
-			<li><b>3.3.0:</b><br>
-				Added move caret to next/previous element with/without selection actions.<br>
-				Added select word/element under caret actions.<br>
-				Added predict case actions.
-			</li>
-			<li><b>3.2.0:</b><br>
-				Added Cancel Paste action<br>
-				Added Remove Duplicate Selections action<br>
-				Fixed a bug in settings
-			</li>
-			<li><b>3.1.0:</b><br>
-				<b>Removed scripting feature in favor of better existing plugins.</b><br>
-				rewritten plugin in kotlin
-			</li>
-			<li><b>3.0.0:</b><br>
-				Added scripting feature for custom actions! - available at Settings -> Tools -> Actionable -> Scripting<br>
-				please visit github repo for more info.
-			</li>
-			<li><b>2.3.1:</b><br>
-				Added justify carets end and shift text action<br>
-				Minor improvements
-			</li>
-			<li><b>2.2.2:</b><br>
-				fixed invalid caret bug with justify carets actions<br>
-				improved functionality of justify carets end action
-			</li>
-			<li><b>2.2.1:</b><br>
-				Added highlighter hinting for set copy/cut-paste word/element offset<br>
-				Added configuration for the above<br>
-				renewed plugin settings categories
-			</li>
-			<li><b>2.2.0:</b><br>
-				Added set copy/cut-paste word/element offset at caret actions.<br>
-				visit repository home page for detailed information about how these actions work.
-			</li>
-			<li><b>2.1.0:</b><br>
-				<b>Now plugins supports IntelliJ since 2017.1</b><br>
-				Added configuration for hard stop word separators.<br>
-				visit settings page of the plugin for more info. <code>Settings > tools > Actionable > Caret Movement</code>
-			</li>
-			<li><b>2.0.0:</b><br>
-				<b>Now plugins supports IntelliJ since 2019.1.4</b><br>
-				Added configuration for find actions<br>
-				Minor improvements
-			</li>
-			<li><b>1.5.1:</b><br>
-				Added Add selection to next/previous occurrence<br>
-				Renamed Copy/Cut word at caret --to--> Copy/Cut element at caret<br>
-				Minor improvements
-			</li>
-			<li><b>1.4.1:</b><br>
-				Added move caret to next/previous word (+ with selection)<br>
-				Added exception reporting feature<br>
-				Minor improvements
-			</li>
-			<li><b>1.2.0:</b> Added copy/cut word at caret</li>
-			<li><b>1.1.0:</b> Added justify carets actions</li>
-			<li><b>1.0.1:</b> Fixed issue with duplicate down action</li>
-			<li><b>1.0.0:</b> Fixed some issues with plugin.xml</li>
-			<li><b>1.0.0-Beta:</b> Initial Release</li>
-		</ul>
-		]]></change-notes>
 	
 	<depends>com.intellij.modules.platform</depends>
 	<depends>com.intellij.modules.lang</depends>
