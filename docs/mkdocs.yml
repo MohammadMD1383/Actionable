@@ -9,7 +9,6 @@ theme:
     - navigation.tracking
     - navigation.tabs
     - navigation.tabs.sticky
-    - navigation.sections
     - navigation.indexes
     - navigation.top
     - toc.integrate
@@ -40,6 +39,13 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Switch to Light Mode
+
+plugins:
+  - search
+  - file-filter:
+      filter_nav: true
+      exclude_glob:
+        - 'assets/snippets/**'
 
 markdown_extensions:
   - pymdownx.critic
