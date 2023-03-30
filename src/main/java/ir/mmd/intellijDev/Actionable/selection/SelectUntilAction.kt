@@ -28,8 +28,10 @@ class SelectUntilAction : AnAction() {
 					runWriteCommandAction {
 						allCarets.withEachMapped({ it.util }) {
 							document.removeCharAt(offset - 1)
-							moveUntilReached(e.keyChar.toString(), "\n", CaretUtil.FORWARD)
-							offset++
+							if (!moveUntilReached(e.keyChar.toString(), "\n", CaretUtil.FORWARD)) {
+								offset++
+							}
+							
 							makeOffsetDiffSelection()
 							commit()
 						}
