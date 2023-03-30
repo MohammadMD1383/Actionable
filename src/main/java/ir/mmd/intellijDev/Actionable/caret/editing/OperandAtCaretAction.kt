@@ -10,7 +10,7 @@ import com.intellij.psi.PsiPolyadicExpression
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.util.parentOfTypes
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.psi.PsiActionAtCaret
+import ir.mmd.intellijDev.Actionable.caret.PsiActionAtCaret
 import ir.mmd.intellijDev.Actionable.util.ext.contains
 import ir.mmd.intellijDev.Actionable.util.ext.copyToClipboard
 import org.jetbrains.kotlin.psi.KtBinaryExpression

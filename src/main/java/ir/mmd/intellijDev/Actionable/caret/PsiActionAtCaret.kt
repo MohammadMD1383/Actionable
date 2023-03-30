@@ -1,9 +1,8 @@
-package ir.mmd.intellijDev.Actionable.psi
+package ir.mmd.intellijDev.Actionable.caret
 
 import com.intellij.openapi.editor.Caret
 import com.intellij.psi.PsiElement
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.caret.ActionAtCaret
 import ir.mmd.intellijDev.Actionable.util.ext.elementAtOrBefore
 
 abstract class PsiActionAtCaret(inWriteAction: Boolean = false) : ActionAtCaret<PsiActionAtCaret.Model, PsiElement>(inWriteAction) {

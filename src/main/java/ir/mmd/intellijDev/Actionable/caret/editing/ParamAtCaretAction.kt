@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.util.parentOfType
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.psi.PsiActionAtCaret
+import ir.mmd.intellijDev.Actionable.caret.PsiActionAtCaret
 import ir.mmd.intellijDev.Actionable.util.ext.copyToClipboard
 import org.jetbrains.kotlin.psi.KtParameter
 

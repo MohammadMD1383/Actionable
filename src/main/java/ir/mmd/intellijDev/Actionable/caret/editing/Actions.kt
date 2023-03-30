@@ -1,37 +1,21 @@
 package ir.mmd.intellijDev.Actionable.caret.editing
 
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.editor.Caret
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.psi.PsiActionAtCaret
-import ir.mmd.intellijDev.Actionable.text.WordActionAtCaret
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.caret.PsiActionAtCaret
+import ir.mmd.intellijDev.Actionable.caret.WordActionAtCaret
+import ir.mmd.intellijDev.Actionable.util.ext.copyToClipboard
 
-class CutWordAtCaret : CaretEditingAction() {
-	override fun isDumbAware() = true
-	context (LazyEventContext)
-	override fun perform(caret: Caret) = copyWordAtCaret(true)
+class CopyWordAtCaret : WordActionAtCaret() {
+	context(LazyEventContext)
+	override fun doAction(model: Model) = model.word.copyToClipboard()
 }
 
-class CutElementAtCaret : CaretEditingAction() {
+class CutWordAtCaret : WordActionAtCaret(true) {
 	context(LazyEventContext)
-	override fun perform(caret: Caret) = copyElementAtCaret(true)
-}
-
-class CopyWordAtCaret : CaretEditingAction() {
-	override fun isDumbAware() = true
-	context(LazyEventContext)
-	override fun perform(caret: Caret) = copyWordAtCaret(false)
-}
-
-class CopyElementAtCaret : CaretEditingAction() {
-	context(LazyEventContext)
-	override fun perform(caret: Caret) = copyElementAtCaret(false)
-}
-
-class DeleteElementAtCaretAction : PsiActionAtCaret(true) {
-	context(LazyEventContext)
-	override fun doAction(model: Model) = model.psiElement.delete()
+	override fun doAction(model: Model) {
+		model.word.copyToClipboard()
+		document.deleteString(model.boundaries[0], model.boundaries[1])
+	}
 }
 
 class DeleteWordAtCaretAction : WordActionAtCaret(true) {
@@ -39,29 +23,20 @@ class DeleteWordAtCaretAction : WordActionAtCaret(true) {
 	override fun doAction(model: Model) = document.deleteString(model.boundaries[0], model.boundaries[1])
 }
 
-class SetWordCutPasteOffset : CaretEditingAction() {
+class CopyElementAtCaret : PsiActionAtCaret() {
 	context(LazyEventContext)
-	override fun perform(caret: Caret) = setPasteOffset("wd;ct")
+	override fun doAction(model: Model) = model.psiElement.text.copyToClipboard()
 }
 
-class SetWordCopyPasteOffset : CaretEditingAction() {
+class CutElementAtCaret : PsiActionAtCaret(true) {
 	context(LazyEventContext)
-	override fun perform(caret: Caret) = setPasteOffset("wd;cp")
+	override fun doAction(model: Model) = model.psiElement.run {
+		text.copyToClipboard()
+		delete()
+	}
 }
 
-class SetElementCutPasteOffset : CaretEditingAction() {
+class DeleteElementAtCaretAction : PsiActionAtCaret(true) {
 	context(LazyEventContext)
-	override fun perform(caret: Caret) = setPasteOffset("el;ct")
-}
-
-class SetElementCopyPasteOffset : CaretEditingAction() {
-	context(LazyEventContext)
-	override fun perform(caret: Caret) = setPasteOffset("el;cp")
-}
-
-class CancelPasteAction : CaretEditingAction() {
-	context(LazyEventContext)
-	override fun perform(caret: Caret) = editor.removeScheduledPasteAction()
-	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && editor.getUserData(scheduledPasteActionKind) != null }
+	override fun doAction(model: Model) = model.psiElement.delete()
 }

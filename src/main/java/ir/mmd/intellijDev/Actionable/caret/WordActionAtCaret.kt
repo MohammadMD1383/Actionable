@@ -1,8 +1,7 @@
-package ir.mmd.intellijDev.Actionable.text
+package ir.mmd.intellijDev.Actionable.caret
 
 import com.intellij.openapi.editor.Caret
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.caret.ActionAtCaret
 import ir.mmd.intellijDev.Actionable.util.ext.getWordAtOffsetOrBefore
 
 abstract class WordActionAtCaret(inWriteAction: Boolean = false) : ActionAtCaret<WordActionAtCaret.Model, String>(inWriteAction) {
