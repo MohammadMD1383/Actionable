@@ -1,6 +1,6 @@
 package ir.mmd.intellijDev.Actionable.util
 
-import com.intellij.openapi.application.ApplicationManager
+import com.intellij.util.application
 
 /**
  * You can use this to beatify the code like this:
@@ -37,4 +37,4 @@ inline infix fun <T> T.after(block: () -> Unit) = also { block() }
  * Helper method to get application-wide service
  */
 @Suppress("NOTHING_TO_INLINE")
-inline fun <T> service(clazz: Class<T>): T = ApplicationManager.getApplication().getService(clazz)
+inline fun <T> service(clazz: Class<T>): T = application.getService(clazz)
