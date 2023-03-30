@@ -6,7 +6,6 @@ import com.intellij.openapi.editor.Caret
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 class EmptyLineAction : MultiCaretAction() {
 	context (LazyEventContext)
@@ -15,7 +14,7 @@ class EmptyLineAction : MultiCaretAction() {
 		val lineStartOffset = document.getLineStartOffset(lineNumber)
 		val lineEndOffset = document.getLineEndOffset(lineNumber)
 		
-		project.runWriteCommandAction {
+		runWriteCommandAction {
 			document.deleteString(lineStartOffset, lineEndOffset)
 		}
 	}

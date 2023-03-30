@@ -9,7 +9,6 @@ import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.getLineStartIndentLength
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 class IndentPreservingEmptyLineAction : MultiCaretAction() {
 	context (LazyEventContext)
@@ -20,7 +19,7 @@ class IndentPreservingEmptyLineAction : MultiCaretAction() {
 		val lineIndentEndOffset = lineStartOffset + document.getLineStartIndentLength(lineNumber)
 		val line = document.getText(TextRange(lineStartOffset, lineEndOffset))
 		
-		project.runWriteCommandAction {
+		runWriteCommandAction {
 			if (line.isBlank()) {
 				document.deleteString(lineStartOffset, lineEndOffset)
 			} else {

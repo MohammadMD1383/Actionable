@@ -8,7 +8,6 @@ import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.action
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 class StartLineUp : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
@@ -19,7 +18,7 @@ class StartLineUp : AnAction() {
 			val line = caret.logicalPosition.line
 			
 			if (line == 0) {
-				project.runWriteCommandAction { document.insertString(0, "\n") }
+				runWriteCommandAction { document.insertString(0, "\n") }
 				caret moveTo 0
 			} else {
 				caret moveTo document.getLineEndOffset(line - 1)

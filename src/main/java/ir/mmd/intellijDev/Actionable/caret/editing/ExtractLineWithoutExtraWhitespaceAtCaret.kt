@@ -6,7 +6,10 @@ import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretActionWithInitialization
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.copyToClipboard
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.getLineStartIndentLength
+import ir.mmd.intellijDev.Actionable.util.ext.getLineTrailingWhitespaceLength
 
 abstract class ExtractLineWithoutExtraWhitespaceAtCaret(private val cut: Boolean) : MultiCaretActionWithInitialization<MutableList<String>>() {
 	context(LazyEventContext)
@@ -25,7 +28,7 @@ abstract class ExtractLineWithoutExtraWhitespaceAtCaret(private val cut: Boolean
 		
 		data += document.getText(TextRange(start, end))
 		if (cut) {
-			project.runWriteCommandAction {
+			runWriteCommandAction {
 				document.deleteString(start, end)
 			}
 		}

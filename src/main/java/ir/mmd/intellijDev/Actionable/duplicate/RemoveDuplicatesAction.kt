@@ -7,10 +7,8 @@ import com.intellij.openapi.editor.Caret
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretActionWithInitialization
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
-
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.haveSelection
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 class RemoveDuplicatesAction : MultiCaretActionWithInitialization<HashSet<String>>() {
 	context(LazyEventContext)
@@ -20,7 +18,7 @@ class RemoveDuplicatesAction : MultiCaretActionWithInitialization<HashSet<String
 	override fun perform(caret: Caret): Unit = service<SettingsState>().run {
 		val text = caret.selectedText!!
 		data.find { it.equals(text, ignoreCase = !isCaseSensitive) }?.let {
-			project.runWriteCommandAction {
+			runWriteCommandAction {
 				document.deleteString(caret.selectionStart, caret.selectionEnd)
 			}
 		} ?: data.add(text)

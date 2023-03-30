@@ -17,7 +17,7 @@ class PastePreservingCaseAction : AnAction() {
 			return
 		}
 		
-		project.runWriteCommandAction {
+		runWriteCommandAction {
 			if (caretCount > contentsSize) {
 				contents.forEachIndexed { i, content ->
 					allCarets[i].replaceSelectedText { content toCaseStyleOf it }

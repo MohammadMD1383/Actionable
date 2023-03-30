@@ -89,7 +89,7 @@ abstract class CaretEditingAction : SingleCaretAction() {
 	context (LazyEventContext)
 	fun copyElementAtCaret(deleteElement: Boolean) = psiFile.elementAt(primaryCaret)!!.run {
 		text.copyToClipboard()
-		if (deleteElement) project.runWriteCommandAction(::delete)
+		if (deleteElement) runWriteCommandAction(::delete)
 	}
 	
 	context (LazyEventContext)
@@ -99,7 +99,7 @@ abstract class CaretEditingAction : SingleCaretAction() {
 		
 		word.copyToClipboard()
 		if (deleteWord) {
-			project.runWriteCommandAction {
+			runWriteCommandAction {
 				document.deleteString(boundaries[0], boundaries[1])
 			}
 		}

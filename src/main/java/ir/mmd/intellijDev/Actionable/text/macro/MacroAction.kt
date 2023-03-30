@@ -38,7 +38,7 @@ class MacroAction(name: String, private val macro: String) : MultiCaretAction(na
 			}
 		}
 		
-		project.runWriteCommandAction {
+		runWriteCommandAction {
 			document.replaceString(replacementStart, replacementEnd, evaluatedMacro.text)
 			caret moveTo replacementStart + evaluatedMacro.caretFinalOffset
 		}

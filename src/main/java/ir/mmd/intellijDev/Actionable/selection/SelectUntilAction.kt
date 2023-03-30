@@ -6,7 +6,10 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.CaretUtil
 import ir.mmd.intellijDev.Actionable.util.afterDoing
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.removeCharAt
+import ir.mmd.intellijDev.Actionable.util.ext.util
+import ir.mmd.intellijDev.Actionable.util.ext.withEachMapped
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 
@@ -22,7 +25,7 @@ class SelectUntilAction : AnAction() {
 		editor.contentComponent.addKeyListener(object : KeyAdapter() {
 			override fun keyTyped(e: KeyEvent) {
 				if (e.keyChar != KeyEvent.CHAR_UNDEFINED) {
-					project.runWriteCommandAction {
+					runWriteCommandAction {
 						allCarets.withEachMapped({ it.util }) {
 							document.removeCharAt(offset - 1)
 							moveUntilReached(e.keyChar.toString(), "\n", CaretUtil.FORWARD)

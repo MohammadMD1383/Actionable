@@ -31,7 +31,7 @@ class ExecutePasteAction : CaretEditingAction() {
 			else -> throw Exception("Unknown scheduled paste action target")
 		}
 		
-		project.runWriteCommandAction {
+		runWriteCommandAction {
 			paste(
 				document,
 				caret,

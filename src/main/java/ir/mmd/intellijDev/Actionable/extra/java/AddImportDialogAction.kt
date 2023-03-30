@@ -16,7 +16,6 @@ import com.intellij.ui.EditorTextField
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.psiFile
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 class AddImportDialogAction : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
@@ -36,7 +35,7 @@ class AddImportDialogAction : AnAction() {
 		
 		if (result == OK_EXIT_CODE) {
 			val psiClass = psiFacade.findClass(editorTextField.text, GlobalSearchScope.allScope(project)) ?: return
-			project.runWriteCommandAction {
+			runWriteCommandAction {
 				JavaCodeStyleManager.getInstance(project).addImport(e.psiFile as PsiJavaFile, psiClass)
 			}
 		}

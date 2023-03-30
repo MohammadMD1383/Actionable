@@ -13,7 +13,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.*
 
 abstract class MoveSelectionAction : AnAction() {
 	private fun swap(
-		project: Project,
+		project: Project?,
 		editor: Editor,
 		document: Document,
 		caret: Caret,
@@ -37,7 +37,7 @@ abstract class MoveSelectionAction : AnAction() {
 	}
 	
 	protected fun Editor.moveSelectionsUp() {
-		val project = project!!
+		val project = project
 		val carets = allCarets
 		val document = document
 		
@@ -68,7 +68,7 @@ abstract class MoveSelectionAction : AnAction() {
 	}
 	
 	protected fun Editor.moveSelectionsDown() {
-		val project = project!!
+		val project = project
 		val document = document
 		
 		allCarets.asReversed().forEach { caret ->

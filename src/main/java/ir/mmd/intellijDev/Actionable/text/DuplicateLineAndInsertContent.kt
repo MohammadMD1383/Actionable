@@ -11,7 +11,10 @@ import com.intellij.ui.components.JBTextArea
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.caretsAndSelectionsAreOnTheSameLine
 import ir.mmd.intellijDev.Actionable.text.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.addCaret
+import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.moveTo
+import ir.mmd.intellijDev.Actionable.util.ext.replaceRanges
 
 open class DuplicateLineAndInsertContent : AnAction() {
 	context (LazyEventContext)
@@ -47,7 +50,7 @@ open class DuplicateLineAndInsertContent : AnAction() {
 			it.selectionStart - lineStartOffset..it.selectionEnd - lineStartOffset
 		}
 		
-		project.runWriteCommandAction {
+		runWriteCommandAction {
 			replacements.removeFirst().let {
 				val (newLine, ranges) = rawLine.replaceRanges(replacementRanges, it, preserveCase)
 				

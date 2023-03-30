@@ -8,7 +8,6 @@ import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.getLineStartIndentLength
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 class DeleteToIndentedLineStartAction : MultiCaretAction() {
 	context (LazyEventContext)
@@ -19,7 +18,7 @@ class DeleteToIndentedLineStartAction : MultiCaretAction() {
 		val lineIndentEndOffset = lineStartOffset + document.getLineStartIndentLength(lineNumber)
 		val line = document.getText(TextRange(lineStartOffset, lineEndOffset))
 		
-		project.runWriteCommandAction {
+		runWriteCommandAction {
 			when {
 				line.isBlank() -> {
 					document.deleteString(lineStartOffset, lineEndOffset)

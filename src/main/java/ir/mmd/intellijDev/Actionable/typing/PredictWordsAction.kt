@@ -9,7 +9,6 @@ import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.haveSelection
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 abstract class PredictWordsAction : MultiCaretAction() {
 	abstract fun transformWords(words: MutableList<String>): String
@@ -46,7 +45,7 @@ abstract class PredictWordsAction : MultiCaretAction() {
 	override fun perform(caret: Caret) {
 		val text = transformWords(predictWords(project, caret.selectedText!!))
 		
-		project.runWriteCommandAction {
+		runWriteCommandAction {
 			editor.document.replaceString(caret.selectionStart, caret.selectionEnd, text)
 		}
 		
