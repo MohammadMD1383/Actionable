@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.find.settings.handy
+package ir.mmd.intellijDev.Actionable.toggle
 
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
 

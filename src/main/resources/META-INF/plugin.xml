@@ -663,8 +663,8 @@
 				<separator text="Find"/>
 				
 				<action
-					class="ir.mmd.intellijDev.Actionable.find.settings.handy.FindCaseSensitivityToggleAction"
-					id="ir.mmd.intellijDev.Actionable.find.settings.handy.FindCaseSensitivityToggleAction"
+					class="ir.mmd.intellijDev.Actionable.toggle.FindCaseSensitivityToggleAction"
+					id="ir.mmd.intellijDev.Actionable.toggle.FindCaseSensitivityToggleAction"
 					text="Find Is Case-Sensitive"
 					description="A shortcut for `is find case-sensitive` option in Actionable settings"/>
 			</group>
