@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.extra.ide.keymap
+package ir.mmd.intellijDev.Actionable.extra.ide
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent

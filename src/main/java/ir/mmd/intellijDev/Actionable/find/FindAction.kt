@@ -48,3 +48,7 @@ abstract class FindAction(private val searchForward: Boolean) : AnAction() {
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
+
+class SelectPreviousOccurrence : FindAction(false)
+
+class SelectNextOccurrence : FindAction(true)

@@ -8,14 +8,11 @@ import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 
 abstract class UnselectAction : AnAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
-		getTargetCaret(allCarets).let {
-			it.removeSelection()
-			caretModel.removeCaret(it)
-		}
-	}
-	
 	abstract fun getTargetCaret(carets: List<Caret>): Caret
+	
+	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+		getTargetCaret(allCarets).let(caretModel::removeCaret)
+	}
 	
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && caretCount > 1 }

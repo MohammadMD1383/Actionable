@@ -44,9 +44,6 @@ abstract class MoveSelectionToOccurrence(
 }
 
 class MoveFirstSelectionToPreviousOccurrence : MoveSelectionToOccurrence(true, false)
-
 class MoveFirstSelectionToNextOccurrence : MoveSelectionToOccurrence(true, true)
-
 class MoveLastSelectionToPreviousOccurrence : MoveSelectionToOccurrence(false, false)
-
 class MoveLastSelectionToNextOccurrence : MoveSelectionToOccurrence(false, true)

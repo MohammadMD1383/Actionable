@@ -673,8 +673,8 @@
 				<separator text="IDE"/>
 				
 				<action
-					class="ir.mmd.intellijDev.Actionable.extra.ide.keymap.OpenKeymapSettingsAction"
-					id="ir.mmd.intellijDev.Actionable.extra.ide.keymap.OpenKeymapSettingsAction"
+					class="ir.mmd.intellijDev.Actionable.extra.ide.OpenKeymapSettingsAction"
+					id="ir.mmd.intellijDev.Actionable.extra.ide.OpenKeymapSettingsAction"
 					text="Open Keymap Settings"
 					description="Opens Settings > Keymap dialog"/>
 			</group>
