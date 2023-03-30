@@ -102,6 +102,9 @@
 	
 	<change-notes><![CDATA[
 		<ul>
+			<li><b>3.20.1:</b><br>
+				fixed an issue in JustifyCaretAction
+			</li>
 			<li><b>3.20.0:</b><br>
 				<b>FINAL RELEASE OF v3.x.x! v4 IS COMING!!!</b><br>
 				fixed issues #13 #40<br>
