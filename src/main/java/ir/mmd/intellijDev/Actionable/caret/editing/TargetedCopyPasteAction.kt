@@ -64,13 +64,14 @@ abstract class TargetedCopyPasteAction : SingleCaretAction() {
 				editor.markupModel.run {
 					previousHighlighter?.let { removeHighlighter(it) }
 					editor.putUserData(
-						previousHighlighterKey, addRangeHighlighter(
-						startOffset,
-						endOffset,
-						HighlighterLayer.LAST + 10,
-						EditorColors.IDENTIFIER_UNDER_CARET_ATTRIBUTES.defaultAttributes,
-						HighlighterTargetArea.EXACT_RANGE
-					)
+						previousHighlighterKey,
+						addRangeHighlighter(
+							startOffset,
+							endOffset,
+							HighlighterLayer.LAST + 10,
+							EditorColors.IDENTIFIER_UNDER_CARET_ATTRIBUTES.defaultAttributes,
+							HighlighterTargetArea.EXACT_RANGE
+						)
 					)
 				}
 			}
