@@ -14,6 +14,7 @@ import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.util.afterDoing
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
+import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 import ir.mmd.intellijDev.Actionable.util.ext.util
 
 abstract class MoveCaretAction : MultiCaretAction() {
@@ -84,4 +85,74 @@ abstract class MoveCaretAction : MultiCaretAction() {
 	context(LazyEventContext) override fun perform(caret: Caret) = Unit
 	override fun update(e: AnActionEvent) = e.enableIf { hasEditor }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+}
+
+class MoveCaretToNextWord : MoveCaretAction() {
+	override fun isDumbAware() = true
+	context (LazyEventContext)
+	override fun perform(caret: Caret) {
+		caret.removeSelection()
+		caret moveTo moveCaretVirtually(caret, true)
+	}
+}
+
+class MoveCaretToPreviousWord : MoveCaretAction() {
+	override fun isDumbAware() = true
+	context (LazyEventContext)
+	override fun perform(caret: Caret) {
+		caret.removeSelection()
+		caret moveTo moveCaretVirtually(caret, false)
+	}
+}
+
+class MoveCaretToNextElement : MoveCaretAction() {
+	context (LazyEventContext)
+	override fun perform(caret: Caret) {
+		caret.removeSelection()
+		caret moveTo moveCaretVirtually(caret, true, psiFile)
+	}
+}
+
+class MoveCaretToPreviousElement : MoveCaretAction() {
+	context (LazyEventContext)
+	override fun perform(caret: Caret) {
+		caret.removeSelection()
+		caret moveTo moveCaretVirtually(caret, false, psiFile)
+	}
+}
+
+class MoveCaretToNextWordWithSelection : MoveCaretAction() {
+	override fun isDumbAware() = true
+	
+	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
+		moveCaretsWithSelection(allCarets.toMutableList(), true) {
+			moveCaretVirtually(it, true)
+		}
+	}
+}
+
+class MoveCaretToPreviousWordWithSelection : MoveCaretAction() {
+	override fun isDumbAware() = true
+	
+	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
+		moveCaretsWithSelection(allCarets.toMutableList(), false) {
+			moveCaretVirtually(it, false)
+		}
+	}
+}
+
+class MoveCaretToNextElementWithSelection : MoveCaretAction() {
+	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
+		moveCaretsWithSelection(allCarets.toMutableList(), true) {
+			moveCaretVirtually(it, true, psiFile)
+		}
+	}
+}
+
+class MoveCaretToPreviousElementWithSelection : MoveCaretAction() {
+	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
+		moveCaretsWithSelection(allCarets.toMutableList(), false) {
+			moveCaretVirtually(it, false, psiFile)
+		}
+	}
 }

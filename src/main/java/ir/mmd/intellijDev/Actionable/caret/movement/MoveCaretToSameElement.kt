@@ -57,3 +57,7 @@ abstract class MoveCaretToSameElement(private val forward: Boolean) : AnAction()
 	override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
 }
+
+class MoveCaretToNextSameElement : MoveCaretToSameElement(true)
+
+class MoveCaretToPreviousSameElement : MoveCaretToSameElement(false)
