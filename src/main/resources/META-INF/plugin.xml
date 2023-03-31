@@ -654,6 +654,14 @@
 					description="Expands tag on typing"/>
 			</group>
 			
+			<group id="ir.mmd.intellijDev.Actionable.IDEGroup" text="IDE" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.ide.OpenKeymapSettingsAction"
+					id="ir.mmd.intellijDev.Actionable.ide.OpenKeymapSettingsAction"
+					text="Open Keymap Settings"
+					description="Opens Settings > Keymap dialog"/>
+			</group>
+			
 			<group id="ir.mmd.intellijDev.Actionable.LanguageSpecific" text="Language Specific" popup="true">
 				<group id="ir.mmd.intellijDev.Actionable.LanguageSpecific.XML" text="XML" popup="true">
 				
@@ -662,14 +670,6 @@
 				<group id="ir.mmd.intellijDev.Actionable.LanguageSpecific.HTML" text="HTML" popup="true">
 				
 				</group>
-			</group>
-			
-			<group id="ir.mmd.intellijDev.Actionable.IDEGroup" text="IDE" popup="true">
-				<action
-					class="ir.mmd.intellijDev.Actionable.ide.OpenKeymapSettingsAction"
-					id="ir.mmd.intellijDev.Actionable.ide.OpenKeymapSettingsAction"
-					text="Open Keymap Settings"
-					description="Opens Settings > Keymap dialog"/>
 			</group>
 		</group>
 	</actions>
