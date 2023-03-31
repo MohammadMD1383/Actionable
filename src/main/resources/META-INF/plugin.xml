@@ -110,22 +110,23 @@
 				id="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				instance="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				displayName="Find"/>
+		</applicationConfigurable>
+		
+		<applicationConfigurable
+			parentId="ir.mmd.intellijDev.Actionable.settings.Settings"
+			id="ir.mmd.intellijDev.Actionable.lang.settings.Settings"
+			instance="ir.mmd.intellijDev.Actionable.lang.settings.Settings"
+			displayName="Language Specific">
 			
 			<configurable
-				id="ir.mmd.intellijDev.Actionable.lang.settings.Settings"
-				instance="ir.mmd.intellijDev.Actionable.lang.settings.Settings"
-				displayName="Language Specific">
-				
-				<configurable
-					id="ir.mmd.intellijDev.Actionable.lang.xml.settings.Settings"
-					instance="ir.mmd.intellijDev.Actionable.lang.xml.settings.Settings"
-					displayName="XML"/>
-				
-				<configurable
-					id="ir.mmd.intellijDev.Actionable.lang.html.settings.Settings"
-					instance="ir.mmd.intellijDev.Actionable.lang.html.settings.Settings"
-					displayName="HTML"/>
-			</configurable>
+				id="ir.mmd.intellijDev.Actionable.lang.xml.settings.Settings"
+				instance="ir.mmd.intellijDev.Actionable.lang.xml.settings.Settings"
+				displayName="XML"/>
+			
+			<configurable
+				id="ir.mmd.intellijDev.Actionable.lang.html.settings.Settings"
+				instance="ir.mmd.intellijDev.Actionable.lang.html.settings.Settings"
+				displayName="HTML"/>
 		</applicationConfigurable>
 	</extensions>
 	
