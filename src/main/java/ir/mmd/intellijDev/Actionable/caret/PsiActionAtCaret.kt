@@ -7,12 +7,12 @@ import ir.mmd.intellijDev.Actionable.util.ext.elementAtOrBefore
 
 abstract class PsiActionAtCaret(inWriteAction: Boolean = false) : ActionAtCaret<PsiActionAtCaret.Model, PsiElement>(inWriteAction) {
 	class Model(
-		override val caret: Caret,
+		caret: Caret,
 		val psiElement: PsiElement
-	) : IModel
+	) : ActionAtCaret.Model(caret)
 	
 	context(LazyEventContext)
-	override fun mapCaret(caret: Caret): Model? {
+	override fun createModel(caret: Caret): Model? {
 		val psiElement = psiFile.elementAtOrBefore(caret) ?: return null
 		return Model(caret, psiElement)
 	}

@@ -7,24 +7,23 @@ import com.intellij.openapi.editor.Caret
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.dontHaveSelection
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.withEach
 
-abstract class ActionAtCaret<TModel : ActionAtCaret.IModel, TKey>(private val inWriteAction: Boolean = false) : AnAction() {
-	interface IModel {
+abstract class ActionAtCaret<TModel : ActionAtCaret.Model, TKey>(private val inWriteAction: Boolean = false) : AnAction() {
+	open class Model(
 		val caret: Caret
-	}
+	)
 	
 	context (LazyEventContext)
 	protected abstract fun doAction(model: TModel)
 	
 	context (LazyEventContext)
-	protected abstract fun mapCaret(caret: Caret): TModel?
+	protected abstract fun createModel(caret: Caret): TModel?
 	
 	protected abstract fun distinctKey(model: TModel): TKey
 	
 	final override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
 		allCarets.mapNotNull {
-			mapCaret(it)
+			createModel(it)
 		}.distinctBy {
 			distinctKey(it)
 		}.also {
@@ -37,11 +36,11 @@ abstract class ActionAtCaret<TModel : ActionAtCaret.IModel, TKey>(private val in
 					caretModel.removeCaret(caret)
 				}
 			}
-		}.withEach {
+		}.forEach {
 			if (inWriteAction) {
-				runWriteCommandAction { doAction(this) }
+				runWriteCommandAction { doAction(it) }
 			} else {
-				doAction(this)
+				doAction(it)
 			}
 		}
 	}

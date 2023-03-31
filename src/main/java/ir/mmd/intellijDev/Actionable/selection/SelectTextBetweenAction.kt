@@ -1,13 +1,14 @@
 package ir.mmd.intellijDev.Actionable.selection
 
 import com.intellij.openapi.editor.Caret
-import com.intellij.psi.PsiFile
+import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.util.ext.util
 
 abstract class SelectTextBetweenAction(private val char: String) : SelectTextUnderCaretAction() {
-	override fun getSelectionRange(caret: Caret, psiFile: PsiFile): IntRange? {
+	context (LazyEventContext)
+	override fun getSelectionRange(caret: Caret): IntRange? {
 		val cutil = caret.util
 		
 		if (!cutil.moveUntilReached(char, "\n", BACKWARD)) return null
@@ -20,3 +21,7 @@ abstract class SelectTextBetweenAction(private val char: String) : SelectTextUnd
 		return start..end
 	}
 }
+
+class SelectTextBetweenQuotesAction : SelectTextBetweenAction("'")
+class SelectTextBetweenDoubleQuotesAction : SelectTextBetweenAction("\"")
+class SelectTextBetweenBackticksAction : SelectTextBetweenAction("`")

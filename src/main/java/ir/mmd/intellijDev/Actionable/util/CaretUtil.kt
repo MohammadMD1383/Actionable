@@ -200,6 +200,11 @@ class CaretUtil(private val caret: Caret) {
 	}
 	
 	/**
+	 * Overload of [getWordBoundaries] with default values
+	 */
+	fun getWordBoundaries() = service<SettingsState>().run { getWordBoundaries(wordSeparators, hardStopCharacters) }
+	
+	/**
 	 * Returns the word under the caret or `null` if there is no word
 	 *
 	 * @param boundaries specify an `int[2]` if you want to get the word boundaries too
