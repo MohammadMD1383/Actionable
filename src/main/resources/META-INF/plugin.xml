@@ -133,38 +133,6 @@
 					description="Expands tag on typing"/>
 			</group>
 			
-			<group id="ir.mmd.intellijDev.Actionable.TypingGroup" text="Typing" popup="true">
-				<action
-					class="ir.mmd.intellijDev.Actionable.typing.PredictCamelcaseWordsAction"
-					id="ir.mmd.intellijDev.Actionable.typing.PredictCamelcaseWordsAction"
-					text="Predict Words: Camel-Case"
-					description="Predicts the words from a raw text and rewrites them in camel-case"/>
-				
-				<action
-					class="ir.mmd.intellijDev.Actionable.typing.PredictPascalCaseWordsAction"
-					id="ir.mmd.intellijDev.Actionable.typing.PredictPascalCaseWordsAction"
-					text="Predict Words: Pascal-Case"
-					description="Predicts the words from a raw text and rewrites them in pascal-case"/>
-				
-				<action
-					class="ir.mmd.intellijDev.Actionable.typing.PredictSnakeCaseWordsAction"
-					id="ir.mmd.intellijDev.Actionable.typing.PredictSnakeCaseWordsAction"
-					text="Predict Words: Snake-Case"
-					description="Predicts the words from a raw text and rewrites them in snake-case"/>
-				
-				<action
-					class="ir.mmd.intellijDev.Actionable.typing.PredictKebabCaseWordsAction"
-					id="ir.mmd.intellijDev.Actionable.typing.PredictKebabCaseWordsAction"
-					text="Predict Words: Kebab-Case"
-					description="Predicts the words from a raw text and rewrites them in kebab-case"/>
-				
-				<action
-					class="ir.mmd.intellijDev.Actionable.typing.PredictSpacedWordsAction"
-					id="ir.mmd.intellijDev.Actionable.typing.PredictSpacedWordsAction"
-					text="Predict Words: Spaced"
-					description="Predicts the words from a raw text and rewrites them in spaced"/>
-			</group>
-			
 			<group id="ir.mmd.intellijDev.Actionable.TextGroup" text="Text" popup="true">
 				<action
 					class="ir.mmd.intellijDev.Actionable.text.DuplicateLineAndPasteClipboardContentAction"
