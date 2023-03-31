@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.typing.xml
+package ir.mmd.intellijDev.Actionable.lang.xml.type
 
 import com.intellij.codeInsight.editorActions.BackspaceHandlerDelegate
 import com.intellij.ide.highlighter.XmlFileType
@@ -10,7 +10,7 @@ import com.intellij.psi.util.parentOfType
 import com.intellij.psi.xml.XmlTag
 import com.intellij.psi.xml.XmlToken
 import com.intellij.psi.xml.XmlTokenType
-import ir.mmd.intellijDev.Actionable.typing.xml.state.State
+import ir.mmd.intellijDev.Actionable.lang.xml.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 import ir.mmd.intellijDev.Actionable.util.ext.nextLeafNoWhitespace
 import ir.mmd.intellijDev.Actionable.util.ext.prevLeafNoWhitespace
@@ -26,7 +26,7 @@ class CollapseEmptyTagOnBackspace : BackspaceHandlerDelegate() {
 		) return
 		
 		val project = editor.project!!
-		if (!project.service<State>().collapseEmptyTagOnBackspaceEnabled) return
+		if (!project.service<SettingsState>().collapseEmptyTagOnBackspaceEnabled) return
 		
 		val caret = editor.caretModel.primaryCaret
 		val offset = caret.offset

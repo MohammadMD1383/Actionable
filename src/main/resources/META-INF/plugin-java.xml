@@ -1,52 +1,57 @@
 <idea-plugin>
 	<extensions defaultExtensionNs="com.intellij">
 		<projectService
-			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.java.state.State"/>
+			serviceImplementation="ir.mmd.intellijDev.Actionable.lang.java.settings.SettingsState"/>
 		
 		<typedHandler
-			implementation="ir.mmd.intellijDev.Actionable.typing.java.AutoInsertSemicolon"/>
+			implementation="ir.mmd.intellijDev.Actionable.lang.java.type.AutoInsertSemicolon"/>
 		<typedHandler
-			implementation="ir.mmd.intellijDev.Actionable.typing.java.AutoClassCase"/>
+			implementation="ir.mmd.intellijDev.Actionable.lang.java.type.AutoClassCase"/>
 		<typedHandler
-			implementation="ir.mmd.intellijDev.Actionable.typing.java.JITRefactoringInsert"/>
+			implementation="ir.mmd.intellijDev.Actionable.lang.java.type.JITRefactoringInsert"/>
 		
 		<backspaceHandlerDelegate
-			implementation="ir.mmd.intellijDev.Actionable.typing.java.JITRefactoringDelete"/>
+			implementation="ir.mmd.intellijDev.Actionable.lang.java.type.JITRefactoringDelete"/>
+		
+		<applicationConfigurable
+			parentId="ir.mmd.intellijDev.Actionable.lang.settings.Settings"
+			id="ir.mmd.intellijDev.Actionable.lang.java.settings.Settings"
+			instance="ir.mmd.intellijDev.Actionable.lang.java.settings.Settings"
+			displayName="Java"/>
 	</extensions>
 	
 	<actions>
+		<group id="ir.mmd.intellijDev.Actionable.LanguageSpecific.Java" text="Java" popup="true">
+			<add-to-group group-id="ir.mmd.intellijDev.Actionable.LanguageSpecific"/>
+			
+			<action
+				class="ir.mmd.intellijDev.Actionable.lang.java.AddImportDialogAction"
+				id="ir.mmd.intellijDev.Actionable.lang.java.AddImportDialogAction"
+				text="Add Import"
+				description="Add import to current file using a popup dialog with ease"/>
+		</group>
+		
 		<group>
-			<add-to-group group-id="ir.mmd.intellijDev.Actionable.TypeHandlersGroup"/>
+			<add-to-group group-id="ir.mmd.intellijDev.Actionable.GlobalToggles"/>
 			<separator text="Java"/>
 			
 			<action
-				class="ir.mmd.intellijDev.Actionable.typing.java.state.AutoInsertSemicolonState"
-				id="ir.mmd.intellijDev.Actionable.typing.java.state.AutoInsertSemicolonState"
+				class="ir.mmd.intellijDev.Actionable.lang.java.settings.AutoInsertSemicolonState"
+				id="ir.mmd.intellijDev.Actionable.lang.java.settings.AutoInsertSemicolonState"
 				text="Auto Insert Semicolons"
 				description="Whether to automatically insert semicolons or not"/>
 			
 			<action
-				class="ir.mmd.intellijDev.Actionable.typing.java.state.AutoClassCaseState"
-				id="ir.mmd.intellijDev.Actionable.typing.java.state.AutoClassCaseState"
+				class="ir.mmd.intellijDev.Actionable.lang.java.settings.AutoClassCaseState"
+				id="ir.mmd.intellijDev.Actionable.lang.java.settings.AutoClassCaseState"
 				text="Auto Class Case"
 				description="Whether to automatically capitalize class names or not"/>
 			
 			<action
-				class="ir.mmd.intellijDev.Actionable.typing.java.state.JITRefactoringEnabled"
-				id="ir.mmd.intellijDev.Actionable.typing.java.state.JITRefactoringEnabled"
+				class="ir.mmd.intellijDev.Actionable.lang.java.settings.JITRefactoringEnabled"
+				id="ir.mmd.intellijDev.Actionable.lang.java.settings.JITRefactoringEnabled"
 				text="Just in Time Refactoring"
 				description="Renames all references as you edit"/>
-		</group>
-		
-		<group>
-			<add-to-group group-id="ir.mmd.intellijDev.Actionable.ExtraGroup"/>
-			<separator text="Java"/>
-			
-			<action
-				class="ir.mmd.intellijDev.Actionable.extra.java.AddImportDialogAction"
-				id="ir.mmd.intellijDev.Actionable.extra.java.AddImportDialogAction"
-				text="Add Import"
-				description="Add import to current file using a popup dialog with ease"/>
 		</group>
 	</actions>
 </idea-plugin>

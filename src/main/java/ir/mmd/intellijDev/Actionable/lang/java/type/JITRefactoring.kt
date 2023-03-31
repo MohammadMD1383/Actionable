@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.typing.java
+package ir.mmd.intellijDev.Actionable.lang.java.type
 
 import com.intellij.codeInsight.editorActions.BackspaceHandlerDelegate
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
@@ -12,7 +12,7 @@ import com.intellij.psi.PsiIdentifier
 import com.intellij.psi.PsiLocalVariable
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.parentOfType
-import ir.mmd.intellijDev.Actionable.typing.java.state.State
+import ir.mmd.intellijDev.Actionable.lang.java.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.prevLeafNoWhitespace
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
@@ -20,7 +20,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 class JITRefactoringInsert : TypedHandlerDelegate() {
 	override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile) = Result.CONTINUE.also {
 		if (
-			!project.service<State>().jitRefactoringEnabled ||
+			!project.service<SettingsState>().jitRefactoringEnabled ||
 			file.fileType !is JavaFileType
 		) return@also
 		
@@ -52,7 +52,7 @@ class JITRefactoringDelete : BackspaceHandlerDelegate() {
 	override fun beforeCharDeleted(c: Char, file: PsiFile, editor: Editor) {}
 	override fun charDeleted(c: Char, file: PsiFile, editor: Editor) = false after {
 		if (
-			!editor.project!!.service<State>().jitRefactoringEnabled ||
+			!editor.project!!.service<SettingsState>().jitRefactoringEnabled ||
 			file.fileType !is JavaFileType
 		) return@after
 		

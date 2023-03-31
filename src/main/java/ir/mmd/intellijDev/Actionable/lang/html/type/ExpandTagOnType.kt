@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.typing.html
+package ir.mmd.intellijDev.Actionable.lang.html.type
 
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.ide.highlighter.HtmlFileType
@@ -7,11 +7,11 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
-import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.typing.html.state.State
+import ir.mmd.intellijDev.Actionable.lang.html.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 import ir.mmd.intellijDev.Actionable.util.ext.util
+import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState as MovementSettingsState
 
 class ExpandTagOnType : TypedHandlerDelegate() {
 	companion object {
@@ -39,7 +39,7 @@ class ExpandTagOnType : TypedHandlerDelegate() {
 		file: PsiFile
 	) = Result.CONTINUE.also {
 		if (
-			!project.service<State>().expandTagOnTypeEnabled ||
+			!project.service<SettingsState>().expandTagOnTypeEnabled ||
 			file.fileType !is HtmlFileType
 		) return@also
 		
@@ -47,7 +47,7 @@ class ExpandTagOnType : TypedHandlerDelegate() {
 		val caret = editor.caretModel.primaryCaret
 		val offset = caret.offset
 		val cutil = caret.util
-		val movementSettings = service<SettingsState>()
+		val movementSettings = service<MovementSettingsState>()
 		cutil.moveUntilReached(movementSettings.wordSeparators, movementSettings.hardStopCharacters, BACKWARD)
 		val tag = document.getText(TextRange(cutil.offset, offset))
 		

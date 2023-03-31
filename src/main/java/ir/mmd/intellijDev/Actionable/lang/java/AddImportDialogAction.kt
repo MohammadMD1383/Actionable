@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.extra.java
+package ir.mmd.intellijDev.Actionable.lang.java
 
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.actionSystem.ActionUpdateThread

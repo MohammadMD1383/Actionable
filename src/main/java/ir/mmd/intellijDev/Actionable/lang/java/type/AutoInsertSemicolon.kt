@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.typing.java
+package ir.mmd.intellijDev.Actionable.lang.java.type
 
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.ide.highlighter.JavaFileType
@@ -12,7 +12,7 @@ import com.intellij.psi.PsiModifier.DEFAULT
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.util.parentOfTypes
 import com.intellij.psi.util.prevLeaf
-import ir.mmd.intellijDev.Actionable.typing.java.state.State
+import ir.mmd.intellijDev.Actionable.lang.java.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
@@ -25,7 +25,7 @@ class AutoInsertSemicolon : TypedHandlerDelegate() {
 		fileType: FileType
 	) = Result.CONTINUE after {
 		if (
-			!project.service<State>().autoInsertSemicolonEnabled ||
+			!project.service<SettingsState>().autoInsertSemicolonEnabled ||
 			file.fileType !is JavaFileType ||
 			c != '('
 		) return@after
@@ -51,7 +51,7 @@ class AutoInsertSemicolon : TypedHandlerDelegate() {
 		file: PsiFile
 	) = Result.CONTINUE.also {
 		if (
-			!project.service<State>().autoInsertSemicolonEnabled ||
+			!project.service<SettingsState>().autoInsertSemicolonEnabled ||
 			file.fileType !is JavaFileType ||
 			c == ';'
 		) return@also

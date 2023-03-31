@@ -38,21 +38,23 @@
 	
 	<depends>com.intellij.modules.platform</depends>
 	<depends>com.intellij.modules.lang</depends>
-	<depends optional="true">com.intellij.java</depends>
-	<depends optional="true">org.jetbrains.kotlin</depends>
-	<depends config-file="plugin-rider.xml" optional="true">com.intellij.modules.rider</depends>
-	<depends config-file="plugin-java.xml" optional="true">com.intellij.modules.java</depends>
-	<depends config-file="plugin-javascript.xml" optional="true">JavaScript</depends>
+	<depends>com.intellij.modules.xml</depends>
+	
+	<depends optional="true" config-file="plugin-java.xml">com.intellij.java</depends>
+	<depends optional="true" config-file="plugin-kotlin.xml">org.jetbrains.kotlin</depends>
+	<depends optional="true" config-file="plugin-rider.xml">com.intellij.modules.rider</depends>
+	<depends optional="true" config-file="plugin-javascript.xml">JavaScript</depends>
+	<depends optional="true" config-file="plugin-golang.xml">org.jetbrains.plugins.go</depends>
 	
 	<extensions defaultExtensionNs="com.intellij">
 		<errorHandler
 			implementation="ir.mmd.intellijDev.Actionable.internal.ErrorReporter"/>
 		
 		<typedHandler
-			implementation="ir.mmd.intellijDev.Actionable.typing.html.ExpandTagOnType"/>
+			implementation="ir.mmd.intellijDev.Actionable.lang.html.type.ExpandTagOnType"/>
 		
 		<backspaceHandlerDelegate
-			implementation="ir.mmd.intellijDev.Actionable.typing.xml.CollapseEmptyTagOnBackspace"/>
+			implementation="ir.mmd.intellijDev.Actionable.lang.xml.type.CollapseEmptyTagOnBackspace"/>
 		
 		<preloadingActivity
 			implementation="ir.mmd.intellijDev.Actionable.app.Startup"/>
@@ -67,9 +69,9 @@
 			serviceImplementation="ir.mmd.intellijDev.Actionable.text.settings.SettingsState"/>
 		
 		<projectService
-			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.html.state.State"/>
+			serviceImplementation="ir.mmd.intellijDev.Actionable.lang.xml.settings.SettingsState"/>
 		<projectService
-			serviceImplementation="ir.mmd.intellijDev.Actionable.typing.xml.state.State"/>
+			serviceImplementation="ir.mmd.intellijDev.Actionable.lang.html.settings.SettingsState"/>
 		
 		<applicationConfigurable
 			parentId="tools"
@@ -108,30 +110,28 @@
 				id="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				instance="ir.mmd.intellijDev.Actionable.find.settings.Settings"
 				displayName="Find"/>
+			
+			<configurable
+				id="ir.mmd.intellijDev.Actionable.lang.settings.Settings"
+				instance="ir.mmd.intellijDev.Actionable.lang.settings.Settings"
+				displayName="Language Specific">
+				
+				<configurable
+					id="ir.mmd.intellijDev.Actionable.lang.xml.settings.Settings"
+					instance="ir.mmd.intellijDev.Actionable.lang.xml.settings.Settings"
+					displayName="XML"/>
+				
+				<configurable
+					id="ir.mmd.intellijDev.Actionable.lang.html.settings.Settings"
+					instance="ir.mmd.intellijDev.Actionable.lang.html.settings.Settings"
+					displayName="HTML"/>
+			</configurable>
 		</applicationConfigurable>
 	</extensions>
 	
 	<actions>
 		<group id="ir.mmd.intellijDev.Actionable" text="Actionable" popup="true">
 			<add-to-group group-id="EditMenu" anchor="last"/>
-			
-			<group id="ir.mmd.intellijDev.Actionable.TypeHandlersGroup" text="Type Handlers" popup="true">
-				<separator text="XML"/>
-				
-				<action
-					class="ir.mmd.intellijDev.Actionable.typing.xml.state.CollapseEmptyTagOnBackspaceState"
-					id="ir.mmd.intellijDev.Actionable.typing.xml.state.CollapseEmptyTagOnBackspaceState"
-					text="Collapse Empty Tag on Backspace"
-					description="Collapses empty tag when backspace pressed if caret is inside the tag with absolutely no content"/>
-				
-				<separator text="HTML"/>
-				
-				<action
-					class="ir.mmd.intellijDev.Actionable.typing.html.state.ExpandTagOnTypeState"
-					id="ir.mmd.intellijDev.Actionable.typing.html.state.ExpandTagOnTypeState"
-					text="Expand Tag on Type"
-					description="Expands tag on typing"/>
-			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.TextGroup" text="Text" popup="true">
 				<action
@@ -635,14 +635,38 @@
 					id="ir.mmd.intellijDev.Actionable.toggle.FindCaseSensitivityToggleAction"
 					text="Find Is Case-Sensitive"
 					description="A shortcut for `is find case-sensitive` option in Actionable settings"/>
-			</group>
-			
-			<group id="ir.mmd.intellijDev.Actionable.ExtraGroup" text="Extra" popup="true">
-				<separator text="IDE"/>
+				
+				<separator text="XML"/>
 				
 				<action
-					class="ir.mmd.intellijDev.Actionable.extra.ide.OpenKeymapSettingsAction"
-					id="ir.mmd.intellijDev.Actionable.extra.ide.OpenKeymapSettingsAction"
+					class="ir.mmd.intellijDev.Actionable.lang.xml.settings.CollapseEmptyTagOnBackspaceState"
+					id="ir.mmd.intellijDev.Actionable.lang.xml.settings.CollapseEmptyTagOnBackspaceState"
+					text="Collapse Empty Tag on Backspace"
+					description="Collapses empty tag when backspace pressed if caret is inside the tag with absolutely no content"/>
+				
+				<separator text="HTML"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.lang.html.settings.ExpandTagOnTypeState"
+					id="ir.mmd.intellijDev.Actionable.lang.html.settings.ExpandTagOnTypeState"
+					text="Expand Tag on Type"
+					description="Expands tag on typing"/>
+			</group>
+			
+			<group id="ir.mmd.intellijDev.Actionable.LanguageSpecific" text="Language Specific" popup="true">
+				<group id="ir.mmd.intellijDev.Actionable.LanguageSpecific.XML" text="XML" popup="true">
+				
+				</group>
+				
+				<group id="ir.mmd.intellijDev.Actionable.LanguageSpecific.HTML" text="HTML" popup="true">
+				
+				</group>
+			</group>
+			
+			<group id="ir.mmd.intellijDev.Actionable.IDEGroup" text="IDE" popup="true">
+				<action
+					class="ir.mmd.intellijDev.Actionable.ide.OpenKeymapSettingsAction"
+					id="ir.mmd.intellijDev.Actionable.ide.OpenKeymapSettingsAction"
 					text="Open Keymap Settings"
 					description="Opens Settings > Keymap dialog"/>
 			</group>

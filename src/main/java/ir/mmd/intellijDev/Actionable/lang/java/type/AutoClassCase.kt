@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.typing.java
+package ir.mmd.intellijDev.Actionable.lang.java.type
 
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.ide.highlighter.JavaFileType
@@ -9,7 +9,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.parentOfType
-import ir.mmd.intellijDev.Actionable.typing.java.state.State
+import ir.mmd.intellijDev.Actionable.lang.java.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.elementAtOrBefore
 import ir.mmd.intellijDev.Actionable.util.ext.prevLeafNoWhitespace
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
@@ -23,7 +23,7 @@ class AutoClassCase : TypedHandlerDelegate() {
 		file: PsiFile
 	) = Result.CONTINUE.also {
 		if (
-			!project.service<State>().autoClassCaseEnabled ||
+			!project.service<SettingsState>().autoClassCaseEnabled ||
 			file.fileType !is JavaFileType ||
 			c != '{'
 		) return@also
