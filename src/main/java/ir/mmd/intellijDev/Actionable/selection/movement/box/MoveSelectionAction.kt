@@ -9,7 +9,7 @@ import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
-abstract class MoveSelectionAction(private val method: context(LazyEventContext) MoveSelectionAction.() -> Unit) : AnAction() {
+abstract class MoveSelectionAction : AnAction() {
 	context (LazyEventContext)
 	private fun swap(
 		caret: Caret,
@@ -127,13 +127,31 @@ abstract class MoveSelectionAction(private val method: context(LazyEventContext)
 		}
 	}
 	
-	override fun actionPerformed(e: AnActionEvent) = method(LazyEventContext(e), this)
 	override fun isDumbAware() = true
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && allCarets.haveSelection }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
-class MoveSelectionUp : MoveSelectionAction(MoveSelectionAction::moveSelectionsUp)
-class MoveSelectionDown : MoveSelectionAction(MoveSelectionAction::moveSelectionsDown)
-class MoveSelectionLeft : MoveSelectionAction(MoveSelectionAction::moveSelectionsLeft)
-class MoveSelectionRight : MoveSelectionAction(MoveSelectionAction::moveSelectionsRight)
+class MoveSelectionUp : MoveSelectionAction() {
+	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+		moveSelectionsUp()
+	}
+}
+
+class MoveSelectionDown : MoveSelectionAction() {
+	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+		moveSelectionsDown()
+	}
+}
+
+class MoveSelectionLeft : MoveSelectionAction() {
+	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+		moveSelectionsLeft()
+	}
+}
+
+class MoveSelectionRight : MoveSelectionAction() {
+	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+		moveSelectionsRight()
+	}
+}
