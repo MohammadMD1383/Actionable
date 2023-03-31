@@ -15,6 +15,8 @@ import ir.mmd.intellijDev.Actionable.util.ext.addCaret
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 import ir.mmd.intellijDev.Actionable.util.ext.replaceRanges
+import java.awt.Toolkit
+import java.awt.datatransfer.DataFlavor
 
 open class DuplicateLineAndInsertContent : AnAction() {
 	context (LazyEventContext)
@@ -83,4 +85,14 @@ open class DuplicateLineAndInsertContent : AnAction() {
 	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 	override fun isDumbAware() = true
+}
+
+class DuplicateLineAndPasteClipboardContentAction : DuplicateLineAndInsertContent() {
+	context(LazyEventContext)
+	override fun getReplacements(): MutableList<String>? {
+		val contents = (Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as String)
+			.split("\n").toMutableList()
+		
+		return contents.ifEmpty { null }
+	}
 }

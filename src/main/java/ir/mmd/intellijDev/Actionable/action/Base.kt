@@ -17,6 +17,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
  *
  * @see AnActionEvent
  */
+@Suppress("MemberVisibilityCanBePrivate")
 class LazyEventContext(val event: AnActionEvent) {
 	private val _project: Project? by lazy { event.project }
 	private val _editor: Editor? by lazy { event.editor }

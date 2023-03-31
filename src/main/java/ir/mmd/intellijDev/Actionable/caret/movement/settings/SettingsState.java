@@ -57,7 +57,7 @@ public class SettingsState implements PersistentStateComponent<SettingsState> {
 		public static final @NotNull String wordSeparators = "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?\n\t";
 		public static final @NotNull WSBehaviour wordSeparatorsBehaviour = WSBehaviour.StopAtCharTypeChange;
 		public static final @NotNull String hardStopSeparators = " ";
-		public static @NotNull SettingsState.SEMBehaviour sameElementMovementBehaviour = SEMBehaviour.Start;
+		public static final @NotNull SettingsState.SEMBehaviour sameElementMovementBehaviour = SEMBehaviour.Start;
 	}
 	
 	public @NotNull String wordSeparators = Defaults.wordSeparators;

@@ -1,14 +1,6 @@
 package ir.mmd.intellijDev.Actionable.extra.ide
 
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.keymap.impl.ui.KeymapPanel
-import com.intellij.openapi.options.ShowSettingsUtil
+import ir.mmd.intellijDev.Actionable.util.OpenSettingsPageAction
 
-class OpenKeymapSettingsAction : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) {
-		ShowSettingsUtil.getInstance().showSettingsDialog(e.project, KeymapPanel::class.java)
-	}
-	
-	override fun isDumbAware() = true
-}
+class OpenKeymapSettingsAction : OpenSettingsPageAction(KeymapPanel::class.java)
