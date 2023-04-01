@@ -3,9 +3,11 @@ package ir.mmd.intellijDev.Actionable.util
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
+import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState.WSBehaviour
 import ir.mmd.intellijDev.Actionable.util.ext.charAtOrNull
+import ir.mmd.intellijDev.Actionable.util.ext.lastIndex
 import kotlin.math.max
 import kotlin.math.min
 
@@ -98,6 +100,18 @@ class CaretUtil(private val caret: Caret) {
 	 * @return the character or null if the evaluated offset is invalid in the parent [Document] of the [Caret]
 	 */
 	fun peek(dir: Int): Char? = if (dir == 0) null else document.charAtOrNull(relativePositionToOffset(dir))
+	
+	/**
+	 * Returns a range of text relative to the caret.
+	 *
+	 * @see peek
+	 */
+	fun peek(range: IntRange): String {
+		val startOffset = relativePositionToOffset(range.first).let { if (it < 0) 0 else it }
+		val endOffset = relativePositionToOffset(range.last).let { if (it > document.lastIndex) document.lastIndex else it }
+		
+		return document.getText(TextRange(startOffset, endOffset))
+	}
 	
 	private fun move(step: Int, hardStops: String): Boolean {
 		(peek(step) ?: return false).let {

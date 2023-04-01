@@ -56,6 +56,10 @@
 		<backspaceHandlerDelegate
 			implementation="ir.mmd.intellijDev.Actionable.lang.xml.type.CollapseEmptyTagOnBackspace"/>
 		
+		<lang.smartEnterProcessor
+			implementationClass="ir.mmd.intellijDev.Actionable.lang.xml.type.ExpandTagSmartEnterProcessor"
+			language="XML"/>
+		
 		<preloadingActivity
 			implementation="ir.mmd.intellijDev.Actionable.app.Startup"/>
 		
@@ -644,6 +648,12 @@
 					id="ir.mmd.intellijDev.Actionable.lang.xml.settings.CollapseEmptyTagOnBackspaceState"
 					text="Collapse Empty Tag on Backspace"
 					description="Collapses empty tag when backspace pressed if caret is inside the tag with absolutely no content"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.lang.xml.settings.ExpandTagOnSmartEnterState"
+					id="ir.mmd.intellijDev.Actionable.lang.xml.settings.ExpandTagOnSmartEnterState"
+					text="Expand Collapsed Tag By Complete Statement Action"
+					description="Expands a collapsed tag when caret is at the end of the tag and complete current statement happens"/>
 				
 				<separator text="HTML"/>
 				

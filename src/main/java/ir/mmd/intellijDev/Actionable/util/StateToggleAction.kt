@@ -4,22 +4,21 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.ToggleAction
 import ir.mmd.intellijDev.Actionable.util.ext.service
+import kotlin.reflect.KMutableProperty1
 
 /**
  * Base class of [ProjectStateToggleAction] and [GlobalStateToggleAction]
  *
  * @param clazz usually a [com.intellij.openapi.components.PersistentStateComponent]
  */
-sealed class StateToggleAction<S>(protected val clazz: Class<S>) : ToggleAction() {
-	/**
-	 * Get toggle's current state
-	 */
-	protected abstract fun S.get(): Boolean
+sealed class StateToggleAction<T>(
+	protected val clazz: Class<T>,
+	private val property: KMutableProperty1<T, Boolean>
+) : ToggleAction() {
+	abstract fun getService(e: AnActionEvent): T
 	
-	/**
-	 * Set toggle's state
-	 */
-	protected abstract fun S.set(b: Boolean)
+	override fun isSelected(e: AnActionEvent) = property.get(getService(e))
+	override fun setSelected(e: AnActionEvent, state: Boolean) = property.set(getService(e), state)
 	
 	override fun isDumbAware() = true
 	override fun getActionUpdateThread() = ActionUpdateThread.BGT
@@ -30,9 +29,11 @@ sealed class StateToggleAction<S>(protected val clazz: Class<S>) : ToggleAction(
  *
  * @param clazz usually a [com.intellij.openapi.components.PersistentStateComponent]
  */
-abstract class ProjectStateToggleAction<S>(clazz: Class<S>) : StateToggleAction<S>(clazz) {
-	override fun isSelected(e: AnActionEvent) = e.project!!.service(clazz).run { get() }
-	override fun setSelected(e: AnActionEvent, state: Boolean) = e.project!!.service(clazz).run { set(state) }
+abstract class ProjectStateToggleAction<T>(
+	clazz: Class<T>,
+	property: KMutableProperty1<T, Boolean>
+) : StateToggleAction<T>(clazz, property) {
+	override fun getService(e: AnActionEvent) = e.project!!.service(clazz)
 }
 
 /**
@@ -40,7 +41,9 @@ abstract class ProjectStateToggleAction<S>(clazz: Class<S>) : StateToggleAction<
  *
  * @param clazz usually a [com.intellij.openapi.components.PersistentStateComponent]
  */
-abstract class GlobalStateToggleAction<S>(clazz: Class<S>) : StateToggleAction<S>(clazz) {
-	override fun isSelected(e: AnActionEvent) = service(clazz).run { get() }
-	override fun setSelected(e: AnActionEvent, state: Boolean) = service(clazz).run { set(state) }
+abstract class GlobalStateToggleAction<T>(
+	clazz: Class<T>,
+	property: KMutableProperty1<T, Boolean>
+) : StateToggleAction<T>(clazz, property) {
+	override fun getService(e: AnActionEvent) = service(clazz)
 }

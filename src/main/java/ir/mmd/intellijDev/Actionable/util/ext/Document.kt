@@ -61,6 +61,11 @@ inline fun Document.getLineStartIndentLength(line: Int) = getLineStartIndent(lin
 inline fun Document.getLineTrailingWhitespaceLength(line: Int) = getLineTrailingWhitespace(line).length
 
 /**
+ * Returns the last index in the document char[]
+ */
+inline val Document.lastIndex get() = textLength - 1
+
+/**
  * Returns word boundaries located at [offset] in the [Document]
  *
  * @param separators characters that are known as **word delimiters**
