@@ -1,5 +1,3 @@
-## What Does It Do?
-
 Automatically converts ==space separated== class name to `PascalCase` format.
 
 ## Example

@@ -1,5 +1,3 @@
-## What Does It Do?
-
 * Duplicates the line, where the caret is, up.
 * Duplicates all the lines that has a selection.
 

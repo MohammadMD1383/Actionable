@@ -1,5 +1,3 @@
-## What Does It Do?
-
 Selects from the caret up to the key you press, or the end of line.
 
 ## Example

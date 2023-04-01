@@ -4,8 +4,6 @@ import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.ui.DialogBuilder
-import com.intellij.openapi.ui.DialogWrapper.OK_EXIT_CODE
 import com.intellij.psi.JavaCodeFragmentFactory
 import com.intellij.psi.JavaPsiFacade
 import com.intellij.psi.PsiDocumentManager
@@ -16,6 +14,7 @@ import com.intellij.ui.EditorTextField
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.psiFile
+import ir.mmd.intellijDev.Actionable.util.showCustomInputDialog
 
 class AddImportDialogAction : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
@@ -23,18 +22,14 @@ class AddImportDialogAction : AnAction() {
 		val psiPackage = psiFacade.findPackage("")
 		val codeFragment = JavaCodeFragmentFactory.getInstance(project).createReferenceCodeFragment("", psiPackage, true, true)
 		val fragmentDocument = PsiDocumentManager.getInstance(project).getDocument(codeFragment)
-		val editorTextField = EditorTextField(fragmentDocument, project, JavaFileType.INSTANCE)
+		val text = showCustomInputDialog(
+			project,
+			"Add Import",
+			EditorTextField(fragmentDocument, project, JavaFileType.INSTANCE)
+		) { it.text }
 		
-		val result = DialogBuilder(project).apply {
-			setCenterPanel(editorTextField)
-			setTitle("Add Import")
-			removeAllActions()
-			addOkAction()
-			addCancelAction()
-		}.show()
-		
-		if (result == OK_EXIT_CODE) {
-			val psiClass = psiFacade.findClass(editorTextField.text, GlobalSearchScope.allScope(project)) ?: return
+		if (text != null) {
+			val psiClass = psiFacade.findClass(text, GlobalSearchScope.allScope(project)) ?: return
 			runWriteCommandAction {
 				JavaCodeStyleManager.getInstance(project).addImport(e.psiFile as PsiJavaFile, psiClass)
 			}

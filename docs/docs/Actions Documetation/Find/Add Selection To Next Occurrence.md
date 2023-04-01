@@ -1,5 +1,3 @@
-## What Does It Do?
-
 This does exactly what IDE does :)
 
 [//]: # (@formatter:off)

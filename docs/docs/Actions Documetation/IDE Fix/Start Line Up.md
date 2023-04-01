@@ -1,5 +1,3 @@
-## What Does It Do?
-
 Does exactly what IDE action ==Start New Line Before Current== does.
 
 ## Why This Action?

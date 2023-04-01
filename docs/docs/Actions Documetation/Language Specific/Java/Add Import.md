@@ -1,5 +1,3 @@
-## What Does It Do?
-
 Shows an input dialog, with autocompletion, to add an import.
 
 ## Advantage?

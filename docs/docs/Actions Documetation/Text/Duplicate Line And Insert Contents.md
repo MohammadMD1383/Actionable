@@ -1,5 +1,3 @@
-## What Does It Do?
-
 Duplicates a line and inserts contents gotten from an input dialog.
 
 [//]: # (@formatter:off)

@@ -1,5 +1,3 @@
-## What Does It Do?
-
 Replaces selections while preserving the case of the source.
 
 It shows an input dialog with a single line text field.

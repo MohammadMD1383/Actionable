@@ -4,10 +4,7 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
-import com.intellij.openapi.ui.DialogBuilder
-import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.util.TextRange
-import com.intellij.ui.components.JBTextArea
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.caretsAndSelectionsAreOnTheSameLine
 import ir.mmd.intellijDev.Actionable.text.settings.SettingsState
@@ -15,27 +12,18 @@ import ir.mmd.intellijDev.Actionable.util.ext.addCaret
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 import ir.mmd.intellijDev.Actionable.util.ext.replaceRanges
+import ir.mmd.intellijDev.Actionable.util.showMultilineInputDialog
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 
 open class DuplicateLineAndInsertContent : AnAction() {
 	context (LazyEventContext)
-	protected open fun getReplacements(): MutableList<String>? {
-		val textArea = JBTextArea(5, 30)
-		val result = DialogBuilder(project).apply {
-			setCenterPanel(textArea)
-			setTitle("Duplicate Line And Insert Content")
-			removeAllActions()
-			addOkAction()
-			addCancelAction()
-		}.show()
-		
-		if (result != DialogWrapper.OK_EXIT_CODE || textArea.text.isBlank()) {
-			return null
-		}
-		
-		return textArea.text.split('\n').toMutableList()
-	}
+	protected open fun getReplacements() = showMultilineInputDialog(
+		project,
+		"Duplicate Line And Insert Content",
+		10,
+		50
+	)?.split('\n')?.toMutableList()
 	
 	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
 		if (!caretsAndSelectionsAreOnTheSameLine()) {

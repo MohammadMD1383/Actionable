@@ -1,5 +1,3 @@
-## What Does It Do?
-
 Selects the ==Word== under the caret, if exists.
 
 [//]: # (@formatter:off)

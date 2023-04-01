@@ -1,5 +1,3 @@
-## What Does It Do?
-
 Moves the selection to the right. See the example below to understand.
 
 ## Example
