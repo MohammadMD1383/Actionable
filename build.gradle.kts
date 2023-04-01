@@ -1,8 +1,3 @@
-import org.jetbrains.intellij.tasks.BuildSearchableOptionsTask
-import org.jetbrains.intellij.tasks.PatchPluginXmlTask
-import org.jetbrains.intellij.tasks.RunIdeTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 buildscript {
 	repositories {
 		mavenCentral()
@@ -38,16 +33,6 @@ java {
 	targetCompatibility = JavaVersion.VERSION_17
 }
 
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		jvmTarget = JavaVersion.VERSION_17.toString()
-		freeCompilerArgs = freeCompilerArgs + listOf(
-			"-Xjvm-default=all",
-			"-Xcontext-receivers"
-		)
-	}
-}
-
 intellij {
 	plugins.add("com.intellij.java")
 	plugins.add("org.jetbrains.kotlin")
@@ -56,23 +41,43 @@ intellij {
 	version.set("2023.1")
 }
 
-tasks.withType<RunIdeTask> {
-	autoReloadPlugins.set(true)
-}
-
-tasks.withType<PatchPluginXmlTask> {
-	version.set(project.version.toString())
-	sinceBuild.set("231")
-	untilBuild.set("241")
-	changeNotes.set("""
-		Preview Version of 4
-	""".trimIndent())
-}
-
-tasks.withType<BuildSearchableOptionsTask> {
-	enabled = false
-}
-
-tasks.withType<Test> {
-	useJUnitPlatform()
+tasks {
+	compileKotlin {
+		kotlinOptions {
+			jvmTarget = JavaVersion.VERSION_17.toString()
+			freeCompilerArgs += listOf(
+				"-Xjvm-default=all",
+				"-Xcontext-receivers"
+			)
+		}
+	}
+	
+	runIde {
+		autoReloadPlugins.set(true)
+	}
+	
+	buildSearchableOptions {
+		enabled = environment["SKIP_BSO"] == null
+	}
+	
+	patchPluginXml {
+		version.set(project.version.toString())
+		sinceBuild.set("231")
+		untilBuild.set("233.*")
+		changeNotes.set("""
+			<ul>
+				<li>New <b>FULL</b> documentation available at <a href='https://mohammadmd1383.github.io/Actionable/'>here</a></li>
+				<li>Internal cleanup, refactorings and improvements</li>
+				<li>Fixed a bug in Justify Carets Action</li>
+				<li>Fixed a bug in Select Until... Action</li>
+				<li>Removed Predict Words Actions</li>
+				<li>Reordered Actions</li>
+				<li>Added New Action: Create Temporary File</li>
+			</ul>
+		""".trimIndent())
+	}
+	
+	test {
+		useJUnitPlatform()
+	}
 }
