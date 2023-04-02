@@ -1,15 +1,18 @@
 package ir.mmd.intellijDev.Actionable.text
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.project.DumbAware
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.haveSelection
+import ir.mmd.intellijDev.Actionable.util.ext.replaceSelectedText
+import ir.mmd.intellijDev.Actionable.util.ext.toCaseStyleOf
+import ir.mmd.intellijDev.Actionable.util.ext.withEachIndexed
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 
-class PastePreservingCaseAction : AnAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+class PastePreservingCaseAction : ActionBase(), DumbAware {
+	context (LazyEventContext)
+	override fun performAction() {
 		val contents = (Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as String).split('\n')
 		val contentsSize = contents.size
 		
@@ -30,7 +33,6 @@ class PastePreservingCaseAction : AnAction() {
 		}
 	}
 	
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
-	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor and allCarets.haveSelection }
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor and allCarets.haveSelection
 }

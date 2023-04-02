@@ -1,22 +1,20 @@
 package ir.mmd.intellijDev.Actionable.text
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.caretsAndSelectionsAreOnTheSameLine
 import ir.mmd.intellijDev.Actionable.text.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.ui.showMultilineInputDialog
 import ir.mmd.intellijDev.Actionable.util.ext.addCaret
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 import ir.mmd.intellijDev.Actionable.util.ext.replaceRanges
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 
-open class DuplicateLineAndInsertContent : AnAction() {
+open class DuplicateLineAndInsertContent : ActionBase(), DumbAware {
 	context (LazyEventContext)
 	protected open fun getReplacements() = showMultilineInputDialog(
 		project,
@@ -25,7 +23,8 @@ open class DuplicateLineAndInsertContent : AnAction() {
 		50
 	)?.split('\n')?.toMutableList()
 	
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+	context (LazyEventContext)
+	override fun performAction() {
 		if (!caretsAndSelectionsAreOnTheSameLine()) {
 			return
 		}
@@ -70,9 +69,8 @@ open class DuplicateLineAndInsertContent : AnAction() {
 		}
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
-	override fun isDumbAware() = true
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor
 }
 
 class DuplicateLineAndPasteClipboardContentAction : DuplicateLineAndInsertContent() {

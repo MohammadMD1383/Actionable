@@ -1,15 +1,13 @@
 package ir.mmd.intellijDev.Actionable.editing
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.getLineStartIndentLength
 
-open class EmptyLineAction : MultiCaretAction() {
+open class EmptyLineAction : MultiCaretAction(), DumbAware {
 	context (LazyEventContext)
 	open fun getTextRange(lineNumber: Int) = document.run { getLineStartOffset(lineNumber)..getLineEndOffset(lineNumber) }
 	
@@ -23,9 +21,8 @@ open class EmptyLineAction : MultiCaretAction() {
 		}
 	}
 	
-	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor
 }
 
 class IndentPreservingEmptyLineAction : EmptyLineAction() {

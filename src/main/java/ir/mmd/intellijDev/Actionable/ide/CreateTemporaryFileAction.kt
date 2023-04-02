@@ -1,17 +1,16 @@
 package ir.mmd.intellijDev.Actionable.ide
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.OpenFileDescriptor
+import com.intellij.openapi.project.DumbAware
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.ui.showInputDialog
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.vfs.MemoryMappedVirtualFile
 
-class CreateTemporaryFileAction : AnAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+class CreateTemporaryFileAction : ActionBase(), DumbAware {
+	context (LazyEventContext)
+	override fun performAction() {
 		val fileName = showInputDialog(
 			project,
 			"Create Temporary File",
@@ -23,7 +22,6 @@ class CreateTemporaryFileAction : AnAction() {
 		)
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
-	override fun isDumbAware() = true
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor
 }

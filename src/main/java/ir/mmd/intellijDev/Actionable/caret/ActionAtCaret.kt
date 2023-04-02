@@ -1,14 +1,11 @@
 package ir.mmd.intellijDev.Actionable.caret
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.dontHaveSelection
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 
-abstract class ActionAtCaret<TModel : ActionAtCaret.Model, TKey>(private val inWriteAction: Boolean = false) : AnAction() {
+abstract class ActionAtCaret<TModel : ActionAtCaret.Model, TKey>(private val inWriteAction: Boolean = false) : ActionBase() {
 	open class Model(
 		val caret: Caret
 	)
@@ -21,7 +18,8 @@ abstract class ActionAtCaret<TModel : ActionAtCaret.Model, TKey>(private val inW
 	
 	protected abstract fun distinctKey(model: TModel): TKey
 	
-	final override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+	context (LazyEventContext)
+	final override fun performAction() {
 		allCarets.mapNotNull {
 			createModel(it)
 		}.distinctBy {
@@ -45,6 +43,6 @@ abstract class ActionAtCaret<TModel : ActionAtCaret.Model, TKey>(private val inW
 		}
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor and allCarets.dontHaveSelection }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context(LazyEventContext)
+	override fun isEnabled() = hasEditor and allCarets.dontHaveSelection
 }

@@ -1,14 +1,18 @@
 package ir.mmd.intellijDev.Actionable.action
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.*
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.NlsActions
 import com.intellij.psi.PsiFile
 import ir.mmd.intellijDev.Actionable.util.ext.editor
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.psiFile
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
+import java.util.function.Supplier
+import javax.swing.Icon
 
 /**
  * This model contains required fields for actions.
@@ -53,11 +57,41 @@ class LazyEventContext(val event: AnActionEvent) {
 }
 
 /**
+ * The base action for all actions in Actionable plugin.
+ */
+@Suppress("unused")
+abstract class ActionBase : AnAction {
+	constructor() : super()
+	constructor(icon: Icon?) : super(icon)
+	constructor(text: @NlsActions.ActionText String?) : super(text)
+	constructor(dynamicText: Supplier<@NlsActions.ActionText String>) : super(dynamicText)
+	constructor(text: @NlsActions.ActionText String?, description: @NlsActions.ActionDescription String?, icon: Icon?) : super(text, description, icon)
+	constructor(dynamicText: Supplier<@NlsActions.ActionText String>, icon: Icon?) : super(dynamicText, icon)
+	constructor(dynamicText: Supplier<@NlsActions.ActionText String>, dynamicDescription: Supplier<@NlsActions.ActionDescription String>, icon: Icon?) : super(dynamicText, dynamicDescription, icon)
+	
+	context (LazyEventContext)
+	abstract fun performAction()
+	
+	/**
+	 * `hasProject` is forced for all actions.
+	 *
+	 * Specify criteria other than that here.
+	 */
+	context (LazyEventContext)
+	open fun isEnabled(): Boolean = true
+	
+	final override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) { performAction() }
+	final override fun update(e: AnActionEvent) = e.enableIf { hasProject and isEnabled() }
+	final override fun isDumbAware() = super.isDumbAware()
+	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+}
+
+/**
  * This kind of action will be triggered for each [com.intellij.openapi.editor.Caret]
  */
-abstract class MultiCaretAction : AnAction {
-	constructor(name: String) : super(name)
+abstract class MultiCaretAction : ActionBase {
 	constructor() : super()
+	constructor(name: String) : super(name)
 	
 	/**
 	 * This method will be called for each [Caret]
@@ -65,9 +99,8 @@ abstract class MultiCaretAction : AnAction {
 	context (LazyEventContext)
 	abstract fun perform(caret: Caret)
 	
-	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
-		allCarets.forEach { perform(it) }
-	}
+	context(LazyEventContext)
+	override fun performAction() = allCarets.forEach { perform(it) }
 }
 
 /**
@@ -77,10 +110,7 @@ abstract class MultiCaretAction : AnAction {
  *
  * @see MultiCaretAction
  */
-abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction {
-	constructor(name: String) : super(name)
-	constructor() : super()
-	
+abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction() {
 	/**
 	 * Backing field for [data]
 	 */
@@ -107,7 +137,8 @@ abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction {
 	context (LazyEventContext)
 	open fun finalize() = Unit
 	
-	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
+	context (LazyEventContext)
+	override fun performAction() {
 		_data = initialize()
 		allCarets.forEach { perform(it) }
 		finalize()
@@ -120,10 +151,9 @@ abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction {
  *
  * @param forceSingleCaret force to have single caret in [AnAction.update]
  */
-abstract class SingleCaretAction(private val forceSingleCaret: Boolean = true) : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
-		perform(primaryCaret)
-	}
+abstract class SingleCaretAction(private val forceSingleCaret: Boolean = true) : ActionBase() {
+	context(LazyEventContext)
+	override fun performAction() = perform(primaryCaret)
 	
 	/**
 	 * This will only be called once and only for the primary caret
@@ -131,12 +161,6 @@ abstract class SingleCaretAction(private val forceSingleCaret: Boolean = true) :
 	context (LazyEventContext)
 	abstract fun perform(caret: Caret)
 	
-	/**
-	 * `hasEditorWith { caretCount == 1 }` will automatically be applied to this if [forceSingleCaret] is set to `true`
-	 */
-	context (LazyEventContext)
-	open val actionEnabled: Boolean
-		get() = true
-	
-	override fun update(e: AnActionEvent) = e.enableIf { actionEnabled and (!forceSingleCaret || caretCount == 1) }
+	context(LazyEventContext)
+	override fun isEnabled() = hasEditor and (!forceSingleCaret || caretCount == 1)
 }

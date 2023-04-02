@@ -1,7 +1,5 @@
 package ir.mmd.intellijDev.Actionable.caret.editing
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
@@ -105,12 +103,6 @@ abstract class TargetedCopyPasteAction : SingleCaretAction() {
 		putUserData(scheduledPasteActionOffset, primaryCaret.offset)
 		if (service<SettingsState>().showPasteActionHints) addEditorMouseMotionListener(motionListener)
 	}
-	
-	context(LazyEventContext)
-	override val actionEnabled: Boolean
-		get() = hasProject
-	
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
 }
 
 class SetWordCutPasteOffset : TargetedCopyPasteAction() {
@@ -137,7 +129,8 @@ class CancelPasteAction : TargetedCopyPasteAction() {
 	context(LazyEventContext)
 	override fun perform(caret: Caret) = editor.removeScheduledPasteAction()
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && editor.getUserData(scheduledPasteActionKind) != null }
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor && editor.getUserData(scheduledPasteActionKind) != null
 }
 
 class ExecutePasteAction : TargetedCopyPasteAction() {
@@ -208,7 +201,6 @@ class ExecutePasteAction : TargetedCopyPasteAction() {
 		} /* else -> offset is between the start and end -> ignore */
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf {
-		hasProject && hasEditor && caretCount == 1 && editor.getUserData(scheduledPasteActionKind) != null
-	}
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor && caretCount == 1 && editor.getUserData(scheduledPasteActionKind) != null
 }

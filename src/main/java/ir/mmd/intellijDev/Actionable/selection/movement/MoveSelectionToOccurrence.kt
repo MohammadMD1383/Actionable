@@ -2,24 +2,23 @@ package ir.mmd.intellijDev.Actionable.selection.movement
 
 import com.intellij.find.FindManager
 import com.intellij.find.FindModel
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.ScrollType
+import com.intellij.openapi.project.DumbAware
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.find.settings.SettingsState
-
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
 abstract class MoveSelectionToOccurrence(
 	private val isFirst: Boolean,
 	private val isForward: Boolean
-) : AnAction() {
-	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
+) : ActionBase(), DumbAware {
+	context (LazyEventContext)
+	override fun performAction() {
 		val caret = allCarets.run { if (isFirst) first() else last() }
 		
-		val (found, start, end) = FindManager.getInstance(e.project).findString(
+		val (found, start, end) = FindManager.getInstance(project).findString(
 			document.immutableCharSequence,
 			caret.run { if (isForward) selectionEnd else selectionStart },
 			FindModel().apply {
@@ -38,9 +37,8 @@ abstract class MoveSelectionToOccurrence(
 		}
 	}
 	
-	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && allCarets.haveSelection }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor && allCarets.haveSelection
 }
 
 class MoveFirstSelectionToPreviousOccurrence : MoveSelectionToOccurrence(true, false)

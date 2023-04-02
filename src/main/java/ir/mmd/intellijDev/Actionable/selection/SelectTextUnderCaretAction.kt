@@ -3,9 +3,8 @@ package ir.mmd.intellijDev.Actionable.selection
 import com.goide.psi.GoStringLiteral
 import com.intellij.lang.javascript.psi.JSLiteralExpression
 import com.intellij.lang.javascript.psi.ecma6.JSStringTemplateExpression
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
+import com.intellij.openapi.project.DumbAware
 import com.intellij.psi.PsiLiteralExpression
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.util.parentOfTypes
@@ -31,12 +30,11 @@ abstract class SelectTextUnderCaretAction : ActionAtCaret<ActionAtCaret.Model, A
 		model.caret.setSelection(range.first, range.last)
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor
 }
 
-class SelectLineWithoutIndentAction : SelectTextUnderCaretAction() {
-	override fun isDumbAware() = true
+class SelectLineWithoutIndentAction : SelectTextUnderCaretAction(), DumbAware {
 	
 	context (LazyEventContext)
 	override fun getSelectionRange(caret: Caret): IntRange? {
@@ -48,8 +46,7 @@ class SelectLineWithoutIndentAction : SelectTextUnderCaretAction() {
 	}
 }
 
-class SelectWordUnderCaretAction : SelectTextUnderCaretAction() {
-	override fun isDumbAware() = true
+class SelectWordUnderCaretAction : SelectTextUnderCaretAction(), DumbAware {
 	
 	context (LazyEventContext)
 	override fun getSelectionRange(caret: Caret): IntRange? {

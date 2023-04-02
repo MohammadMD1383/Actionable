@@ -1,20 +1,22 @@
 package ir.mmd.intellijDev.Actionable.caret.movement
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.ScrollType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.elementAt
+import ir.mmd.intellijDev.Actionable.util.ext.moveTo
+import ir.mmd.intellijDev.Actionable.util.ext.nextLeafNoWhitespace
+import ir.mmd.intellijDev.Actionable.util.ext.prevLeafNoWhitespace
 
-abstract class MoveCaretToSameElement(private val forward: Boolean) : AnAction() {
+abstract class MoveCaretToSameElement(private val forward: Boolean) : ActionBase() {
 	private val getNextLeafElement = if (forward) PsiElement::nextLeafNoWhitespace else PsiElement::prevLeafNoWhitespace
 	
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+	context (LazyEventContext)
+	override fun performAction() {
 		allCarets.forEach { caret ->
 			if (!caret.isValid) {
 				return@forEach
@@ -54,10 +56,9 @@ abstract class MoveCaretToSameElement(private val forward: Boolean) : AnAction()
 		)
 	}
 	
-	override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor
 }
 
 class MoveCaretToNextSameElement : MoveCaretToSameElement(true)
-
 class MoveCaretToPreviousSameElement : MoveCaretToSameElement(false)

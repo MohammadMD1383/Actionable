@@ -1,14 +1,17 @@
 package ir.mmd.intellijDev.Actionable.text
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.project.DumbAware
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.ui.showInputDialog
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.haveSelection
+import ir.mmd.intellijDev.Actionable.util.ext.replaceSelectedText
+import ir.mmd.intellijDev.Actionable.util.ext.toCaseStyleOf
+import ir.mmd.intellijDev.Actionable.util.ext.withEach
 
-class ReplaceSelectionsPreservingCaseAction : AnAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+class ReplaceSelectionsPreservingCaseAction : ActionBase(), DumbAware {
+	context (LazyEventContext)
+	override fun performAction() {
 		val text = showInputDialog(project, "Replace Selections Preserving Case")
 		if (text.isNullOrBlank()) {
 			return
@@ -21,7 +24,6 @@ class ReplaceSelectionsPreservingCaseAction : AnAction() {
 		}
 	}
 	
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor and allCarets.haveSelection }
-	override fun isDumbAware() = true
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor and allCarets.haveSelection
 }

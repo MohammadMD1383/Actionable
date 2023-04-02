@@ -1,22 +1,20 @@
 package ir.mmd.intellijDev.Actionable.selection
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
+import com.intellij.openapi.project.DumbAware
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 
-abstract class UnselectAction : AnAction() {
+abstract class UnselectAction : ActionBase(), DumbAware {
 	abstract fun getTargetCaret(carets: List<Caret>): Caret
 	
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
+	context (LazyEventContext)
+	override fun performAction() {
 		getTargetCaret(allCarets).let(caretModel::removeCaret)
 	}
 	
-	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && caretCount > 1 }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor && caretCount > 1
 }
 
 class UnselectFirstSelectionAction : UnselectAction() {

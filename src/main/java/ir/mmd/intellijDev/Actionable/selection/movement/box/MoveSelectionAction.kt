@@ -1,15 +1,14 @@
 package ir.mmd.intellijDev.Actionable.selection.movement.box
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.LogicalPosition
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.*
 
-abstract class MoveSelectionAction : AnAction() {
+abstract class MoveSelectionAction : ActionBase(), DumbAware {
 	context (LazyEventContext)
 	private fun swap(
 		caret: Caret,
@@ -127,31 +126,26 @@ abstract class MoveSelectionAction : AnAction() {
 		}
 	}
 	
-	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && allCarets.haveSelection }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor && allCarets.haveSelection
 }
 
 class MoveSelectionUp : MoveSelectionAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
-		moveSelectionsUp()
-	}
+	context (LazyEventContext)
+	override fun performAction() = moveSelectionsUp()
 }
 
 class MoveSelectionDown : MoveSelectionAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
-		moveSelectionsDown()
-	}
+	context (LazyEventContext)
+	override fun performAction() = moveSelectionsDown()
 }
 
 class MoveSelectionLeft : MoveSelectionAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
-		moveSelectionsLeft()
-	}
+	context (LazyEventContext)
+	override fun performAction() = moveSelectionsLeft()
 }
 
 class MoveSelectionRight : MoveSelectionAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {
-		moveSelectionsRight()
-	}
+	context (LazyEventContext)
+	override fun performAction() = moveSelectionsRight()
 }

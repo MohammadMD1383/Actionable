@@ -1,16 +1,14 @@
 package ir.mmd.intellijDev.Actionable.duplicate
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.LogicalPosition
 import com.intellij.openapi.editor.VisualPosition
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 
-abstract class DuplicateAction : MultiCaretAction() {
+abstract class DuplicateAction : MultiCaretAction(), DumbAware {
 	/**
 	 * Duplicate line(s) up
 	 *
@@ -108,9 +106,8 @@ abstract class DuplicateAction : MultiCaretAction() {
 		val text: String
 	)
 	
-	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor
 }
 
 class DuplicateLinesUp : DuplicateAction() {

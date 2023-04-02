@@ -1,22 +1,21 @@
 package ir.mmd.intellijDev.Actionable.selection
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.project.DumbAware
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.CaretUtil
 import ir.mmd.intellijDev.Actionable.util.afterDoing
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.removeCharAt
 import ir.mmd.intellijDev.Actionable.util.ext.util
 import ir.mmd.intellijDev.Actionable.util.ext.withEachMapped
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 
-class SelectUntilAction : AnAction() {
+class SelectUntilAction : ActionBase(), DumbAware {
 	private var lastKeyAdapter: KeyAdapter? = null
 	
-	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
+	context (LazyEventContext)
+	override fun performAction() {
 		if (lastKeyAdapter != null) return afterDoing {
 			editor.contentComponent.removeKeyListener(lastKeyAdapter)
 			lastKeyAdapter = null
@@ -44,7 +43,6 @@ class SelectUntilAction : AnAction() {
 		}.also { lastKeyAdapter = it })
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject and hasEditor }
-	override fun isDumbAware() = true
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor
 }

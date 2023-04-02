@@ -1,15 +1,12 @@
 package ir.mmd.intellijDev.Actionable.caret.manipulation
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-
-class RemoveCaretsOnEmptyLinesAction : MultiCaretAction() {
+class RemoveCaretsOnEmptyLinesAction : MultiCaretAction(), DumbAware {
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {
 		val lineNumber = document.getLineNumber(caret.offset)
@@ -22,7 +19,6 @@ class RemoveCaretsOnEmptyLinesAction : MultiCaretAction() {
 		}
 	}
 	
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor && caretCount > 1 }
-	override fun isDumbAware() = true
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor && caretCount > 1
 }

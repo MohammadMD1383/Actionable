@@ -1,14 +1,18 @@
 package ir.mmd.intellijDev.Actionable.text.macro
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.Caret
+import com.intellij.openapi.project.DumbAware
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.after
-import ir.mmd.intellijDev.Actionable.util.ext.*
+import ir.mmd.intellijDev.Actionable.util.ext.elementAt
+import ir.mmd.intellijDev.Actionable.util.ext.getWordAtOffset
+import ir.mmd.intellijDev.Actionable.util.ext.getWordBoundaries
+import ir.mmd.intellijDev.Actionable.util.ext.moveTo
+import kotlin.collections.component1
+import kotlin.collections.component2
 
-class MacroAction(name: String, private val macro: String) : MultiCaretAction(name) {
+class MacroAction(name: String, private val macro: String) : MultiCaretAction(name), DumbAware {
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {
 		val evaluatedMacro = LazyMacroContext(caret).run { evaluateMacro() }
@@ -65,9 +69,8 @@ class MacroAction(name: String, private val macro: String) : MultiCaretAction(na
 		return EvaluatedMacro(text, finalOffset, replaceTarget)
 	}
 	
-	override fun isDumbAware() = true
-	override fun update(e: AnActionEvent) = e.enableIf { hasProject && hasEditor }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor
 	
 	context (LazyEventContext)
 	private class LazyMacroContext(private val caret: Caret) {

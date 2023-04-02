@@ -1,9 +1,8 @@
 package ir.mmd.intellijDev.Actionable.caret.movement
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Caret
+import com.intellij.openapi.project.DumbAware
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.nextLeaf
 import com.intellij.psi.util.prevLeaf
@@ -13,7 +12,6 @@ import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
 import ir.mmd.intellijDev.Actionable.util.afterDoing
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 import ir.mmd.intellijDev.Actionable.util.ext.util
 
@@ -82,13 +80,14 @@ abstract class MoveCaretAction : MultiCaretAction() {
 		}
 	}
 	
-	context(LazyEventContext) override fun perform(caret: Caret) = Unit
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor }
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
+	context(LazyEventContext)
+	override fun perform(caret: Caret) = Unit
+	
+	context (LazyEventContext)
+	override fun isEnabled() = hasEditor
 }
 
-class MoveCaretToNextWord : MoveCaretAction() {
-	override fun isDumbAware() = true
+class MoveCaretToNextWord : MoveCaretAction(), DumbAware {
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {
 		caret.removeSelection()
@@ -96,8 +95,7 @@ class MoveCaretToNextWord : MoveCaretAction() {
 	}
 }
 
-class MoveCaretToPreviousWord : MoveCaretAction() {
-	override fun isDumbAware() = true
+class MoveCaretToPreviousWord : MoveCaretAction(), DumbAware {
 	context (LazyEventContext)
 	override fun perform(caret: Caret) {
 		caret.removeSelection()
@@ -121,38 +119,31 @@ class MoveCaretToPreviousElement : MoveCaretAction() {
 	}
 }
 
-class MoveCaretToNextWordWithSelection : MoveCaretAction() {
-	override fun isDumbAware() = true
-	
-	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
-		moveCaretsWithSelection(allCarets.toMutableList(), true) {
-			moveCaretVirtually(it, true)
-		}
+class MoveCaretToNextWordWithSelection : MoveCaretAction(), DumbAware {
+	context (LazyEventContext)
+	override fun performAction() = moveCaretsWithSelection(allCarets.toMutableList(), true) {
+		moveCaretVirtually(it, true)
 	}
 }
 
-class MoveCaretToPreviousWordWithSelection : MoveCaretAction() {
-	override fun isDumbAware() = true
+class MoveCaretToPreviousWordWithSelection : MoveCaretAction(), DumbAware {
 	
-	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
-		moveCaretsWithSelection(allCarets.toMutableList(), false) {
-			moveCaretVirtually(it, false)
-		}
+	context (LazyEventContext)
+	override fun performAction() = moveCaretsWithSelection(allCarets.toMutableList(), false) {
+		moveCaretVirtually(it, false)
 	}
 }
 
 class MoveCaretToNextElementWithSelection : MoveCaretAction() {
-	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
-		moveCaretsWithSelection(allCarets.toMutableList(), true) {
-			moveCaretVirtually(it, true, psiFile)
-		}
+	context (LazyEventContext)
+	override fun performAction() = moveCaretsWithSelection(allCarets.toMutableList(), true) {
+		moveCaretVirtually(it, true, psiFile)
 	}
 }
 
 class MoveCaretToPreviousElementWithSelection : MoveCaretAction() {
-	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {
-		moveCaretsWithSelection(allCarets.toMutableList(), false) {
-			moveCaretVirtually(it, false, psiFile)
-		}
+	context (LazyEventContext)
+	override fun performAction() = moveCaretsWithSelection(allCarets.toMutableList(), false) {
+		moveCaretVirtually(it, false, psiFile)
 	}
 }

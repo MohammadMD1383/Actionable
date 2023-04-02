@@ -1,15 +1,13 @@
 package ir.mmd.intellijDev.Actionable.caret.justification
 
-import com.intellij.openapi.actionSystem.ActionUpdateThread
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.LogicalPosition
+import com.intellij.openapi.project.DumbAware
+import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.forEachIf
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 
-abstract class JustifyAction : AnAction() {
+abstract class JustifyAction : ActionBase(), DumbAware {
 	context (LazyEventContext)
 	protected fun getLeftmostColumn() = allCarets.minOf { it.visualPosition.column }
 	
@@ -69,19 +67,21 @@ abstract class JustifyAction : AnAction() {
 		}
 	}
 	
-	override fun isDumbAware() = true
-	override fun getActionUpdateThread() = ActionUpdateThread.BGT
-	override fun update(e: AnActionEvent) = e.enableIf { hasEditor && caretCount > 1 }
+	context(LazyEventContext)
+	override fun isEnabled() = hasEditor && caretCount > 1
 }
 
 class JustifyCaretsEndAndShift : JustifyAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) { justify(getRightmostColumn()) }
+	context(LazyEventContext)
+	override fun performAction() = justify(getRightmostColumn())
 }
 
 class JustifyCaretsStart : JustifyAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) { justify(getLeftmostColumn()) }
+	context(LazyEventContext)
+	override fun performAction() = justify(getLeftmostColumn())
 }
 
 class JustifyCaretsEnd : JustifyAction() {
-	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) { justifyCaretsEndWithShifting() }
+	context(LazyEventContext)
+	override fun performAction() = justifyCaretsEndWithShifting()
 }
