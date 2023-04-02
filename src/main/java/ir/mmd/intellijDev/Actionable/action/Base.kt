@@ -6,11 +6,9 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.editor.*
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.NlsActions
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiFile
-import ir.mmd.intellijDev.Actionable.util.ext.editor
-import ir.mmd.intellijDev.Actionable.util.ext.enableIf
-import ir.mmd.intellijDev.Actionable.util.ext.psiFile
-import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
+import ir.mmd.intellijDev.Actionable.util.ext.*
 import java.util.function.Supplier
 import javax.swing.Icon
 
@@ -26,10 +24,12 @@ class LazyEventContext(val event: AnActionEvent) {
 	private val _project: Project? by lazy { event.project }
 	private val _editor: Editor? by lazy { event.editor }
 	private val _psiFile: PsiFile? by lazy { event.psiFile }
+	private val _virtualFile: VirtualFile? by lazy { event.virtualFile }
 	
 	val project: Project get() = _project!!
 	val editor: Editor get() = _editor!!
 	val psiFile: PsiFile get() = _psiFile!!
+	val virtualFile: VirtualFile get() = _virtualFile!!
 	
 	val document: Document by lazy { editor.document }
 	val caretModel: CaretModel by lazy { editor.caretModel }
@@ -42,6 +42,7 @@ class LazyEventContext(val event: AnActionEvent) {
 	val hasProject get() = _project != null
 	val hasEditor get() = _editor != null
 	val hasPsiFile get() = _psiFile != null
+	val hasVirtualFile get() = _virtualFile != null
 	
 	/**
 	 * This can be used to do some stuff in the scope of [LazyEventContext]

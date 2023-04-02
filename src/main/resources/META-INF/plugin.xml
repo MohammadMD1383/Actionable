@@ -669,13 +669,24 @@
 					class="ir.mmd.intellijDev.Actionable.ide.CreateTemporaryFileAction"
 					id="ir.mmd.intellijDev.Actionable.ide.CreateTemporaryFileAction"
 					text="Create Temporary File"
-					description="Creates a temporary memory-mapped file"/>
+					description="Creates a temporary memory-mapped file"
+					icon="AllIcons.FileTypes.Custom"/>
 				
 				<action
 					class="ir.mmd.intellijDev.Actionable.ide.OpenKeymapSettingsAction"
 					id="ir.mmd.intellijDev.Actionable.ide.OpenKeymapSettingsAction"
 					text="Open Keymap Settings"
-					description="Opens Settings > Keymap dialog"/>
+					description="Opens Settings > Keymap dialog"
+					icon="AllIcons.Nodes.KeymapEditor"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.ide.CreateMultipleFilesAction"
+					id="ir.mmd.intellijDev.Actionable.ide.CreateMultipleFilesAction"
+					text="Create Multiple Files"
+					description="Creates multiple files from an input dialog"
+					icon="AllIcons.FileTypes.Custom">
+					<add-to-group group-id="NewGroup" anchor="first"/>
+				</action>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.LanguageSpecific" text="Language Specific" popup="true">
