@@ -47,3 +47,15 @@ fun <T : JComponent> showCustomInputDialog(
 	
 	return if (dialog.show() == DialogWrapper.OK_EXIT_CODE) getComponentText(component) else null
 }
+
+fun showCustomDialog(
+	project: Project?,
+	title: String,
+	createCenterPanel: () -> JComponent
+) = DialogBuilder(project).apply {
+	setTitle(title)
+	setCenterPanel(createCenterPanel())
+	removeAllActions()
+	addOkAction()
+	addCancelAction()
+}.show()
