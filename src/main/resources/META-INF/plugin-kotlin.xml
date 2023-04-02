@@ -1,1 +1,13 @@
-<idea-plugin/>
+<idea-plugin>
+	<actions>
+		<group id="ir.mmd.intellijDev.Actionable.LanguageSpecific.Kotlin" text="Kotlin" popup="true">
+			<add-to-group group-id="ir.mmd.intellijDev.Actionable.LanguageSpecific"/>
+			
+			<action
+				class="ir.mmd.intellijDev.Actionable.lang.kotlin.SwitchFunctionBodyExpressionStyleAction"
+				id="ir.mmd.intellijDev.Actionable.lang.kotlin.SwitchFunctionBodyExpressionStyleAction"
+				text="Switch Function Body Expression Style"
+				description="Converts a single statement function body, to expression style and vice versa"/>
+		</group>
+	</actions>
+</idea-plugin>
