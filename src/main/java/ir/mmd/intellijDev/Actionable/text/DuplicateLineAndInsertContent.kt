@@ -8,11 +8,11 @@ import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.caretsAndSelectionsAreOnTheSameLine
 import ir.mmd.intellijDev.Actionable.text.settings.SettingsState
+import ir.mmd.intellijDev.Actionable.ui.showMultilineInputDialog
 import ir.mmd.intellijDev.Actionable.util.ext.addCaret
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 import ir.mmd.intellijDev.Actionable.util.ext.replaceRanges
-import ir.mmd.intellijDev.Actionable.util.showMultilineInputDialog
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 

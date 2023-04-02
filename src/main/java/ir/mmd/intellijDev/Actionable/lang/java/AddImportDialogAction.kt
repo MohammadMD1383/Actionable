@@ -12,9 +12,9 @@ import com.intellij.psi.codeStyle.JavaCodeStyleManager
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.ui.EditorTextField
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
+import ir.mmd.intellijDev.Actionable.ui.showCustomInputDialog
 import ir.mmd.intellijDev.Actionable.util.ext.enableIf
 import ir.mmd.intellijDev.Actionable.util.ext.psiFile
-import ir.mmd.intellijDev.Actionable.util.showCustomInputDialog
 
 class AddImportDialogAction : AnAction() {
 	override fun actionPerformed(e: AnActionEvent) = (LazyEventContext(e)) {

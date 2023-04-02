@@ -23,7 +23,7 @@ class AutoClassCase : TypedHandlerDelegate() {
 		file: PsiFile
 	) = Result.CONTINUE.also {
 		if (
-			!project.service<SettingsState>().autoClassCaseEnabled ||
+			!service<SettingsState>().autoClassCaseEnabled ||
 			file.fileType !is JavaFileType ||
 			c != '{'
 		) return@also

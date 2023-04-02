@@ -72,9 +72,9 @@
 		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.text.settings.SettingsState"/>
 		
-		<projectService
+		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.lang.xml.settings.SettingsState"/>
-		<projectService
+		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.lang.html.settings.SettingsState"/>
 		
 		<applicationConfigurable

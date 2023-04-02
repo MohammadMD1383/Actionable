@@ -20,7 +20,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 class JITRefactoringInsert : TypedHandlerDelegate() {
 	override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile) = Result.CONTINUE.also {
 		if (
-			!project.service<SettingsState>().jitRefactoringEnabled ||
+			!service<SettingsState>().jitRefactoringEnabled ||
 			file.fileType !is JavaFileType
 		) return@also
 		

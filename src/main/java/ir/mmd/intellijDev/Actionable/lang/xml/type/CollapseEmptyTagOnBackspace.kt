@@ -26,7 +26,7 @@ class CollapseEmptyTagOnBackspace : BackspaceHandlerDelegate() {
 		) return
 		
 		val project = editor.project!!
-		if (!project.service<SettingsState>().collapseEmptyTagOnBackspaceEnabled) return
+		if (!service<SettingsState>().collapseEmptyTagOnBackspaceEnabled) return
 		
 		val caret = editor.caretModel.primaryCaret
 		val offset = caret.offset

@@ -25,7 +25,7 @@ class AutoInsertSemicolon : TypedHandlerDelegate() {
 		fileType: FileType
 	) = Result.CONTINUE after {
 		if (
-			!project.service<SettingsState>().autoInsertSemicolonEnabled ||
+			!service<SettingsState>().autoInsertSemicolonEnabled ||
 			file.fileType !is JavaFileType ||
 			c != '('
 		) return@after
@@ -51,7 +51,7 @@ class AutoInsertSemicolon : TypedHandlerDelegate() {
 		file: PsiFile
 	) = Result.CONTINUE.also {
 		if (
-			!project.service<SettingsState>().autoInsertSemicolonEnabled ||
+			!service<SettingsState>().autoInsertSemicolonEnabled ||
 			file.fileType !is JavaFileType ||
 			c == ';'
 		) return@also

@@ -39,7 +39,7 @@ class ExpandTagOnType : TypedHandlerDelegate() {
 		file: PsiFile
 	) = Result.CONTINUE.also {
 		if (
-			!project.service<SettingsState>().expandTagOnTypeEnabled ||
+			!service<SettingsState>().expandTagOnTypeEnabled ||
 			file.fileType !is HtmlFileType
 		) return@also
 		

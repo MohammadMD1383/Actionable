@@ -1,6 +1,6 @@
 <idea-plugin>
 	<extensions defaultExtensionNs="com.intellij">
-		<projectService
+		<applicationService
 			serviceImplementation="ir.mmd.intellijDev.Actionable.lang.java.settings.SettingsState"/>
 		
 		<typedHandler

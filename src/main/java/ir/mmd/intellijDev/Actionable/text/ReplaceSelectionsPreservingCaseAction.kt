@@ -4,8 +4,8 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
+import ir.mmd.intellijDev.Actionable.ui.showInputDialog
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import ir.mmd.intellijDev.Actionable.util.showInputDialog
 
 class ReplaceSelectionsPreservingCaseAction : AnAction() {
 	override fun actionPerformed(e: AnActionEvent): Unit = (LazyEventContext(e)) {

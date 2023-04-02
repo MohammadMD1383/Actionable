@@ -14,7 +14,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 
 class ExpandTagSmartEnterProcessor : SmartEnterProcessor() {
 	override fun process(project: Project, editor: Editor, psiFile: PsiFile): Boolean {
-		if (!project.service<SettingsState>().expandTagOnSmartEnterEnabled) {
+		if (!service<SettingsState>().expandTagOnSmartEnterEnabled) {
 			return false
 		}
 		

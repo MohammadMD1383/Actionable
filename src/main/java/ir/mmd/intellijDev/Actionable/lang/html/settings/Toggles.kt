@@ -1,5 +1,5 @@
 package ir.mmd.intellijDev.Actionable.lang.html.settings
 
-import ir.mmd.intellijDev.Actionable.util.ProjectStateToggleAction
+import ir.mmd.intellijDev.Actionable.util.GlobalStateToggleAction
 
-class ExpandTagOnTypeState : ProjectStateToggleAction<SettingsState>(SettingsState::class.java, SettingsState::expandTagOnTypeEnabled)
+class ExpandTagOnTypeState : GlobalStateToggleAction<SettingsState>(SettingsState::class.java, SettingsState::expandTagOnTypeEnabled)
