@@ -5,7 +5,7 @@ import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.dontHaveSelection
 
-abstract class ActionAtCaret<TModel : ActionAtCaret.Model, TKey>(
+abstract class ActionAtCaret<TModel : ActionAtCaret.Model>(
 	private val removeCarets: Boolean = true,
 	private val inWriteAction: Boolean = false
 ) : ActionBase() {
@@ -19,7 +19,7 @@ abstract class ActionAtCaret<TModel : ActionAtCaret.Model, TKey>(
 	context (LazyEventContext)
 	protected abstract fun createModel(caret: Caret): TModel?
 	
-	protected abstract fun distinctKey(model: TModel): TKey
+	protected abstract fun distinctKey(model: TModel): Any
 	
 	context (LazyEventContext)
 	final override fun performAction() {

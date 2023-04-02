@@ -8,7 +8,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.getWordAtOffsetOrBefore
 abstract class WordActionAtCaret(
 	removeCarets: Boolean = true,
 	inWriteAction: Boolean = false
-) : ActionAtCaret<WordActionAtCaret.Model, String>(removeCarets, inWriteAction), DumbAware {
+) : ActionAtCaret<WordActionAtCaret.Model>(removeCarets, inWriteAction), DumbAware {
 	class Model(
 		caret: Caret,
 		val word: String,

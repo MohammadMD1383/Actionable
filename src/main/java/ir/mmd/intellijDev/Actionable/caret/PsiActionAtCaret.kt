@@ -8,7 +8,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.elementAtOrBefore
 abstract class PsiActionAtCaret(
 	removeCarets: Boolean = true,
 	inWriteAction: Boolean = false
-) : ActionAtCaret<PsiActionAtCaret.Model, PsiElement>(removeCarets, inWriteAction) {
+) : ActionAtCaret<PsiActionAtCaret.Model>(removeCarets, inWriteAction) {
 	class Model(
 		caret: Caret,
 		val psiElement: PsiElement
