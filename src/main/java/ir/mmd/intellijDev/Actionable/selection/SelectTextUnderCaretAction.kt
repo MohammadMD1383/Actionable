@@ -15,7 +15,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.*
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import kotlin.math.absoluteValue
 
-abstract class SelectTextUnderCaretAction : ActionAtCaret<ActionAtCaret.Model, ActionAtCaret.Model>() {
+abstract class SelectTextUnderCaretAction : ActionAtCaret<ActionAtCaret.Model, ActionAtCaret.Model>(removeCarets = false) {
 	context (LazyEventContext)
 	abstract fun getSelectionRange(caret: Caret): IntRange?
 	

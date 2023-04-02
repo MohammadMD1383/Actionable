@@ -5,7 +5,10 @@ import com.intellij.openapi.project.DumbAware
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.getWordAtOffsetOrBefore
 
-abstract class WordActionAtCaret(inWriteAction: Boolean = false) : ActionAtCaret<WordActionAtCaret.Model, String>(inWriteAction), DumbAware {
+abstract class WordActionAtCaret(
+	removeCarets: Boolean = true,
+	inWriteAction: Boolean = false
+) : ActionAtCaret<WordActionAtCaret.Model, String>(removeCarets, inWriteAction), DumbAware {
 	class Model(
 		caret: Caret,
 		val word: String,

@@ -11,7 +11,6 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.util.parentOfType
 import ir.mmd.intellijDev.Actionable.lang.java.settings.SettingsState
 import ir.mmd.intellijDev.Actionable.util.ext.elementAtOrBefore
-import ir.mmd.intellijDev.Actionable.util.ext.prevLeafNoWhitespace
 import ir.mmd.intellijDev.Actionable.util.ext.runWriteCommandAction
 import ir.mmd.intellijDev.Actionable.util.ext.titleCase
 
@@ -31,7 +30,6 @@ class AutoClassCase : TypedHandlerDelegate() {
 		val document = editor.document
 		val caret = editor.caretModel.primaryCaret
 		val element = file.elementAtOrBefore(caret)
-			?.prevLeafNoWhitespace(true)
 			?.parentOfType<PsiClass>(true)
 			?: return@also
 		

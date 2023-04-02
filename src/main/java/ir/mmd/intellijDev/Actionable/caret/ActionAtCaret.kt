@@ -5,7 +5,10 @@ import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.dontHaveSelection
 
-abstract class ActionAtCaret<TModel : ActionAtCaret.Model, TKey>(private val inWriteAction: Boolean = false) : ActionBase() {
+abstract class ActionAtCaret<TModel : ActionAtCaret.Model, TKey>(
+	private val removeCarets: Boolean = true,
+	private val inWriteAction: Boolean = false
+) : ActionBase() {
 	open class Model(
 		val caret: Caret
 	)
@@ -25,13 +28,15 @@ abstract class ActionAtCaret<TModel : ActionAtCaret.Model, TKey>(private val inW
 		}.distinctBy {
 			distinctKey(it)
 		}.also {
-			it.map { model ->
-				model.caret
-			}.let { list ->
-				allCarets.filter { caret ->
-					caret !in list
-				}.forEach { caret ->
-					caretModel.removeCaret(caret)
+			if (removeCarets) {
+				it.map { model ->
+					model.caret
+				}.let { list ->
+					allCarets.filter { caret ->
+						caret !in list
+					}.forEach { caret ->
+						caretModel.removeCaret(caret)
+					}
 				}
 			}
 		}.forEach {

@@ -5,7 +5,10 @@ import com.intellij.psi.PsiElement
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.ext.elementAtOrBefore
 
-abstract class PsiActionAtCaret(inWriteAction: Boolean = false) : ActionAtCaret<PsiActionAtCaret.Model, PsiElement>(inWriteAction) {
+abstract class PsiActionAtCaret(
+	removeCarets: Boolean = true,
+	inWriteAction: Boolean = false
+) : ActionAtCaret<PsiActionAtCaret.Model, PsiElement>(removeCarets, inWriteAction) {
 	class Model(
 		caret: Caret,
 		val psiElement: PsiElement
@@ -13,7 +16,7 @@ abstract class PsiActionAtCaret(inWriteAction: Boolean = false) : ActionAtCaret<
 	
 	context(LazyEventContext)
 	override fun createModel(caret: Caret): Model? {
-		val psiElement = psiFile.elementAtOrBefore(caret) ?: return null
+		val psiElement = psiFile.elementAtOrBefore(caret, skipWhitespace = false) ?: return null
 		return Model(caret, psiElement)
 	}
 	
