@@ -67,13 +67,13 @@ class SwitchFunctionBodyExpressionStyleAction : AnAction() {
 				function.equalsToken!!.delete()
 				
 				if (returnType.isUnit()) {
-					bodyExpression.replace(
-						if (bodyExpression.text == "Unit") {
-							psiFactory.createEmptyBody()
-						} else {
-							psiFactory.createSingleStatementBlock(bodyExpression)
-						}
-					)
+					if (bodyExpression.text == "Unit") {
+						bodyExpression.replace(psiFactory.createEmptyBody())
+					} else {
+						bodyExpression.replace(psiFactory.createSingleStatementBlock(bodyExpression))
+						function.typeReference?.delete()
+						function.colon?.delete()
+					}
 				} else if (returnType.isNothing()) {
 					bodyExpression.replace(
 						psiFactory.createSingleStatementBlock(bodyExpression)
