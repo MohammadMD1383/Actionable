@@ -3,6 +3,7 @@ package ir.mmd.intellijDev.Actionable.ui
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogBuilder
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.JBTextField
 import javax.swing.JComponent
@@ -59,3 +60,9 @@ fun showCustomDialog(
 	addOkAction()
 	addCancelAction()
 }.show()
+
+fun showConfirm(
+	project: Project?,
+	title: String,
+	text: String
+) = showCustomDialog(project, title) { JBLabel(text) } == DialogWrapper.OK_EXIT_CODE

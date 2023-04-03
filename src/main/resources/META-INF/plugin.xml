@@ -682,10 +682,20 @@
 				<action
 					class="ir.mmd.intellijDev.Actionable.ide.CreateMultipleFilesAction"
 					id="ir.mmd.intellijDev.Actionable.ide.CreateMultipleFilesAction"
-					text="Create Multiple Files"
+					text="Create Multiple Files..."
 					description="Creates multiple files from an input dialog"
 					icon="AllIcons.FileTypes.Custom">
 					<add-to-group group-id="NewGroup" anchor="first"/>
+				</action>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.ide.DeleteCurrentFileAction"
+					id="ir.mmd.intellijDev.Actionable.ide.DeleteCurrentFileAction"
+					text="Delete Current File"
+					description="Deletes current file which is open"
+					icon="CollaborationToolsIcons.Delete">
+					<add-to-group group-id="EditorTabPopupMenuEx" anchor="after" relative-to-action="RenameFile"/>
+					<override-text place="EditorTabPopup" text="Delete File..."/>
 				</action>
 			</group>
 			
