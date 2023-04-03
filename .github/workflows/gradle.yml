@@ -39,7 +39,7 @@ jobs:
         TAG="nightly/$VERSION+$(git rev-parse --short HEAD)"
         echo "TAG=$TAG" >> $GITHUB_ENV
         
-        sed -i 's/version = "[0-9]\+\.[0-9]\+\.[0-9]\+"/version = "'"$TAG"'".replace('\''\/'\'', '\''-'\'' )/g' build.gradle.kts
+        sed -i 's#version = "[0-9]\+\.[0-9]\+\.[0-9]\+"#version = "'"$TAG"'".replace('"'/','-'"')#g' build.gradle.kts
       shell: bash
       
     - name: Build with Gradle
