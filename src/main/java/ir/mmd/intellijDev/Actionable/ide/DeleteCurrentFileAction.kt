@@ -10,7 +10,7 @@ import ir.mmd.intellijDev.Actionable.ui.showConfirm
 class DeleteCurrentFileAction : ActionBase(), DumbAware {
 	context (LazyEventContext)
 	override fun performAction() {
-		if (showConfirm(project, "Delete Current File", "Are you sure?")) {
+		if (showConfirm(project, "Delete Current File", "Are you sure to delete (${virtualFile.name})?")) {
 			application.runWriteAction {
 				virtualFile.delete(this)
 			}
