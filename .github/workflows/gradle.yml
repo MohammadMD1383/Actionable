@@ -32,9 +32,14 @@ jobs:
     - name: Create tag
       run: |
         echo "COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
-        echo "VERSION=$(grep -Eo 'version = "[0-9]+\.[0-9]+\.[0-9]+"' build.gradle.kts | sed 's/version = "//;s/"$//')" >> $GITHUB_ENV
-        echo "TAG=nightly/${{ env.VERSION }}+$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-        sed -i 's/version = "[0-9]\+\.[0-9]\+\.[0-9]\+"/version = "'"${{ env.TAG }}"'".replace('\''\/'\'', '\''-'\'' )/g' build.gradle.kts
+        
+        VERSION=$(grep -Eo 'version = "[0-9]+\.[0-9]+\.[0-9]+"' build.gradle.kts | sed 's/version = "//;s/"$//')
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        
+        TAG="nightly/$VERSION+$(git rev-parse --short HEAD)"
+        echo "TAG=$TAG" >> $GITHUB_ENV
+        
+        sed -i 's/version = "[0-9]\+\.[0-9]\+\.[0-9]\+"/version = "'"$TAG"'".replace('\''\/'\'', '\''-'\'' )/g' build.gradle.kts
       shell: bash
       
     - name: Build with Gradle
