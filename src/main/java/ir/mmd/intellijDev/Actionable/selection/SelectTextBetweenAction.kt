@@ -1,9 +1,11 @@
 package ir.mmd.intellijDev.Actionable.selection
 
 import com.intellij.openapi.editor.Caret
+import com.intellij.openapi.project.DumbAware
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.BACKWARD
 import ir.mmd.intellijDev.Actionable.util.CaretUtil.Companion.FORWARD
+import ir.mmd.intellijDev.Actionable.util.ext.copy
 import ir.mmd.intellijDev.Actionable.util.ext.util
 
 abstract class SelectTextBetweenAction(private val char: String) : SelectTextUnderCaretAction() {
@@ -25,3 +27,8 @@ abstract class SelectTextBetweenAction(private val char: String) : SelectTextUnd
 class SelectTextBetweenQuotesAction : SelectTextBetweenAction("'")
 class SelectTextBetweenDoubleQuotesAction : SelectTextBetweenAction("\"")
 class SelectTextBetweenBackticksAction : SelectTextBetweenAction("`")
+
+class SelectTextBetweenAnyQuotesAction : SelectLiteralElementUnderCaretAction(), DumbAware {
+	context(LazyEventContext)
+	override fun getSelectionRange(caret: Caret) = rawSelectionRange(caret)?.copy(+1, -1)
+}

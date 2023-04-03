@@ -293,6 +293,12 @@
 					text="Select Text Between Backticks (Single-Line)"
 					description="Selects the text between two backticks in a line"/>
 				
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenAnyQuotesAction"
+					id="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenAnyQuotesAction"
+					text="Select Text Between Any Quotes"
+					description="Selects the text between two same quotes of any kind"/>
+					
 				<separator/>
 				
 				<action

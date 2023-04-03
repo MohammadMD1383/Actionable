@@ -94,6 +94,12 @@ fun String.replaceRanges(ranges: List<IntRange>, replacement: String, preserveCa
 inline operator fun IntRange?.contains(i: Int) = this != null && contains(i)
 
 /**
+ * Returns a new [IntRange] by `first + firstAddition .. last + lastAddition`
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun IntRange.copy(firstAddition: Int = 0, lastAddition: Int = 0) = first + firstAddition..last + lastAddition
+
+/**
  * like `forEach` but brings the receiver to the scope
  */
 inline fun <T> Iterable<T>.withEach(block: T.() -> Unit) = forEach { it.block() }

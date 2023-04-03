@@ -63,8 +63,8 @@ class SelectElementUnderCaretAction : SelectTextUnderCaretAction() {
 	}
 }
 
-class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
-	private fun rawSelectionRange(caret: Caret) = caret.util.run {
+open class SelectLiteralElementUnderCaretAction : SelectTextUnderCaretAction() {
+	protected fun rawSelectionRange(caret: Caret) = caret.util.run {
 		if (!moveUntilReached("\"'`", "\n", CaretUtil.BACKWARD)) return@run null
 		val startCandidateOffset = prevCharOffset
 		val startCandidateChar = prevChar!!
