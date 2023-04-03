@@ -11,6 +11,7 @@ class StringCaseManipulator(private val string: String) {
 		LowerSnakeCase,
 		UpperSnakeCase,
 		KebabCase,
+		Spaced,
 		Unknown
 	}
 	
@@ -22,15 +23,17 @@ class StringCaseManipulator(private val string: String) {
 	/**
 	 * detects [CaseStyle] of a string
 	 */
-	private fun String.detectCaseStyle() = when (this[0]) {
-		in 'a'..'z' -> when {
+	private fun String.detectCaseStyle() = when {
+		' ' in this -> CaseStyle.Spaced
+		
+		this[0] in 'a'..'z' -> when {
 			this.any { it in 'A'..'Z' } -> CaseStyle.CamelCase
 			this.any { it == '_' } -> CaseStyle.LowerSnakeCase
 			this.any { it == '-' } -> CaseStyle.KebabCase
 			else -> CaseStyle.AllLowerCase
 		}
 		
-		in 'A'..'Z' -> when {
+		this[0] in 'A'..'Z' -> when {
 			this.any { it in 'a'..'z' } -> CaseStyle.PascalCase
 			this.any { it == '_' } -> CaseStyle.UpperSnakeCase
 			else -> CaseStyle.AllUpperCase
@@ -54,6 +57,8 @@ class StringCaseManipulator(private val string: String) {
 			CaseStyle.UpperSnakeCase -> string.lowercase().split('_')
 			
 			CaseStyle.KebabCase -> string.lowercase().split('-')
+			
+			CaseStyle.Spaced -> string.lowercase().split(' ')
 			
 			CaseStyle.CamelCase,
 			CaseStyle.PascalCase -> mutableListOf<String>().apply {
@@ -84,18 +89,22 @@ class StringCaseManipulator(private val string: String) {
 		CaseStyle.LowerSnakeCase -> toLowerSnakeCase()
 		CaseStyle.UpperSnakeCase -> toUpperSnakeCase()
 		CaseStyle.KebabCase -> toKebabCase()
+		CaseStyle.Spaced -> toSpaced()
 		else -> string
 	}
 	
-	private fun toAllUpperCase(): String {
+	@Suppress("MemberVisibilityCanBePrivate")
+	fun toAllUpperCase(): String {
 		return split.joinToString("") { it.uppercase() }
 	}
 	
-	private fun toAllLowerCase(): String {
+	@Suppress("MemberVisibilityCanBePrivate")
+	fun toAllLowerCase(): String {
 		return split.joinToString("")
 	}
 	
-	private fun toCamelCase(): String {
+	@Suppress("MemberVisibilityCanBePrivate")
+	fun toCamelCase(): String {
 		if (split.isEmpty()) {
 			return string
 		}
@@ -109,19 +118,28 @@ class StringCaseManipulator(private val string: String) {
 		}
 	}
 	
-	private fun toPascalCase(): String {
+	@Suppress("MemberVisibilityCanBePrivate")
+	fun toPascalCase(): String {
 		return split.joinToString("") { it.replaceFirstChar { c -> c.uppercase() } }
 	}
 	
-	private fun toLowerSnakeCase(): String {
+	@Suppress("MemberVisibilityCanBePrivate")
+	fun toLowerSnakeCase(): String {
 		return split.joinToString("_")
 	}
 	
-	private fun toUpperSnakeCase(): String {
+	@Suppress("MemberVisibilityCanBePrivate")
+	fun toUpperSnakeCase(): String {
 		return split.joinToString("_") { it.uppercase() }
 	}
 	
-	private fun toKebabCase(): String {
+	@Suppress("MemberVisibilityCanBePrivate")
+	fun toKebabCase(): String {
 		return split.joinToString("-")
+	}
+	
+	@Suppress("MemberVisibilityCanBePrivate")
+	fun toSpaced(): String {
+		return split.joinToString(" ")
 	}
 }
