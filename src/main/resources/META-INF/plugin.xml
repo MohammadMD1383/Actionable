@@ -240,10 +240,16 @@
 			
 			<group id="ir.mmd.intellijDev.Actionable.SelectionGroup" text="Selection" popup="true">
 				<action
-					class="ir.mmd.intellijDev.Actionable.selection.SelectUntilAction"
-					id="ir.mmd.intellijDev.Actionable.selection.SelectUntilAction"
-					text="Select Until ..."
-					description="Select until the next character you will type"/>
+					class="ir.mmd.intellijDev.Actionable.selection.ForwardSelectUntilAction"
+					id="ir.mmd.intellijDev.Actionable.selection.ForwardSelectUntilAction"
+					text="Forward Select Until ..."
+					description="Select until the next character you type forward"/>
+				
+				<action
+					class="ir.mmd.intellijDev.Actionable.selection.BackwardSelectUntilAction"
+					id="ir.mmd.intellijDev.Actionable.selection.BackwardSelectUntilAction"
+					text="Backward Select Until ..."
+					description="Select until the next character you type backward"/>
 				
 				<separator/>
 				

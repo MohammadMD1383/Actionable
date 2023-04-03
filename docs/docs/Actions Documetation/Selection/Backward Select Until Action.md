@@ -1,4 +1,4 @@
-Selects from the caret up to the key you press, or the end of line.
+Selects from the caret backward up to the key you press, or the start of line.
 
 ## Example
 
@@ -11,20 +11,20 @@ Selects from the caret up to the key you press, or the end of line.
 
 [//]: # (@formatter:off)
 ```javascript
-const |a = document.body.style;
+const a = document.body.style|;
 ```
 [//]: # (@formatter:on)
 
 ### Action
 
 1. Execute the action
-2. Press ++period++
+2. Press ++dot++
 
 ### After
 
 [//]: # (@formatter:off)
 ```javascript
-const [a = document.]|body.style;
+const a = document.body.|[style];
 ```
 [//]: # (@formatter:on)
 

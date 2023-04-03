@@ -11,7 +11,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.withEachMapped
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 
-class SelectUntilAction : ActionBase(), DumbAware {
+abstract class SelectUntilAction(private val dir: Int) : ActionBase(), DumbAware {
 	private var lastKeyAdapter: KeyAdapter? = null
 	
 	context (LazyEventContext)
@@ -27,8 +27,8 @@ class SelectUntilAction : ActionBase(), DumbAware {
 					runWriteCommandAction {
 						allCarets.withEachMapped({ it.util }) {
 							document.removeCharAt(offset - 1)
-							if (!moveUntilReached(e.keyChar.toString(), "\n", CaretUtil.FORWARD)) {
-								offset++
+							if (!moveUntilReached(e.keyChar.toString(), "\n", dir)) {
+								offset += dir
 							}
 							
 							makeOffsetDiffSelection()
@@ -46,3 +46,6 @@ class SelectUntilAction : ActionBase(), DumbAware {
 	context (LazyEventContext)
 	override fun isEnabled() = hasEditor
 }
+
+class ForwardSelectUntilAction : SelectUntilAction(CaretUtil.FORWARD)
+class BackwardSelectUntilAction : SelectUntilAction(CaretUtil.BACKWARD)
