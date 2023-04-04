@@ -1,5 +1,7 @@
 package ir.mmd.intellijDev.Actionable
 
+import com.intellij.ide.plugins.PluginManager
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
@@ -9,9 +11,7 @@ import com.intellij.util.io.HttpRequests
 import com.intellij.util.io.ZipUtil
 import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.app.Actionable
-import ir.mmd.intellijDev.Actionable.app.Actionable.AUTHOR
-import ir.mmd.intellijDev.Actionable.app.Actionable.PLUGIN_NAME
+import ir.mmd.intellijDev.Actionable.app.Actionable.*
 import ir.mmd.intellijDev.Actionable.util.ext.plus
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
@@ -25,29 +25,41 @@ class DownloadAndInstallNightlyBuildAction : ActionBase(), DumbAware {
 			override fun run(indicator: ProgressIndicator) {
 				try {
 					installPlugin(indicator)
+					showNotification(project, "<b>Actionable installed successfully!</b><br>You need to restart the IDE before using the new version", NotificationType.INFORMATION)
+				} catch (e: UpToDateException) {
+					showNotification(project, "<b>You have already installed the latest version!</b>", NotificationType.INFORMATION)
 				} catch (e: Exception) {
-					Actionable.showNotification(project, "<b>Couldn't download nightly build</b><br><pre>${e.stackTraceToString()}</pre>")
+					showNotification(project, "<b>Couldn't download nightly build</b><br><pre>${e.stackTraceToString()}</pre>", NotificationType.ERROR)
 				}
 			}
 		}
 	)
 	
-	private fun getDownloadUrl(indicator: ProgressIndicator): String? {
+	private fun getDownloadUrl(indicator: ProgressIndicator): String {
 		indicator.text = "Getting release info..."
 		indicator.isIndeterminate = true
 		
 		val latestReleaseUrl = "https://api.github.com/repos/$AUTHOR/$PLUGIN_NAME/releases/latest"
-		return HttpRequests.request(latestReleaseUrl)
+		val json = HttpRequests.request(latestReleaseUrl)
 			.throwStatusCodeException(true)
-			.readString().let {
-				"\"browser_download_url\":\"(.+?)\"".toRegex().find(it)?.groupValues?.get(1)
-			}
+			.readString()
+		
+		val tag = "\"tag_name\":\"(.+?)\"".toRegex().find(json)?.groupValues?.get(1)
+			?: throw Exception("Couldn't find tag_name from response")
+		val version = PluginManager.getPlugins().find { it.pluginId.idString == PLUGIN_ID }!!.version
+		if (version == tag) {
+			throw UpToDateException()
+		}
+		
+		return "\"browser_download_url\":\"(.+?)\"".toRegex().find(json)?.groupValues?.get(1)
+			?: throw Exception("Couldn't find download_url from response")
 	}
 	
 	private fun downloadPlugin(indicator: ProgressIndicator): Path {
+		val downloadUrl = getDownloadUrl(indicator)
+		
 		indicator.text = "Downloading..."
 		
-		val downloadUrl = getDownloadUrl(indicator) ?: throw IllegalStateException("Download url is null")
 		val tmpFile = createTempFile()
 		
 		HttpRequests.request(downloadUrl)

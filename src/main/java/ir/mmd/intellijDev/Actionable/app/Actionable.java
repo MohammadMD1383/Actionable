@@ -16,10 +16,13 @@ public class Actionable {
 	
 	public static final String NOTIFICATION_GROUP = "Actionable Notifications";
 	
-	public static void showNotification(@NotNull Project project, String content) {
+	public static void showNotification(@NotNull Project project, String content, NotificationType type) {
 		Notifications.Bus.notify(
-			new Notification(NOTIFICATION_GROUP, content, NotificationType.ERROR),
+			new Notification(NOTIFICATION_GROUP, content, type),
 			project
 		);
+	}
+	
+	public static class UpToDateException extends Exception {
 	}
 }

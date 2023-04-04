@@ -26,7 +26,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "4.0.0"
+version = "4.1.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -66,14 +66,21 @@ tasks {
 		untilBuild.set("233.*")
 		changeNotes.set("""
 			<ul>
-				<li>New <b>FULL</b> documentation available at <a href='https://mohammadmd1383.github.io/Actionable/'>here</a></li>
-				<li>Internal cleanup, refactorings and improvements</li>
-				<li>Fixed a bug in Justify Carets Action</li>
-				<li>Fixed a bug in Select Until... Action</li>
-				<li>Removed Predict Words Actions</li>
-				<li>Reordered Actions</li>
-				<li>Added New Action: Create Temporary File</li>
+				<li><b>New Feature: Download And Install Nightly Build !!!</b></li>
+				<li><b>New Action</b>: Expand Collapsed Tag By SmartEnter (XML)</li>
+				<li><b>New Action</b>: Switch Function Body Expression Style (Kotlin)</li>
+				<li><b>New Action</b>: Create Multiple Files (with/without (nested) directories) (at once!)</li>
+				<li><b>New Action</b>: Delete Current File</li>
+				<li><b>New Action</b>: Select Text Between Any Quotes (feature request #44: universal select between quotes)</li>
+				<li><b>New Action</b>: Backward/Forward Select Until...</li>
+				<li>Added settings page for XML, HTML and Java typing actions</li>
+				<li>Enhancements to Duplicate Line And Insert Contents (Don't miss it!)</li>
 			</ul>
+			<div>
+				From now you can install the latest nightly builds directly from your IDE! Just use the action <b>Download And Install Nightly Build</b>
+				<br>
+				To see all new features documentation please check out the <a href='https://mohammadmd1383.github.io/Actionable/Actions%20Documetation/'>Actions Documentation</a> section.
+			</div>
 		""".trimIndent())
 	}
 	
