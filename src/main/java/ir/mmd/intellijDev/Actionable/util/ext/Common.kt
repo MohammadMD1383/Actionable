@@ -3,6 +3,8 @@ package ir.mmd.intellijDev.Actionable.util.ext
 import ir.mmd.intellijDev.Actionable.util.StringCaseManipulator
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
+import java.nio.file.Path
+import kotlin.io.path.Path
 
 /**
  * Copies the string to clipboard
@@ -141,3 +143,15 @@ inline operator fun IntRange.component2() = last
  */
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun IntRange.contains(other: IntRange) = first <= other.first && last >= other.last
+
+/**
+ * Joins two paths.
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun Path.plus(other: Path): Path = Path(this.toString(), other.toString())
+
+/**
+ * Joins a path and a string.
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun Path.plus(other: String): Path = Path(this.toString(), other)

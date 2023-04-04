@@ -47,6 +47,10 @@
 	<depends optional="true" config-file="plugin-golang.xml">org.jetbrains.plugins.go</depends>
 	
 	<extensions defaultExtensionNs="com.intellij">
+		<notificationGroup
+			id="Actionable Notifications"
+			displayType="BALLOON"/>
+		
 		<errorHandler
 			implementation="ir.mmd.intellijDev.Actionable.internal.ErrorReporter"/>
 		
@@ -304,7 +308,7 @@
 					id="ir.mmd.intellijDev.Actionable.selection.SelectTextBetweenAnyQuotesAction"
 					text="Select Text Between Any Quotes"
 					description="Selects the text between two same quotes of any kind"/>
-					
+				
 				<separator/>
 				
 				<action
@@ -720,6 +724,13 @@
 				
 				</group>
 			</group>
+			
+			<action
+				class="ir.mmd.intellijDev.Actionable.DownloadAndInstallNightlyBuildAction"
+				id="ir.mmd.intellijDev.Actionable.DownloadAndInstallNightlyBuildAction"
+				text="Download And Install Nightly Build"
+				description="Downloads and installs the latest nightly build from plugin's github releases"
+				icon="AllIcons.Ide.Notification.PluginUpdate"/>
 		</group>
 	</actions>
 </idea-plugin>

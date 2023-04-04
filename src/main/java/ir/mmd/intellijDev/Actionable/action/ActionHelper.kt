@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.DefaultActionGroup
 import com.intellij.openapi.extensions.PluginId
+import ir.mmd.intellijDev.Actionable.app.Actionable
 import ir.mmd.intellijDev.Actionable.text.macro.MacroAction
 
 /**
@@ -21,7 +22,7 @@ fun ActionManager.registerMacro(name: String, macro: String) {
 	registerAction(
 		"${Actions.MACRO_PREFIX}.$name",
 		action,
-		PluginId.getId(Actions.PLUGIN_ID)
+		PluginId.getId(Actionable.PLUGIN_ID)
 	)
 	MacrosActionGroup.add(action)
 }
