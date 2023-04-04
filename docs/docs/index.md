@@ -24,7 +24,8 @@ This is because of providing better quality.
 ## Test Latest Features ASAP
 
 Want to test the latest features before they officially get released?
-Checkout [releases page](https://github.com/MohammadMD1383/Actionable/releases) for nightly builds.
+Simply use the new action `Download And Install Nightly Build` !!! (v4.1.0 onwards)
+Or, checkout [releases page](https://github.com/MohammadMD1383/Actionable/releases) for nightly builds.
 
 ## How To Help?
 
