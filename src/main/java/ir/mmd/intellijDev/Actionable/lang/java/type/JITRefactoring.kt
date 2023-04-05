@@ -52,7 +52,7 @@ class JITRefactoringDelete : BackspaceHandlerDelegate() {
 	override fun beforeCharDeleted(c: Char, file: PsiFile, editor: Editor) {}
 	override fun charDeleted(c: Char, file: PsiFile, editor: Editor) = false after {
 		if (
-			!editor.project!!.service<SettingsState>().jitRefactoringEnabled ||
+			!service<SettingsState>().jitRefactoringEnabled ||
 			file.fileType !is JavaFileType
 		) return@after
 		

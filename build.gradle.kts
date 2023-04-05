@@ -79,6 +79,7 @@ tasks {
 		changeNotes.set("""
 			<ul>
 				<li><b>New Feature</b>: Offline Docs (right inside your IDE!) - Use <b>Open Offline Help</b> action</li>
+				<li><b>Bug Fix</b>: #74 JITRefactoring bug fixed (Java)</li>
 			</ul>
 			<div>
 				To install nightly builds use <b>Download And Install Nightly Build</b> Action
