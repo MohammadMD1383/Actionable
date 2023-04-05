@@ -87,4 +87,8 @@ tasks {
 	test {
 		useJUnitPlatform()
 	}
+	
+	publishPlugin {
+		token.set(System.getenv("ACTIONABLE_PUBLISH_TOKEN"))
+	}
 }
