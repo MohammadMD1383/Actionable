@@ -19,7 +19,7 @@ import java.awt.Desktop
 import java.net.URI
 import com.intellij.openapi.wm.ToolWindowFactory as JBToolWindowFactory
 
-class OpenOfflineHelpAction : ActionBase() {
+class OpenOfflineHelpAction : ActionBase(), DumbAware {
 	context (LazyEventContext)
 	override fun performAction() {
 		ToolWindowManager
