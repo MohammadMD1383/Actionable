@@ -15,6 +15,7 @@ public class Actionable {
 	public static final String AUTHOR = "MohammadMD1383";
 	
 	public static final String NOTIFICATION_GROUP = "Actionable Notifications";
+	public static final String DOCS_TOOLWINDOW_ID = "Actionable Docs";
 	
 	public static void showNotification(@NotNull Project project, String content, NotificationType type) {
 		Notifications.Bus.notify(

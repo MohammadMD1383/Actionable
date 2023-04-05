@@ -18,23 +18,39 @@ permissions: write-all
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    
-    - name: Make gradlew executable
-      run: |
-        chmod +x gradlew
-      shell: bash
-    
-    - name: Publish
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: publishPlugin
-      env:
-        ACTIONABLE_PUBLISH_TOKEN: ${{ secrets.ACTIONABLE_PUBLISH_TOKEN }}
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      
+      - name: setup mkdocs
+        run: |
+          pip install mkdocs-material
+          pip install mkdocs-file-filter-plugin
+      
+      - name: build offline docs
+        run: |
+          cd docs
+          mkdocs build
+        env:
+          OFFLINE_DOCS: true
+      
+      - name: Make gradlew executable
+        run: |
+          chmod +x gradlew
+        shell: bash
+      
+      - name: Publish
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: publishPlugin
+        env:
+          ACTIONABLE_PUBLISH_TOKEN: ${{ secrets.ACTIONABLE_PUBLISH_TOKEN }}

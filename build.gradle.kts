@@ -26,7 +26,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "4.1.0"
+version = "4.2.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -52,8 +52,20 @@ tasks {
 		}
 	}
 	
+	buildPlugin {
+		from("docs/site") {
+			into("docs")
+		}
+	}
+	
 	runIde {
 		autoReloadPlugins.set(true)
+	}
+	
+	prepareSandbox {
+		from("docs/site") {
+			into("${pluginName.get()}/docs")
+		}
 	}
 	
 	buildSearchableOptions {
@@ -66,20 +78,14 @@ tasks {
 		untilBuild.set("233.*")
 		changeNotes.set("""
 			<ul>
-				<li><b>New Feature: Download And Install Nightly Build !!!</b></li>
-				<li><b>New Action</b>: Expand Collapsed Tag By SmartEnter (XML)</li>
-				<li><b>New Action</b>: Switch Function Body Expression Style (Kotlin)</li>
-				<li><b>New Action</b>: Create Multiple Files (with/without (nested) directories) (at once!)</li>
-				<li><b>New Action</b>: Delete Current File</li>
-				<li><b>New Action</b>: Select Text Between Any Quotes (feature request #44: universal select between quotes)</li>
-				<li><b>New Action</b>: Backward/Forward Select Until...</li>
-				<li>Added settings page for XML, HTML and Java typing actions</li>
-				<li>Enhancements to Duplicate Line And Insert Contents (Don't miss it!)</li>
+				<li><b>New Feature</b>: Offline Docs (right inside your IDE!) - Use <b>Open Offline Help</b> action</li>
 			</ul>
 			<div>
-				From now you can install the latest nightly builds directly from your IDE! Just use the action <b>Download And Install Nightly Build</b>
+				To install nightly builds use <b>Download And Install Nightly Build</b> Action
 				<br>
 				To see all new features documentation please check out the <a href='https://mohammadmd1383.github.io/Actionable/Actions%20Documetation/'>Actions Documentation</a> section.
+				<br>
+				<b>To see the offline docs right from your ide use the action: Open Offline Help</b>
 			</div>
 		""".trimIndent())
 	}

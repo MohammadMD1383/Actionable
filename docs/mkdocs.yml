@@ -5,7 +5,6 @@ theme:
   name: material
   
   features:
-    - navigation.instant
     - navigation.tracking
     - navigation.tabs
     - navigation.tabs.sticky
@@ -42,6 +41,8 @@ theme:
 
 plugins:
   - search
+  - offline:
+      enabled: !ENV [OFFLINE_DOCS, false]
   - file-filter:
       filter_nav: true
       exclude_glob:

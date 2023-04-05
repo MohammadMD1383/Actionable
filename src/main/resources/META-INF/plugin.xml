@@ -52,6 +52,14 @@
 			id="Actionable Notifications"
 			displayType="BALLOON"/>
 		
+		<toolWindow
+			factoryClass="ir.mmd.intellijDev.Actionable.OpenOfflineHelpAction$ToolWindowFactory"
+			id="Actionable Docs"
+			anchor="right"
+			icon="AllIcons.Toolwindows.Documentation"
+			doNotActivateOnStart="true"
+			canCloseContents="false"/>
+		
 		<errorHandler
 			implementation="ir.mmd.intellijDev.Actionable.internal.ErrorReporter"/>
 		
@@ -732,6 +740,13 @@
 				text="Download And Install Nightly Build"
 				description="Downloads and installs the latest nightly build from plugin's github releases"
 				icon="AllIcons.Ide.Notification.PluginUpdate"/>
+			
+			<action
+				class="ir.mmd.intellijDev.Actionable.OpenOfflineHelpAction"
+				id="ir.mmd.intellijDev.Actionable.OpenOfflineHelpAction"
+				text="Open Offline Help"
+				description="Opens offline Actionable docs"
+				icon="AllIcons.Toolwindows.Documentation"/>
 		</group>
 	</actions>
 </idea-plugin>
