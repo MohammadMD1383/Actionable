@@ -53,6 +53,7 @@ tasks {
 	}
 	
 	buildPlugin {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 		from("docs/site") {
 			into("docs")
 		}
@@ -63,6 +64,7 @@ tasks {
 	}
 	
 	prepareSandbox {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 		from("docs/site") {
 			into("${pluginName.get()}/docs")
 		}
