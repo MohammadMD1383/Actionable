@@ -52,10 +52,11 @@ jobs:
           VERSION=$(grep -Eo 'version = "[0-9]+\.[0-9]+\.[0-9]+"' build.gradle.kts | sed 's/version = "//;s/"$//')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           
-          TAG="nightly/$VERSION+$(git rev-parse --short HEAD)"
+          REV="$(git rev-parse --short HEAD)"
+          TAG="nightly/$VERSION+$REV"
           echo "TAG=$TAG" >> $GITHUB_ENV
           
-          sed -i 's#version = "[0-9]\+\.[0-9]\+\.[0-9]\+"#version = "'"$TAG"'".replace('"'/','-'"')#g' build.gradle.kts
+          sed -i 's#version = "[0-9]\+\.[0-9]\+\.[0-9]\+"#version = "'"$VERSION+$REV-nightly"'"#g' build.gradle.kts
         shell: bash
       
       - name: Build with Gradle
