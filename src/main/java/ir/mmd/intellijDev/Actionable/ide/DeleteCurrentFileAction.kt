@@ -18,5 +18,5 @@ class DeleteCurrentFileAction : ActionBase(), DumbAware {
 	}
 	
 	context (LazyEventContext)
-	override fun isEnabled() = hasEditor and hasVirtualFile and virtualFile.isFile
+	override fun isEnabled() = hasVirtualFile and virtualFile.isFile
 }
