@@ -84,6 +84,7 @@ tasks {
 				<li><b>Bug Fix</b>: #74 JITRefactoring bug fixed (Java)</li>
 				<li><b>Bug Fix</b>: #75 Nightly builds were considered as older versions</li>
 				<li><b>Bug Fix</b>: #78 delete file is turned off</li>
+				<li><b>Bug Fix</b>: #81 temporary file dialog won't be cancelled on cancel button press</li>
 			</ul>
 			<div>
 				To install nightly builds use <b>Download And Install Nightly Build</b> Action

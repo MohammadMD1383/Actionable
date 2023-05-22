@@ -14,14 +14,11 @@ class CreateTemporaryFileAction : ActionBase(), DumbAware {
 		val fileName = showInputDialog(
 			project,
 			"Create Temporary File",
-		).let { if (it.isNullOrBlank()) "Temporary File" else it }
+		)?.ifBlank { "Temporary File" } ?: return
 		
 		FileEditorManager.getInstance(project).openTextEditor(
 			OpenFileDescriptor(project, MemoryMappedVirtualFile(fileName)),
 			true
 		)
 	}
-	
-	context (LazyEventContext)
-	override fun isEnabled() = hasEditor
 }
