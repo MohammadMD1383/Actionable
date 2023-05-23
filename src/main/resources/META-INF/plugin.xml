@@ -71,6 +71,9 @@
 			language="ActionableMacroTemplate"
 			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplatePlaceholderCompletionContributor"/>
 		
+		<typedHandler
+			implementation="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroHandlerDollarTypedHandler"/>
+		
 		<notificationGroup
 			id="Actionable Notifications"
 			displayType="BALLOON"/>

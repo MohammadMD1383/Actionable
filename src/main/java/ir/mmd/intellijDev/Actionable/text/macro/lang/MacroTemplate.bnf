@@ -15,4 +15,4 @@ MacroTemplateFile ::= (Placeholder | Text)*
 
 Placeholder ::= DOLLAR PLACEHOLDER_NAME DOLLAR {methods=[getPlaceholderName]}
 
-private Text ::= ANY_TEXT | DOLLAR | ESCAPE | ESCAPED_DOLLAR | ESCAPED_ESCAPE
+private Text ::= ANY_TEXT | DOLLAR | ESCAPE | ESCAPED_DOLLAR | ESCAPED_ESCAPE | PLACEHOLDER_NAME

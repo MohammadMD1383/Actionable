@@ -4,12 +4,17 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.EditorKind;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.openapi.fileEditor.impl.text.PsiAwareTextEditorProvider;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.ui.ListSpeedSearch;
 import com.intellij.ui.components.JBList;
 import ir.mmd.intellijDev.Actionable.text.macro.MacroUtilKt;
 import ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateFileType;
+import ir.mmd.intellijDev.Actionable.vfs.MemoryMappedVirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -91,8 +96,11 @@ public class UI implements Disposable {
 	private void createUIComponents() {
 		var factory = EditorFactory.getInstance();
 		var document = factory.createDocument("");
-		macroEditor = factory.createEditor(document, null, MacroTemplateFileType.INSTANCE, false); // fixme
-		macroEditorComponent = macroEditor.getComponent();
+		macroEditor = factory.createEditor(document, null, new MemoryMappedVirtualFile("Macro", "", MacroTemplateFileType.INSTANCE), false, EditorKind.MAIN_EDITOR); // fixme
+		macroEditorComponent = PsiAwareTextEditorProvider.getInstance().createEditor(
+			ProjectManager.getInstance().getOpenProjects()[0],
+			new LightVirtualFile("File", MacroTemplateFileType.INSTANCE,"")
+		).getComponent(); // todo
 		
 		document.addDocumentListener(new DocumentListener() {
 			@Override

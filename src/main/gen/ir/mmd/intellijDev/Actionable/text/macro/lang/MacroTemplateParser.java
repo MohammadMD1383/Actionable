@@ -69,7 +69,7 @@ public class MacroTemplateParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ANY_TEXT | DOLLAR | ESCAPE | ESCAPED_DOLLAR | ESCAPED_ESCAPE
+  // ANY_TEXT | DOLLAR | ESCAPE | ESCAPED_DOLLAR | ESCAPED_ESCAPE | PLACEHOLDER_NAME
   static boolean Text(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Text")) return false;
     boolean r;
@@ -78,6 +78,7 @@ public class MacroTemplateParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, ESCAPE);
     if (!r) r = consumeToken(b, ESCAPED_DOLLAR);
     if (!r) r = consumeToken(b, ESCAPED_ESCAPE);
+    if (!r) r = consumeToken(b, PLACEHOLDER_NAME);
     return r;
   }
 
