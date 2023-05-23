@@ -9,6 +9,7 @@ import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.ui.ListSpeedSearch;
 import com.intellij.ui.components.JBList;
 import ir.mmd.intellijDev.Actionable.text.macro.MacroUtilKt;
+import ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateFileType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -63,7 +64,7 @@ public class UI implements Disposable {
 			} catch (FileAlreadyExistsException ignored) {
 				JOptionPane.showMessageDialog(component, "Macro with the same name already exists", "Error", JOptionPane.ERROR_MESSAGE);
 				
-				if (model.size() == 0) {
+				if (model.isEmpty()) {
 					macroEditorComponent.setVisible(false);
 				}
 			} catch (IOException ex) {
@@ -90,7 +91,7 @@ public class UI implements Disposable {
 	private void createUIComponents() {
 		var factory = EditorFactory.getInstance();
 		var document = factory.createDocument("");
-		macroEditor = factory.createEditor(document);
+		macroEditor = factory.createEditor(document, null, MacroTemplateFileType.INSTANCE, false); // fixme
 		macroEditorComponent = macroEditor.getComponent();
 		
 		document.addDocumentListener(new DocumentListener() {

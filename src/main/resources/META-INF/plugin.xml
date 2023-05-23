@@ -48,6 +48,29 @@
 	<depends optional="true" config-file="plugin-golang.xml">org.jetbrains.plugins.go</depends>
 	
 	<extensions defaultExtensionNs="com.intellij">
+		<fileType
+			name="Actionable Macro Template"
+			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateFileType"
+			fieldName="INSTANCE"
+			language="ActionableMacroTemplate"
+			extensions="mt"/>
+		
+		<lang.parserDefinition
+			language="ActionableMacroTemplate"
+			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateParserDefinition"/>
+		
+		<lang.syntaxHighlighterFactory
+			language="ActionableMacroTemplate"
+			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateSyntaxHighlighterFactory"/>
+		
+		<annotator
+			language="ActionableMacroTemplate"
+			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateAnnotator"/>
+		
+		<completion.contributor
+			language="ActionableMacroTemplate"
+			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplatePlaceholderCompletionContributor"/>
+		
 		<notificationGroup
 			id="Actionable Notifications"
 			displayType="BALLOON"/>

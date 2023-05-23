@@ -1,0 +1,18 @@
+{
+	parserClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateParser"
+	extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+	psiClassPrefix="MacroTemplatePsi"
+	psiImplClassSuffix="Impl"
+	psiPackage="ir.mmd.intellijDev.Actionable.text.macro.lang.psi"
+	psiImplPackage="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.impl"
+	elementTypeHolderClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplateTypes"
+	elementTypeClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplateElementType"
+	tokenTypeClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplateTokenType"
+	psiImplUtilClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.impl.MacroTemplatePsiImplUtil"
+}
+
+MacroTemplateFile ::= (Placeholder | Text)*
+
+Placeholder ::= DOLLAR PLACEHOLDER_NAME DOLLAR {methods=[getPlaceholderName]}
+
+private Text ::= ANY_TEXT | DOLLAR | ESCAPE | ESCAPED_DOLLAR | ESCAPED_ESCAPE

@@ -49,10 +49,10 @@ class MacroAction(name: String, private val macro: String) : MultiCaretAction(na
 	}
 	
 	context (LazyMacroContext)
-	private fun evaluateMacro(): EvaluatedMacro {
+	private fun evaluateMacro(): EvaluatedMacro { // todo
 		var replaceTarget = EvaluatedMacro.ReplaceTarget.None
 		var text = macro.replace("""\$([A-Z_]+)\$""".toRegex()) {
-			when (it.groupValues[1]) {
+			when (it.groupValues[1]) { // todo
 				"SELECTION" -> selection after { replaceTarget = EvaluatedMacro.ReplaceTarget.Selection }
 				"ELEMENT" -> element after { replaceTarget = EvaluatedMacro.ReplaceTarget.Element }
 				"WORD" -> word after { replaceTarget = EvaluatedMacro.ReplaceTarget.Word }
@@ -84,7 +84,7 @@ class MacroAction(name: String, private val macro: String) : MultiCaretAction(na
 		val caretFinalOffset: Int,
 		val replaceTarget: ReplaceTarget
 	) {
-		enum class ReplaceTarget {
+		enum class ReplaceTarget { // todo
 			Selection, Word, Element, None
 		}
 	}
