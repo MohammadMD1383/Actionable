@@ -16,6 +16,7 @@ class MacroTemplatePlaceholderCompletionContributor : CompletionContributor(), D
 	
 	override fun beforeCompletion(context: CompletionInitializationContext) {
 		context.dummyIdentifier = ""
+		context.offsetMap.addOffset(CompletionInitializationContext.IDENTIFIER_END_OFFSET, context.editor.caretModel.currentCaret.offset)
 	}
 	
 	private class MacroTemplatePlaceholderCompletionProvider : CompletionProvider<CompletionParameters>() {
