@@ -12,11 +12,12 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplatePsiPlaceholder
+import ir.mmd.intellijDev.Actionable.text.macro.macroPlaceholderNames
 
 class MacroTemplateAnnotator : Annotator, DumbAware {
 	override fun annotate(element: PsiElement, holder: AnnotationHolder) {
 		if (element is MacroTemplatePsiPlaceholder) {
-			if (element.placeholderName.text !in listOf("SELECTION", "ELEMENT", "WORD")) { // todo
+			if (element.placeholderName.text !in macroPlaceholderNames) {
 				holder.newAnnotation(HighlightSeverity.ERROR, "Unknown placeholder")
 					.range(element)
 					.highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL)

@@ -5,12 +5,11 @@ import com.intellij.openapi.project.DumbAware
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 import ir.mmd.intellijDev.Actionable.util.after
-import ir.mmd.intellijDev.Actionable.util.ext.elementAt
-import ir.mmd.intellijDev.Actionable.util.ext.getWordAtOffset
-import ir.mmd.intellijDev.Actionable.util.ext.getWordBoundaries
-import ir.mmd.intellijDev.Actionable.util.ext.moveTo
+import ir.mmd.intellijDev.Actionable.util.ext.*
 import kotlin.collections.component1
 import kotlin.collections.component2
+
+val macroPlaceholderNames = listOf("SELECTION", "WORD", "ELEMENT", "LINE")
 
 class MacroAction(name: String, private val macro: String) : MultiCaretAction(name), DumbAware {
 	context (LazyEventContext)
@@ -40,6 +39,11 @@ class MacroAction(name: String, private val macro: String) : MultiCaretAction(na
 				replacementStart = it.startOffset
 				replacementEnd = it.endOffset
 			}
+			
+			EvaluatedMacro.ReplaceTarget.Line -> {
+				replacementStart = document.getLineStartOffset(caret.logicalPosition.line)
+				replacementEnd = document.getLineEndOffset(caret.logicalPosition.line)
+			}
 		}
 		
 		runWriteCommandAction {
@@ -49,13 +53,14 @@ class MacroAction(name: String, private val macro: String) : MultiCaretAction(na
 	}
 	
 	context (LazyMacroContext)
-	private fun evaluateMacro(): EvaluatedMacro { // todo
+	private fun evaluateMacro(): EvaluatedMacro {
 		var replaceTarget = EvaluatedMacro.ReplaceTarget.None
 		var text = macro.replace("""\$([A-Z_]+)\$""".toRegex()) {
-			when (it.groupValues[1]) { // todo
+			when (it.groupValues[1]) {
 				"SELECTION" -> selection after { replaceTarget = EvaluatedMacro.ReplaceTarget.Selection }
 				"ELEMENT" -> element after { replaceTarget = EvaluatedMacro.ReplaceTarget.Element }
 				"WORD" -> word after { replaceTarget = EvaluatedMacro.ReplaceTarget.Word }
+				"LINE" -> line after { replaceTarget = EvaluatedMacro.ReplaceTarget.Line }
 				else -> ""
 			}
 		}
@@ -77,6 +82,7 @@ class MacroAction(name: String, private val macro: String) : MultiCaretAction(na
 		val selection: String by lazy { selectionModel.selectedText ?: "" }
 		val element: String by lazy { psiFile.elementAt(caret)?.text ?: "" }
 		val word: String by lazy { document.getWordAtOffset(caret.offset) ?: "" }
+		val line: String by lazy { document.getLineText(caret) }
 	}
 	
 	private data class EvaluatedMacro(
@@ -84,8 +90,8 @@ class MacroAction(name: String, private val macro: String) : MultiCaretAction(na
 		val caretFinalOffset: Int,
 		val replaceTarget: ReplaceTarget
 	) {
-		enum class ReplaceTarget { // todo
-			Selection, Word, Element, None
+		enum class ReplaceTarget {
+			Selection, Word, Element, Line, None
 		}
 	}
 }
