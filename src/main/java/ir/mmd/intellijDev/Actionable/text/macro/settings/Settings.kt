@@ -14,8 +14,12 @@ class Settings : Configurable {
 	override fun getDisplayName() = "Macro"
 	override fun createComponent(): JComponent = ui?.component ?: UI().run { ui = this; component }
 	override fun isModified() = true
-	override fun apply() = reRegisterMacros()
 	override fun reset() = Unit
+	
+	override fun apply() {
+		ui!!.saveChanges()
+		reRegisterMacros()
+	}
 	
 	override fun disposeUIResources() {
 		ui?.let { Disposer.dispose(it) }
