@@ -30,6 +30,30 @@ inline infix fun Caret.moveTo(position: LogicalPosition) = moveToLogicalPosition
 inline infix fun Caret.moveTo(position: VisualPosition) = moveToVisualPosition(position)
 
 /**
+ * Moves the caret forward by [count]
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun Caret.moveForward(count: Int = 1) = moveToOffset(offset + count)
+
+/**
+ * Moves the caret backward by [count]
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun Caret.moveBackward(count: Int = 1) = moveToOffset(offset - count)
+
+/**
+ * Moves the caret [count] lines up
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun Caret.moveUp(count: Int = 1) = moveToLogicalPosition(LogicalPosition(logicalPosition.line - count, logicalPosition.column))
+
+/**
+ * Moves the caret [count] lines down
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun Caret.moveDown(count: Int = 1) = moveToLogicalPosition(LogicalPosition(logicalPosition.line + count, logicalPosition.column))
+
+/**
  * Replaces the text that is selected by the caret with [text]
  */
 context (LazyEventContext)

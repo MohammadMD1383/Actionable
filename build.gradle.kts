@@ -26,7 +26,9 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "4.2.0"
+version = "4.3.0"
+
+sourceSets["main"].java.srcDirs("src/main/gen")
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17
@@ -80,11 +82,7 @@ tasks {
 		untilBuild.set("233.*")
 		changeNotes.set("""
 			<ul>
-				<li><b>New Feature</b>: Offline Docs (right inside your IDE!) - Use <b>Open Offline Help</b> action</li>
-				<li><b>Bug Fix</b>: #74 JITRefactoring bug fixed (Java)</li>
-				<li><b>Bug Fix</b>: #75 Nightly builds were considered as older versions</li>
-				<li><b>Bug Fix</b>: #78 delete file is turned off</li>
-				<li><b>Bug Fix</b>: #81 temporary file dialog won't be cancelled on cancel button press</li>
+				<li><b></b>: </li>
 			</ul>
 			<div>
 				To install nightly builds use <b>Download And Install Nightly Build</b> Action

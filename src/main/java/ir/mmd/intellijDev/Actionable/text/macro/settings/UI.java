@@ -1,15 +1,16 @@
 package ir.mmd.intellijDev.Actionable.text.macro.settings;
 
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditor;
+import com.intellij.openapi.fileEditor.impl.text.PsiAwareTextEditorProvider;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.ui.ListSpeedSearch;
 import com.intellij.ui.components.JBList;
 import ir.mmd.intellijDev.Actionable.text.macro.MacroUtilKt;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -18,23 +19,27 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 public class UI implements Disposable {
 	private final Path macroStorePath = MacroUtilKt.getMacroStorePath();
 	private JScrollPane component;
 	private JLabel pathLabel;
 	private JBList<String> macroList;
-	private Editor macroEditor;
-	private JComponent macroEditorComponent;
 	private JButton createNewMacroButton;
 	private JButton removeSelectedMacroButton;
+	private JSplitPane splitPane;
+	private final Project project;
+	private FileEditor editor;
 	
 	public JScrollPane getComponent() {
 		return component;
 	}
 	
 	public UI() {
+		final var projectManager = ProjectManager.getInstance();
+		final var openProjects = projectManager.getOpenProjects();
+		project = openProjects.length > 0 ? openProjects[0] : projectManager.getDefaultProject();
+		
 		pathLabel.setText("Macro store path: " + macroStorePath);
 		
 		new ListSpeedSearch<>(macroList);
@@ -44,9 +49,7 @@ public class UI implements Disposable {
 		model.addAll(macroNames);
 		macroList.setModel(model);
 		
-		if (macroNames == null || macroNames.isEmpty()) {
-			macroEditorComponent.setVisible(false);
-		} else {
+		if (macroNames != null && !macroNames.isEmpty()) {
 			macroList.setSelectedIndex(0);
 		}
 		
@@ -54,18 +57,11 @@ public class UI implements Disposable {
 			var newMacroName = JOptionPane.showInputDialog(component, "Please enter name for the new macro", "New Macro");
 			
 			try {
-				Files.createFile(Paths.get(macroStorePath.toString(), newMacroName));
-				model.add(0, newMacroName);
-				
-				if (model.size() == 1) {
-					macroEditorComponent.setVisible(true);
-				}
+				Files.createFile(Paths.get(macroStorePath.toString(), newMacroName + ".mt"));
+				model.add(0, newMacroName + ".mt");
+				macroList.setSelectedIndex(0);
 			} catch (FileAlreadyExistsException ignored) {
 				JOptionPane.showMessageDialog(component, "Macro with the same name already exists", "Error", JOptionPane.ERROR_MESSAGE);
-				
-				if (model.size() == 0) {
-					macroEditorComponent.setVisible(false);
-				}
 			} catch (IOException ex) {
 				throw new RuntimeException(ex);
 			}
@@ -79,29 +75,15 @@ public class UI implements Disposable {
 			var macroName = macroList.getSelectedValue();
 			
 			try {
+				closeEditor();
 				Files.delete(Paths.get(macroStorePath.toString(), macroName));
 				model.remove(macroList.getSelectedIndex());
+				
+				if (!model.isEmpty()) {
+					macroList.setSelectedIndex(0);
+				}
 			} catch (IOException ex) {
 				throw new RuntimeException(ex);
-			}
-		});
-	}
-	
-	private void createUIComponents() {
-		var factory = EditorFactory.getInstance();
-		var document = factory.createDocument("");
-		macroEditor = factory.createEditor(document);
-		macroEditorComponent = macroEditor.getComponent();
-		
-		document.addDocumentListener(new DocumentListener() {
-			@Override
-			public void documentChanged(@NotNull DocumentEvent event) {
-				var text = event.getDocument().getText();
-				try {
-					Files.write(Paths.get(macroStorePath.toString(), macroList.getSelectedValue()), text.getBytes());
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
 			}
 		});
 	}
@@ -112,18 +94,38 @@ public class UI implements Disposable {
 		}
 		
 		var selectedMacro = Paths.get(macroStorePath.toString(), macroList.getSelectedValue());
+		openEditor(selectedMacro);
+	}
+	
+	private void openEditor(Path file) {
+		closeEditor();
 		
-		try (var lines = Files.lines(selectedMacro)) {
-			ApplicationManager.getApplication().runWriteAction(
-				() -> macroEditor.getDocument().setText(lines.collect(Collectors.joining("\n")))
-			);
-		} catch (IOException ex) {
-			throw new RuntimeException(ex);
+		//noinspection DataFlowIssue
+		editor = PsiAwareTextEditorProvider.getInstance().createEditor(
+			project, LocalFileSystem.getInstance().findFileByNioFile(file)
+		);
+		
+		splitPane.setRightComponent(editor.getComponent());
+	}
+	
+	private void closeEditor() {
+		if (editor != null) {
+			splitPane.remove(editor.getComponent());
+			Disposer.dispose(editor);
+			editor = null;
 		}
+	}
+	
+	public void saveChanges() {
+		final var documentManager = FileDocumentManager.getInstance();
+		//noinspection DataFlowIssue
+		documentManager.saveDocument(
+			documentManager.getDocument(editor.getFile())
+		);
 	}
 	
 	@Override
 	public void dispose() {
-		EditorFactory.getInstance().releaseEditor(macroEditor);
+		closeEditor();
 	}
 }

@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.util.ext
 
+import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.util.StringCaseManipulator
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
@@ -143,6 +144,12 @@ inline operator fun IntRange.component2() = last
  */
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun IntRange.contains(other: IntRange) = first <= other.first && last >= other.last
+
+/**
+ * Converts this [IntRange] into a [TextRange]
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun IntRange.toTextRange() = TextRange(first, last)
 
 /**
  * Joins two paths.
