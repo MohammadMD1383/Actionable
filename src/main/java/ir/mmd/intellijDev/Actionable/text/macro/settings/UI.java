@@ -117,6 +117,10 @@ public class UI implements Disposable {
 	}
 	
 	public void saveChanges() {
+		if (editor == null) {
+			return;
+		}
+		
 		final var documentManager = FileDocumentManager.getInstance();
 		//noinspection DataFlowIssue
 		documentManager.saveDocument(
