@@ -100,6 +100,7 @@ public class UI implements Disposable {
 	private void openEditor(Path file) {
 		closeEditor();
 		
+		//noinspection DataFlowIssue
 		editor = PsiAwareTextEditorProvider.getInstance().createEditor(
 			project, LocalFileSystem.getInstance().findFileByNioFile(file)
 		);
@@ -117,6 +118,7 @@ public class UI implements Disposable {
 	
 	public void saveChanges() {
 		final var documentManager = FileDocumentManager.getInstance();
+		//noinspection DataFlowIssue
 		documentManager.saveDocument(
 			documentManager.getDocument(editor.getFile())
 		);
