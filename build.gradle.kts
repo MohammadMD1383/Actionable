@@ -82,7 +82,9 @@ tasks {
 		untilBuild.set("233.*")
 		changeNotes.set("""
 			<ul>
-				<li><b></b>: </li>
+				<li>New Feature<b></b>: Syntax highlighting, code completion, and inspection for macro templates!</li>
+				<li>New Feature<b></b>: ${'$'}LINE$ and ${'$'}NUMBER$ placeholders for macro</li>
+				<li>Bug Fix<b></b>: #89 Macro save strategy</li>
 			</ul>
 			<div>
 				To install nightly builds use <b>Download And Install Nightly Build</b> Action
