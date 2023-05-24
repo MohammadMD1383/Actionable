@@ -72,7 +72,10 @@
 			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplatePlaceholderCompletionContributor"/>
 		
 		<typedHandler
-			implementation="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroHandlerDollarTypedHandler"/>
+			implementation="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateDollarTypedHandler"/>
+		
+		<backspaceHandlerDelegate
+			implementation="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateDollarBackspaceHandler"/>
 		
 		<notificationGroup
 			id="Actionable Notifications"

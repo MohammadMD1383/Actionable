@@ -29,8 +29,8 @@ public class MacroTemplatePsiPlaceholderImpl extends ASTWrapperPsiElement implem
 
   @Override
   @NotNull
-  public String getPlaceholderName() {
-    return MacroTemplatePsiImplUtil.getPlaceholderName(this);
+  public PsiElement getPlaceholderName() {
+    return findNotNullChildByType(PLACEHOLDER_NAME);
   }
 
 }

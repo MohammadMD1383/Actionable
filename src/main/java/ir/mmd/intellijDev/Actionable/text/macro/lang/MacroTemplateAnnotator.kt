@@ -16,7 +16,7 @@ import ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplatePsiPlaceho
 class MacroTemplateAnnotator : Annotator, DumbAware {
 	override fun annotate(element: PsiElement, holder: AnnotationHolder) {
 		if (element is MacroTemplatePsiPlaceholder) {
-			if (element.placeholderName !in listOf("SELECTION", "ELEMENT", "WORD")) { // todo
+			if (element.placeholderName.text !in listOf("SELECTION", "ELEMENT", "WORD")) { // todo
 				holder.newAnnotation(HighlightSeverity.ERROR, "Unknown placeholder")
 					.range(element)
 					.highlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL)
@@ -32,9 +32,9 @@ class MacroTemplateAnnotator : Annotator, DumbAware {
 		}
 	}
 	
-	private class RemoveUnknownPlaceholderQuickFix(private val placeholder:MacroTemplatePsiPlaceholder) : BaseIntentionAction() {
+	private class RemoveUnknownPlaceholderQuickFix(private val placeholder: MacroTemplatePsiPlaceholder) : BaseIntentionAction() {
 		override fun getFamilyName() = "Remove unknown placeholder"
-		override fun getText() = "Remove `${placeholder.placeholderName}`"
+		override fun getText() = "Remove `${placeholder.placeholderName.text}`"
 		override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?) = true
 		override fun invoke(project: Project, editor: Editor?, file: PsiFile?) = placeholder.delete()
 	}

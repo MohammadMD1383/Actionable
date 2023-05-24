@@ -28,15 +28,19 @@ ANY_TEXT_AFTER_ESCAPE=[^][^$\\]*
 
 %%
 
-<YYINITIAL>    {DOLLAR}                { yybegin(AFTER_DOLLAR); return MacroTemplateTypes.DOLLAR; }
-<YYINITIAL>    {ESCAPED_ESCAPE}        { yybegin(YYINITIAL); return MacroTemplateTypes.ESCAPED_ESCAPE; }
-<YYINITIAL>    {ESCAPED_DOLLAR}        { yybegin(YYINITIAL); return MacroTemplateTypes.ESCAPED_DOLLAR; }
-<YYINITIAL>    {ESCAPE}                { yybegin(AFTER_ESCAPE); return MacroTemplateTypes.ESCAPE; }
+<YYINITIAL> {
+	{DOLLAR}         { yybegin(AFTER_DOLLAR); return MacroTemplateTypes.DOLLAR; }
+	{ESCAPED_ESCAPE} { yybegin(YYINITIAL); return MacroTemplateTypes.ESCAPED_ESCAPE; }
+	{ESCAPED_DOLLAR} { yybegin(YYINITIAL); return MacroTemplateTypes.ESCAPED_DOLLAR; }
+	{ESCAPE}         { yybegin(AFTER_ESCAPE); return MacroTemplateTypes.ESCAPE; }
+	{ANY_TEXT}       { yybegin(YYINITIAL); return MacroTemplateTypes.ANY_TEXT; }
+}
 
-<AFTER_DOLLAR> {DOLLAR}                { yybegin(AFTER_DOLLAR); return MacroTemplateTypes.DOLLAR; }
-<AFTER_DOLLAR> {PLACEHOLDER_NAME}      { yybegin(YYINITIAL); return MacroTemplateTypes.PLACEHOLDER_NAME; }
-<AFTER_DOLLAR> {ANY_TEXT}              { yybegin(YYINITIAL); return MacroTemplateTypes.ANY_TEXT; }
+<AFTER_DOLLAR> {
+	{DOLLAR}           { yybegin(AFTER_DOLLAR); return MacroTemplateTypes.DOLLAR; }
+	{PLACEHOLDER_NAME} { yybegin(YYINITIAL); return MacroTemplateTypes.PLACEHOLDER_NAME; }
+	{ANY_TEXT}         { yybegin(YYINITIAL); return MacroTemplateTypes.ANY_TEXT; }
+    [^]                { yypushback(1); yybegin(YYINITIAL); }
+}
 
 <AFTER_ESCAPE> {ANY_TEXT_AFTER_ESCAPE} { yybegin(YYINITIAL); return MacroTemplateTypes.ANY_TEXT; }
-
-<YYINITIAL>    {ANY_TEXT}              { yybegin(YYINITIAL); return MacroTemplateTypes.ANY_TEXT; }

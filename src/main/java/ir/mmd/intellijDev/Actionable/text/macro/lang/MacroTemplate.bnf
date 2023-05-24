@@ -9,10 +9,11 @@
 	elementTypeClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplateElementType"
 	tokenTypeClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplateTokenType"
 	psiImplUtilClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.impl.MacroTemplatePsiImplUtil"
+	generateTokenAccessors=true
 }
 
 MacroTemplateFile ::= (Placeholder | Text)*
 
-Placeholder ::= DOLLAR PLACEHOLDER_NAME DOLLAR {methods=[getPlaceholderName]}
+Placeholder ::= DOLLAR PLACEHOLDER_NAME DOLLAR
 
 private Text ::= ANY_TEXT | DOLLAR | ESCAPE | ESCAPED_DOLLAR | ESCAPED_ESCAPE | PLACEHOLDER_NAME

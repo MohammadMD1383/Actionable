@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface MacroTemplatePsiPlaceholder extends PsiElement {
 
   @NotNull
-  String getPlaceholderName();
+  PsiElement getPlaceholderName();
 
 }
