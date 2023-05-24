@@ -126,7 +126,7 @@ class CaretUtil(private val caret: Caret) {
 	 * @return `false` if we reached a [hardStops] otherwise `true`
 	 * @see offset
 	 */
-	private fun moveWhileFacing(chars: String, hardStops: String, step: Int): Boolean {
+	fun moveWhileFacing(chars: String, hardStops: String, step: Int): Boolean {
 		while (true) when (peek(step) ?: return false) {
 			in hardStops -> return false
 			!in chars -> return true

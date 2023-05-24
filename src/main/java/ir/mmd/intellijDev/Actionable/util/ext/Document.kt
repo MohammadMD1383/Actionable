@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState
+import ir.mmd.intellijDev.Actionable.util.CaretUtil
 
 /**
  * Removes a character at [offset] in the [Document]
@@ -132,4 +133,25 @@ fun Document.getWordAtOffsetOrBefore(
 	boundaries: IntArray?
 ): String? {
 	return getWordAtOffset(offset, boundaries) ?: getWordAtOffset(offset - 1, boundaries)
+}
+
+/**
+ * Matches a number literal under caret
+ *
+ * @param boundaries specify to get the boundaries of the number in the [Document]
+ * @return null if not matched
+ */
+fun Document.getNumberAt(caret: Caret, boundaries: IntArray? = null): String? {
+	val cutil = caret.util
+	val numbers = "0123456789"
+	
+	cutil.moveWhileFacing(numbers, "", CaretUtil.BACKWARD)
+	val start = cutil.offset
+	
+	cutil.reset()
+	cutil.moveWhileFacing(numbers, "", CaretUtil.FORWARD)
+	val end = cutil.offset
+	
+	boundaries?.let { it[0] = start; it[1] = end }
+	return if (start == end) null else getText(TextRange(start, end))
 }
