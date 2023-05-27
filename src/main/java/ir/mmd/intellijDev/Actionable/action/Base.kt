@@ -101,50 +101,23 @@ abstract class MultiCaretAction : ActionBase {
 	context (LazyEventContext)
 	abstract fun perform()
 	
-	context(LazyEventContext)
-	override fun performAction() = caretModel.runForEachCaret { perform() }
-}
-
-/**
- * Use this if you want to [initialize] something that should be accessible by all of the [perform] calls
- *
- * Also, there is a [finalize] method to help you do something at the end of all [perform] calls
- *
- * @see MultiCaretAction
- */
-abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction() {
 	/**
-	 * Backing field for [data]
-	 */
-	private var _data: T? = null
-	
-	/**
-	 * Return value of [initialize] will be stored in this field per action execution.
-	 */
-	protected val data: T & Any get() = _data!!
-	
-	/**
-	 * This method will be called once before any [perform] calls
-	 *
-	 * Return value of this method will be stored in [data] field for later use
+	 * This method will be executed once before [perform]
 	 */
 	context (LazyEventContext)
-	abstract fun initialize(): T & Any
+	open fun initialize() = Unit
 	
 	/**
-	 * This method will be executed once after all [perform] calls have finished
-	 *
-	 * This can be used to doing cleanup ...
+	 * This method will be executed once after [perform]
 	 */
 	context (LazyEventContext)
 	open fun finalize() = Unit
 	
-	context (LazyEventContext)
+	context(LazyEventContext)
 	override fun performAction() {
-		_data = initialize()
-		super.performAction()
+		initialize()
+		caretModel.runForEachCaret { perform() }
 		finalize()
-		_data = null
 	}
 }
 
