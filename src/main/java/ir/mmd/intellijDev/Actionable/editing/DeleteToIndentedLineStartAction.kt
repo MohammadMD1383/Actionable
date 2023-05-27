@@ -1,6 +1,5 @@
 package ir.mmd.intellijDev.Actionable.editing
 
-import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
@@ -9,7 +8,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.getLineStartIndentLength
 
 class DeleteToIndentedLineStartAction : MultiCaretAction(), DumbAware {
 	context (LazyEventContext)
-	override fun perform(caret: Caret) {
+	override fun perform() {
 		val lineNumber = document.getLineNumber(caret.offset)
 		val lineStartOffset = document.getLineStartOffset(lineNumber)
 		val lineEndOffset = document.getLineEndOffset(lineNumber)

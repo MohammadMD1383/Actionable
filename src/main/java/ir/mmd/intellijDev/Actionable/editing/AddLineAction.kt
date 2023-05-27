@@ -1,13 +1,12 @@
 package ir.mmd.intellijDev.Actionable.editing
 
-import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.project.DumbAware
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
 
 abstract class AddLineAction(private val above: Boolean) : MultiCaretAction(), DumbAware {
 	context (LazyEventContext)
-	override fun perform(caret: Caret) {
+	override fun perform() {
 		val lineNumber = document.getLineNumber(caret.offset)
 		
 		runWriteCommandAction {

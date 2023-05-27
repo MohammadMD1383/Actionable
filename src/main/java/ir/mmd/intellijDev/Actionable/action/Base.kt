@@ -37,6 +37,7 @@ class LazyEventContext(val event: AnActionEvent) {
 	val scrollingModel: ScrollingModel by lazy { editor.scrollingModel }
 	val allCarets: List<Caret> by lazy { caretModel.allCarets }
 	val primaryCaret: Caret by lazy { caretModel.primaryCaret }
+	val caret: Caret by lazy { caretModel.currentCaret }
 	val caretCount: Int by lazy { caretModel.caretCount }
 	
 	val hasProject get() = _project != null
@@ -98,10 +99,10 @@ abstract class MultiCaretAction : ActionBase {
 	 * This method will be called for each [Caret]
 	 */
 	context (LazyEventContext)
-	abstract fun perform(caret: Caret)
+	abstract fun perform()
 	
 	context(LazyEventContext)
-	override fun performAction() = allCarets.forEach { perform(it) }
+	override fun performAction() = caretModel.runForEachCaret { perform() }
 }
 
 /**
@@ -141,7 +142,7 @@ abstract class MultiCaretActionWithInitialization<T> : MultiCaretAction() {
 	context (LazyEventContext)
 	override fun performAction() {
 		_data = initialize()
-		allCarets.forEach { perform(it) }
+		super.performAction()
 		finalize()
 		_data = null
 	}

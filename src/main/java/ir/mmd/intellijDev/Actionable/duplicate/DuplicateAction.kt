@@ -1,6 +1,5 @@
 package ir.mmd.intellijDev.Actionable.duplicate
 
-import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.LogicalPosition
 import com.intellij.openapi.editor.VisualPosition
 import com.intellij.openapi.project.DumbAware
@@ -112,10 +111,10 @@ abstract class DuplicateAction : MultiCaretAction(), DumbAware {
 
 class DuplicateLinesUp : DuplicateAction() {
 	context(LazyEventContext)
-	override fun perform(caret: Caret) = duplicateUp(caret.selectionStart, caret.selectionEnd)
+	override fun perform() = duplicateUp(caret.selectionStart, caret.selectionEnd)
 }
 
 class DuplicateLinesDown : DuplicateAction() {
 	context(LazyEventContext)
-	override fun perform(caret: Caret) = duplicateDown(caret.selectionStart, caret.selectionEnd)
+	override fun perform() = duplicateDown(caret.selectionStart, caret.selectionEnd)
 }

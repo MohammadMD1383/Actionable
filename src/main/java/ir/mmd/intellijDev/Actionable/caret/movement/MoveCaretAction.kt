@@ -81,7 +81,7 @@ abstract class MoveCaretAction : MultiCaretAction() {
 	}
 	
 	context(LazyEventContext)
-	override fun perform(caret: Caret) = Unit
+	override fun perform() = Unit
 	
 	context (LazyEventContext)
 	override fun isEnabled() = hasEditor
@@ -89,7 +89,7 @@ abstract class MoveCaretAction : MultiCaretAction() {
 
 class MoveCaretToNextWord : MoveCaretAction(), DumbAware {
 	context (LazyEventContext)
-	override fun perform(caret: Caret) {
+	override fun perform() {
 		caret.removeSelection()
 		caret moveTo moveCaretVirtually(caret, true)
 	}
@@ -97,7 +97,7 @@ class MoveCaretToNextWord : MoveCaretAction(), DumbAware {
 
 class MoveCaretToPreviousWord : MoveCaretAction(), DumbAware {
 	context (LazyEventContext)
-	override fun perform(caret: Caret) {
+	override fun perform() {
 		caret.removeSelection()
 		caret moveTo moveCaretVirtually(caret, false)
 	}
@@ -105,7 +105,7 @@ class MoveCaretToPreviousWord : MoveCaretAction(), DumbAware {
 
 class MoveCaretToNextElement : MoveCaretAction() {
 	context (LazyEventContext)
-	override fun perform(caret: Caret) {
+	override fun perform() {
 		caret.removeSelection()
 		caret moveTo moveCaretVirtually(caret, true, psiFile)
 	}
@@ -113,7 +113,7 @@ class MoveCaretToNextElement : MoveCaretAction() {
 
 class MoveCaretToPreviousElement : MoveCaretAction() {
 	context (LazyEventContext)
-	override fun perform(caret: Caret) {
+	override fun perform() {
 		caret.removeSelection()
 		caret moveTo moveCaretVirtually(caret, false, psiFile)
 	}

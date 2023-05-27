@@ -1,6 +1,5 @@
 package ir.mmd.intellijDev.Actionable.caret.movement
 
-import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.editor.ScrollType
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
@@ -10,7 +9,7 @@ import ir.mmd.intellijDev.Actionable.util.ext.parentNoWhitespace
 
 class MoveCaretUpTheTreeAction : MultiCaretAction() {
 	context (LazyEventContext)
-	override fun perform(caret: Caret) {
+	override fun perform() {
 		var element = psiFile.elementAt(caret)?.parentNoWhitespace ?: return
 		if (element.textRange.startOffset == caret.offset) {
 			element = element.parentNoWhitespace ?: return

@@ -1,6 +1,5 @@
 package ir.mmd.intellijDev.Actionable.editing
 
-import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
@@ -12,7 +11,7 @@ open class EmptyLineAction : MultiCaretAction(), DumbAware {
 	open fun getTextRange(lineNumber: Int) = document.run { getLineStartOffset(lineNumber)..getLineEndOffset(lineNumber) }
 	
 	context (LazyEventContext)
-	override fun perform(caret: Caret) {
+	override fun perform() {
 		val lineNumber = document.getLineNumber(caret.offset)
 		val range = getTextRange(lineNumber)
 		

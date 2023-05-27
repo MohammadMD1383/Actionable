@@ -1,6 +1,5 @@
 package ir.mmd.intellijDev.Actionable.caret.editing
 
-import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
@@ -19,7 +18,7 @@ abstract class ExtractLineWithoutExtraWhitespaceAtCaret(private val cut: Boolean
 	}
 	
 	context (LazyEventContext)
-	override fun perform(caret: Caret) {
+	override fun perform() {
 		val lineNumber = document.getLineNumber(caret.offset)
 		val start = document.getLineStartOffset(lineNumber) + document.getLineStartIndentLength(lineNumber)
 		val end = document.getLineEndOffset(lineNumber) - document.getLineTrailingWhitespaceLength(lineNumber)

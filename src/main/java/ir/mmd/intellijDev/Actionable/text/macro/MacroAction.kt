@@ -13,7 +13,7 @@ val macroPlaceholderNames = listOf("SELECTION", "WORD", "ELEMENT", "LINE", "NUMB
 
 class MacroAction(name: String, private val macro: String) : MultiCaretAction(name), DumbAware {
 	context (LazyEventContext)
-	override fun perform(caret: Caret) {
+	override fun perform() {
 		val evaluatedMacro = LazyMacroContext(caret).run { evaluateMacro() }
 		
 		val replacementStart: Int

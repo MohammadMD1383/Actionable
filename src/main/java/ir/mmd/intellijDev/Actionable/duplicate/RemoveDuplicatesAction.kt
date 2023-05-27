@@ -1,7 +1,6 @@
 package ir.mmd.intellijDev.Actionable.duplicate
 
 import com.intellij.openapi.components.service
-import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.project.DumbAware
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretActionWithInitialization
@@ -13,7 +12,7 @@ class RemoveDuplicatesAction : MultiCaretActionWithInitialization<HashSet<String
 	override fun initialize(): HashSet<String> = HashSet()
 	
 	context (LazyEventContext)
-	override fun perform(caret: Caret): Unit = service<SettingsState>().run {
+	override fun perform(): Unit = service<SettingsState>().run {
 		val text = caret.selectedText!!
 		data.find { it.equals(text, ignoreCase = !isCaseSensitive) }?.let {
 			runWriteCommandAction {
