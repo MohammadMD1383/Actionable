@@ -12,6 +12,8 @@ on:
   push:
     tags:
       - 'v*.*.*'
+    branches:
+      - master
 
 permissions: write-all
 
