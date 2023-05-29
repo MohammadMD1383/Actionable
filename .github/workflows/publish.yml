@@ -10,10 +10,10 @@ name: publish
 on:
   workflow_dispatch:
   push:
-    tags:
-      - 'v*.*.*'
     branches:
       - master
+    tags:
+      - 'v*.*.*'
 
 permissions: write-all
 
