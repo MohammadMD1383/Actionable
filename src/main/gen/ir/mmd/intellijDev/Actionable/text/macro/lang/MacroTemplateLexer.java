@@ -66,8 +66,8 @@ class MacroTemplateLexer implements FlexLexer {
   private static final int [] ZZ_CMAP_BLOCKS = zzUnpackcmap_blocks();
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
-    "\44\0\1\1\34\0\32\2\1\0\1\3\2\0\1\2"+
-    "\u01a0\0";
+    "\44\0\1\1\13\0\12\2\7\0\32\3\1\0\1\4"+
+    "\2\0\1\3\u01a0\0";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[512];
@@ -94,10 +94,11 @@ class MacroTemplateLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\3\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7";
+    "\3\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
+    "\1\10";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[10];
+    int [] result = new int[11];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -122,11 +123,11 @@ class MacroTemplateLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\4\0\10\0\14\0\20\0\24\0\30\0\20"+
-    "\0\20\0\20";
+    "\0\0\0\5\0\12\0\17\0\24\0\31\0\36\0\43"+
+    "\0\24\0\24\0\24";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[10];
+    int [] result = new int[11];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -149,12 +150,13 @@ class MacroTemplateLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\4\1\5\1\4\1\6\1\4\1\5\1\7\1\10"+
-    "\5\4\1\0\1\4\6\0\1\11\1\0\1\12\1\4"+
-    "\1\0\1\7\1\0";
+    "\1\4\1\5\2\4\1\6\1\4\1\5\1\7\1\10"+
+    "\1\11\6\4\1\0\2\4\7\0\1\12\2\0\1\13"+
+    "\1\4\1\0\1\7\1\4\1\0\1\4\1\0\1\4"+
+    "\1\10\1\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[28];
+    int [] result = new int[40];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -192,10 +194,10 @@ class MacroTemplateLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\3\0\1\1\1\11\2\1\3\11";
+    "\3\0\1\1\1\11\3\1\3\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[10];
+    int [] result = new int[11];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -520,37 +522,42 @@ class MacroTemplateLexer implements FlexLexer {
             { yybegin(YYINITIAL); return MacroTemplateTypes.ANY_TEXT;
             }
           // fall through
-          case 8: break;
+          case 9: break;
           case 2:
             { yybegin(AFTER_DOLLAR); return MacroTemplateTypes.DOLLAR;
             }
           // fall through
-          case 9: break;
+          case 10: break;
           case 3:
             { yybegin(AFTER_ESCAPE); return MacroTemplateTypes.ESCAPE;
             }
           // fall through
-          case 10: break;
-          case 4:
-            { yybegin(YYINITIAL); return MacroTemplateTypes.PLACEHOLDER_NAME;
-            }
-          // fall through
           case 11: break;
-          case 5:
-            { yypushback(1); yybegin(YYINITIAL);
+          case 4:
+            { yybegin(YYINITIAL); return MacroTemplateTypes.NUMBER;
             }
           // fall through
           case 12: break;
-          case 6:
-            { yybegin(YYINITIAL); return MacroTemplateTypes.ESCAPED_DOLLAR;
+          case 5:
+            { yybegin(YYINITIAL); return MacroTemplateTypes.PLACEHOLDER_NAME;
             }
           // fall through
           case 13: break;
-          case 7:
-            { yybegin(YYINITIAL); return MacroTemplateTypes.ESCAPED_ESCAPE;
+          case 6:
+            { yypushback(1); yybegin(YYINITIAL);
             }
           // fall through
           case 14: break;
+          case 7:
+            { yybegin(YYINITIAL); return MacroTemplateTypes.ESCAPED_DOLLAR;
+            }
+          // fall through
+          case 15: break;
+          case 8:
+            { yybegin(YYINITIAL); return MacroTemplateTypes.ESCAPED_ESCAPE;
+            }
+          // fall through
+          case 16: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

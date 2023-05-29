@@ -1,3 +1,8 @@
 package ir.mmd.intellijDev.Actionable.text.macro.lang.psi.impl
 
-object MacroTemplatePsiImplUtil
+import ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplatePsiCaretIndicator
+
+object MacroTemplatePsiImplUtil {
+	@JvmStatic
+	fun getNumberInt(element: MacroTemplatePsiCaretIndicator) = element.number.text.toInt()
+}

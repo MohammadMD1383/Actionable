@@ -7,6 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public class MacroTemplatePsiVisitor extends PsiElementVisitor {
 
+  public void visitCaretIndicator(@NotNull MacroTemplatePsiCaretIndicator o) {
+    visitPsiElement(o);
+  }
+
   public void visitPlaceholder(@NotNull MacroTemplatePsiPlaceholder o) {
     visitPsiElement(o);
   }

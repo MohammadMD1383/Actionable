@@ -36,7 +36,19 @@ public class MacroTemplateParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (Placeholder | Text)*
+  // DOLLAR NUMBER DOLLAR
+  public static boolean CaretIndicator(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CaretIndicator")) return false;
+    if (!nextTokenIs(b, DOLLAR)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, DOLLAR, NUMBER, DOLLAR);
+    exit_section_(b, m, CARET_INDICATOR, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (Placeholder | CaretIndicator | Text)*
   static boolean MacroTemplateFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroTemplateFile")) return false;
     while (true) {
@@ -47,11 +59,12 @@ public class MacroTemplateParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Placeholder | Text
+  // Placeholder | CaretIndicator | Text
   private static boolean MacroTemplateFile_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MacroTemplateFile_0")) return false;
     boolean r;
     r = Placeholder(b, l + 1);
+    if (!r) r = CaretIndicator(b, l + 1);
     if (!r) r = Text(b, l + 1);
     return r;
   }
@@ -69,7 +82,7 @@ public class MacroTemplateParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ANY_TEXT | DOLLAR | ESCAPE | ESCAPED_DOLLAR | ESCAPED_ESCAPE | PLACEHOLDER_NAME
+  // ANY_TEXT | DOLLAR | ESCAPE | ESCAPED_DOLLAR | ESCAPED_ESCAPE | PLACEHOLDER_NAME | NUMBER
   static boolean Text(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Text")) return false;
     boolean r;
@@ -79,6 +92,7 @@ public class MacroTemplateParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, ESCAPED_DOLLAR);
     if (!r) r = consumeToken(b, ESCAPED_ESCAPE);
     if (!r) r = consumeToken(b, PLACEHOLDER_NAME);
+    if (!r) r = consumeToken(b, NUMBER);
     return r;
   }
 

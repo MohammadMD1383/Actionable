@@ -43,10 +43,13 @@ intellij {
 	version.set("2023.1")
 }
 
+kotlin {
+	jvmToolchain(17)
+}
+
 tasks {
 	compileKotlin {
 		kotlinOptions {
-			jvmTarget = JavaVersion.VERSION_17.toString()
 			freeCompilerArgs += listOf(
 				"-Xjvm-default=all",
 				"-Xcontext-receivers"
@@ -85,6 +88,7 @@ tasks {
 				<li>New Feature<b></b>: Syntax highlighting, code completion, and inspection for macro templates!</li>
 				<li>New Feature<b></b>: ${'$'}LINE$ and ${'$'}NUMBER$ placeholders for macro</li>
 				<li>Bug Fix<b></b>: #89 Macro save strategy</li>
+				<li>Bug Fix<b></b>: #94 escapes not implemented in macro templates</li>
 				<li>Bug Fix<b></b>: a bug while saving macro in settings page</li>
 			</ul>
 			<div>

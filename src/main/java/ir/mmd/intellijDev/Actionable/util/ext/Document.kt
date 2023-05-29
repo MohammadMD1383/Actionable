@@ -28,16 +28,28 @@ inline operator fun Document.get(index: Int) = immutableCharSequence[index]
 /**
  * Returns the text of [line] in [Document]
  *
+ * @param boundaries (optional) in order to receive start and end offset of the line.
  * @see getLineText
  */
-fun Document.getLineText(line: Int) = getText(TextRange(getLineStartOffset(line), getLineEndOffset(line)))
+fun Document.getLineText(line: Int, boundaries: IntArray? = null): String {
+	val lineStartOffset = getLineStartOffset(line)
+	val lineEndOffset = getLineEndOffset(line)
+	
+	boundaries?.let {
+		it[0] = lineStartOffset
+		it[1] = lineEndOffset
+	}
+	
+	return getText(TextRange(lineStartOffset, lineEndOffset))
+}
 
 /**
  * Returns the text of the line which [caret] is at, in the [Document]
  *
+ * @param boundaries (optional) in order to receive the start and end offset of the line.
  * @see getLineText
  */
-fun Document.getLineText(caret: Caret) = getLineText(getLineNumber(caret.offset))
+fun Document.getLineText(caret: Caret, boundaries: IntArray? = null) = getLineText(getLineNumber(caret.offset), boundaries)
 
 /**
  * Returns starting indentation of the [line] in the [Document]
@@ -74,26 +86,30 @@ inline val Document.lastIndex get() = textLength - 1
 fun Document.getWordBoundaries(
 	offset: Int,
 	separators: String
-): IntArray = intArrayOf(0, 0).apply {
-	val chars = separators.toCharArray()
+): IntArray {
+	val boundaries = intArrayOf(offset, offset)
 	
-	if ((charAtOrNull(offset) ?: return@apply) in separators) {
-		return@apply
+	while (true) {
+		val c = charAtOrNull(boundaries[1])
+		
+		if (c == null || c in separators) {
+			break
+		}
+		
+		boundaries[1]++
 	}
 	
-	set(
-		0,
-		immutableCharSequence.lastIndexOfAny(chars, offset - 1).let {
-			if (it == -1) 0 else it + 1
+	while (true) {
+		val c = charAtOrNull(boundaries[0] - 1)
+		
+		if (c == null || c in separators) {
+			break
 		}
-	)
+		
+		boundaries[0]--
+	}
 	
-	set(
-		1,
-		immutableCharSequence.indexOfAny(chars, offset + 1).let {
-			if (it == -1) immutableCharSequence.lastIndex else it
-		}
-	)
+	return boundaries
 }
 
 /**
@@ -114,25 +130,12 @@ fun Document.getWordAtOffset(
 	boundaries: IntArray? = null
 ): String? {
 	val (startOffset, endOffset) = getWordBoundaries(offset)
-	
-	return if (startOffset == endOffset) null else {
-		boundaries?.let {
-			it[0] = startOffset
-			it[1] = endOffset
-		}
-		
-		immutableCharSequence.substring(startOffset, endOffset)
+	boundaries?.let {
+		it[0] = startOffset
+		it[1] = endOffset
 	}
-}
-
-/**
- * Same as [Document.getWordAtOffset] but catches the word backward if none found in front of the [offset].
- */
-fun Document.getWordAtOffsetOrBefore(
-	offset: Int,
-	boundaries: IntArray?
-): String? {
-	return getWordAtOffset(offset, boundaries) ?: getWordAtOffset(offset - 1, boundaries)
+	
+	return if (startOffset == endOffset) null else immutableCharSequence.substring(startOffset, endOffset)
 }
 
 /**

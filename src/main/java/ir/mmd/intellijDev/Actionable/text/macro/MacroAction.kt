@@ -1,105 +1,78 @@
 package ir.mmd.intellijDev.Actionable.text.macro
 
-import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.project.DumbAware
+import com.intellij.refactoring.suggested.endOffset
+import com.intellij.refactoring.suggested.startOffset
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.MultiCaretAction
+import ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplateTranspiler
 import ir.mmd.intellijDev.Actionable.util.after
 import ir.mmd.intellijDev.Actionable.util.ext.*
-import kotlin.collections.component1
-import kotlin.collections.component2
+import kotlin.math.max
+import kotlin.math.min
 
 val macroPlaceholderNames = listOf("SELECTION", "WORD", "ELEMENT", "LINE", "NUMBER")
 
 class MacroAction(name: String, private val macro: String) : MultiCaretAction(name), DumbAware {
 	context (LazyEventContext)
 	override fun perform() {
-		val evaluatedMacro = LazyMacroContext(caret).run { evaluateMacro() }
+		var replacementStart = caret.selectionStart
+		var replacementEnd = caret.selectionEnd
+		val offset: Int
 		
-		val replacementStart: Int
-		val replacementEnd: Int
-		when (evaluatedMacro.replaceTarget) {
-			EvaluatedMacro.ReplaceTarget.None -> caret.offset.let {
-				replacementStart = it
-				replacementEnd = it
+		val text = MacroTemplateTranspiler(project, macro) {
+			when (it) {
+				"SELECTION" -> {
+					replacementStart = min(replacementStart, selectionModel.selectionStart)
+					replacementEnd = max(replacementEnd, selectionModel.selectionEnd)
+					selectionModel.selectedText ?: ""
+				}
+				
+				"ELEMENT" -> {
+					psiFile.elementAtOrBefore(caret)?.also { el ->
+						replacementStart = min(replacementStart, el.startOffset)
+						replacementEnd = max(replacementEnd, el.endOffset)
+					}?.text ?: ""
+				}
+				
+				"WORD" -> {
+					val boundaries = IntArray(2)
+					(document.getWordAtOffset(caret.offset, boundaries) ?: "") after {
+						replacementStart = min(replacementStart, boundaries[0])
+						replacementEnd = max(replacementEnd, boundaries[1])
+					}
+				}
+				
+				"LINE" -> {
+					val boundaries = IntArray(2)
+					document.getLineText(caret, boundaries) after {
+						replacementStart = min(replacementStart, boundaries[0])
+						replacementEnd = max(replacementEnd, boundaries[1])
+					}
+				}
+				
+				"NUMBER" -> {
+					val boundaries = IntArray(2)
+					(document.getNumberAt(caret, boundaries) ?: "") after {
+						replacementStart = min(replacementStart, boundaries[0])
+						replacementEnd = max(replacementEnd, boundaries[1])
+					}
+				}
+				
+				else -> ""
 			}
-			
-			EvaluatedMacro.ReplaceTarget.Selection -> {
-				replacementStart = caret.selectionStart
-				replacementEnd = caret.selectionEnd
-				caret.removeSelection()
-			}
-			
-			EvaluatedMacro.ReplaceTarget.Word -> document.getWordBoundaries(caret.offset).let { (start, end) ->
-				replacementStart = start
-				replacementEnd = end
-			}
-			
-			EvaluatedMacro.ReplaceTarget.Element -> psiFile.elementAt(caret)!!.textRange.let {
-				replacementStart = it.startOffset
-				replacementEnd = it.endOffset
-			}
-			
-			EvaluatedMacro.ReplaceTarget.Line -> {
-				replacementStart = document.getLineStartOffset(caret.logicalPosition.line)
-				replacementEnd = document.getLineEndOffset(caret.logicalPosition.line)
-			}
-			
-			EvaluatedMacro.ReplaceTarget.Number -> IntArray(2).let {
-				document.getNumberAt(caret, it)
-				replacementStart = it[0]
-				replacementEnd = it[1]
-			}
+		}.run {
+			compute()
+			offset = finalCaretOffset
+			getText()
 		}
 		
 		runWriteCommandAction {
-			document.replaceString(replacementStart, replacementEnd, evaluatedMacro.text)
-			caret moveTo replacementStart + evaluatedMacro.caretFinalOffset
+			document.replaceString(replacementStart, replacementEnd, text)
+			caret moveTo replacementStart + offset
 		}
 	}
 	
-	context (LazyMacroContext)
-	private fun evaluateMacro(): EvaluatedMacro {
-		var replaceTarget = EvaluatedMacro.ReplaceTarget.None
-		var text = macro.replace("""\$([A-Z_]+)\$""".toRegex()) {
-			when (it.groupValues[1]) {
-				"SELECTION" -> selection after { replaceTarget = EvaluatedMacro.ReplaceTarget.Selection }
-				"ELEMENT" -> element after { replaceTarget = EvaluatedMacro.ReplaceTarget.Element }
-				"WORD" -> word after { replaceTarget = EvaluatedMacro.ReplaceTarget.Word }
-				"LINE" -> line after { replaceTarget = EvaluatedMacro.ReplaceTarget.Line }
-				"NUMBER" -> number after { replaceTarget = EvaluatedMacro.ReplaceTarget.Number }
-				else -> ""
-			}
-		}
-		
-		var finalOffset = 0
-		text = text.replace("""\$0\$""".toRegex()) {
-			finalOffset = it.range.first
-			""
-		}
-		
-		return EvaluatedMacro(text, finalOffset, replaceTarget)
-	}
-	
-	context (LazyEventContext)
+	context(LazyEventContext)
 	override fun isEnabled() = hasEditor
-	
-	context (LazyEventContext)
-	private class LazyMacroContext(private val caret: Caret) {
-		val selection: String by lazy { selectionModel.selectedText ?: "" }
-		val element: String by lazy { psiFile.elementAt(caret)?.text ?: "" }
-		val word: String by lazy { document.getWordAtOffset(caret.offset) ?: "" }
-		val number: String by lazy { document.getNumberAt(caret) ?: "" }
-		val line: String by lazy { document.getLineText(caret) }
-	}
-	
-	private data class EvaluatedMacro(
-		val text: String,
-		val caretFinalOffset: Int,
-		val replaceTarget: ReplaceTarget
-	) {
-		enum class ReplaceTarget {
-			Selection, Word, Number, Element, Line, None
-		}
-	}
 }

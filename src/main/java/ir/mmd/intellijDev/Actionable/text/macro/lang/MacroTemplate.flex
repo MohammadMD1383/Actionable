@@ -17,6 +17,7 @@ import com.intellij.psi.TokenType;
 
 DOLLAR=\$
 PLACEHOLDER_NAME=[A-Z_]+
+NUMBER=[0-9]+
 ESCAPE=\\
 ESCAPED_ESCAPE=\\\\
 ESCAPED_DOLLAR=\\\$
@@ -39,6 +40,7 @@ ANY_TEXT_AFTER_ESCAPE=[^][^$\\]*
 <AFTER_DOLLAR> {
 	{DOLLAR}           { yybegin(AFTER_DOLLAR); return MacroTemplateTypes.DOLLAR; }
 	{PLACEHOLDER_NAME} { yybegin(YYINITIAL); return MacroTemplateTypes.PLACEHOLDER_NAME; }
+	{NUMBER}           { yybegin(YYINITIAL); return MacroTemplateTypes.NUMBER; }
 	{ANY_TEXT}         { yybegin(YYINITIAL); return MacroTemplateTypes.ANY_TEXT; }
     [^]                { yypushback(1); yybegin(YYINITIAL); }
 }

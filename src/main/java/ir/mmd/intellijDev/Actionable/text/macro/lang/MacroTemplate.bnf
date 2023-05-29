@@ -12,8 +12,10 @@
 	generateTokenAccessors=true
 }
 
-MacroTemplateFile ::= (Placeholder | Text)*
+MacroTemplateFile ::= (Placeholder | CaretIndicator | Text)*
 
 Placeholder ::= DOLLAR PLACEHOLDER_NAME DOLLAR
 
-private Text ::= ANY_TEXT | DOLLAR | ESCAPE | ESCAPED_DOLLAR | ESCAPED_ESCAPE | PLACEHOLDER_NAME
+CaretIndicator ::= DOLLAR NUMBER DOLLAR {methods=[getNumberInt]}
+
+private Text ::= ANY_TEXT | DOLLAR | ESCAPE | ESCAPED_DOLLAR | ESCAPED_ESCAPE | PLACEHOLDER_NAME | NUMBER

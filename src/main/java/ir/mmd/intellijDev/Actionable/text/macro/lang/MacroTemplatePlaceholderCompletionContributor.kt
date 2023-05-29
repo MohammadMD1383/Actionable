@@ -31,7 +31,7 @@ class MacroTemplatePlaceholderCompletionContributor : CompletionContributor(), D
 			private val placeholderInsertHandler = InsertHandler<LookupElement> { context, _ ->
 				context.editor.caretModel.currentCaret.moveForward()
 			}
-		}
+		} // todo: exclude '$' from completion in order to make TypedHandler work correctly
 		
 		override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
 			macroPlaceholderNames.forEach {
@@ -41,6 +41,13 @@ class MacroTemplatePlaceholderCompletionContributor : CompletionContributor(), D
 						.withInsertHandler(placeholderInsertHandler)
 				)
 			}
+			
+			result.addElement(
+				LookupElementBuilder.create("0").bold().withIcon(AllIcons.Nodes.Variable)
+					.withTailText(" final caret pos")
+					.withTypeText("CaretIndicator", true)
+					.withInsertHandler(placeholderInsertHandler)
+			)
 		}
 	}
 }

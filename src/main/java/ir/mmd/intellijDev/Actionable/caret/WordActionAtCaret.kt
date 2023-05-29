@@ -3,7 +3,7 @@ package ir.mmd.intellijDev.Actionable.caret
 import com.intellij.openapi.editor.Caret
 import com.intellij.openapi.project.DumbAware
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
-import ir.mmd.intellijDev.Actionable.util.ext.getWordAtOffsetOrBefore
+import ir.mmd.intellijDev.Actionable.util.ext.getWordAtOffset
 
 abstract class WordActionAtCaret(
 	removeCarets: Boolean = true,
@@ -18,7 +18,7 @@ abstract class WordActionAtCaret(
 	context(LazyEventContext)
 	override fun createModel(caret: Caret): Model? {
 		val boundaries = IntArray(2)
-		val word = document.getWordAtOffsetOrBefore(caret.offset, boundaries) ?: return null
+		val word = document.getWordAtOffset(caret.offset, boundaries) ?: return null
 		return Model(caret, word, boundaries)
 	}
 	

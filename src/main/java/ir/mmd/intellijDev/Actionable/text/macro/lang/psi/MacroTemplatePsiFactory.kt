@@ -27,4 +27,14 @@ object MacroTemplatePsiFactory {
 	fun createPlaceholderNameFromText(project: Project, text: String): PsiElement {
 		return createPlaceholderFromText(project, text).placeholderName
 	}
+	
+	@JvmStatic
+	fun createCaretIndicatorFromInt(project: Project, number: Int): MacroTemplatePsiCaretIndicator {
+		return createFileFromText(project, "\$$number\$").childrenOfType<MacroTemplatePsiCaretIndicator>().single()
+	}
+	
+	@JvmStatic
+	fun createNumberFromInt(project: Project, number: Int): PsiElement {
+		return createCaretIndicatorFromInt(project, number).number
+	}
 }
