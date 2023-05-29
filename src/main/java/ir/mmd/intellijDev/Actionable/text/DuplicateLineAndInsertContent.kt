@@ -22,9 +22,10 @@ import java.awt.datatransfer.DataFlavor
 import javax.swing.JPanel
 
 open class DuplicateLineAndInsertContent : ActionBase(), DumbAware {
-	protected data class ReplacementModel(
+	protected class ReplacementModel(
 		val extraAboveLines: Int,
 		val extraBelowLines: Int,
+		val newLineCount: Int,
 		val isCasePreserving: Boolean,
 		val replacements: MutableList<String>
 	)
@@ -34,6 +35,7 @@ open class DuplicateLineAndInsertContent : ActionBase(), DumbAware {
 		val textArea = JBTextArea(5, 200)
 		val aboveCount = JBIntSpinner(0, 0, 1000)
 		val belowCount = JBIntSpinner(0, 0, 1000)
+		val newLineCount = JBIntSpinner(0, 0, 1000)
 		val casePreservingCheckbox = JBCheckBox("Case-Preserving", service<SettingsState>().preserveCase)
 		val constraints = GridConstraints().apply {
 			vSizePolicy = GridConstraints.SIZEPOLICY_CAN_GROW or GridConstraints.SIZEPOLICY_CAN_SHRINK
@@ -43,13 +45,15 @@ open class DuplicateLineAndInsertContent : ActionBase(), DumbAware {
 		}
 		
 		val result = showCustomDialog(project, "Duplicate Line And Insert Content") {
-			JPanel(GridLayoutManager(4, 2)).apply {
+			JPanel(GridLayoutManager(6, 2)).apply {
 				add(textArea, constraints.apply { row = 0; column = 0; colSpan = 2 })
 				add(casePreservingCheckbox, constraints.apply { row = 1; column = 0; colSpan = 2 })
 				add(aboveCount, constraints.apply { row = 2; column = 0; colSpan = 1 })
 				add(belowCount, constraints.apply { row = 2; column = 1; colSpan = 1 })
 				add(JBLabel("Extra above lines"), constraints.apply { row = 3; column = 0; colSpan = 1 })
 				add(JBLabel("Extra below lines"), constraints.apply { row = 3; column = 1; colSpan = 1 })
+				add(newLineCount, constraints.apply { row = 4; column = 0; colSpan = 2 })
+				add(JBLabel("New line count between duplicates"), constraints.apply { row = 5; column = 0; colSpan = 2 })
 			}
 		}
 		
@@ -57,6 +61,7 @@ open class DuplicateLineAndInsertContent : ActionBase(), DumbAware {
 			ReplacementModel(
 				aboveCount.number,
 				belowCount.number,
+				newLineCount.number,
 				casePreservingCheckbox.isSelected,
 				textArea.text.split('\n').toMutableList()
 			)
@@ -94,7 +99,8 @@ open class DuplicateLineAndInsertContent : ActionBase(), DumbAware {
 			replacementModel.replacements.forEach {
 				val (newLine, ranges) = rawLine.replaceRanges(replacementRanges, it, preserveCase)
 				
-				document.insertString(lineStartOffset++, "\n$newLine")
+				document.insertString(lineStartOffset, "\n".repeat(replacementModel.newLineCount + 1) + newLine)
+				lineStartOffset += replacementModel.newLineCount + 1
 				
 				ranges.forEach { range ->
 					caretModel.addCaret(lineStartOffset + range.last)
@@ -116,6 +122,6 @@ class DuplicateLineAndPasteClipboardContentAction : DuplicateLineAndInsertConten
 		val contents = (Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor) as String)
 			.split("\n").toMutableList()
 		
-		return if (contents.isNotEmpty()) ReplacementModel(0, 0, service<SettingsState>().preserveCase, contents) else null
+		return if (contents.isNotEmpty()) ReplacementModel(0, 0, 0, service<SettingsState>().preserveCase, contents) else null
 	}
 }

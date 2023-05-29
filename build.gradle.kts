@@ -26,7 +26,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "4.3.0"
+version = "4.4.0"
 
 sourceSets["main"].java.srcDirs("src/main/gen")
 
@@ -85,11 +85,7 @@ tasks {
 		untilBuild.set("233.*")
 		changeNotes.set("""
 			<ul>
-				<li>New Feature<b></b>: Syntax highlighting, code completion, and inspection for macro templates!</li>
-				<li>New Feature<b></b>: ${'$'}LINE$ and ${'$'}NUMBER$ placeholders for macro</li>
-				<li>Bug Fix<b></b>: #89 Macro save strategy</li>
-				<li>Bug Fix<b></b>: #94 escapes not implemented in macro templates</li>
-				<li>Bug Fix<b></b>: a bug while saving macro in settings page</li>
+				<li>New Feature<b></b>: #73 add option to specify \n count between duplications</li>
 			</ul>
 			<div>
 				To install nightly builds use <b>Download And Install Nightly Build</b> Action
