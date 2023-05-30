@@ -48,6 +48,7 @@
 	<depends optional="true" config-file="plugin-golang.xml">org.jetbrains.plugins.go</depends>
 	
 	<extensions defaultExtensionNs="com.intellij">
+		<!--region Macro Template Language-->
 		<fileType
 			name="Actionable Macro Template"
 			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateFileType"
@@ -76,6 +77,20 @@
 		
 		<backspaceHandlerDelegate
 			implementation="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateDollarBackspaceHandler"/>
+		<!--endregion-->
+		
+		<!--region Advanced Search Language-->
+		<fileType
+			name="Advanced Search"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFileType"
+			fieldName="INSTANCE"
+			language="AdvancedSearch"
+			extensions="aas"/>
+		
+		<lang.parserDefinition
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchParserDefinition"/>
+		<!--endregion-->
 		
 		<notificationGroup
 			id="Actionable Notifications"

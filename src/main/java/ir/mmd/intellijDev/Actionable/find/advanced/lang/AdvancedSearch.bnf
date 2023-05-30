@@ -1,0 +1,47 @@
+{
+	parserClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchParser"
+	extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+	psiClassPrefix="AdvancedSearchPsi"
+	psiImplClassSuffix="Impl"
+	psiPackage="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi"
+	psiImplPackage="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl"
+	elementTypeHolderClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes"
+	elementTypeClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchElementType"
+	tokenTypeClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTokenType"
+	psiImplUtilClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl.MacroTemplatePsiImplUtil"
+    generateTokenAccessors=true
+}
+
+AdvancedSearchFile ::= TopLevelProperties? Statements?
+
+// property1: value1
+// property2: value2
+TopLevelProperties ::= (TopLevelProperty semi)+
+
+// property: value
+TopLevelProperty ::= IDENTIFIER COLON VALUE {pin=1 recoverWhile=TopLevelPropertyRecover}
+private TopLevelPropertyRecover ::= !semi
+
+/* --------------------------------------- */
+
+// $class extends java.lang.String
+// $class has-method toString
+Statements ::= (Statement semi)+
+
+// $class implements com.package.Interface
+Statement ::= VARIABLE IDENTIFIER Parameters StatementBody? {pin=1 recoverWhile=StatementRecover}
+private StatementRecover ::= !semi
+
+// com.package1.Interface, com.package2.Interface
+Parameters ::= VALUE (COMMA VALUE)*
+
+// {
+//     $method has-parameters java.lang.String s, java.util.Date d
+// }
+StatementBody ::= LBRACE Statements? RBRACE {pin=1 recoverWhile=StatementBodyRecover}
+private StatementBodyRecover ::= !(RBRACE | semi)
+
+/* -------------------- Helper -------------------- */
+
+// ; | \n | eof
+private semi ::= SEMICOLON | CRLF | <<eof>>
