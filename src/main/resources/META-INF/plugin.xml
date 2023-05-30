@@ -94,6 +94,10 @@
 		<lang.syntaxHighlighterFactory
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchSyntaxHighlighterFactory"/>
+		
+		<lang.foldingBuilder
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFoldingBuilder"/>
 		<!--endregion-->
 		
 		<notificationGroup
