@@ -248,13 +248,12 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SEMICOLON | CRLF | <<eof>>
+  // CRLF | <<eof>>
   static boolean semi(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "semi")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, SEMICOLON);
-    if (!r) r = consumeToken(b, CRLF);
+    r = consumeToken(b, CRLF);
     if (!r) r = eof(b, l + 1);
     exit_section_(b, m, null, r);
     return r;

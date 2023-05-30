@@ -21,7 +21,6 @@ public interface AdvancedSearchTypes {
   IElementType IDENTIFIER = new AdvancedSearchTokenType("IDENTIFIER");
   IElementType LBRACE = new AdvancedSearchTokenType("LBRACE");
   IElementType RBRACE = new AdvancedSearchTokenType("RBRACE");
-  IElementType SEMICOLON = new AdvancedSearchTokenType("SEMICOLON");
   IElementType VALUE = new AdvancedSearchTokenType("VALUE");
   IElementType VARIABLE = new AdvancedSearchTokenType("VARIABLE");
 

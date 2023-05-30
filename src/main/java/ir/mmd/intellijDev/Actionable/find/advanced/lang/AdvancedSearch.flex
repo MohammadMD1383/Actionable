@@ -39,7 +39,6 @@ IDENTIFIER=[a-z]([a-z\-]*[a-z])?
 VARIABLE=\${IDENTIFIER}
 VALUE=[a-zA-Z0-9_\-.$ ]+
 COLON=:
-SEMICOLON=;
 COMMA=,
 LBRACE=\{
 RBRACE=\}
@@ -60,7 +59,6 @@ WHITESPACE=\s+
 	{IDENTIFIER}          { return AdvancedSearchTypes.IDENTIFIER; }
     {VALUE}               { return AdvancedSearchTypes.VALUE; }
     {COLON}               { return AdvancedSearchTypes.COLON; }
-    {SEMICOLON}           { return AdvancedSearchTypes.SEMICOLON; }
     {DOUBLE_CRLF_OR_MORE} { ignorewhitespace(VARIABLE); yypushback(yytext().length() - 1); return AdvancedSearchTypes.CRLF; }
     {CRLF}                { return AdvancedSearchTypes.CRLF; }
 }
@@ -82,7 +80,6 @@ WHITESPACE=\s+
 <STATEMENT> {
     {VALUE}       { return AdvancedSearchTypes.VALUE; }
     {COMMA}       { ignorewhitespace(); return AdvancedSearchTypes.COMMA; }
-    {SEMICOLON}   { ignorewhitespace(); return AdvancedSearchTypes.SEMICOLON; }
     {LBRACE}      { ignorewhitespace(VARIABLE); return AdvancedSearchTypes.LBRACE; }
     {RBRACE}      { yybegin(AFTER_RBRACE); return AdvancedSearchTypes.RBRACE; }
     {CRLF}        { ignorewhitespace(VARIABLE); return AdvancedSearchTypes.CRLF; }

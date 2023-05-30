@@ -72,10 +72,10 @@ class AdvancedSearchLexer implements FlexLexer {
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
     "\11\0\1\1\1\2\1\3\1\4\1\5\22\0\1\6"+
     "\3\0\1\7\7\0\1\10\1\11\1\12\1\0\12\12"+
-    "\1\13\1\14\5\0\32\12\4\0\1\12\1\0\32\15"+
-    "\1\16\1\0\1\17\7\0\1\3\32\0\1\20\u01df\0"+
-    "\1\20\177\0\13\20\35\0\2\3\5\0\1\20\57\0"+
-    "\1\20\240\0\1\20\377\0";
+    "\1\13\6\0\32\12\4\0\1\12\1\0\32\14\1\15"+
+    "\1\0\1\16\7\0\1\3\32\0\1\17\u01df\0\1\17"+
+    "\177\0\13\17\35\0\2\3\5\0\1\17\57\0\1\17"+
+    "\240\0\1\17\377\0";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[1280];
@@ -102,12 +102,12 @@ class AdvancedSearchLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\7\0\1\1\1\2\1\3\1\4\1\5\1\6\2\7"+
-    "\1\10\1\11\1\12\1\13\1\14\1\15\1\1\1\16"+
-    "\1\17\1\20\1\7\1\21\1\3\1\22\2\0";
+    "\7\0\1\1\1\2\1\3\1\4\1\5\2\6\1\7"+
+    "\1\10\1\11\1\12\1\13\1\1\1\14\1\15\1\16"+
+    "\1\6\1\17\1\3\1\20\2\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[31];
+    int [] result = new int[29];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -132,13 +132,13 @@ class AdvancedSearchLexer implements FlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\21\0\42\0\63\0\104\0\125\0\146\0\167"+
-    "\0\210\0\231\0\167\0\167\0\252\0\167\0\273\0\167"+
-    "\0\167\0\167\0\167\0\167\0\314\0\335\0\356\0\167"+
-    "\0\377\0\377\0\210\0\252\0\u0110\0\356\0\u0110";
+    "\0\0\0\20\0\40\0\60\0\100\0\120\0\140\0\160"+
+    "\0\200\0\220\0\160\0\240\0\160\0\260\0\160\0\160"+
+    "\0\160\0\160\0\300\0\320\0\340\0\160\0\360\0\360"+
+    "\0\200\0\240\0\u0100\0\340\0\u0100";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[31];
+    int [] result = new int[29];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -161,19 +161,19 @@ class AdvancedSearchLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\2\10\4\11\2\12\1\10\2\12\1\13\1\14\1\15"+
-    "\5\10\3\16\1\17\2\12\1\20\2\12\1\10\1\21"+
-    "\1\12\1\22\1\23\1\10\1\24\6\25\11\24\1\25"+
-    "\7\10\1\26\7\10\1\23\16\10\1\27\24\10\1\30"+
-    "\1\31\2\16\1\32\1\17\1\31\12\30\23\0\4\33"+
-    "\21\0\2\12\1\0\2\12\2\0\1\12\11\0\2\12"+
-    "\1\0\1\34\1\12\2\0\1\15\5\0\1\16\17\0"+
-    "\6\25\11\0\1\25\15\0\1\35\14\0\1\36\3\0"+
-    "\1\27\4\0\1\31\2\0\1\31\1\0\1\31\23\0"+
-    "\1\37\3\0\1\35\3\0";
+    "\2\10\4\11\2\12\1\10\2\12\1\13\1\14\5\10"+
+    "\3\15\1\16\2\12\1\17\2\12\1\10\1\12\1\20"+
+    "\1\21\1\10\1\22\6\23\10\22\1\23\7\10\1\24"+
+    "\6\10\1\21\15\10\1\25\23\10\1\26\1\27\2\15"+
+    "\1\30\1\16\1\27\11\26\22\0\4\31\20\0\2\12"+
+    "\1\0\2\12\1\0\1\12\11\0\2\12\1\0\1\32"+
+    "\1\12\1\0\1\14\5\0\1\15\16\0\6\23\10\0"+
+    "\1\23\14\0\1\33\14\0\1\34\2\0\1\25\4\0"+
+    "\1\27\2\0\1\27\1\0\1\27\22\0\1\35\2\0"+
+    "\1\33\3\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[289];
+    int [] result = new int[272];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -211,11 +211,11 @@ class AdvancedSearchLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\7\0\1\11\2\1\2\11\1\1\1\11\1\1\5\11"+
+    "\7\0\1\11\2\1\1\11\1\1\1\11\1\1\4\11"+
     "\3\1\1\11\5\1\2\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[31];
+    int [] result = new int[29];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -561,92 +561,82 @@ class AdvancedSearchLexer implements FlexLexer {
 	return TokenType.BAD_CHARACTER;
             }
           // fall through
-          case 19: break;
+          case 17: break;
           case 2:
             { return AdvancedSearchTypes.CRLF;
             }
           // fall through
-          case 20: break;
+          case 18: break;
           case 3:
             { return AdvancedSearchTypes.VALUE;
             }
           // fall through
-          case 21: break;
+          case 19: break;
           case 4:
             { return AdvancedSearchTypes.COLON;
             }
           // fall through
-          case 22: break;
+          case 20: break;
           case 5:
-            { return AdvancedSearchTypes.SEMICOLON;
-            }
-          // fall through
-          case 23: break;
-          case 6:
             { return AdvancedSearchTypes.IDENTIFIER;
             }
           // fall through
-          case 24: break;
-          case 7:
+          case 21: break;
+          case 6:
             { ignorewhitespace(VARIABLE); return AdvancedSearchTypes.CRLF;
             }
           // fall through
-          case 25: break;
-          case 8:
+          case 22: break;
+          case 7:
             { ignorewhitespace(); return AdvancedSearchTypes.COMMA;
             }
           // fall through
-          case 26: break;
-          case 9:
-            { ignorewhitespace(); return AdvancedSearchTypes.SEMICOLON;
-            }
-          // fall through
-          case 27: break;
-          case 10:
+          case 23: break;
+          case 8:
             { ignorewhitespace(VARIABLE); return AdvancedSearchTypes.LBRACE;
             }
           // fall through
-          case 28: break;
-          case 11:
+          case 24: break;
+          case 9:
             { yybegin(AFTER_RBRACE); return AdvancedSearchTypes.RBRACE;
             }
           // fall through
-          case 29: break;
-          case 12:
+          case 25: break;
+          case 10:
             { yybegin(consumenextstate()); yypushback(1);
             }
           // fall through
-          case 30: break;
-          case 13:
+          case 26: break;
+          case 11:
             { yybegin(consumenextstate()); return TokenType.WHITE_SPACE;
             }
           // fall through
-          case 31: break;
-          case 14:
+          case 27: break;
+          case 12:
             { ignorewhitespace(STATEMENT); return AdvancedSearchTypes.IDENTIFIER;
             }
           // fall through
-          case 32: break;
-          case 15:
+          case 28: break;
+          case 13:
             { yybegin(VARIABLE); yypushback(1);
             }
           // fall through
-          case 33: break;
-          case 16:
+          case 29: break;
+          case 14:
             { return TokenType.WHITE_SPACE;
             }
           // fall through
-          case 34: break;
-          case 17:
+          case 30: break;
+          case 15:
             { ignorewhitespace(VARIABLE); yypushback(yytext().length() - 1); return AdvancedSearchTypes.CRLF;
             }
           // fall through
-          case 35: break;
-          case 18:
+          case 31: break;
+          case 16:
             { ignorewhitespace(IDENTIFIER); return AdvancedSearchTypes.VARIABLE;
             }
           // fall through
-          case 36: break;
+          case 32: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

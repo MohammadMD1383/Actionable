@@ -43,5 +43,5 @@ private StatementBodyRecover ::= !(RBRACE | semi)
 
 /* -------------------- Helper -------------------- */
 
-// ; | \n | eof
-private semi ::= SEMICOLON | CRLF | <<eof>>
+// \n | eof
+private semi ::= CRLF | <<eof>>
