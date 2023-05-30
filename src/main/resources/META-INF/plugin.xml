@@ -90,6 +90,10 @@
 		<lang.parserDefinition
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchParserDefinition"/>
+		
+		<lang.syntaxHighlighterFactory
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchSyntaxHighlighterFactory"/>
 		<!--endregion-->
 		
 		<notificationGroup
