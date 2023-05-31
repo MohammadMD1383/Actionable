@@ -98,6 +98,10 @@
 		<lang.foldingBuilder
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFoldingBuilder"/>
+		
+		<completion.contributor
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchCompletionContributor"/>
 		<!--endregion-->
 		
 		<notificationGroup

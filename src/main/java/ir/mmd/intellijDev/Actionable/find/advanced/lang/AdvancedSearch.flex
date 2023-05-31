@@ -51,16 +51,21 @@ WHITESPACE=\s+
 %state VARIABLE
 %state IDENTIFIER
 %state AFTER_COMMA
+%state AFTER_COLON
 %state AFTER_RBRACE
 
 %%
 
 <YYINITIAL> {
 	{IDENTIFIER}          { return AdvancedSearchTypes.IDENTIFIER; }
-    {VALUE}               { return AdvancedSearchTypes.VALUE; }
-    {COLON}               { return AdvancedSearchTypes.COLON; }
+    {COLON}               { yybegin(AFTER_COLON); return AdvancedSearchTypes.COLON; }
     {DOUBLE_CRLF_OR_MORE} { ignorewhitespace(VARIABLE); yypushback(yytext().length() - 1); return AdvancedSearchTypes.CRLF; }
     {CRLF}                { return AdvancedSearchTypes.CRLF; }
+}
+
+<AFTER_COLON> {
+    {VALUE} { yybegin(YYINITIAL); return AdvancedSearchTypes.VALUE; }
+    [^]     { yybegin(YYINITIAL); yypushback(1); }
 }
 
 <WHITESPACE> {
