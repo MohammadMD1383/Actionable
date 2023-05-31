@@ -70,7 +70,7 @@
 		
 		<completion.contributor
 			language="ActionableMacroTemplate"
-			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplatePlaceholderCompletionContributor"/>
+			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateCompletionContributor"/>
 		
 		<typedHandler
 			implementation="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateDollarTypedHandler"/>

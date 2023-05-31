@@ -12,12 +12,12 @@ import ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplateTypes
 import ir.mmd.intellijDev.Actionable.text.macro.macroPlaceholderNames
 import ir.mmd.intellijDev.Actionable.util.ext.moveForward
 
-class MacroTemplatePlaceholderCompletionContributor : CompletionContributor(), DumbAware {
+class MacroTemplateCompletionContributor : CompletionContributor(), DumbAware {
 	init {
 		extend(
 			CompletionType.BASIC,
 			psiElement(MacroTemplateTypes.PLACEHOLDER_NAME).inside(MacroTemplatePsiPlaceholder::class.java),
-			MacroTemplatePlaceholderCompletionProvider()
+			MacroTemplateCompletionProvider()
 		)
 	}
 	
@@ -26,7 +26,7 @@ class MacroTemplatePlaceholderCompletionContributor : CompletionContributor(), D
 		context.offsetMap.addOffset(CompletionInitializationContext.IDENTIFIER_END_OFFSET, context.identifierEndOffset - 1)
 	}
 	
-	private class MacroTemplatePlaceholderCompletionProvider : CompletionProvider<CompletionParameters>() {
+	private class MacroTemplateCompletionProvider : CompletionProvider<CompletionParameters>() {
 		companion object {
 			private val placeholderInsertHandler = InsertHandler<LookupElement> { context, _ ->
 				context.editor.caretModel.currentCaret.moveForward()
