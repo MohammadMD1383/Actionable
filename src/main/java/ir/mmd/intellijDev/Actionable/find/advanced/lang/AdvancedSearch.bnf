@@ -33,7 +33,8 @@ Statement ::= VARIABLE IDENTIFIER Parameters StatementBody? {pin=1 recoverWhile=
 private StatementRecover ::= !semi
 
 // com.package1.Interface, com.package2.Interface
-Parameters ::= VALUE (COMMA VALUE)*
+Parameters ::= Parameter (COMMA Parameter)*
+Parameter ::= VALUE
 
 // {
 //     $method has-parameters java.lang.String s, java.util.Date d

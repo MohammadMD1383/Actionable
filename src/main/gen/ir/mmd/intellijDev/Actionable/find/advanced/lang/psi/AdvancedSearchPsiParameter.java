@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface AdvancedSearchPsiParameters extends PsiElement {
+public interface AdvancedSearchPsiParameter extends PsiElement {
 
   @NotNull
-  List<AdvancedSearchPsiParameter> getParameterList();
+  PsiElement getValue();
 
 }

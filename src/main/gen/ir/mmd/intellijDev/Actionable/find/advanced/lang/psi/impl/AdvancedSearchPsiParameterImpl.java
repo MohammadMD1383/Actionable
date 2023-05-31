@@ -11,14 +11,14 @@ import static ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearc
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*;
 
-public class AdvancedSearchPsiParametersImpl extends ASTWrapperPsiElement implements AdvancedSearchPsiParameters {
+public class AdvancedSearchPsiParameterImpl extends ASTWrapperPsiElement implements AdvancedSearchPsiParameter {
 
-  public AdvancedSearchPsiParametersImpl(@NotNull ASTNode node) {
+  public AdvancedSearchPsiParameterImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull AdvancedSearchPsiVisitor visitor) {
-    visitor.visitParameters(this);
+    visitor.visitParameter(this);
   }
 
   @Override
@@ -29,8 +29,8 @@ public class AdvancedSearchPsiParametersImpl extends ASTWrapperPsiElement implem
 
   @Override
   @NotNull
-  public List<AdvancedSearchPsiParameter> getParameterList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, AdvancedSearchPsiParameter.class);
+  public PsiElement getValue() {
+    return findNotNullChildByType(VALUE);
   }
 
 }

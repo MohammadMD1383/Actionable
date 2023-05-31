@@ -8,6 +8,7 @@ import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl.*;
 
 public interface AdvancedSearchTypes {
 
+  IElementType PARAMETER = new AdvancedSearchElementType("PARAMETER");
   IElementType PARAMETERS = new AdvancedSearchElementType("PARAMETERS");
   IElementType STATEMENT = new AdvancedSearchElementType("STATEMENT");
   IElementType STATEMENTS = new AdvancedSearchElementType("STATEMENTS");
@@ -27,7 +28,10 @@ public interface AdvancedSearchTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == PARAMETERS) {
+      if (type == PARAMETER) {
+        return new AdvancedSearchPsiParameterImpl(node);
+      }
+      else if (type == PARAMETERS) {
         return new AdvancedSearchPsiParametersImpl(node);
       }
       else if (type == STATEMENT) {

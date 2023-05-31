@@ -7,6 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public class AdvancedSearchPsiVisitor extends PsiElementVisitor {
 
+  public void visitParameter(@NotNull AdvancedSearchPsiParameter o) {
+    visitPsiElement(o);
+  }
+
   public void visitParameters(@NotNull AdvancedSearchPsiParameters o) {
     visitPsiElement(o);
   }

@@ -62,19 +62,31 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VALUE (COMMA VALUE)*
+  // VALUE
+  public static boolean Parameter(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Parameter")) return false;
+    if (!nextTokenIs(b, VALUE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, VALUE);
+    exit_section_(b, m, PARAMETER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Parameter (COMMA Parameter)*
   public static boolean Parameters(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Parameters")) return false;
     if (!nextTokenIs(b, VALUE)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, VALUE);
+    r = Parameter(b, l + 1);
     r = r && Parameters_1(b, l + 1);
     exit_section_(b, m, PARAMETERS, r);
     return r;
   }
 
-  // (COMMA VALUE)*
+  // (COMMA Parameter)*
   private static boolean Parameters_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Parameters_1")) return false;
     while (true) {
@@ -85,12 +97,13 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // COMMA VALUE
+  // COMMA Parameter
   private static boolean Parameters_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Parameters_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, COMMA, VALUE);
+    r = consumeToken(b, COMMA);
+    r = r && Parameter(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
