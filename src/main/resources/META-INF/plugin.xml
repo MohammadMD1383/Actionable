@@ -102,6 +102,9 @@
 		<completion.contributor
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchCompletionContributor"/>
+		
+		<multiHostInjector
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchMultiHostInjector"/>
 		<!--endregion-->
 		
 		<notificationGroup

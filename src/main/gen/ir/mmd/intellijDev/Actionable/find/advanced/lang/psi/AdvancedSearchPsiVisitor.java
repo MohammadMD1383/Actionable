@@ -4,11 +4,12 @@ package ir.mmd.intellijDev.Actionable.find.advanced.lang.psi;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLanguageInjectionHost;
 
 public class AdvancedSearchPsiVisitor extends PsiElementVisitor {
 
   public void visitParameter(@NotNull AdvancedSearchPsiParameter o) {
-    visitPsiElement(o);
+    visitPsiLanguageInjectionHost(o);
   }
 
   public void visitParameters(@NotNull AdvancedSearchPsiParameters o) {
@@ -33,6 +34,10 @@ public class AdvancedSearchPsiVisitor extends PsiElementVisitor {
 
   public void visitTopLevelProperty(@NotNull AdvancedSearchPsiTopLevelProperty o) {
     visitPsiElement(o);
+  }
+
+  public void visitPsiLanguageInjectionHost(@NotNull PsiLanguageInjectionHost o) {
+    visitElement(o);
   }
 
   public void visitPsiElement(@NotNull PsiElement o) {

@@ -8,7 +8,7 @@
 	elementTypeHolderClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes"
 	elementTypeClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchElementType"
 	tokenTypeClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTokenType"
-	psiImplUtilClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl.MacroTemplatePsiImplUtil"
+	psiImplUtilClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl.AdvancedSearchPsiImplUtil"
     generateTokenAccessors=true
 }
 
@@ -34,7 +34,7 @@ private StatementRecover ::= !semi
 
 // com.package1.Interface, com.package2.Interface
 Parameters ::= Parameter (COMMA Parameter)*
-Parameter ::= VALUE
+Parameter ::= VALUE {implements="com.intellij.psi.PsiLanguageInjectionHost" methods=[isValidHost updateText createLiteralTextEscaper]}
 
 // {
 //     $method has-parameters java.lang.String s, java.util.Date d

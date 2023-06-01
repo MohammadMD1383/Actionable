@@ -10,6 +10,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*;
+import com.intellij.psi.LiteralTextEscaper;
+import com.intellij.psi.PsiLanguageInjectionHost;
 
 public class AdvancedSearchPsiParameterImpl extends ASTWrapperPsiElement implements AdvancedSearchPsiParameter {
 
@@ -31,6 +33,23 @@ public class AdvancedSearchPsiParameterImpl extends ASTWrapperPsiElement impleme
   @NotNull
   public PsiElement getValue() {
     return findNotNullChildByType(VALUE);
+  }
+
+  @Override
+  public boolean isValidHost() {
+    return AdvancedSearchPsiImplUtil.isValidHost(this);
+  }
+
+  @Override
+  @NotNull
+  public PsiLanguageInjectionHost updateText(@NotNull String text) {
+    return AdvancedSearchPsiImplUtil.updateText(this, text);
+  }
+
+  @Override
+  @NotNull
+  public LiteralTextEscaper<? extends PsiLanguageInjectionHost> createLiteralTextEscaper() {
+    return AdvancedSearchPsiImplUtil.createLiteralTextEscaper(this);
   }
 
 }
