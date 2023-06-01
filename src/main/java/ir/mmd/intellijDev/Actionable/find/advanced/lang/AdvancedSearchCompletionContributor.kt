@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.find.advanced.lang
 
+import com.intellij.codeInsight.AutoPopupController
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
@@ -45,9 +46,11 @@ class AdvancedSearchCompletionContributor : CompletionContributor() {
 	private class AdvancedSearchVariableCompletionProvider : CompletionProvider<CompletionParameters>() {
 		private companion object {
 			private val insertHandler = InsertHandler<LookupElement> { context, _ ->
-				val caret = context.editor.caretModel.currentCaret
+				val editor = context.editor
+				val caret = editor.caretModel.currentCaret
 				context.document.insertString(caret.offset, " ")
 				caret.moveForward()
+				AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
 			}
 			
 			private fun createLookupElement(str: String): LookupElement {
@@ -97,9 +100,11 @@ class AdvancedSearchCompletionContributor : CompletionContributor() {
 	private class AdvancedSearchTopLevelPropertyCompletionProvider : CompletionProvider<CompletionParameters>() {
 		private companion object {
 			private val insertHandler = InsertHandler<LookupElement> { context, _ ->
-				val caret = context.editor.caretModel.currentCaret
+				val editor = context.editor
+				val caret = editor.caretModel.currentCaret
 				context.document.insertString(caret.offset, ": ")
 				caret.moveForward(2)
+				AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
 			}
 			
 			private fun createLookupElement(str: String): LookupElement {

@@ -36,22 +36,16 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TopLevelProperties? Statements?
+  // TopLevelProperties Statements?
   static boolean AdvancedSearchFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AdvancedSearchFile")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = AdvancedSearchFile_0(b, l + 1);
+    r = TopLevelProperties(b, l + 1);
     r = r && AdvancedSearchFile_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
-  }
-
-  // TopLevelProperties?
-  private static boolean AdvancedSearchFile_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AdvancedSearchFile_0")) return false;
-    TopLevelProperties(b, l + 1);
-    return true;
   }
 
   // Statements?
