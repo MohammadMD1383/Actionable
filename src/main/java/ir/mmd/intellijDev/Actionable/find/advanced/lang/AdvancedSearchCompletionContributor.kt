@@ -5,6 +5,7 @@ import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.project.DumbAware
 import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.psiElement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
@@ -12,7 +13,7 @@ import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiTop
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
 import ir.mmd.intellijDev.Actionable.util.ext.moveForward
 
-class AdvancedSearchCompletionContributor : CompletionContributor() {
+class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 	init {
 		extend(
 			CompletionType.BASIC,
