@@ -3,21 +3,35 @@ package ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl
 import com.intellij.psi.LiteralTextEscaper
 import com.intellij.psi.PsiLanguageInjectionHost
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiFactory
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiParameter
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiRawString
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStringLiteral
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiTopLevelProperty
+import ir.mmd.intellijDev.Actionable.util.ext.innerSubString
 
-object AdvancedSearchPsiImplUtil {
-	@JvmStatic
-	fun isValidHost(element: AdvancedSearchPsiParameter) = true
-	
-	@JvmStatic
-	fun updateText(element: AdvancedSearchPsiParameter, text: String): PsiLanguageInjectionHost {
-		return AdvancedSearchPsiFactory.createParameterFromText(element.project, text).also {
-			element.replace(AdvancedSearchPsiFactory.createParameterFromText(element.project, text))
-		}
+fun isValidHost(element: AdvancedSearchPsiStringLiteral) = true
+
+fun updateText(element: AdvancedSearchPsiStringLiteral, text: String): PsiLanguageInjectionHost {
+	return AdvancedSearchPsiFactory.createRawStringFromText(element.project, text).also {
+		element.replace(AdvancedSearchPsiFactory.createParameterFromText(element.project, text))
 	}
-	
-	@JvmStatic
-	fun createLiteralTextEscaper(element: AdvancedSearchPsiParameter): LiteralTextEscaper<out PsiLanguageInjectionHost> {
-		return LiteralTextEscaper.createSimple(element)
-	}
+}
+
+fun createLiteralTextEscaper(element: AdvancedSearchPsiStringLiteral): LiteralTextEscaper<out PsiLanguageInjectionHost> {
+	return LiteralTextEscaper.createSimple(element)
+}
+
+fun getPropertyKey(element: AdvancedSearchPsiTopLevelProperty): String {
+	return element.identifier.text
+}
+
+fun getPropertyValue(element: AdvancedSearchPsiTopLevelProperty): String? {
+	return element.stringLiteral?.stringText
+}
+
+fun getStringText(element: AdvancedSearchPsiStringLiteral): String {
+	return element.text.innerSubString(1, 1)
+}
+
+fun isRawString(element: AdvancedSearchPsiStringLiteral): Boolean {
+	return element is AdvancedSearchPsiRawString
 }

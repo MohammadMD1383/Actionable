@@ -10,15 +10,17 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*;
+import com.intellij.psi.LiteralTextEscaper;
+import com.intellij.psi.PsiLanguageInjectionHost;
 
-public class AdvancedSearchPsiTopLevelPropertyImpl extends ASTWrapperPsiElement implements AdvancedSearchPsiTopLevelProperty {
+public abstract class AdvancedSearchPsiStringLiteralImpl extends ASTWrapperPsiElement implements AdvancedSearchPsiStringLiteral {
 
-  public AdvancedSearchPsiTopLevelPropertyImpl(@NotNull ASTNode node) {
+  public AdvancedSearchPsiStringLiteralImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull AdvancedSearchPsiVisitor visitor) {
-    visitor.visitTopLevelProperty(this);
+    visitor.visitStringLiteral(this);
   }
 
   @Override
@@ -28,33 +30,31 @@ public class AdvancedSearchPsiTopLevelPropertyImpl extends ASTWrapperPsiElement 
   }
 
   @Override
-  @Nullable
-  public AdvancedSearchPsiStringLiteral getStringLiteral() {
-    return findChildByClass(AdvancedSearchPsiStringLiteral.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getColon() {
-    return findChildByType(COLON);
+  public boolean isValidHost() {
+    return AdvancedSearchPsiImplUtilKt.isValidHost(this);
   }
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public PsiLanguageInjectionHost updateText(@NotNull String text) {
+    return AdvancedSearchPsiImplUtilKt.updateText(this, text);
   }
 
   @Override
   @NotNull
-  public String getPropertyKey() {
-    return AdvancedSearchPsiImplUtilKt.getPropertyKey(this);
+  public LiteralTextEscaper<? extends PsiLanguageInjectionHost> createLiteralTextEscaper() {
+    return AdvancedSearchPsiImplUtilKt.createLiteralTextEscaper(this);
   }
 
   @Override
-  @Nullable
-  public String getPropertyValue() {
-    return AdvancedSearchPsiImplUtilKt.getPropertyValue(this);
+  @NotNull
+  public String getStringText() {
+    return AdvancedSearchPsiImplUtilKt.getStringText(this);
+  }
+
+  @Override
+  public boolean isRawString() {
+    return AdvancedSearchPsiImplUtilKt.isRawString(this);
   }
 
 }

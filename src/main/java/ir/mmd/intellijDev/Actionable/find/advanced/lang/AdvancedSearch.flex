@@ -7,26 +7,6 @@ import com.intellij.psi.TokenType;
 
 %%
 
-%{
-	private Integer NEXT_STATE = null;
-    private void nextstate(Integer i) {
-		NEXT_STATE = i;
-    }
-	private int consumenextstate() throws NullPointerException {
-		int i = NEXT_STATE;
-		NEXT_STATE = null;
-		return i;
-	}
-
-	private void ignorewhitespace(int nextState) {
-		yybegin(WHITESPACE);
-		nextstate(nextState);
-	}
-	private void ignorewhitespace() {
-		ignorewhitespace(yystate());
-	}
-%}
-
 %class AdvancedSearchLexer
 %implements FlexLexer
 %unicode
@@ -37,63 +17,50 @@ import com.intellij.psi.TokenType;
 
 IDENTIFIER=[a-z]([a-z\-]*[a-z])?
 VARIABLE=\${IDENTIFIER}
-VALUE=[a-zA-Z0-9_\-.$ ]+
+SINGLE_QUOTE='
+DOUBLE_QUOTE=\"
 COLON=:
 COMMA=,
 LBRACE=\{
 RBRACE=\}
-CRLF=\R
-DOUBLE_CRLF_OR_MORE=\R\R+
+EOS=\R|\;
+ESCAPED_CHAR=\\[^]
 WHITESPACE=\s+
+WHITESPACE_NO_CRLF=[ \t\f]+
 
-%state STATEMENT
 %state WHITESPACE
-%state VARIABLE
-%state IDENTIFIER
-%state AFTER_COMMA
-%state AFTER_COLON
-%state AFTER_RBRACE
+%state RAW_STRING
+%state STRING
 
 %%
 
 <YYINITIAL> {
-	{IDENTIFIER}          { return AdvancedSearchTypes.IDENTIFIER; }
-    {COLON}               { yybegin(AFTER_COLON); return AdvancedSearchTypes.COLON; }
-    {DOUBLE_CRLF_OR_MORE} { ignorewhitespace(VARIABLE); yypushback(yytext().length() - 1); return AdvancedSearchTypes.CRLF; }
-    {CRLF}                { return AdvancedSearchTypes.CRLF; }
+	{VARIABLE}           { return AdvancedSearchTypes.VARIABLE; }
+	{IDENTIFIER}         { return AdvancedSearchTypes.IDENTIFIER; }
+    {COLON}              { return AdvancedSearchTypes.COLON; }
+    {COMMA}              { return AdvancedSearchTypes.COMMA; }
+    {SINGLE_QUOTE}       { yybegin(RAW_STRING); return AdvancedSearchTypes.SINGLE_QUOTE; }
+    {DOUBLE_QUOTE}       { yybegin(STRING); return AdvancedSearchTypes.DOUBLE_QUOTE; }
+    {LBRACE}             { yybegin(WHITESPACE); return AdvancedSearchTypes.LBRACE; }
+    {RBRACE}             { return AdvancedSearchTypes.RBRACE; }
+    {EOS}                { yybegin(WHITESPACE); return AdvancedSearchTypes.EOS; }
+    {WHITESPACE_NO_CRLF} { return TokenType.WHITE_SPACE; }
 }
 
-<AFTER_COLON> {
-    {VALUE} { yybegin(YYINITIAL); return AdvancedSearchTypes.VALUE; }
-    [^]     { yybegin(YYINITIAL); yypushback(1); }
+<RAW_STRING> {
+    {SINGLE_QUOTE} { yybegin(YYINITIAL); return AdvancedSearchTypes.SINGLE_QUOTE; }
+	[^']+          { return AdvancedSearchTypes.STRING_SEQ; }
+}
+
+<STRING> {
+	{ESCAPED_CHAR} { return AdvancedSearchTypes.STRING_ESCAPE_SEQ; }
+	{DOUBLE_QUOTE} { yybegin(YYINITIAL); return AdvancedSearchTypes.DOUBLE_QUOTE; }
+	[^\\\"]+       { return AdvancedSearchTypes.STRING_SEQ; }
 }
 
 <WHITESPACE> {
-	{WHITESPACE} { yybegin(consumenextstate()); return TokenType.WHITE_SPACE; }
-    [^]          { yybegin(consumenextstate()); yypushback(1); }
-}
-
-<VARIABLE> {
-	{VARIABLE}   { ignorewhitespace(IDENTIFIER); return AdvancedSearchTypes.VARIABLE; }
-    {RBRACE}     { yybegin(AFTER_RBRACE); return AdvancedSearchTypes.RBRACE; }
-}
-
-<IDENTIFIER> {
-    {IDENTIFIER} { ignorewhitespace(STATEMENT); return AdvancedSearchTypes.IDENTIFIER; }
-}
-
-<STATEMENT> {
-    {VALUE}       { return AdvancedSearchTypes.VALUE; }
-    {COMMA}       { ignorewhitespace(); return AdvancedSearchTypes.COMMA; }
-    {LBRACE}      { ignorewhitespace(VARIABLE); return AdvancedSearchTypes.LBRACE; }
-    {RBRACE}      { yybegin(AFTER_RBRACE); return AdvancedSearchTypes.RBRACE; }
-    {CRLF}        { ignorewhitespace(VARIABLE); return AdvancedSearchTypes.CRLF; }
-}
-
-<AFTER_RBRACE> {
-	{CRLF}    { ignorewhitespace(VARIABLE); return AdvancedSearchTypes.CRLF; }
-    [\f\t ]+  { return TokenType.WHITE_SPACE; }
-    [^]       { yybegin(VARIABLE); yypushback(1); }
+	{WHITESPACE} { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+    [^]          { yybegin(YYINITIAL); yypushback(1); }
 }
 
 [^] {

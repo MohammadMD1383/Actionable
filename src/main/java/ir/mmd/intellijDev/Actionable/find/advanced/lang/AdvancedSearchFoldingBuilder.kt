@@ -12,7 +12,9 @@ import ir.mmd.intellijDev.Actionable.util.ext.innerSubRange
 
 class AdvancedSearchFoldingBuilder : FoldingBuilderEx(), DumbAware {
 	override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
-		return PsiTreeUtil.collectElementsOfType(root, AdvancedSearchPsiStatementBody::class.java).map {
+		return PsiTreeUtil.collectElementsOfType(root, AdvancedSearchPsiStatementBody::class.java).filter {
+			it.rbrace != null && it.text != "{}"
+		}.map {
 			FoldingDescriptor(it.node, it.textRange.innerSubRange(1, 1))
 		}.toTypedArray()
 	}

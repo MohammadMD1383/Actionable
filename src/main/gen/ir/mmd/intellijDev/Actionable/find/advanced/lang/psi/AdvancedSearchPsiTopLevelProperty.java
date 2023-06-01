@@ -8,12 +8,18 @@ import com.intellij.psi.PsiElement;
 public interface AdvancedSearchPsiTopLevelProperty extends PsiElement {
 
   @Nullable
+  AdvancedSearchPsiStringLiteral getStringLiteral();
+
+  @Nullable
   PsiElement getColon();
 
   @NotNull
   PsiElement getIdentifier();
 
+  @NotNull
+  String getPropertyKey();
+
   @Nullable
-  PsiElement getValue();
+  String getPropertyValue();
 
 }

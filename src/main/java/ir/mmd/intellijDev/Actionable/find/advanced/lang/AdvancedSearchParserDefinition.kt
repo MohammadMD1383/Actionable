@@ -21,7 +21,7 @@ class AdvancedSearchParserDefinition : ParserDefinition {
 	override fun createParser(project: Project): PsiParser = AdvancedSearchParser()
 	override fun getFileNodeType(): IFileElementType = FILE
 	override fun getCommentTokens(): TokenSet = TokenSet.EMPTY
-	override fun getStringLiteralElements(): TokenSet = TokenSet.EMPTY
+	override fun getStringLiteralElements(): TokenSet = TokenSet.create(AdvancedSearchTypes.STRING_SEQ)
 	override fun createElement(node: ASTNode?): PsiElement = AdvancedSearchTypes.Factory.createElement(node)
 	override fun createFile(viewProvider: FileViewProvider): PsiFile = AdvancedSearchFile(viewProvider)
 }

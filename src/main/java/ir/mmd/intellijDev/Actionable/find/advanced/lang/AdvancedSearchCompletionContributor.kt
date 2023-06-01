@@ -7,35 +7,37 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.project.DumbAware
 import com.intellij.util.ProcessingContext
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.psiElement
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.identifier
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.stringLiteral
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.stringSequence
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.variable
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiTopLevelProperty
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
 import ir.mmd.intellijDev.Actionable.util.ext.moveForward
 
 class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 	init {
 		extend(
 			CompletionType.BASIC,
-			psiElement(AdvancedSearchTypes.VARIABLE).inside(AdvancedSearchPsiStatement::class.java),
+			variable().inside<AdvancedSearchPsiStatement>(),
 			AdvancedSearchVariableCompletionProvider()
 		)
 		
 		extend(
 			CompletionType.BASIC,
-			psiElement(AdvancedSearchTypes.IDENTIFIER).inside(AdvancedSearchPsiStatement::class.java),
+			identifier().inside<AdvancedSearchPsiStatement>(),
 			AdvancedSearchIdentifierCompletionProvider()
 		)
 		
 		extend(
 			CompletionType.BASIC,
-			psiElement(AdvancedSearchTypes.IDENTIFIER).inside(AdvancedSearchPsiTopLevelProperty::class.java),
+			identifier().inside<AdvancedSearchPsiTopLevelProperty>(),
 			AdvancedSearchTopLevelPropertyCompletionProvider()
 		)
 		
 		extend(
 			CompletionType.BASIC,
-			psiElement(AdvancedSearchTypes.VALUE).inside(AdvancedSearchPsiTopLevelProperty::class.java),
+			stringSequence().inside(stringLiteral().withSingleStringSequence().thatDoesntContain(" ").inside<AdvancedSearchPsiTopLevelProperty>()),
 			AdvancedSearchTopLevelPropertyValueCompletionProvider()
 		)
 	}
@@ -74,9 +76,11 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 	private class AdvancedSearchIdentifierCompletionProvider : CompletionProvider<CompletionParameters>() {
 		private companion object {
 			private val insertHandler = InsertHandler<LookupElement> { context, _ ->
-				val caret = context.editor.caretModel.currentCaret
-				context.document.insertString(caret.offset, " ")
-				caret.moveForward()
+				val editor = context.editor
+				val caret = editor.caretModel.currentCaret
+				context.document.insertString(caret.offset, " ''")
+				caret.moveForward(2)
+				AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
 			} // todo: merge whitespace inserted
 			// todo: make global insert handler
 			
@@ -103,8 +107,8 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 			private val insertHandler = InsertHandler<LookupElement> { context, _ ->
 				val editor = context.editor
 				val caret = editor.caretModel.currentCaret
-				context.document.insertString(caret.offset, ": ")
-				caret.moveForward(2)
+				context.document.insertString(caret.offset, ": ''")
+				caret.moveForward(3)
 				AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
 			}
 			

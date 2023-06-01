@@ -9,11 +9,15 @@ import com.intellij.psi.PsiLanguageInjectionHost;
 public class AdvancedSearchPsiVisitor extends PsiElementVisitor {
 
   public void visitParameter(@NotNull AdvancedSearchPsiParameter o) {
-    visitPsiLanguageInjectionHost(o);
+    visitPsiElement(o);
   }
 
   public void visitParameters(@NotNull AdvancedSearchPsiParameters o) {
     visitPsiElement(o);
+  }
+
+  public void visitRawString(@NotNull AdvancedSearchPsiRawString o) {
+    visitStringLiteral(o);
   }
 
   public void visitStatement(@NotNull AdvancedSearchPsiStatement o) {
@@ -26,6 +30,14 @@ public class AdvancedSearchPsiVisitor extends PsiElementVisitor {
 
   public void visitStatements(@NotNull AdvancedSearchPsiStatements o) {
     visitPsiElement(o);
+  }
+
+  public void visitString(@NotNull AdvancedSearchPsiString o) {
+    visitStringLiteral(o);
+  }
+
+  public void visitStringLiteral(@NotNull AdvancedSearchPsiStringLiteral o) {
+    visitPsiLanguageInjectionHost(o);
   }
 
   public void visitTopLevelProperties(@NotNull AdvancedSearchPsiTopLevelProperties o) {

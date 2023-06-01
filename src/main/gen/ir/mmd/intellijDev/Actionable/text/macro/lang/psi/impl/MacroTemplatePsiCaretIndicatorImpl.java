@@ -35,7 +35,7 @@ public class MacroTemplatePsiCaretIndicatorImpl extends ASTWrapperPsiElement imp
 
   @Override
   public int getNumberInt() {
-    return MacroTemplatePsiImplUtil.getNumberInt(this);
+    return MacroTemplatePsiImplUtilKt.getNumberInt(this);
   }
 
 }

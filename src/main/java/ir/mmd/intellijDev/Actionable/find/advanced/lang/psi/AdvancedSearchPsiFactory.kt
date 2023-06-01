@@ -11,8 +11,33 @@ object AdvancedSearchPsiFactory {
 		return PsiFileFactory.getInstance(project).createFileFromText(AdvancedSearchLanguage, text) as AdvancedSearchFile
 	}
 	
+	/**
+	 * don't specify quotes
+	 */
+	@JvmStatic
+	fun createRawStringFromText(project: Project, text: String): AdvancedSearchPsiRawString {
+		return createFileFromText(project, "a:'$text'")
+			.properties!!.topLevelPropertyList[0]
+			.stringLiteral as AdvancedSearchPsiRawString
+	}
+	
+	/**
+	 * don't specify quotes
+	 */
+	@JvmStatic
+	fun createStringFromText(project: Project, text: String): AdvancedSearchPsiString {
+		return createFileFromText(project, "a:\"$text\"")
+			.properties!!.topLevelPropertyList[0]
+			.stringLiteral as AdvancedSearchPsiString
+	}
+	
+	/**
+	 * specify [text] without quotes
+	 */
+	@JvmStatic
 	fun createParameterFromText(project: Project, text: String): AdvancedSearchPsiParameter {
-		val file = createFileFromText(project, "a:b\n\n\$c d $text")
-		return file.statements!!.statementList[0].parameters!!.parameterList[0]
+		return createFileFromText(project, "a:'b';\$c d '$text'")
+			.statements!!.statementList[0]
+			.parameters!!.parameterList[0]
 	}
 }

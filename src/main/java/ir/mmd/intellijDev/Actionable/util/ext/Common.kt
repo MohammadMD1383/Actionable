@@ -13,6 +13,14 @@ import kotlin.io.path.Path
 fun String.copyToClipboard() = Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(this), null)
 
 /**
+ * drop [start] chars from start and [end] chars from the end of the string
+ */
+fun String.innerSubString(start: Int, end: Int): String {
+	val e = length - end
+	return if (start > lastIndex || e < 0) this else substring(start, e)
+}
+
+/**
  * Checks if all characters in the string are distinct characters
  */
 fun String.isAllDistinct() = toCharArray().distinct().size == length

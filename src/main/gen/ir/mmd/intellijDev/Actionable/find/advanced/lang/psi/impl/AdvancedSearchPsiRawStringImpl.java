@@ -8,17 +8,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*;
 
-public class AdvancedSearchPsiParameterImpl extends ASTWrapperPsiElement implements AdvancedSearchPsiParameter {
+public class AdvancedSearchPsiRawStringImpl extends AdvancedSearchPsiStringLiteralImpl implements AdvancedSearchPsiRawString {
 
-  public AdvancedSearchPsiParameterImpl(@NotNull ASTNode node) {
+  public AdvancedSearchPsiRawStringImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull AdvancedSearchPsiVisitor visitor) {
-    visitor.visitParameter(this);
+    visitor.visitRawString(this);
   }
 
   @Override
@@ -28,9 +28,9 @@ public class AdvancedSearchPsiParameterImpl extends ASTWrapperPsiElement impleme
   }
 
   @Override
-  @NotNull
-  public AdvancedSearchPsiStringLiteral getStringLiteral() {
-    return findNotNullChildByClass(AdvancedSearchPsiStringLiteral.class);
+  @Nullable
+  public PsiElement getStringSeq() {
+    return findChildByType(STRING_SEQ);
   }
 
 }

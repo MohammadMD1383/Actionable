@@ -13,6 +13,12 @@ class AdvancedSearchSyntaxHighlighter : SyntaxHighlighterBase() {
 		return when (tokenType) {
 			AdvancedSearchTypes.VARIABLE -> arrayOf(DefaultLanguageHighlighterColors.KEYWORD)
 			AdvancedSearchTypes.IDENTIFIER -> arrayOf(DefaultLanguageHighlighterColors.NUMBER)
+			AdvancedSearchTypes.STRING_ESCAPE_SEQ -> arrayOf(DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE)
+			
+			AdvancedSearchTypes.STRING_SEQ,
+			AdvancedSearchTypes.SINGLE_QUOTE,
+			AdvancedSearchTypes.DOUBLE_QUOTE -> arrayOf(DefaultLanguageHighlighterColors.STRING)
+			
 			else -> TextAttributesKey.EMPTY_ARRAY
 		}
 	}
