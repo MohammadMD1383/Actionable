@@ -9,6 +9,8 @@
 	elementTypeClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchElementType"
 	tokenTypeClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTokenType"
 	psiImplUtilClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl.AdvancedSearchPsiImplUtilKt"
+	parserUtilClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchParserUtilKt"
+	parserImports="static com.intellij.lang.parser.GeneratedParserUtilBase.*"
     generateTokenAccessors=true
 }
 
@@ -44,7 +46,7 @@ StatementBody ::= LBRACE Statements? RBRACE {pin=1}
 /* -------------------- Helper -------------------- */
 
 // \n | ; | eof
-private eos ::= EOS | <<eof>>
+private eos ::= EOS | <<eof>> | <<rBraceAsEOSInBody>>
 
 // 'raw'
 // "supports escapes"
@@ -55,4 +57,4 @@ StringLiteral ::= RawString | String {
 
 String ::= DOUBLE_QUOTE (STRING_SEQ | STRING_ESCAPE_SEQ)* DOUBLE_QUOTE {pin=1 extends=StringLiteral}
 
-RawString ::= SINGLE_QUOTE STRING_SEQ SINGLE_QUOTE {pin=1 extends=StringLiteral}
+RawString ::= SINGLE_QUOTE STRING_SEQ? SINGLE_QUOTE {pin=1 extends=StringLiteral}

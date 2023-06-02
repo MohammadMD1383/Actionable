@@ -4,12 +4,13 @@ package ir.mmd.intellijDev.Actionable.find.advanced.lang;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import static ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchParserUtilKt.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.LightPsiParser;
+import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
 
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class AdvancedSearchParser implements PsiParser, LightPsiParser {
@@ -113,16 +114,25 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SINGLE_QUOTE STRING_SEQ SINGLE_QUOTE
+  // SINGLE_QUOTE STRING_SEQ? SINGLE_QUOTE
   public static boolean RawString(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RawString")) return false;
     if (!nextTokenIs(b, SINGLE_QUOTE)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, RAW_STRING, null);
-    r = consumeTokens(b, 1, SINGLE_QUOTE, STRING_SEQ, SINGLE_QUOTE);
+    r = consumeToken(b, SINGLE_QUOTE);
     p = r; // pin = 1
+    r = r && report_error_(b, RawString_1(b, l + 1));
+    r = p && consumeToken(b, SINGLE_QUOTE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // STRING_SEQ?
+  private static boolean RawString_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RawString_1")) return false;
+    consumeToken(b, STRING_SEQ);
+    return true;
   }
 
   /* ********************************************************** */
@@ -308,13 +318,14 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EOS | <<eof>>
+  // EOS | <<eof>> | <<rBraceAsEOSInBody>>
   static boolean eos(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "eos")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, EOS);
     if (!r) r = eof(b, l + 1);
+    if (!r) r = rBraceAsEOSInBody(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
