@@ -104,7 +104,8 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 				createLookupElement("has-method"),
 				createLookupElement("has-method-directly"),
 				createLookupElement("has-param"),
-				createLookupElement("super-of")
+				createLookupElement("super-of"),
+				createLookupElement("name-matches"),
 			))
 		}
 	}
@@ -126,9 +127,8 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 		}
 		
 		override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-			result.addAllElements(listOf(
-				createLookupElement("language")
-			))
+			result.addElement(createLookupElement("language"))
+			result.addElement(createLookupElement("scope"))
 		}
 	}
 	
@@ -146,6 +146,11 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 				result.addAllElements(Language.getRegisteredLanguages().mapNotNull {
 					if (it.id.isEmpty()) null else createLookupElement(it.id, it.associatedFileType?.icon)
 				})
+			}
+			
+			if (psiElement().inside(topLevelProperty().withKey("scope")).accepts(element)) {
+				result.addElement(createLookupElement("all"))
+				result.addElement(createLookupElement("project"))
 			}
 		}
 	}

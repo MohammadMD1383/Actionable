@@ -147,6 +147,13 @@ class AdvancedSearchParameterPattern : AdvancedSearchElementPattern<AdvancedSear
 			return@with false
 		}
 	}
+	
+	fun withIdentifierText(pattern: Regex): AdvancedSearchParameterPattern {
+		return with("AdvancedSearchParameterPattern.withIdentifierText(regex)") { t, _ ->
+			val identifier = t.parentOfType<AdvancedSearchPsiStatement>()?.identifier?.text ?: return@with false
+			return@with pattern.matches(identifier)
+		}
+	}
 }
 
 class AdvancedSearchTopLevelPropertyPattern : AdvancedSearchElementPattern<AdvancedSearchPsiTopLevelProperty, AdvancedSearchTopLevelPropertyPattern>(AdvancedSearchPsiTopLevelProperty::class.java) {

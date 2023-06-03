@@ -1,14 +1,13 @@
 package ir.mmd.intellijDev.Actionable.find.advanced.agent
 
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Iconable
 import com.intellij.patterns.PatternCondition
 import com.intellij.patterns.PsiClassPattern
 import com.intellij.patterns.PsiJavaPatterns
+import com.intellij.patterns.StandardPatterns
 import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiMethod
 import com.intellij.psi.impl.JavaPsiFacadeEx
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.AllClassesSearch
@@ -28,24 +27,24 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 			}
 		}
 		
+		val searchScope = when (val scope = model.properties["scope"] ?: "all") {
+			"project" -> GlobalSearchScope.projectScope(project)
+			"all" -> GlobalSearchScope.allScope(project)
+			else -> throw IllegalArgumentException("unknown scope: $scope")
+		}
+		
 		progress.text = "Searching..."
-		AllClassesSearch.search(GlobalSearchScope.allScope(project), project).forEach {
+		AllClassesSearch.search(searchScope, project).forEach {
 			progress.checkCanceled()
 			if (criteria.accepts(it)) {
 				addResult(SearchResult(
 					it.name ?: "anonymous",
 					it.qualifiedName,
 					it,
-					getIconFor(it)
+					it.getIcon(Iconable.ICON_FLAG_READ_STATUS)
 				))
 			}
 		}
-	}
-	
-	private fun getIconFor(element: PsiElement) = when (element) {
-		is PsiClass -> AllIcons.Nodes.Class
-		is PsiMethod -> AllIcons.Nodes.Method
-		else -> null
 	}
 	
 	private fun buildCriteria(statement: SearchStatement): PsiClassPattern {
@@ -80,6 +79,12 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 				criteria = criteria.withModifiers(*statement.parameters.toTypedArray())
 			}
 			
+			"name-matches" -> {
+				statement.parameters.forEach {
+					criteria = criteria.withName(StandardPatterns.string().matches(it))
+				}
+			}
+			
 			else -> throw IllegalArgumentException("unknown identifier: ${statement.identifier}")
 		}
 		
@@ -87,9 +92,15 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 	}
 }
 
-fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object : PatternCondition<PsiClass?>("directInheritorOf") {
+fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object : PatternCondition<PsiClass?>("inheritorOf") {
 	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
 		val facade = JavaPsiFacadeEx.getInstanceEx(t.project)
 		return t.isInheritor(facade.findClass(baseName), !direct)
 	}
 })
+
+val PsiClass.isExceptionClass: Boolean
+	get() {
+		val facade = JavaPsiFacadeEx.getInstanceEx(project)
+		return isInheritor(facade.findClass("java.lang.Exception"), true)
+	}

@@ -10,7 +10,9 @@ import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPat
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.stringLiteral
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStringLiteral
 import ir.mmd.intellijDev.Actionable.util.then
+import org.intellij.lang.regexp.RegExpLanguage
 
+@Suppress("CompanionObjectInExtension")
 class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	companion object {
 		private fun innerStringLiteralRangeOf(element: PsiElement): TextRange {
@@ -21,8 +23,24 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
 		javaInterfaceForImplementsAndExtends(context, registrar) or
 			javaClassForExtends(context, registrar) or
-			javaMethodParam(context, registrar)
+			javaMethodParam(context, registrar) or
+			regexpForMatches(context, registrar)
 		// todo: optimize patterns
+	}
+	
+	private fun regexpForMatches(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
+		val condition = stringLiteral()
+			.inside(parameter()
+				.withIdentifierText(".+-matches".toRegex()))
+		
+		return condition.accepts(context) then {
+			registrar.startInjecting(RegExpLanguage.INSTANCE)
+				.addPlace(
+					null, null,
+					context as PsiLanguageInjectionHost,
+					innerStringLiteralRangeOf(context)
+				).doneInjecting()
+		}
 	}
 	
 	private fun javaMethodParam(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
