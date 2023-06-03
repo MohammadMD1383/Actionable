@@ -98,7 +98,8 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 			// todo: specific to variable provided before
 			result.addAllElements(listOf(
 				createLookupElement("extends"),
-				createLookupElement("implements"),
+				createLookupElement("extends-directly"),
+				createLookupElement("implements-directly"),
 				createLookupElement("has-modifier"),
 				createLookupElement("has-method"),
 				createLookupElement("has-param"),

@@ -46,7 +46,7 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 		val condition = stringLiteral()
 			.inside(parameter()
 				.withVariableText("\$class")
-				.withIdentifierText("extends")
+				.withIdentifierText("extends", "extends-directly")
 				.withTopLevelProperty("language", "java"))
 		
 		return condition.accepts(context) then {
@@ -62,8 +62,8 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	private fun javaInterfaceForImplementsAndExtends(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
 		val condition = stringLiteral()
 			.inside(
-				(parameter().withVariableText("\$class").withIdentifierText("implements") or
-					parameter().withVariableText("\$interface").withIdentifierText("extends"))
+				(parameter().withVariableText("\$class").withIdentifierText("implements", "implements-directly") or
+					parameter().withVariableText("\$interface").withIdentifierText("extends", "extends-directly"))
 					.withTopLevelProperty("language", "java")
 			)
 		

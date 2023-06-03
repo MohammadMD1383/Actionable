@@ -124,17 +124,27 @@ class AdvancedSearchParameterPattern : AdvancedSearchElementPattern<AdvancedSear
 	/**
 	 * specify [text] with '$'
 	 */
-	fun withVariableText(text: String): AdvancedSearchParameterPattern {
+	fun withVariableText(vararg text: String): AdvancedSearchParameterPattern {
 		return with("AdvancedSearchParameterPattern.withVariableText") { t, _ ->
 			val statement = t.parentOfType<AdvancedSearchPsiStatement>() ?: return@with false
-			return@with statement.variable.text == text
+			text.forEach {
+				if (statement.variable.text == it) {
+					return@with true
+				}
+			}
+			return@with false
 		}
 	}
 	
-	fun withIdentifierText(text: String): AdvancedSearchParameterPattern {
+	fun withIdentifierText(vararg text: String): AdvancedSearchParameterPattern {
 		return with("AdvancedSearchParameterPattern.withIdentifierText") { t, _ ->
 			val statement = t.parentOfType<AdvancedSearchPsiStatement>() ?: return@with false
-			return@with statement.identifier?.text == text
+			text.forEach {
+				if (statement.identifier?.text == it) {
+					return@with true
+				}
+			}
+			return@with false
 		}
 	}
 }

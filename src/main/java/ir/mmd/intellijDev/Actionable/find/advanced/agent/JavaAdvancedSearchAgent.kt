@@ -3,13 +3,16 @@ package ir.mmd.intellijDev.Actionable.find.advanced.agent
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
+import com.intellij.patterns.PatternCondition
 import com.intellij.patterns.PsiClassPattern
 import com.intellij.patterns.PsiJavaPatterns
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiMethod
+import com.intellij.psi.impl.JavaPsiFacadeEx
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.AllClassesSearch
+import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
 
 @Suppress("NonDefaultConstructor")
@@ -60,9 +63,23 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 				}
 			}
 			
+			"extends-directly",
+			"implements-directly" -> {
+				statement.parameters.forEach {
+					criteria = criteria.directInheritorOf(it)
+				}
+			}
+			
 			else -> throw IllegalArgumentException("unknown identifier: ${statement.identifier}")
 		}
 		
 		return criteria
 	}
 }
+
+fun PsiClassPattern.directInheritorOf(baseName: String) = with(object : PatternCondition<PsiClass?>("directInheritorOf") {
+	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
+		val facade = JavaPsiFacadeEx.getInstanceEx(t.project)
+		return t.isInheritor(facade.findClass(baseName), false)
+	}
+})
