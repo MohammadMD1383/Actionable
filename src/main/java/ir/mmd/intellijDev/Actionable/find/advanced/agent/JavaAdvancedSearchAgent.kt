@@ -85,6 +85,10 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 				}
 			}
 			
+			"is-anonymous" -> {
+				criteria = criteria.isAnonymous()
+			}
+			
 			else -> throw IllegalArgumentException("unknown identifier: ${statement.identifier}")
 		}
 		
@@ -96,6 +100,12 @@ fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object
 	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
 		val facade = JavaPsiFacadeEx.getInstanceEx(t.project)
 		return t.isInheritor(facade.findClass(baseName), !direct)
+	}
+})
+
+fun PsiClassPattern.isAnonymous() =with(object : PatternCondition<PsiClass?>("isAnonymous") {
+	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
+		return t.name == null
 	}
 })
 

@@ -31,7 +31,7 @@ private TopLevelPropertyRecover ::= !eos
 Statements ::= (Statement eos)+
 
 // $class implements 'com.package.Interface'
-Statement ::= VARIABLE IDENTIFIER Parameters StatementBody? {pin=1 recoverWhile=StatementRecover}
+Statement ::= VARIABLE IDENTIFIER Parameters? StatementBody? {pin=1 recoverWhile=StatementRecover}
 private StatementRecover ::= !eos
 
 // 'com.package1.Interface', 'com.package2.Interface'

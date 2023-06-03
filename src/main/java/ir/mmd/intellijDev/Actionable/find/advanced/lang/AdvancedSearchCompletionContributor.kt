@@ -88,9 +88,9 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 			} // todo: merge whitespace inserted
 			// todo: make global insert handler
 			
-			private fun createLookupElement(str: String): LookupElement {
+			private fun createLookupElement(str: String, skipInsertHandler: Boolean = false): LookupElement {
 				return LookupElementBuilder.create(str).bold().withIcon(AllIcons.Nodes.Variable)
-					.withInsertHandler(insertHandler)
+					.run { if (skipInsertHandler) this else withInsertHandler(insertHandler) }
 			}
 		}
 		
@@ -106,6 +106,7 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 				createLookupElement("has-param"),
 				createLookupElement("super-of"),
 				createLookupElement("name-matches"),
+				createLookupElement("is-anonymous", true),
 			))
 		}
 	}

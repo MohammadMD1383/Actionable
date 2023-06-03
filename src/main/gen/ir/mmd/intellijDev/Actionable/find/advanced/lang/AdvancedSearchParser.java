@@ -136,17 +136,24 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VARIABLE IDENTIFIER Parameters StatementBody?
+  // VARIABLE IDENTIFIER Parameters? StatementBody?
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, STATEMENT, "<statement>");
     r = consumeTokens(b, 1, VARIABLE, IDENTIFIER);
     p = r; // pin = 1
-    r = r && report_error_(b, Parameters(b, l + 1));
+    r = r && report_error_(b, Statement_2(b, l + 1));
     r = p && Statement_3(b, l + 1) && r;
     exit_section_(b, l, m, r, p, AdvancedSearchParser::StatementRecover);
     return r || p;
+  }
+
+  // Parameters?
+  private static boolean Statement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Statement_2")) return false;
+    Parameters(b, l + 1);
+    return true;
   }
 
   // StatementBody?

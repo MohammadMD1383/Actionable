@@ -90,7 +90,7 @@ abstract class AdvancedSearchAgent protected constructor(
 	private fun buildSearchStatement(psiStatement: AdvancedSearchPsiStatement): SearchStatement {
 		val variable = psiStatement.variable.text
 		val identifier = psiStatement.identifier!!.text
-		val parameters = psiStatement.parameters!!.parameterList.map { it.stringLiteral.stringText }
+		val parameters = psiStatement.parameters?.parameterList?.map { it.stringLiteral.stringText } ?: emptyList()
 		val innerStatements = psiStatement.statementBody?.statements?.statementList?.map {
 			buildSearchStatement(it)
 		}
