@@ -14,6 +14,7 @@ class AdvancedSearchSyntaxHighlighter : SyntaxHighlighterBase() {
 			AdvancedSearchTypes.VARIABLE -> arrayOf(DefaultLanguageHighlighterColors.KEYWORD)
 			AdvancedSearchTypes.IDENTIFIER -> arrayOf(DefaultLanguageHighlighterColors.NUMBER)
 			AdvancedSearchTypes.STRING_ESCAPE_SEQ -> arrayOf(DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE)
+			AdvancedSearchTypes.COMMENT -> arrayOf(DefaultLanguageHighlighterColors.LINE_COMMENT)
 			
 			AdvancedSearchTypes.STRING_SEQ,
 			AdvancedSearchTypes.SINGLE_QUOTE,

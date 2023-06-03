@@ -12,6 +12,7 @@
 	parserUtilClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchParserUtilKt"
 	parserImports="static com.intellij.lang.parser.GeneratedParserUtilBase.*"
     generateTokenAccessors=true
+    tokens=[COMMENT="COMMENT"]
 }
 
 AdvancedSearchFile ::= TopLevelProperties? Statements?
@@ -45,8 +46,8 @@ StatementBody ::= LBRACE Statements? RBRACE {pin=1}
 
 /* -------------------- Helper -------------------- */
 
-// \n | ; | eof
-private eos ::= EOS | <<eof>> | <<rBraceAsEOSInBody>>
+// \n | ; | eof | }
+private eos ::= EOS+ | <<eof>> | <<rBraceAsEOSInBody>>
 
 // 'raw'
 // "supports escapes"

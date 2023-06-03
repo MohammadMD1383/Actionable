@@ -24,6 +24,7 @@ COMMA=,
 LBRACE=\{
 RBRACE=\}
 EOS=\R|\;
+LINE_COMMENT=\#
 ESCAPED_CHAR=\\[^]
 WHITESPACE=\s+
 WHITESPACE_NO_CRLF=[ \t\f]+
@@ -31,6 +32,7 @@ WHITESPACE_NO_CRLF=[ \t\f]+
 %state WHITESPACE
 %state RAW_STRING
 %state STRING
+%state LINE_COMMENT
 
 %%
 
@@ -45,6 +47,7 @@ WHITESPACE_NO_CRLF=[ \t\f]+
     {RBRACE}             { return AdvancedSearchTypes.RBRACE; }
     {EOS}                { yybegin(WHITESPACE); return AdvancedSearchTypes.EOS; }
     {WHITESPACE_NO_CRLF} { return TokenType.WHITE_SPACE; }
+    {LINE_COMMENT}       { yybegin(LINE_COMMENT); }
 }
 
 <RAW_STRING> {
@@ -61,6 +64,10 @@ WHITESPACE_NO_CRLF=[ \t\f]+
 <WHITESPACE> {
 	{WHITESPACE} { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
     [^]          { yybegin(YYINITIAL); yypushback(1); }
+}
+
+<LINE_COMMENT> {
+	[^\n]+ { yybegin(YYINITIAL); return AdvancedSearchTypes.COMMENT; }
 }
 
 [^] {

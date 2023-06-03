@@ -12,6 +12,7 @@ import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
 
+@Suppress("CompanionObjectInExtension")
 class AdvancedSearchParserDefinition : ParserDefinition {
 	companion object {
 		val FILE = IFileElementType(AdvancedSearchLanguage)
@@ -20,7 +21,7 @@ class AdvancedSearchParserDefinition : ParserDefinition {
 	override fun createLexer(project: Project): Lexer = AdvancedSearchLexerAdapter()
 	override fun createParser(project: Project): PsiParser = AdvancedSearchParser()
 	override fun getFileNodeType(): IFileElementType = FILE
-	override fun getCommentTokens(): TokenSet = TokenSet.EMPTY
+	override fun getCommentTokens(): TokenSet = TokenSet.create(AdvancedSearchTypes.COMMENT)
 	override fun getStringLiteralElements(): TokenSet = TokenSet.create(AdvancedSearchTypes.STRING_SEQ)
 	override fun createElement(node: ASTNode?): PsiElement = AdvancedSearchTypes.Factory.createElement(node)
 	override fun createFile(viewProvider: FileViewProvider): PsiFile = AdvancedSearchFile(viewProvider)

@@ -89,8 +89,8 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 			// todo: make global insert handler
 			
 			private fun createLookupElement(str: String, skipInsertHandler: Boolean = false): LookupElement {
-				return LookupElementBuilder.create(str).bold().withIcon(AllIcons.Nodes.Variable)
-					.run { if (skipInsertHandler) this else withInsertHandler(insertHandler) }
+				val builder = LookupElementBuilder.create(str).bold().withIcon(AllIcons.Nodes.Variable)
+				return if (skipInsertHandler) builder else builder.withInsertHandler(insertHandler)
 			}
 		}
 		

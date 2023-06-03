@@ -325,14 +325,29 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EOS | <<eof>> | <<rBraceAsEOSInBody>>
+  // EOS+ | <<eof>> | <<rBraceAsEOSInBody>>
   static boolean eos(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "eos")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, EOS);
+    r = eos_0(b, l + 1);
     if (!r) r = eof(b, l + 1);
     if (!r) r = rBraceAsEOSInBody(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // EOS+
+  private static boolean eos_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "eos_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EOS);
+    while (r) {
+      int c = current_position_(b);
+      if (!consumeToken(b, EOS)) break;
+      if (!empty_element_parsed_guard_(b, "eos_0", c)) break;
+    }
     exit_section_(b, m, null, r);
     return r;
   }

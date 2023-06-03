@@ -21,6 +21,7 @@ public interface AdvancedSearchTypes {
 
   IElementType COLON = new AdvancedSearchTokenType("COLON");
   IElementType COMMA = new AdvancedSearchTokenType("COMMA");
+  IElementType COMMENT = new AdvancedSearchTokenType("COMMENT");
   IElementType DOUBLE_QUOTE = new AdvancedSearchTokenType("DOUBLE_QUOTE");
   IElementType EOS = new AdvancedSearchTokenType("EOS");
   IElementType IDENTIFIER = new AdvancedSearchTokenType("IDENTIFIER");
