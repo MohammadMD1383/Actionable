@@ -102,6 +102,7 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 				createLookupElement("implements-directly"),
 				createLookupElement("has-modifier"),
 				createLookupElement("has-method"),
+				createLookupElement("has-method-directly"),
 				createLookupElement("has-param"),
 				createLookupElement("super-of")
 			))

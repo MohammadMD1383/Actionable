@@ -22,7 +22,7 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 		progress.checkCanceled()
 		
 		if (model.statements.size > 1) {
-			model.statements.subList(1, model.statements.lastIndex).forEach {
+			model.statements.subList(1, model.statements.size).forEach {
 				progress.checkCanceled()
 				criteria = criteria.and(buildCriteria(it))
 			}
@@ -57,17 +57,27 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 		
 		when (statement.identifier) {
 			"extends",
-			"implements" -> {
+			"implements",
+			"extends-directly",
+			"implements-directly" -> {
+				val direct = "directly" in statement.identifier
 				statement.parameters.forEach {
-					criteria = criteria.inheritorOf(true, it)
+					criteria = criteria.inheritorOf(it, direct)
 				}
 			}
 			
-			"extends-directly",
-			"implements-directly" -> {
-				statement.parameters.forEach {
-					criteria = criteria.directInheritorOf(it)
+			"has-method",
+			"has-method-directly" -> {
+				val checkDeep = "directly" !in statement.identifier
+				statement.parameters.map {
+					PsiJavaPatterns.psiMethod().withName(it)
+				}.forEach {
+					criteria = criteria.withMethod(checkDeep, it)
 				}
+			}
+			
+			"has-modifier" -> {
+				criteria = criteria.withModifiers(*statement.parameters.toTypedArray())
 			}
 			
 			else -> throw IllegalArgumentException("unknown identifier: ${statement.identifier}")
@@ -77,9 +87,9 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 	}
 }
 
-fun PsiClassPattern.directInheritorOf(baseName: String) = with(object : PatternCondition<PsiClass?>("directInheritorOf") {
+fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object : PatternCondition<PsiClass?>("directInheritorOf") {
 	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
 		val facade = JavaPsiFacadeEx.getInstanceEx(t.project)
-		return t.isInheritor(facade.findClass(baseName), false)
+		return t.isInheritor(facade.findClass(baseName), !direct)
 	}
 })
