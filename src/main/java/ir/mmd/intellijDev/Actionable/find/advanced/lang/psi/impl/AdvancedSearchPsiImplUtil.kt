@@ -2,10 +2,7 @@ package ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl
 
 import com.intellij.psi.LiteralTextEscaper
 import com.intellij.psi.PsiLanguageInjectionHost
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiFactory
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiRawString
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStringLiteral
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiTopLevelProperty
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*
 import ir.mmd.intellijDev.Actionable.util.ext.innerSubString
 
 fun isValidHost(element: AdvancedSearchPsiStringLiteral) = true
@@ -34,4 +31,8 @@ fun getStringText(element: AdvancedSearchPsiStringLiteral): String {
 
 fun isRawString(element: AdvancedSearchPsiStringLiteral): Boolean {
 	return element is AdvancedSearchPsiRawString
+}
+
+fun getLanguageProperty(element: AdvancedSearchPsiTopLevelProperties): AdvancedSearchPsiTopLevelProperty? {
+	return element.topLevelPropertyList.find { it.propertyKey == "language" }
 }

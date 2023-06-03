@@ -18,7 +18,7 @@ AdvancedSearchFile ::= TopLevelProperties? Statements?
 
 // property1: 'value1'
 // property2: 'value2'
-TopLevelProperties ::= (TopLevelProperty eos)+
+TopLevelProperties ::= (TopLevelProperty eos)+ {methods=[getLanguageProperty]}
 
 // property: 'value'
 TopLevelProperty ::= IDENTIFIER COLON StringLiteral {pin=1 recoverWhile=TopLevelPropertyRecover methods=[getPropertyKey getPropertyValue]}

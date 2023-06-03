@@ -5,15 +5,19 @@ import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
+import com.intellij.lang.Language
 import com.intellij.openapi.project.DumbAware
 import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.identifier
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.psiElement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.stringLiteral
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.stringSequence
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.topLevelProperty
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.variable
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiTopLevelProperty
 import ir.mmd.intellijDev.Actionable.util.ext.moveForward
+import javax.swing.Icon
 
 class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 	init {
@@ -95,6 +99,7 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 			result.addAllElements(listOf(
 				createLookupElement("extends"),
 				createLookupElement("implements"),
+				createLookupElement("has-modifier"),
 				createLookupElement("has-method"),
 				createLookupElement("has-param"),
 				createLookupElement("super-of")
@@ -127,16 +132,19 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 	
 	private class AdvancedSearchTopLevelPropertyValueCompletionProvider : CompletionProvider<CompletionParameters>() {
 		private companion object {
-			private fun createLookupElement(str: String): LookupElement {
-				return LookupElementBuilder.create(str)
+			private fun createLookupElement(str: String, icon: Icon? = null): LookupElement {
+				return LookupElementBuilder.create(str).withIcon(icon)
 			}
 		}
 		
 		override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-			result.addAllElements(listOf(
-				createLookupElement("java"),
-				createLookupElement("kotlin")
-			))
+			val element = parameters.originalFile.findElementAt(parameters.offset)
+			
+			if (psiElement().inside(topLevelProperty().withKey("language")).accepts(element)) {
+				result.addAllElements(Language.getRegisteredLanguages().mapNotNull {
+					if (it.id.isEmpty()) null else createLookupElement(it.id, it.associatedFileType?.icon)
+				})
+			}
 		}
 	}
 }

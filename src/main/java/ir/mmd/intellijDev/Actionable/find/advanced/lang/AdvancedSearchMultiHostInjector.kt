@@ -9,31 +9,72 @@ import com.intellij.psi.PsiLanguageInjectionHost
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.parameter
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.stringLiteral
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStringLiteral
+import ir.mmd.intellijDev.Actionable.util.then
 
 class AdvancedSearchMultiHostInjector : MultiHostInjector {
-	override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
-		javaInterfaceForImplements(context, registrar)
+	companion object {
+		private fun innerStringLiteralRangeOf(element: PsiElement): TextRange {
+			return TextRange.from(1, element.text.lastIndex - 1)
+		}
 	}
 	
-	private fun javaInterfaceForImplements(context: PsiElement, registrar: MultiHostRegistrar) :Boolean {
+	override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
+		javaInterfaceForImplementsAndExtends(context, registrar) or
+			javaClassForExtends(context, registrar) or
+			javaMethodParam(context, registrar)
+		// todo: optimize patterns
+	}
+	
+	private fun javaMethodParam(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
 		val condition = stringLiteral()
 			.inside(parameter()
-				.withIdentifierText("implements")
+				.withVariableText("\$method")
+				.withIdentifierText("has-param")
 				.withTopLevelProperty("language", "java"))
 		
-		if (condition.accepts(context)) {
+		return condition.accepts(context) then {
+			registrar.startInjecting(JavaLanguage.INSTANCE)
+				.addPlace(
+					"class A { void m(", ") { } }",
+					context as PsiLanguageInjectionHost,
+					innerStringLiteralRangeOf(context)
+				).doneInjecting()
+		}
+	}
+	
+	private fun javaClassForExtends(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
+		val condition = stringLiteral()
+			.inside(parameter()
+				.withVariableText("\$class")
+				.withIdentifierText("extends")
+				.withTopLevelProperty("language", "java"))
+		
+		return condition.accepts(context) then {
+			registrar.startInjecting(JavaLanguage.INSTANCE)
+				.addPlace(
+					"class A extends ", " { }",
+					context as PsiLanguageInjectionHost,
+					innerStringLiteralRangeOf(context)
+				).doneInjecting()
+		}
+	}
+	
+	private fun javaInterfaceForImplementsAndExtends(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
+		val condition = stringLiteral()
+			.inside(
+				(parameter().withVariableText("\$class").withIdentifierText("implements") or
+					parameter().withVariableText("\$interface").withIdentifierText("extends"))
+					.withTopLevelProperty("language", "java")
+			)
+		
+		return condition.accepts(context) then {
 			registrar.startInjecting(JavaLanguage.INSTANCE)
 				.addPlace(
 					"class A implements ", " { }",
 					context as PsiLanguageInjectionHost,
-					TextRange.from(1, context.text.lastIndex - 1)
-				)
-				.doneInjecting()
-			
-			return true
+					innerStringLiteralRangeOf(context)
+				).doneInjecting()
 		}
-		
-		return false
 	}
 	
 	override fun elementsToInjectIn(): MutableList<out Class<out PsiElement>> {

@@ -47,6 +47,19 @@
 	<depends optional="true" config-file="plugin-javascript.xml">JavaScript</depends>
 	<depends optional="true" config-file="plugin-golang.xml">org.jetbrains.plugins.go</depends>
 	
+	<extensionPoints>
+		<extensionPoint
+			name="find.advanced.agent"
+			beanClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchAgentBean"
+			dynamic="true"/>
+	</extensionPoints>
+	
+	<extensions defaultExtensionNs="ir.mmd.intellijDev.Actionable">
+		<find.advanced.agent
+			language="JAVA"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.JavaAdvancedSearchAgent"/>
+	</extensions>
+	
 	<extensions defaultExtensionNs="com.intellij">
 		<!--region Macro Template Language-->
 		<fileType
@@ -458,6 +471,16 @@
 					id="ir.mmd.intellijDev.Actionable.find.SelectPreviousOccurrence"
 					text="Add Selection to Previous Occurrence"
 					description="Adds selection to the previous occurrence of the word in the editor"/>
+				
+				<separator/>
+				
+				<group id="ir.mmd.intellijDev.Actionable.AdvancedSearchGroup" text="Advanced Search" popup="true">
+					<action
+						class="ir.mmd.intellijDev.Actionable.find.advanced.SearchAction"
+						id="ir.mmd.intellijDev.Actionable.find.advanced.SearchAction"
+						text="Search..."
+						description="Search using this .aas file"/>
+				</group>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.CaretGroup" text="Caret Actions" popup="true">

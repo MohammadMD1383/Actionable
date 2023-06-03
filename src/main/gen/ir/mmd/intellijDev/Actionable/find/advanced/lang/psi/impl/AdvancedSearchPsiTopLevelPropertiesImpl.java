@@ -33,4 +33,10 @@ public class AdvancedSearchPsiTopLevelPropertiesImpl extends ASTWrapperPsiElemen
     return PsiTreeUtil.getChildrenOfTypeAsList(this, AdvancedSearchPsiTopLevelProperty.class);
   }
 
+  @Override
+  @Nullable
+  public AdvancedSearchPsiTopLevelProperty getLanguageProperty() {
+    return AdvancedSearchPsiImplUtilKt.getLanguageProperty(this);
+  }
+
 }

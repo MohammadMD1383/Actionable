@@ -4,8 +4,15 @@ import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.util.StringCaseManipulator
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
+import java.net.URLEncoder
 import java.nio.file.Path
 import kotlin.io.path.Path
+
+/**
+ * url encodes the string
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun String.urlEncode(encoding: String = "utf8") = URLEncoder.encode(this, encoding)
 
 /**
  * Copies the string to clipboard

@@ -7,10 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiParameter
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStringLiteral
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.children
 
 open class AdvancedSearchElementPattern<T : PsiElement, Self : AdvancedSearchElementPattern<T, Self>> : PsiElementPattern<T, Self> {
@@ -41,6 +38,9 @@ open class AdvancedSearchElementPattern<T : PsiElement, Self : AdvancedSearchEle
 		
 		@JvmStatic
 		fun parameter() = AdvancedSearchParameterPattern()
+		
+		@JvmStatic
+		fun topLevelProperty() = AdvancedSearchTopLevelPropertyPattern()
 	}
 	
 	inline fun <reified T : PsiElement> inside(): Self {
@@ -63,8 +63,10 @@ open class AdvancedSearchElementPattern<T : PsiElement, Self : AdvancedSearchEle
 	 * specify [value] without quotes
 	 *
 	 * set [value] to null to just match against property
+	 *
+	 * @param ignoreCase whether to compare [property] and [value] ignoring the case or not
 	 */
-	fun withTopLevelProperty(property: String, value: String? = null): Self {
+	fun withTopLevelProperty(property: String, value: String? = null, ignoreCase: Boolean = true): Self {
 		return with("AdvancedSearchElementPattern.withTopLevelProperty") { t, _ ->
 			val file = t.containingFile
 			if (file !is AdvancedSearchFile) {
@@ -73,10 +75,10 @@ open class AdvancedSearchElementPattern<T : PsiElement, Self : AdvancedSearchEle
 			
 			val properties = file.properties?.topLevelPropertyList ?: return@with false
 			val prop = properties.find {
-				it.propertyKey == property
+				it.propertyKey.equals(property, ignoreCase)
 			} ?: return@with false
 			
-			if (value != null) return@with prop.propertyValue == value else return@with true
+			if (value != null) return@with prop.propertyValue.equals(value, ignoreCase) else return@with true
 		}
 	}
 	
@@ -133,6 +135,20 @@ class AdvancedSearchParameterPattern : AdvancedSearchElementPattern<AdvancedSear
 		return with("AdvancedSearchParameterPattern.withIdentifierText") { t, _ ->
 			val statement = t.parentOfType<AdvancedSearchPsiStatement>() ?: return@with false
 			return@with statement.identifier?.text == text
+		}
+	}
+}
+
+class AdvancedSearchTopLevelPropertyPattern : AdvancedSearchElementPattern<AdvancedSearchPsiTopLevelProperty, AdvancedSearchTopLevelPropertyPattern>(AdvancedSearchPsiTopLevelProperty::class.java) {
+	fun withKey(k: String): AdvancedSearchTopLevelPropertyPattern {
+		return with("AdvancedSearchTopLevelPropertyPattern.withPropertyKey") { t, _ ->
+			t.propertyKey == k
+		}
+	}
+	
+	fun withValue(v: String): AdvancedSearchTopLevelPropertyPattern {
+		return with("AdvancedSearchTopLevelPropertyPattern.withValue") { t, _ ->
+			t.propertyValue == v
 		}
 	}
 }
