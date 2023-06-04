@@ -118,7 +118,7 @@
 		
 		<completion.contributor
 			language="AdvancedSearch"
-			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchCompletionContributor"/>
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.compl.AdvancedSearchCompletionContributor"/>
 		
 		<multiHostInjector
 			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchMultiHostInjector"/>

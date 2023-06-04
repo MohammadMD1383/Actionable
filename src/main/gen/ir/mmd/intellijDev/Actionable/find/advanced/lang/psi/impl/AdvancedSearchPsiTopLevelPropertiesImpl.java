@@ -41,6 +41,12 @@ public class AdvancedSearchPsiTopLevelPropertiesImpl extends ASTWrapperPsiElemen
 
   @Override
   @Nullable
+  public AdvancedSearchPsiTopLevelProperty findPsiPropertyByKey(@NotNull String key, boolean ignoreCase) {
+    return AdvancedSearchPsiImplUtilKt.findPsiPropertyByKey(this, key, ignoreCase);
+  }
+
+  @Override
+  @Nullable
   public AdvancedSearchPsiTopLevelProperty findPsiPropertyByKey(@NotNull String key) {
     return AdvancedSearchPsiImplUtilKt.findPsiPropertyByKey(this, key);
   }

@@ -10,38 +10,21 @@ import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.children
 
+fun psiElement() = AdvancedSearchElementPattern.Capture(PsiElement::class.java)
+fun <T : PsiElement> psiElement(aClass: Class<T>) = AdvancedSearchElementPattern.Capture(aClass)
+fun psiElement(type: IElementType) = psiElement().withElementType(type)
+fun variable() = psiElement(AdvancedSearchTypes.VARIABLE)
+fun identifier() = psiElement(AdvancedSearchTypes.IDENTIFIER)
+fun statement() = AdvancedSearchStatementPattern()
+fun statementBody() = psiElement(AdvancedSearchTypes.STATEMENT_BODY)
+fun stringLiteral() = AdvancedSearchStringLiteralPattern.Capture(AdvancedSearchPsiStringLiteral::class.java)
+fun stringSequence() = psiElement(AdvancedSearchTypes.STRING_SEQ)
+fun parameter() = AdvancedSearchParameterPattern()
+fun topLevelProperty() = AdvancedSearchTopLevelPropertyPattern()
+
 open class AdvancedSearchElementPattern<T : PsiElement, Self : AdvancedSearchElementPattern<T, Self>> : PsiElementPattern<T, Self> {
 	constructor(aClass: Class<T>) : super(aClass)
 	constructor(condition: InitialPatternCondition<T>) : super(condition)
-	
-	companion object {
-		@JvmStatic
-		fun psiElement() = Capture(PsiElement::class.java)
-		
-		@JvmStatic
-		fun <T : PsiElement> psiElement(aClass: Class<T>) = Capture(aClass)
-		
-		@JvmStatic
-		fun psiElement(type: IElementType) = psiElement().withElementType(type)
-		
-		@JvmStatic
-		fun variable() = psiElement(AdvancedSearchTypes.VARIABLE)
-		
-		@JvmStatic
-		fun identifier() = psiElement(AdvancedSearchTypes.IDENTIFIER)
-		
-		@JvmStatic
-		fun stringLiteral() = AdvancedSearchStringLiteralPattern.Capture(AdvancedSearchPsiStringLiteral::class.java)
-		
-		@JvmStatic
-		fun stringSequence() = psiElement(AdvancedSearchTypes.STRING_SEQ)
-		
-		@JvmStatic
-		fun parameter() = AdvancedSearchParameterPattern()
-		
-		@JvmStatic
-		fun topLevelProperty() = AdvancedSearchTopLevelPropertyPattern()
-	}
 	
 	inline fun <reified T : PsiElement> inside(): Self {
 		return inside(T::class.java)
@@ -73,13 +56,13 @@ open class AdvancedSearchElementPattern<T : PsiElement, Self : AdvancedSearchEle
 				return@with false
 			}
 			
-			val properties = file.properties?.topLevelPropertyList ?: return@with false
-			val prop = properties.find {
-				it.key.equals(property, ignoreCase)
-			} ?: return@with false
-			
+			val prop = file.properties?.findPsiPropertyByKey(property, ignoreCase) ?: return@with false
 			if (value != null) return@with prop.value.equals(value, ignoreCase) else return@with true
 		}
+	}
+	
+	fun withoutParentStatement() = with("AdvancedSearchElementPattern.withoutParentStatement") { t, _ ->
+		t.parentOfType<AdvancedSearchPsiStatement>() == null
 	}
 	
 	class Capture<T : PsiElement> : AdvancedSearchElementPattern<T, Capture<T>> {
@@ -124,41 +107,31 @@ class AdvancedSearchParameterPattern : AdvancedSearchElementPattern<AdvancedSear
 	/**
 	 * specify [text] with '$'
 	 */
-	fun withVariableText(vararg text: String): AdvancedSearchParameterPattern {
-		return with("AdvancedSearchParameterPattern.withVariableText") { t, _ ->
-			val statement = t.parentOfType<AdvancedSearchPsiStatement>() ?: return@with false
-			text.forEach {
-				if (statement.psiVariable?.text == it) {
-					return@with true
-				}
-			}
-			return@with false
+	fun withVariable(vararg text: String): AdvancedSearchParameterPattern {
+		return with("AdvancedSearchParameterPattern.withVariable") { t, _ ->
+			val v = t.parentOfType<AdvancedSearchPsiStatement>()?.identifier ?: return@with false
+			text.any { v == it }
 		}
 	}
 	
-	fun withIdentifierText(vararg text: String): AdvancedSearchParameterPattern {
-		return with("AdvancedSearchParameterPattern.withIdentifierText") { t, _ ->
-			val statement = t.parentOfType<AdvancedSearchPsiStatement>() ?: return@with false
-			text.forEach {
-				if (statement.psiIdentifier?.text == it) {
-					return@with true
-				}
-			}
-			return@with false
+	fun withIdentifier(vararg text: String): AdvancedSearchParameterPattern {
+		return with("AdvancedSearchParameterPattern.withIdentifier") { t, _ ->
+			val i = t.parentOfType<AdvancedSearchPsiStatement>()?.identifier ?: return@with false
+			text.any { i == it }
 		}
 	}
 	
-	fun withIdentifierText(pattern: Regex): AdvancedSearchParameterPattern {
-		return with("AdvancedSearchParameterPattern.withIdentifierText(regex)") { t, _ ->
+	fun withIdentifier(pattern: Regex): AdvancedSearchParameterPattern {
+		return with("AdvancedSearchParameterPattern.withIdentifier(regex)") { t, _ ->
 			val identifier = t.parentOfType<AdvancedSearchPsiStatement>()?.psiIdentifier?.text ?: return@with false
-			return@with pattern.matches(identifier)
+			pattern.matches(identifier)
 		}
 	}
 }
 
 class AdvancedSearchTopLevelPropertyPattern : AdvancedSearchElementPattern<AdvancedSearchPsiTopLevelProperty, AdvancedSearchTopLevelPropertyPattern>(AdvancedSearchPsiTopLevelProperty::class.java) {
 	fun withKey(k: String): AdvancedSearchTopLevelPropertyPattern {
-		return with("AdvancedSearchTopLevelPropertyPattern.withPropertyKey") { t, _ ->
+		return with("AdvancedSearchTopLevelPropertyPattern.withKey") { t, _ ->
 			t.key == k
 		}
 	}
@@ -167,5 +140,17 @@ class AdvancedSearchTopLevelPropertyPattern : AdvancedSearchElementPattern<Advan
 		return with("AdvancedSearchTopLevelPropertyPattern.withValue") { t, _ ->
 			t.value == v
 		}
+	}
+}
+
+class AdvancedSearchStatementPattern : AdvancedSearchElementPattern<AdvancedSearchPsiStatement, AdvancedSearchStatementPattern>(AdvancedSearchPsiStatement::class.java) {
+	fun withVariable(vararg text: String, checkParent: Boolean = false) = with("AdvancedSearchStatementPattern.withVariable") { t, _ ->
+		val v = t.variable ?: (if (checkParent) t.parentStatement?.variable else null) ?: return@with false
+		text.any { v == it }
+	}
+	
+	fun withIdentifier(vararg text: String) = with("AdvancedSearchStatementPattern.withIdentifier") { t, _ ->
+		val i = t.identifier ?: return@with false
+		text.any { i == it }
 	}
 }

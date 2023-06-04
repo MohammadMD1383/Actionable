@@ -52,10 +52,10 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 				is PsiMethodPattern -> {
 					it.acceptChildren(object : JavaRecursiveElementVisitor() {
 						override fun visitMethod(method: PsiMethod) {
-							if (criteria.accepts(method)) {
+							if (method.containingClass == it && criteria.accepts(method)) {
 								addResult(SearchResult(
 									method.name,
-									"${method.containingClass!!.qualifiedName}#${method.name}",
+									"${it.qualifiedName}#${method.name}",
 									method,
 									getIconFor(method)
 								))

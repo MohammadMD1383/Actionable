@@ -51,4 +51,22 @@ public class AdvancedSearchPsiStatementImpl extends ASTWrapperPsiElement impleme
     return AdvancedSearchPsiImplUtilKt.getPsiParameters(this);
   }
 
+  @Override
+  @Nullable
+  public String getVariable() {
+    return AdvancedSearchPsiImplUtilKt.getVariable(this);
+  }
+
+  @Override
+  @Nullable
+  public String getIdentifier() {
+    return AdvancedSearchPsiImplUtilKt.getIdentifier(this);
+  }
+
+  @Override
+  @Nullable
+  public AdvancedSearchPsiStatement getParentStatement() {
+    return AdvancedSearchPsiImplUtilKt.getParentStatement(this);
+  }
+
 }

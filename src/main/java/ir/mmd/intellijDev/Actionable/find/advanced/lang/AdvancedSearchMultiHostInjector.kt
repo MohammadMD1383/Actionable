@@ -6,8 +6,6 @@ import com.intellij.lang.java.JavaLanguage
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLanguageInjectionHost
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.parameter
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern.Companion.stringLiteral
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStringLiteral
 import ir.mmd.intellijDev.Actionable.util.then
 import org.intellij.lang.regexp.RegExpLanguage
@@ -31,7 +29,7 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	private fun regexpForMatches(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
 		val condition = stringLiteral()
 			.inside(parameter()
-				.withIdentifierText(".+-matches".toRegex()))
+				.withIdentifier(".+-matches".toRegex()))
 		
 		return condition.accepts(context) then {
 			registrar.startInjecting(RegExpLanguage.INSTANCE)
@@ -46,8 +44,8 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	private fun javaMethodParam(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
 		val condition = stringLiteral()
 			.inside(parameter()
-				.withVariableText("\$method")
-				.withIdentifierText("has-param")
+				.withVariable("\$method")
+				.withIdentifier("has-param")
 				.withTopLevelProperty("language", "java"))
 		
 		return condition.accepts(context) then {
@@ -63,8 +61,8 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	private fun javaClassForExtends(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
 		val condition = stringLiteral()
 			.inside(parameter()
-				.withVariableText("\$class")
-				.withIdentifierText("extends", "extends-directly")
+				.withVariable("\$class")
+				.withIdentifier("extends", "extends-directly")
 				.withTopLevelProperty("language", "java"))
 		
 		return condition.accepts(context) then {
@@ -80,8 +78,8 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	private fun javaInterfaceForImplementsAndExtends(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
 		val condition = stringLiteral()
 			.inside(
-				(parameter().withVariableText("\$class").withIdentifierText("implements", "implements-directly") or
-					parameter().withVariableText("\$interface").withIdentifierText("extends", "extends-directly"))
+				(parameter().withVariable("\$class").withIdentifier("implements", "implements-directly") or
+					parameter().withVariable("\$interface").withIdentifier("extends", "extends-directly"))
 					.withTopLevelProperty("language", "java")
 			)
 		

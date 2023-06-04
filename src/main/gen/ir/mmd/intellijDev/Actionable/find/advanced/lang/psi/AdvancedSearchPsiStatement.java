@@ -19,4 +19,13 @@ public interface AdvancedSearchPsiStatement extends PsiElement {
   @Nullable
   AdvancedSearchPsiParameters getPsiParameters();
 
+  @Nullable
+  String getVariable();
+
+  @Nullable
+  String getIdentifier();
+
+  @Nullable
+  AdvancedSearchPsiStatement getParentStatement();
+
 }

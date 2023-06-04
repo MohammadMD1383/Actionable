@@ -3,6 +3,7 @@ package ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl
 import com.intellij.psi.LiteralTextEscaper
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLanguageInjectionHost
+import com.intellij.psi.util.parentOfType
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*
 import ir.mmd.intellijDev.Actionable.util.ext.innerSubString
 
@@ -38,8 +39,12 @@ fun getLanguagePsiProperty(element: AdvancedSearchPsiTopLevelProperties): Advanc
 	return element.topLevelPropertyList.find { it.key == "language" }
 }
 
+fun findPsiPropertyByKey(element: AdvancedSearchPsiTopLevelProperties, key: String, ignoreCase:Boolean): AdvancedSearchPsiTopLevelProperty? {
+	return element.topLevelPropertyList.find { it.key.equals(key, ignoreCase) }
+}
+
 fun findPsiPropertyByKey(element: AdvancedSearchPsiTopLevelProperties, key: String): AdvancedSearchPsiTopLevelProperty? {
-	return element.topLevelPropertyList.find { it.key == key }
+	return findPsiPropertyByKey(element, key, true)
 }
 
 fun getPsiVariable(element: AdvancedSearchPsiStatement): PsiElement? {
@@ -52,4 +57,16 @@ fun getPsiIdentifier(element: AdvancedSearchPsiStatement): PsiElement? {
 
 fun getPsiParameters(element: AdvancedSearchPsiStatement): AdvancedSearchPsiParameters? {
 	return element.node.findChildByType(AdvancedSearchTypes.PARAMETERS)?.psi as AdvancedSearchPsiParameters?
+}
+
+fun getVariable(element: AdvancedSearchPsiStatement): String? {
+	return element.psiVariable?.text
+}
+
+fun getIdentifier(element: AdvancedSearchPsiStatement): String? {
+	return element.psiIdentifier?.text
+}
+
+fun getParentStatement(element: AdvancedSearchPsiStatement): AdvancedSearchPsiStatement? {
+	return element.parentOfType<AdvancedSearchPsiStatement>()
 }

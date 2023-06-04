@@ -101,8 +101,8 @@ class AdvancedSearchLexer implements FlexLexer {
 
   private static final String ZZ_ACTION_PACKED_0 =
     "\5\0\1\1\1\2\1\3\1\4\3\5\1\6\1\7"+
-    "\1\3\1\10\1\11\1\12\1\13\1\14\1\15\1\16"+
-    "\1\17\1\20\1\17\1\21\1\3\1\22\1\0\1\23"+
+    "\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17"+
+    "\1\20\1\21\1\20\1\22\1\3\1\10\1\0\1\23"+
     "\1\0";
 
   private static int [] zzUnpackAction() {
@@ -573,57 +573,57 @@ class AdvancedSearchLexer implements FlexLexer {
           // fall through
           case 26: break;
           case 8:
-            { yybegin(RAW_STRING); return AdvancedSearchTypes.SINGLE_QUOTE;
+            { return AdvancedSearchTypes.VARIABLE;
             }
           // fall through
           case 27: break;
           case 9:
-            { yybegin(WHITESPACE); return AdvancedSearchTypes.COMMA;
+            { yybegin(RAW_STRING); return AdvancedSearchTypes.SINGLE_QUOTE;
             }
           // fall through
           case 28: break;
           case 10:
-            { return AdvancedSearchTypes.COLON;
+            { yybegin(WHITESPACE); return AdvancedSearchTypes.COMMA;
             }
           // fall through
           case 29: break;
           case 11:
-            { return AdvancedSearchTypes.IDENTIFIER;
+            { return AdvancedSearchTypes.COLON;
             }
           // fall through
           case 30: break;
           case 12:
-            { yybegin(WHITESPACE); return AdvancedSearchTypes.LBRACE;
+            { return AdvancedSearchTypes.IDENTIFIER;
             }
           // fall through
           case 31: break;
           case 13:
-            { return AdvancedSearchTypes.RBRACE;
+            { yybegin(WHITESPACE); return AdvancedSearchTypes.LBRACE;
             }
           // fall through
           case 32: break;
           case 14:
-            { yybegin(MAIN); yypushback(1);
+            { return AdvancedSearchTypes.RBRACE;
             }
           // fall through
           case 33: break;
           case 15:
-            { return AdvancedSearchTypes.STRING_SEQ;
+            { yybegin(MAIN); yypushback(1);
             }
           // fall through
           case 34: break;
           case 16:
-            { yybegin(MAIN); return AdvancedSearchTypes.SINGLE_QUOTE;
+            { return AdvancedSearchTypes.STRING_SEQ;
             }
           // fall through
           case 35: break;
           case 17:
-            { yybegin(MAIN); return AdvancedSearchTypes.DOUBLE_QUOTE;
+            { yybegin(MAIN); return AdvancedSearchTypes.SINGLE_QUOTE;
             }
           // fall through
           case 36: break;
           case 18:
-            { return AdvancedSearchTypes.VARIABLE;
+            { yybegin(MAIN); return AdvancedSearchTypes.DOUBLE_QUOTE;
             }
           // fall through
           case 37: break;

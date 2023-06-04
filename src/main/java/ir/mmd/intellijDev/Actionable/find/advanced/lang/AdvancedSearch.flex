@@ -16,7 +16,7 @@ import com.intellij.psi.TokenType;
 %eof}
 
 IDENTIFIER=[a-z]([a-z\-]*[a-z])?
-VARIABLE=\${IDENTIFIER}
+VARIABLE=\${IDENTIFIER}?
 SINGLE_QUOTE='
 DOUBLE_QUOTE=\"
 COLON=:

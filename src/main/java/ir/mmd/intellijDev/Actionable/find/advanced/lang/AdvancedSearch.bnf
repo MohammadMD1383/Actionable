@@ -35,7 +35,7 @@ Statements ::= (Statement eos)+
 //Statement ::= VARIABLE IDENTIFIER Parameters? StatementBody? {pin=1 recoverWhile=StatementRecover}
 Statement ::= <<statement VARIABLE IDENTIFIER Parameters>> StatementBody? {
 	recoverWhile=StatementRecover
-	methods=[getPsiVariable getPsiIdentifier getPsiParameters]
+	methods=[getPsiVariable getPsiIdentifier getPsiParameters getVariable getIdentifier getParentStatement]
 }
 private StatementRecover ::= !eos
 
