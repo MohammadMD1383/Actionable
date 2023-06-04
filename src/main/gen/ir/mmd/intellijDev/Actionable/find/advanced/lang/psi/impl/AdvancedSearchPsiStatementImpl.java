@@ -29,26 +29,26 @@ public class AdvancedSearchPsiStatementImpl extends ASTWrapperPsiElement impleme
 
   @Override
   @Nullable
-  public AdvancedSearchPsiParameters getParameters() {
-    return findChildByClass(AdvancedSearchPsiParameters.class);
-  }
-
-  @Override
-  @Nullable
   public AdvancedSearchPsiStatementBody getStatementBody() {
     return findChildByClass(AdvancedSearchPsiStatementBody.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  public PsiElement getPsiVariable() {
+    return AdvancedSearchPsiImplUtilKt.getPsiVariable(this);
   }
 
   @Override
-  @NotNull
-  public PsiElement getVariable() {
-    return findNotNullChildByType(VARIABLE);
+  @Nullable
+  public PsiElement getPsiIdentifier() {
+    return AdvancedSearchPsiImplUtilKt.getPsiIdentifier(this);
+  }
+
+  @Override
+  @Nullable
+  public AdvancedSearchPsiParameters getPsiParameters() {
+    return AdvancedSearchPsiImplUtilKt.getPsiParameters(this);
   }
 
 }

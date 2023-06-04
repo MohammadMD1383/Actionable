@@ -45,7 +45,7 @@ WHITESPACE_NO_CRLF=[ \t\f]+
 	{VARIABLE}           { return AdvancedSearchTypes.VARIABLE; }
 	{IDENTIFIER}         { return AdvancedSearchTypes.IDENTIFIER; }
     {COLON}              { return AdvancedSearchTypes.COLON; }
-    {COMMA}              { return AdvancedSearchTypes.COMMA; }
+    {COMMA}              { yybegin(WHITESPACE); return AdvancedSearchTypes.COMMA; }
     {SINGLE_QUOTE}       { yybegin(RAW_STRING); return AdvancedSearchTypes.SINGLE_QUOTE; }
     {DOUBLE_QUOTE}       { yybegin(STRING); return AdvancedSearchTypes.DOUBLE_QUOTE; }
     {LBRACE}             { yybegin(WHITESPACE); return AdvancedSearchTypes.LBRACE; }

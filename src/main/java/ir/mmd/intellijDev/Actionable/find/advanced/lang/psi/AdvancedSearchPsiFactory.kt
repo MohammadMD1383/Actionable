@@ -36,8 +36,8 @@ object AdvancedSearchPsiFactory {
 	 */
 	@JvmStatic
 	fun createParameterFromText(project: Project, text: String): AdvancedSearchPsiParameter {
-		return createFileFromText(project, "a:'b';\$c d '$text'")
+		return createFileFromText(project, "\$c d '$text'")
 			.statements!!.statementList[0]
-			.parameters!!.parameterList[0]
+			.psiParameters!!.parameterList[0]
 	}
 }

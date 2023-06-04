@@ -578,7 +578,7 @@ class AdvancedSearchLexer implements FlexLexer {
           // fall through
           case 27: break;
           case 9:
-            { return AdvancedSearchTypes.COMMA;
+            { yybegin(WHITESPACE); return AdvancedSearchTypes.COMMA;
             }
           // fall through
           case 28: break;

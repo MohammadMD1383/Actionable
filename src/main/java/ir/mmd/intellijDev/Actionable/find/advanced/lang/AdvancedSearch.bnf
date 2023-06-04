@@ -15,14 +15,14 @@
     tokens=[COMMENT="COMMENT"]
 }
 
-AdvancedSearchFile ::= eos* TopLevelProperties? eos* Statements?
+AdvancedSearchFile ::= EOS* TopLevelProperties? EOS* Statements?
 
 // property1: 'value1'
 // property2: 'value2'
-TopLevelProperties ::= (TopLevelProperty eos)+ {methods=[getLanguageProperty]}
+TopLevelProperties ::= (TopLevelProperty eos)+ {methods=[getLanguagePsiProperty findPsiPropertyByKey]}
 
 // property: 'value'
-TopLevelProperty ::= IDENTIFIER COLON StringLiteral {pin=1 recoverWhile=TopLevelPropertyRecover methods=[getPropertyKey getPropertyValue]}
+TopLevelProperty ::= IDENTIFIER COLON StringLiteral {pin=1 recoverWhile=TopLevelPropertyRecover methods=[getKey getValue]}
 private TopLevelPropertyRecover ::= !eos
 
 /* --------------------------------------- */
@@ -32,7 +32,11 @@ private TopLevelPropertyRecover ::= !eos
 Statements ::= (Statement eos)+
 
 // $class implements 'com.package.Interface'
-Statement ::= VARIABLE IDENTIFIER Parameters? StatementBody? {pin=1 recoverWhile=StatementRecover}
+//Statement ::= VARIABLE IDENTIFIER Parameters? StatementBody? {pin=1 recoverWhile=StatementRecover}
+Statement ::= <<statement VARIABLE IDENTIFIER Parameters>> StatementBody? {
+	recoverWhile=StatementRecover
+	methods=[getPsiVariable getPsiIdentifier getPsiParameters]
+}
 private StatementRecover ::= !eos
 
 // 'com.package1.Interface', 'com.package2.Interface'
@@ -42,7 +46,7 @@ Parameter ::= StringLiteral
 // {
 //     $method has-parameters 'java.lang.String s', 'java.util.Date d'
 // }
-StatementBody ::= LBRACE Statements? RBRACE {pin=1}
+StatementBody ::= LBRACE EOS* Statements? EOS* RBRACE {pin=1}
 
 /* -------------------- Helper -------------------- */
 
@@ -53,7 +57,7 @@ private eos ::= EOS+ | <<eof>> | <<rBraceAsEOSInBody>>
 // "supports escapes"
 StringLiteral ::= RawString | String {
 	implements="com.intellij.psi.PsiLanguageInjectionHost"
-	methods=[isValidHost updateText createLiteralTextEscaper getStringText isRawString]
+	methods=[isValidHost updateText createLiteralTextEscaper getContent isRaw]
 }
 
 String ::= DOUBLE_QUOTE (STRING_SEQ | STRING_ESCAPE_SEQ)* DOUBLE_QUOTE {pin=1 extends=StringLiteral}

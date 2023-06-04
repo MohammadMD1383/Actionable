@@ -75,10 +75,10 @@ open class AdvancedSearchElementPattern<T : PsiElement, Self : AdvancedSearchEle
 			
 			val properties = file.properties?.topLevelPropertyList ?: return@with false
 			val prop = properties.find {
-				it.propertyKey.equals(property, ignoreCase)
+				it.key.equals(property, ignoreCase)
 			} ?: return@with false
 			
-			if (value != null) return@with prop.propertyValue.equals(value, ignoreCase) else return@with true
+			if (value != null) return@with prop.value.equals(value, ignoreCase) else return@with true
 		}
 	}
 	
@@ -95,7 +95,7 @@ open class AdvancedSearchStringLiteralPattern<T : AdvancedSearchPsiStringLiteral
 	fun withSingleStringSequence(ignoreEscapes: Boolean = false): Self {
 		return with("AdvancedSearchStringLiteralPattern.withSingleStringSequence") { t, _ ->
 			var count = 0
-			t.isRawString || (t.node.children().all {
+			t.isRaw || (t.node.children().all {
 				when (it.elementType) {
 					AdvancedSearchTypes.STRING_ESCAPE_SEQ -> ignoreEscapes
 					AdvancedSearchTypes.STRING_SEQ -> ++count <= 1
@@ -110,7 +110,7 @@ open class AdvancedSearchStringLiteralPattern<T : AdvancedSearchPsiStringLiteral
 	 */
 	fun thatDoesntContain(text: String): Self {
 		return with("AdvancedSearchStringLiteralPattern.thatDoesntContain") { t, _ ->
-			text !in t.stringText
+			text !in t.content
 		}
 	}
 	
@@ -128,7 +128,7 @@ class AdvancedSearchParameterPattern : AdvancedSearchElementPattern<AdvancedSear
 		return with("AdvancedSearchParameterPattern.withVariableText") { t, _ ->
 			val statement = t.parentOfType<AdvancedSearchPsiStatement>() ?: return@with false
 			text.forEach {
-				if (statement.variable.text == it) {
+				if (statement.psiVariable?.text == it) {
 					return@with true
 				}
 			}
@@ -140,7 +140,7 @@ class AdvancedSearchParameterPattern : AdvancedSearchElementPattern<AdvancedSear
 		return with("AdvancedSearchParameterPattern.withIdentifierText") { t, _ ->
 			val statement = t.parentOfType<AdvancedSearchPsiStatement>() ?: return@with false
 			text.forEach {
-				if (statement.identifier?.text == it) {
+				if (statement.psiIdentifier?.text == it) {
 					return@with true
 				}
 			}
@@ -150,7 +150,7 @@ class AdvancedSearchParameterPattern : AdvancedSearchElementPattern<AdvancedSear
 	
 	fun withIdentifierText(pattern: Regex): AdvancedSearchParameterPattern {
 		return with("AdvancedSearchParameterPattern.withIdentifierText(regex)") { t, _ ->
-			val identifier = t.parentOfType<AdvancedSearchPsiStatement>()?.identifier?.text ?: return@with false
+			val identifier = t.parentOfType<AdvancedSearchPsiStatement>()?.psiIdentifier?.text ?: return@with false
 			return@with pattern.matches(identifier)
 		}
 	}
@@ -159,13 +159,13 @@ class AdvancedSearchParameterPattern : AdvancedSearchElementPattern<AdvancedSear
 class AdvancedSearchTopLevelPropertyPattern : AdvancedSearchElementPattern<AdvancedSearchPsiTopLevelProperty, AdvancedSearchTopLevelPropertyPattern>(AdvancedSearchPsiTopLevelProperty::class.java) {
 	fun withKey(k: String): AdvancedSearchTopLevelPropertyPattern {
 		return with("AdvancedSearchTopLevelPropertyPattern.withPropertyKey") { t, _ ->
-			t.propertyKey == k
+			t.key == k
 		}
 	}
 	
 	fun withValue(v: String): AdvancedSearchTopLevelPropertyPattern {
 		return with("AdvancedSearchTopLevelPropertyPattern.withValue") { t, _ ->
-			t.propertyValue == v
+			t.value == v
 		}
 	}
 }

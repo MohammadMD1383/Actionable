@@ -47,14 +47,14 @@ public class AdvancedSearchPsiTopLevelPropertyImpl extends ASTWrapperPsiElement 
 
   @Override
   @NotNull
-  public String getPropertyKey() {
-    return AdvancedSearchPsiImplUtilKt.getPropertyKey(this);
+  public String getKey() {
+    return AdvancedSearchPsiImplUtilKt.getKey(this);
   }
 
   @Override
   @Nullable
-  public String getPropertyValue() {
-    return AdvancedSearchPsiImplUtilKt.getPropertyValue(this);
+  public String getValue() {
+    return AdvancedSearchPsiImplUtilKt.getValue(this);
   }
 
 }

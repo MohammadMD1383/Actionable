@@ -17,9 +17,9 @@ public interface AdvancedSearchPsiTopLevelProperty extends PsiElement {
   PsiElement getIdentifier();
 
   @NotNull
-  String getPropertyKey();
+  String getKey();
 
   @Nullable
-  String getPropertyValue();
+  String getValue();
 
 }

@@ -8,15 +8,15 @@ import com.intellij.psi.PsiElement;
 public interface AdvancedSearchPsiStatement extends PsiElement {
 
   @Nullable
-  AdvancedSearchPsiParameters getParameters();
-
-  @Nullable
   AdvancedSearchPsiStatementBody getStatementBody();
 
   @Nullable
-  PsiElement getIdentifier();
+  PsiElement getPsiVariable();
 
-  @NotNull
-  PsiElement getVariable();
+  @Nullable
+  PsiElement getPsiIdentifier();
+
+  @Nullable
+  AdvancedSearchPsiParameters getPsiParameters();
 
 }

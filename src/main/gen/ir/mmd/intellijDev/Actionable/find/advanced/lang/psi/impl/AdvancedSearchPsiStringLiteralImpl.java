@@ -48,13 +48,13 @@ public abstract class AdvancedSearchPsiStringLiteralImpl extends ASTWrapperPsiEl
 
   @Override
   @NotNull
-  public String getStringText() {
-    return AdvancedSearchPsiImplUtilKt.getStringText(this);
+  public String getContent() {
+    return AdvancedSearchPsiImplUtilKt.getContent(this);
   }
 
   @Override
-  public boolean isRawString() {
-    return AdvancedSearchPsiImplUtilKt.isRawString(this);
+  public boolean isRaw() {
+    return AdvancedSearchPsiImplUtilKt.isRaw(this);
   }
 
 }

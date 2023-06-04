@@ -38,7 +38,7 @@ abstract class AdvancedSearchAgent protected constructor(
 				return null
 			}
 			
-			val language = file.properties?.languageProperty?.propertyValue ?: return null
+			val language = file.properties?.languagePsiProperty?.value ?: return null
 			if (!Language.getRegisteredLanguages().any { it.id.equals(language, ignoreCase = true) }) {
 				return null
 			}
@@ -67,7 +67,7 @@ abstract class AdvancedSearchAgent protected constructor(
 	)
 	
 	class SearchStatement(
-		val variable: String,
+		val variable: String?,
 		val identifier: String,
 		val parameters: List<String>,
 		val innerStatements: List<SearchStatement>?
@@ -76,7 +76,7 @@ abstract class AdvancedSearchAgent protected constructor(
 	protected val model: SearchModel by lazy {
 		val properties = mutableMapOf<String, String>()
 		file.properties?.topLevelPropertyList?.forEach {
-			properties[it.propertyKey] = it.propertyValue!!
+			properties[it.key] = it.value!!
 		}
 		
 		val statements = mutableListOf<SearchStatement>()
@@ -88,9 +88,9 @@ abstract class AdvancedSearchAgent protected constructor(
 	}
 	
 	private fun buildSearchStatement(psiStatement: AdvancedSearchPsiStatement): SearchStatement {
-		val variable = psiStatement.variable.text
-		val identifier = psiStatement.identifier!!.text
-		val parameters = psiStatement.parameters?.parameterList?.map { it.stringLiteral.stringText } ?: emptyList()
+		val variable = psiStatement.psiVariable?.text
+		val identifier = psiStatement.psiIdentifier!!.text
+		val parameters = psiStatement.psiParameters?.parameterList?.map { it.stringLiteral.content } ?: emptyList()
 		val innerStatements = psiStatement.statementBody?.statements?.statementList?.map {
 			buildSearchStatement(it)
 		}

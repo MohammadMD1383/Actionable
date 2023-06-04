@@ -69,6 +69,7 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 		override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
 			// todo: specific to context and parent elements
 			result.addAllElements(listOf(
+				createLookupElement("type"),
 				createLookupElement("class"),
 				createLookupElement("method"),
 				createLookupElement("interface"),

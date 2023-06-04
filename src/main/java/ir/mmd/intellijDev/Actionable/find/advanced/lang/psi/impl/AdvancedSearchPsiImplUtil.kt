@@ -1,6 +1,7 @@
 package ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl
 
 import com.intellij.psi.LiteralTextEscaper
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLanguageInjectionHost
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*
 import ir.mmd.intellijDev.Actionable.util.ext.innerSubString
@@ -17,22 +18,38 @@ fun createLiteralTextEscaper(element: AdvancedSearchPsiStringLiteral): LiteralTe
 	return LiteralTextEscaper.createSimple(element)
 }
 
-fun getPropertyKey(element: AdvancedSearchPsiTopLevelProperty): String {
+fun getKey(element: AdvancedSearchPsiTopLevelProperty): String {
 	return element.identifier.text
 }
 
-fun getPropertyValue(element: AdvancedSearchPsiTopLevelProperty): String? {
-	return element.stringLiteral?.stringText
+fun getValue(element: AdvancedSearchPsiTopLevelProperty): String? {
+	return element.stringLiteral?.content
 }
 
-fun getStringText(element: AdvancedSearchPsiStringLiteral): String {
+fun getContent(element: AdvancedSearchPsiStringLiteral): String {
 	return element.text.innerSubString(1, 1)
 }
 
-fun isRawString(element: AdvancedSearchPsiStringLiteral): Boolean {
+fun isRaw(element: AdvancedSearchPsiStringLiteral): Boolean {
 	return element is AdvancedSearchPsiRawString
 }
 
-fun getLanguageProperty(element: AdvancedSearchPsiTopLevelProperties): AdvancedSearchPsiTopLevelProperty? {
-	return element.topLevelPropertyList.find { it.propertyKey == "language" }
+fun getLanguagePsiProperty(element: AdvancedSearchPsiTopLevelProperties): AdvancedSearchPsiTopLevelProperty? {
+	return element.topLevelPropertyList.find { it.key == "language" }
+}
+
+fun findPsiPropertyByKey(element: AdvancedSearchPsiTopLevelProperties, key: String): AdvancedSearchPsiTopLevelProperty? {
+	return element.topLevelPropertyList.find { it.key == key }
+}
+
+fun getPsiVariable(element: AdvancedSearchPsiStatement): PsiElement? {
+	return element.node.findChildByType(AdvancedSearchTypes.VARIABLE)?.psi
+}
+
+fun getPsiIdentifier(element: AdvancedSearchPsiStatement): PsiElement? {
+	return element.node.findChildByType(AdvancedSearchTypes.IDENTIFIER)?.psi
+}
+
+fun getPsiParameters(element: AdvancedSearchPsiStatement): AdvancedSearchPsiParameters? {
+	return element.node.findChildByType(AdvancedSearchTypes.PARAMETERS)?.psi as AdvancedSearchPsiParameters?
 }

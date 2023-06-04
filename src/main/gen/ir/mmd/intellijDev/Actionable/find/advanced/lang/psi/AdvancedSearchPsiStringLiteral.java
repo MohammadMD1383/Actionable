@@ -18,8 +18,8 @@ public interface AdvancedSearchPsiStringLiteral extends PsiLanguageInjectionHost
   LiteralTextEscaper<? extends PsiLanguageInjectionHost> createLiteralTextEscaper();
 
   @NotNull
-  String getStringText();
+  String getContent();
 
-  boolean isRawString();
+  boolean isRaw();
 
 }

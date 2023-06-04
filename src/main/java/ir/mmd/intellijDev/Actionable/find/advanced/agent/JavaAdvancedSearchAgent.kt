@@ -5,10 +5,7 @@ import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Iconable
 import com.intellij.patterns.*
-import com.intellij.psi.JavaRecursiveElementVisitor
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiMember
-import com.intellij.psi.PsiMethod
+import com.intellij.psi.*
 import com.intellij.psi.impl.JavaPsiFacadeEx
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.AllClassesSearch
@@ -82,11 +79,14 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 		else -> el.getIcon(Iconable.ICON_FLAG_READ_STATUS)
 	}
 	
-	private fun buildCriteria(statement: SearchStatement): PsiMemberPattern<*, *> {
-		var criteria: PsiMemberPattern<*, *> = when (statement.variable) {
-			"\$class" -> PsiJavaPatterns.psiClass()
-			"\$interface" -> PsiJavaPatterns.psiClass().isInterface
+	private fun buildCriteria(statement: SearchStatement, parent: PsiElementPattern<out PsiElement, *>? = null): PsiElementPattern<out PsiElement, *> {
+		var criteria: PsiElementPattern<out PsiElement, *> = when (statement.variable) {
+			"\$type" -> PsiJavaPatterns.psiClass()
+			"\$class" -> PsiJavaPatterns.psiClass().nonInterface()
+			"\$interface" -> PsiJavaPatterns.psiClass().isInterface().nonAnnotationType()
+			"\$annotation" -> PsiJavaPatterns.psiClass().isAnnotationType()
 			"\$method" -> PsiJavaPatterns.psiMethod()
+			null -> parent ?: throw IllegalArgumentException("both variable and parent cannot be null")
 			else -> throw IllegalArgumentException("unknown variable: ${statement.variable}")
 		}
 		
@@ -114,7 +114,8 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 			}
 			
 			"has-modifier" -> {
-				criteria = criteria.withModifiers(*statement.parameters.toTypedArray())
+				require(criteria is PsiMemberPattern) { "only classes and interfaces and methods can use ${statement.identifier}" }
+				criteria = (criteria as PsiMemberPattern<out PsiMember, *>).withModifiers(*statement.parameters.toTypedArray())
 			}
 			
 			"name-matches" -> {
@@ -131,20 +132,43 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 			else -> throw IllegalArgumentException("unknown identifier: ${statement.identifier}")
 		}
 		
+		statement.innerStatements?.forEach {
+			criteria = if (it.variable != null) {
+				mixCriteria(criteria, buildCriteria(it))
+			} else {
+				criteria.and(buildCriteria(it, criteria))
+			}
+		}
+		
 		return criteria
+	}
+	
+	private fun mixCriteria(parent: PsiElementPattern<out PsiElement, *>, child: PsiElementPattern<out PsiElement, *>) = when (parent) {
+		is PsiClassPattern -> when (child) {
+			is PsiMethodPattern -> parent.withMethod(true, child)
+			else -> throw UnsupportedOperationException("cannot mix `${child.javaClass.simpleName}` into ${parent.javaClass.simpleName}")
+		}
+		
+		else -> throw UnsupportedOperationException("mixing is not supported for `${parent.javaClass.simpleName}` and `${child.javaClass.simpleName}`")
 	}
 }
 
-fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object : PatternCondition<PsiClass?>("inheritorOf") {
-	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
+fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object : PatternCondition<PsiClass>("inheritorOf") {
+	override fun accepts(t: PsiClass, context: ProcessingContext): Boolean {
 		val facade = JavaPsiFacadeEx.getInstanceEx(t.project)
 		return t.isInheritor(facade.findClass(baseName), !direct)
 	}
 })
 
-fun PsiClassPattern.isAnonymous() = with(object : PatternCondition<PsiClass?>("isAnonymous") {
-	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
+fun PsiClassPattern.isAnonymous() = with(object : PatternCondition<PsiClass>("isAnonymous") {
+	override fun accepts(t: PsiClass, context: ProcessingContext): Boolean {
 		return t.name == null
+	}
+})
+
+fun PsiClassPattern.nonInterface() = with(object : PatternCondition<PsiClass>("nonInterface") {
+	override fun accepts(t: PsiClass, context: ProcessingContext): Boolean {
+		return !t.isInterface
 	}
 })
 

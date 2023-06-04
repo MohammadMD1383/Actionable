@@ -11,6 +11,9 @@ public interface AdvancedSearchPsiTopLevelProperties extends PsiElement {
   List<AdvancedSearchPsiTopLevelProperty> getTopLevelPropertyList();
 
   @Nullable
-  AdvancedSearchPsiTopLevelProperty getLanguageProperty();
+  AdvancedSearchPsiTopLevelProperty getLanguagePsiProperty();
+
+  @Nullable
+  AdvancedSearchPsiTopLevelProperty findPsiPropertyByKey(@NotNull String key);
 
 }

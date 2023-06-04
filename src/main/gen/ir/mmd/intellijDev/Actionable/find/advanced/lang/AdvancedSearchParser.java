@@ -41,7 +41,7 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
   };
 
   /* ********************************************************** */
-  // eos* TopLevelProperties? eos* Statements?
+  // EOS* TopLevelProperties? EOS* Statements?
   static boolean AdvancedSearchFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AdvancedSearchFile")) return false;
     boolean r;
@@ -54,12 +54,12 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // eos*
+  // EOS*
   private static boolean AdvancedSearchFile_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AdvancedSearchFile_0")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!eos(b, l + 1)) break;
+      if (!consumeToken(b, EOS)) break;
       if (!empty_element_parsed_guard_(b, "AdvancedSearchFile_0", c)) break;
     }
     return true;
@@ -72,12 +72,12 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // eos*
+  // EOS*
   private static boolean AdvancedSearchFile_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AdvancedSearchFile_2")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!eos(b, l + 1)) break;
+      if (!consumeToken(b, EOS)) break;
       if (!empty_element_parsed_guard_(b, "AdvancedSearchFile_2", c)) break;
     }
     return true;
@@ -160,35 +160,26 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VARIABLE IDENTIFIER Parameters? StatementBody?
+  // <<statement VARIABLE IDENTIFIER Parameters>> StatementBody?
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
-    boolean r, p;
+    boolean r;
     Marker m = enter_section_(b, l, _NONE_, STATEMENT, "<statement>");
-    r = consumeTokens(b, 1, VARIABLE, IDENTIFIER);
-    p = r; // pin = 1
-    r = r && report_error_(b, Statement_2(b, l + 1));
-    r = p && Statement_3(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, AdvancedSearchParser::StatementRecover);
-    return r || p;
-  }
-
-  // Parameters?
-  private static boolean Statement_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_2")) return false;
-    Parameters(b, l + 1);
-    return true;
+    r = statement(b, l + 1, VARIABLE_parser_, IDENTIFIER_parser_, AdvancedSearchParser::Parameters);
+    r = r && Statement_1(b, l + 1);
+    exit_section_(b, l, m, r, false, AdvancedSearchParser::StatementRecover);
+    return r;
   }
 
   // StatementBody?
-  private static boolean Statement_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Statement_3")) return false;
+  private static boolean Statement_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Statement_1")) return false;
     StatementBody(b, l + 1);
     return true;
   }
 
   /* ********************************************************** */
-  // LBRACE Statements? RBRACE
+  // LBRACE EOS* Statements? EOS* RBRACE
   public static boolean StatementBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementBody")) return false;
     if (!nextTokenIs(b, LBRACE)) return false;
@@ -197,15 +188,39 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, LBRACE);
     p = r; // pin = 1
     r = r && report_error_(b, StatementBody_1(b, l + 1));
+    r = p && report_error_(b, StatementBody_2(b, l + 1)) && r;
+    r = p && report_error_(b, StatementBody_3(b, l + 1)) && r;
     r = p && consumeToken(b, RBRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // Statements?
+  // EOS*
   private static boolean StatementBody_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementBody_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, EOS)) break;
+      if (!empty_element_parsed_guard_(b, "StatementBody_1", c)) break;
+    }
+    return true;
+  }
+
+  // Statements?
+  private static boolean StatementBody_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StatementBody_2")) return false;
     Statements(b, l + 1);
+    return true;
+  }
+
+  // EOS*
+  private static boolean StatementBody_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StatementBody_3")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, EOS)) break;
+      if (!empty_element_parsed_guard_(b, "StatementBody_3", c)) break;
+    }
     return true;
   }
 
@@ -224,16 +239,15 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
   // (Statement eos)+
   public static boolean Statements(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statements")) return false;
-    if (!nextTokenIs(b, VARIABLE)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, STATEMENTS, "<statements>");
     r = Statements_0(b, l + 1);
     while (r) {
       int c = current_position_(b);
       if (!Statements_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "Statements", c)) break;
     }
-    exit_section_(b, m, STATEMENTS, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -376,4 +390,6 @@ public class AdvancedSearchParser implements PsiParser, LightPsiParser {
     return r;
   }
 
+  static final Parser IDENTIFIER_parser_ = (b, l) -> consumeToken(b, IDENTIFIER);
+  static final Parser VARIABLE_parser_ = (b, l) -> consumeToken(b, VARIABLE);
 }
