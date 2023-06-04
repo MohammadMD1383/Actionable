@@ -4,21 +4,24 @@ import com.intellij.icons.AllIcons
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Iconable
-import com.intellij.patterns.PatternCondition
-import com.intellij.patterns.PsiClassPattern
-import com.intellij.patterns.PsiJavaPatterns
-import com.intellij.patterns.StandardPatterns
+import com.intellij.patterns.*
+import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiMember
+import com.intellij.psi.PsiMethod
 import com.intellij.psi.impl.JavaPsiFacadeEx
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.AllClassesSearch
 import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
-import javax.swing.Icon
 
 @Suppress("NonDefaultConstructor")
 class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) : AdvancedSearchAgent(project, searchFile) {
 	override fun search(progress: ProgressIndicator, addResult: (SearchResult) -> Unit) {
+		if (model.statements.map { it.variable }.distinct().size != 1) {
+			throw IllegalArgumentException("all top level statements should have the same variable")
+		}
+		
 		var criteria = buildCriteria(model.statements.first())
 		progress.checkCanceled()
 		
@@ -38,28 +41,52 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 		progress.text = "Searching..."
 		AllClassesSearch.search(searchScope, project).forEach {
 			progress.checkCanceled()
-			if (criteria.accepts(it)) {
-				addResult(SearchResult(
-					it.name ?: "anonymous",
-					it.qualifiedName,
-					it,
-					getIconFor(it)
-				))
+			
+			when (criteria) {
+				is PsiClassPattern -> if (criteria.accepts(it)) {
+					addResult(SearchResult(
+						it.name ?: "anonymous",
+						it.qualifiedName,
+						it,
+						getIconFor(it)
+					))
+				}
+				
+				is PsiMethodPattern -> {
+					it.acceptChildren(object : JavaRecursiveElementVisitor() {
+						override fun visitMethod(method: PsiMethod) {
+							if (criteria.accepts(method)) {
+								addResult(SearchResult(
+									method.name,
+									"${method.containingClass!!.qualifiedName}#${method.name}",
+									method,
+									getIconFor(method)
+								))
+							}
+						}
+					})
+				}
 			}
 		}
 	}
 	
-	private fun getIconFor(el: PsiClass): Icon? {
-		return when {
-			el.isExceptionClass -> if (el.hasModifierProperty("abstract")) AllIcons.Nodes.AbstractException else AllIcons.Nodes.ExceptionClass
-			else -> el.getIcon(Iconable.ICON_FLAG_READ_STATUS)
+	private fun getIconFor(el: PsiMember) = when {
+		el is PsiClass && el.isExceptionClass -> {
+			if (el.hasModifierProperty("abstract")) {
+				AllIcons.Nodes.AbstractException
+			} else {
+				AllIcons.Nodes.ExceptionClass
+			}
 		}
+		
+		else -> el.getIcon(Iconable.ICON_FLAG_READ_STATUS)
 	}
 	
-	private fun buildCriteria(statement: SearchStatement): PsiClassPattern {
-		var criteria = when (statement.variable) {
+	private fun buildCriteria(statement: SearchStatement): PsiMemberPattern<*, *> {
+		var criteria: PsiMemberPattern<*, *> = when (statement.variable) {
 			"\$class" -> PsiJavaPatterns.psiClass()
 			"\$interface" -> PsiJavaPatterns.psiClass().isInterface
+			"\$method" -> PsiJavaPatterns.psiMethod()
 			else -> throw IllegalArgumentException("unknown variable: ${statement.variable}")
 		}
 		
@@ -68,19 +95,21 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 			"implements",
 			"extends-directly",
 			"implements-directly" -> {
+				require(criteria is PsiClassPattern) { "only classes and interfaces can use ${statement.identifier}" }
 				val direct = "directly" in statement.identifier
 				statement.parameters.forEach {
-					criteria = criteria.inheritorOf(it, direct)
+					criteria = (criteria as PsiClassPattern).inheritorOf(it, direct)
 				}
 			}
 			
 			"has-method",
 			"has-method-directly" -> {
+				require(criteria is PsiClassPattern) { "only classes and interfaces can use ${statement.identifier}" }
 				val checkDeep = "directly" !in statement.identifier
 				statement.parameters.map {
 					PsiJavaPatterns.psiMethod().withName(it)
 				}.forEach {
-					criteria = criteria.withMethod(checkDeep, it)
+					criteria = (criteria as PsiClassPattern).withMethod(checkDeep, it)
 				}
 			}
 			
@@ -95,7 +124,8 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 			}
 			
 			"is-anonymous" -> {
-				criteria = criteria.isAnonymous()
+				require(criteria is PsiClassPattern) { "only classes can use ${statement.identifier}" }
+				criteria = (criteria as PsiClassPattern).isAnonymous()
 			}
 			
 			else -> throw IllegalArgumentException("unknown identifier: ${statement.identifier}")
