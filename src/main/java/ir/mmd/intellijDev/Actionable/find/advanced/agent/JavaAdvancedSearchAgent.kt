@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.find.advanced.agent
 
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Iconable
@@ -13,6 +14,7 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.searches.AllClassesSearch
 import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
+import javax.swing.Icon
 
 @Suppress("NonDefaultConstructor")
 class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) : AdvancedSearchAgent(project, searchFile) {
@@ -41,9 +43,16 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 					it.name ?: "anonymous",
 					it.qualifiedName,
 					it,
-					it.getIcon(Iconable.ICON_FLAG_READ_STATUS)
+					getIconFor(it)
 				))
 			}
+		}
+	}
+	
+	private fun getIconFor(el: PsiClass): Icon? {
+		return when {
+			el.isExceptionClass -> if (el.hasModifierProperty("abstract")) AllIcons.Nodes.AbstractException else AllIcons.Nodes.ExceptionClass
+			else -> el.getIcon(Iconable.ICON_FLAG_READ_STATUS)
 		}
 	}
 	
@@ -103,7 +112,7 @@ fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object
 	}
 })
 
-fun PsiClassPattern.isAnonymous() =with(object : PatternCondition<PsiClass?>("isAnonymous") {
+fun PsiClassPattern.isAnonymous() = with(object : PatternCondition<PsiClass?>("isAnonymous") {
 	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
 		return t.name == null
 	}
