@@ -19,10 +19,10 @@ class AdvancedSearchLexer implements FlexLexer {
 
   /** lexical states */
   public static final int YYINITIAL = 0;
-  public static final int WHITESPACE = 2;
-  public static final int RAW_STRING = 4;
-  public static final int STRING = 6;
-  public static final int LINE_COMMENT = 8;
+  public static final int MAIN = 2;
+  public static final int WHITESPACE = 4;
+  public static final int RAW_STRING = 6;
+  public static final int STRING = 8;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -100,9 +100,9 @@ class AdvancedSearchLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\5\0\1\1\1\2\3\3\1\4\1\5\1\1\1\6"+
-    "\1\7\1\10\1\11\1\12\1\13\1\14\1\15\1\16"+
-    "\1\17\1\16\1\20\1\1\1\21\1\22\1\0\1\23"+
+    "\5\0\1\1\1\2\1\3\1\4\3\5\1\6\1\7"+
+    "\1\3\1\10\1\11\1\12\1\13\1\14\1\15\1\16"+
+    "\1\17\1\20\1\17\1\21\1\3\1\22\1\0\1\23"+
     "\1\0";
 
   private static int [] zzUnpackAction() {
@@ -132,9 +132,9 @@ class AdvancedSearchLexer implements FlexLexer {
 
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\23\0\46\0\71\0\114\0\137\0\162\0\137"+
-    "\0\162\0\205\0\137\0\137\0\230\0\137\0\137\0\137"+
-    "\0\253\0\137\0\137\0\137\0\276\0\321\0\137\0\344"+
-    "\0\137\0\367\0\u010a\0\u011d\0\253\0\137\0\u011d";
+    "\0\205\0\137\0\205\0\230\0\137\0\253\0\276\0\137"+
+    "\0\137\0\137\0\321\0\137\0\137\0\137\0\344\0\137"+
+    "\0\367\0\137\0\u010a\0\u011d\0\321\0\137\0\u011d";
 
   private static int [] zzUnpackRowMap() {
     int [] result = new int[31];
@@ -160,15 +160,15 @@ class AdvancedSearchLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\6\1\7\2\10\1\11\1\12\1\13\1\14\1\15"+
-    "\1\16\1\17\1\6\1\20\1\10\1\6\1\21\1\22"+
-    "\1\23\1\6\1\24\5\25\14\24\1\25\11\26\1\27"+
-    "\11\26\6\30\1\31\7\30\1\32\4\30\2\33\1\6"+
-    "\20\33\24\0\1\7\2\0\1\7\20\0\1\10\37\0"+
-    "\1\34\16\0\1\35\3\0\1\21\4\0\5\25\14\0"+
-    "\1\25\11\26\1\0\11\26\6\30\1\0\7\30\1\0"+
-    "\4\30\23\36\2\33\1\0\20\33\13\0\1\37\3\0"+
-    "\1\34\3\0";
+    "\1\6\5\7\14\6\1\7\1\10\1\11\2\12\1\13"+
+    "\1\14\1\15\1\16\1\17\1\20\1\21\1\10\1\22"+
+    "\1\12\1\10\1\23\1\24\1\25\1\10\1\26\5\7"+
+    "\14\26\1\7\11\27\1\30\11\27\6\31\1\32\7\31"+
+    "\1\33\4\31\24\0\5\7\14\0\1\7\1\0\1\11"+
+    "\2\0\1\11\20\0\1\12\20\0\2\16\1\0\20\16"+
+    "\17\0\1\34\16\0\1\35\3\0\1\23\3\0\11\27"+
+    "\1\0\11\27\6\31\1\0\7\31\1\0\4\31\23\36"+
+    "\13\0\1\37\3\0\1\34\3\0";
 
   private static int [] zzUnpacktrans() {
     int [] result = new int[304];
@@ -209,9 +209,9 @@ class AdvancedSearchLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\5\0\1\11\1\1\1\11\2\1\2\11\1\1\3\11"+
-    "\1\1\3\11\2\1\1\11\1\1\1\11\3\1\1\0"+
-    "\1\11\1\0";
+    "\5\0\1\11\1\1\1\11\1\1\1\11\2\1\1\11"+
+    "\2\1\3\11\1\1\3\11\1\1\1\11\1\1\1\11"+
+    "\2\1\1\0\1\11\1\0";
 
   private static int [] zzUnpackAttribute() {
     int [] result = new int[31];
@@ -536,89 +536,89 @@ class AdvancedSearchLexer implements FlexLexer {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
+            { yypushback(1); yybegin(MAIN);
+            }
+          // fall through
+          case 20: break;
+          case 2:
+            { yybegin(MAIN); return TokenType.WHITE_SPACE;
+            }
+          // fall through
+          case 21: break;
+          case 3:
             { /* IElementType elType;
 	while ((elType = advance()) == TokenType.BAD_CHARACTER) continue; */
 	return TokenType.BAD_CHARACTER;
             }
           // fall through
-          case 20: break;
-          case 2:
-            { return TokenType.WHITE_SPACE;
-            }
-          // fall through
-          case 21: break;
-          case 3:
-            { yybegin(WHITESPACE); return AdvancedSearchTypes.EOS;
-            }
-          // fall through
           case 22: break;
           case 4:
-            { yybegin(STRING); return AdvancedSearchTypes.DOUBLE_QUOTE;
+            { return TokenType.WHITE_SPACE;
             }
           // fall through
           case 23: break;
           case 5:
-            { yybegin(LINE_COMMENT);
+            { yybegin(WHITESPACE); return AdvancedSearchTypes.EOS;
             }
           // fall through
           case 24: break;
           case 6:
-            { yybegin(RAW_STRING); return AdvancedSearchTypes.SINGLE_QUOTE;
+            { yybegin(STRING); return AdvancedSearchTypes.DOUBLE_QUOTE;
             }
           // fall through
           case 25: break;
           case 7:
-            { return AdvancedSearchTypes.COMMA;
+            { return AdvancedSearchTypes.COMMENT;
             }
           // fall through
           case 26: break;
           case 8:
-            { return AdvancedSearchTypes.COLON;
+            { yybegin(RAW_STRING); return AdvancedSearchTypes.SINGLE_QUOTE;
             }
           // fall through
           case 27: break;
           case 9:
-            { return AdvancedSearchTypes.IDENTIFIER;
+            { return AdvancedSearchTypes.COMMA;
             }
           // fall through
           case 28: break;
           case 10:
-            { yybegin(WHITESPACE); return AdvancedSearchTypes.LBRACE;
+            { return AdvancedSearchTypes.COLON;
             }
           // fall through
           case 29: break;
           case 11:
-            { return AdvancedSearchTypes.RBRACE;
+            { return AdvancedSearchTypes.IDENTIFIER;
             }
           // fall through
           case 30: break;
           case 12:
-            { yybegin(YYINITIAL); yypushback(1);
+            { yybegin(WHITESPACE); return AdvancedSearchTypes.LBRACE;
             }
           // fall through
           case 31: break;
           case 13:
-            { yybegin(YYINITIAL); return TokenType.WHITE_SPACE;
+            { return AdvancedSearchTypes.RBRACE;
             }
           // fall through
           case 32: break;
           case 14:
-            { return AdvancedSearchTypes.STRING_SEQ;
+            { yybegin(MAIN); yypushback(1);
             }
           // fall through
           case 33: break;
           case 15:
-            { yybegin(YYINITIAL); return AdvancedSearchTypes.SINGLE_QUOTE;
+            { return AdvancedSearchTypes.STRING_SEQ;
             }
           // fall through
           case 34: break;
           case 16:
-            { yybegin(YYINITIAL); return AdvancedSearchTypes.DOUBLE_QUOTE;
+            { yybegin(MAIN); return AdvancedSearchTypes.SINGLE_QUOTE;
             }
           // fall through
           case 35: break;
           case 17:
-            { yybegin(YYINITIAL); return AdvancedSearchTypes.COMMENT;
+            { yybegin(MAIN); return AdvancedSearchTypes.DOUBLE_QUOTE;
             }
           // fall through
           case 36: break;

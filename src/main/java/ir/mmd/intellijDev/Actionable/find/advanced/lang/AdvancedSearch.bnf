@@ -15,7 +15,7 @@
     tokens=[COMMENT="COMMENT"]
 }
 
-AdvancedSearchFile ::= TopLevelProperties? Statements?
+AdvancedSearchFile ::= eos* TopLevelProperties? eos* Statements?
 
 // property1: 'value1'
 // property2: 'value2'

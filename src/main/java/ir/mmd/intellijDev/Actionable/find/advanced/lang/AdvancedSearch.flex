@@ -24,19 +24,24 @@ COMMA=,
 LBRACE=\{
 RBRACE=\}
 EOS=\R|\;
-LINE_COMMENT=\#
+LINE_COMMENT=\#[^\n]*
 ESCAPED_CHAR=\\[^]
 WHITESPACE=\s+
 WHITESPACE_NO_CRLF=[ \t\f]+
 
+%state MAIN
 %state WHITESPACE
 %state RAW_STRING
 %state STRING
-%state LINE_COMMENT
 
 %%
 
 <YYINITIAL> {
+	{WHITESPACE} { yybegin(MAIN); return TokenType.WHITE_SPACE; }
+    [^]          { yypushback(1); yybegin(MAIN); }
+}
+
+<MAIN> {
 	{VARIABLE}           { return AdvancedSearchTypes.VARIABLE; }
 	{IDENTIFIER}         { return AdvancedSearchTypes.IDENTIFIER; }
     {COLON}              { return AdvancedSearchTypes.COLON; }
@@ -47,27 +52,23 @@ WHITESPACE_NO_CRLF=[ \t\f]+
     {RBRACE}             { return AdvancedSearchTypes.RBRACE; }
     {EOS}                { yybegin(WHITESPACE); return AdvancedSearchTypes.EOS; }
     {WHITESPACE_NO_CRLF} { return TokenType.WHITE_SPACE; }
-    {LINE_COMMENT}       { yybegin(LINE_COMMENT); }
+    {LINE_COMMENT}       { return AdvancedSearchTypes.COMMENT; }
 }
 
 <RAW_STRING> {
-    {SINGLE_QUOTE} { yybegin(YYINITIAL); return AdvancedSearchTypes.SINGLE_QUOTE; }
+    {SINGLE_QUOTE} { yybegin(MAIN); return AdvancedSearchTypes.SINGLE_QUOTE; }
 	[^']+          { return AdvancedSearchTypes.STRING_SEQ; }
 }
 
 <STRING> {
 	{ESCAPED_CHAR} { return AdvancedSearchTypes.STRING_ESCAPE_SEQ; }
-	{DOUBLE_QUOTE} { yybegin(YYINITIAL); return AdvancedSearchTypes.DOUBLE_QUOTE; }
+	{DOUBLE_QUOTE} { yybegin(MAIN); return AdvancedSearchTypes.DOUBLE_QUOTE; }
 	[^\\\"]+       { return AdvancedSearchTypes.STRING_SEQ; }
 }
 
 <WHITESPACE> {
-	{WHITESPACE} { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
-    [^]          { yybegin(YYINITIAL); yypushback(1); }
-}
-
-<LINE_COMMENT> {
-	[^\n]+ { yybegin(YYINITIAL); return AdvancedSearchTypes.COMMENT; }
+	{WHITESPACE} { yybegin(MAIN); return TokenType.WHITE_SPACE; }
+    [^]          { yybegin(MAIN); yypushback(1); }
 }
 
 [^] {
