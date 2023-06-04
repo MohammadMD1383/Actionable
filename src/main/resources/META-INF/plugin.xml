@@ -108,6 +108,10 @@
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchSyntaxHighlighterFactory"/>
 		
+		<lang.commenter
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchCommenter"/>
+		
 		<lang.foldingBuilder
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFoldingBuilder"/>
