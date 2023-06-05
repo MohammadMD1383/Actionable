@@ -11,18 +11,29 @@ import com.intellij.icons.AllIcons
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import com.intellij.util.ProcessingContext
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psiElement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.statement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.statementBody
+import ir.mmd.intellijDev.Actionable.util.ext.elementAt
 import ir.mmd.intellijDev.Actionable.util.ext.moveForward
+import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 
 private val insertHandler = InsertHandler<LookupElement> { context, _ ->
 	val editor = context.editor
 	val caret = editor.caretModel.currentCaret
-	context.document.insertString(caret.offset, " ")
-	caret.moveForward()
-	AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
+	val element = (context.file.elementAt(caret)
+		?.parent as? AdvancedSearchPsiStatement)
+		?.psiIdentifier
+	
+	if (element != null) {
+		caret moveTo element.textOffset
+	} else {
+		context.document.insertString(caret.offset, " ")
+		caret.moveForward()
+		AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
+	}
 }
 
 private fun createLookupElement(str: String): LookupElement {
@@ -44,7 +55,7 @@ class AdvancedSearchVariableCompletionProvider : CompletionProvider<CompletionPa
 	
 	private fun javaInsideTypeVariables(element: PsiElement?, result: CompletionResultSet) {
 		val criteria = psiElement()
-			.withSuperParent(2, statementBody().withParent(statement()
+			.withSuperParent(3, statementBody().withParent(statement()
 				.withVariable("\$class", "\$interface", "\$type", "\$annotation")))
 			.withTopLevelProperty("language", "java")
 		
