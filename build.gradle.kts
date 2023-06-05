@@ -86,6 +86,7 @@ tasks {
 		changeNotes.set("""
 			<ul>
 				<li>New Feature<b></b>: #73 add option to specify \n count between duplications</li>
+				<li>New Feature<b></b>: Smart Temporary File (which provides all code insight features)</li>
 			</ul>
 			<div>
 				To install nightly builds use <b>Download And Install Nightly Build</b> Action
