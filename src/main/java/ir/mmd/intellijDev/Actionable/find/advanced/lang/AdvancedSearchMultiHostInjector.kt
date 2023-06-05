@@ -10,14 +10,11 @@ import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStr
 import ir.mmd.intellijDev.Actionable.util.then
 import org.intellij.lang.regexp.RegExpLanguage
 
-@Suppress("CompanionObjectInExtension")
+private fun innerStringLiteralRangeOf(element: PsiElement): TextRange {
+	return TextRange.from(1, element.text.lastIndex - 1)
+}
+
 class AdvancedSearchMultiHostInjector : MultiHostInjector {
-	companion object {
-		private fun innerStringLiteralRangeOf(element: PsiElement): TextRange {
-			return TextRange.from(1, element.text.lastIndex - 1)
-		}
-	}
-	
 	override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
 		javaInterfaceForImplementsAndExtends(context, registrar) or
 			javaClassForExtends(context, registrar) or
@@ -43,8 +40,8 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	
 	private fun javaMethodParam(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
 		val condition = stringLiteral()
-			.inside(parameter()
-				.withVariable("\$method")
+			.withSuperParent(3, statement()
+				.withVariable("\$method", checkParent = true)
 				.withIdentifier("has-param")
 				.withTopLevelProperty("language", "java"))
 		
@@ -60,8 +57,8 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	
 	private fun javaClassForExtends(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
 		val condition = stringLiteral()
-			.inside(parameter()
-				.withVariable("\$class")
+			.withSuperParent(3, statement()
+				.withVariable("\$class", checkParent = true)
 				.withIdentifier("extends", "extends-directly")
 				.withTopLevelProperty("language", "java"))
 		
@@ -77,9 +74,9 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	
 	private fun javaInterfaceForImplementsAndExtends(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
 		val condition = stringLiteral()
-			.inside(
-				(parameter().withVariable("\$class").withIdentifier("implements", "implements-directly") or
-					parameter().withVariable("\$interface").withIdentifier("extends", "extends-directly"))
+			.withSuperParent(3,
+				(statement().withVariable("\$class", checkParent = true).withIdentifier("implements", "implements-directly") or
+					statement().withVariable("\$interface", checkParent = true).withIdentifier("extends", "extends-directly"))
 					.withTopLevelProperty("language", "java")
 			)
 		
