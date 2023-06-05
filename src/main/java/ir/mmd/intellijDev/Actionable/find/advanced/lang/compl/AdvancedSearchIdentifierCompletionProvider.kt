@@ -10,7 +10,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
-import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiFactory
@@ -25,8 +24,8 @@ import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 private val insertHandler = InsertHandler<LookupElement> { context, _ ->
 	val editor = context.editor
 	val caret = editor.caretModel.currentCaret
-	val param = context.file.elementAt(caret)
-		?.parentOfType<AdvancedSearchPsiStatement>()
+	val param = (context.file.elementAt(caret)
+		?.parent as? AdvancedSearchPsiStatement)
 		?.psiParameters?.parameterList?.firstOrNull()
 	
 	if (param != null) {
