@@ -82,6 +82,7 @@ class AdvancedSearchIdentifierCompletionProvider : CompletionProvider<Completion
 			result.addElement(createLookupElement("super-of"))
 			result.addElement(createLookupElement("extends"))
 			result.addElement(createLookupElement("implements"))
+			result.addElement(createLookupElement("direct-super-of"))
 			result.addElement(createLookupElement("extends-directly"))
 			result.addElement(createLookupElement("implements-directly"))
 			result.addElement(createLookupElement("has-modifier"))

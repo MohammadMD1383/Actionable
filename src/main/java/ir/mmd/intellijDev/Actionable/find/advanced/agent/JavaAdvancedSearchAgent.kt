@@ -102,6 +102,15 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 				}
 			}
 			
+			"super-of",
+			"direct-super-of" -> {
+				require(criteria is PsiClassPattern) { "only types can use ${statement.identifier}" }
+				val direct = "direct" in statement.identifier
+				statement.parameters.forEach {
+					criteria = (criteria as PsiClassPattern).superOf(it, direct)
+				}
+			}
+			
 			"has-method",
 			"has-method-directly" -> {
 				require(criteria is PsiClassPattern) { "only classes and interfaces can use ${statement.identifier}" }
@@ -153,26 +162,33 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 	}
 }
 
-fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object : PatternCondition<PsiClass>("inheritorOf") {
+private fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object : PatternCondition<PsiClass>("inheritorOf") {
 	override fun accepts(t: PsiClass, context: ProcessingContext): Boolean {
 		val facade = JavaPsiFacadeEx.getInstanceEx(t.project)
 		return t.isInheritor(facade.findClass(baseName), !direct)
 	}
 })
 
-fun PsiClassPattern.isAnonymous() = with(object : PatternCondition<PsiClass>("isAnonymous") {
+private fun PsiClassPattern.isAnonymous() = with(object : PatternCondition<PsiClass>("isAnonymous") {
 	override fun accepts(t: PsiClass, context: ProcessingContext): Boolean {
 		return t.name == null
 	}
 })
 
-fun PsiClassPattern.nonInterface() = with(object : PatternCondition<PsiClass>("nonInterface") {
+private fun PsiClassPattern.nonInterface() = with(object : PatternCondition<PsiClass>("nonInterface") {
 	override fun accepts(t: PsiClass, context: ProcessingContext): Boolean {
 		return !t.isInterface
 	}
 })
 
-val PsiClass.isExceptionClass: Boolean
+private fun PsiClassPattern.superOf(fqn: String, direct: Boolean) = with(object : PatternCondition<PsiClass?>("superOf") {
+	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
+		val facade = JavaPsiFacadeEx.getInstanceEx(t.project)
+		return facade.findClass(fqn).isInheritor(t, !direct)
+	}
+})
+
+private val PsiClass.isExceptionClass: Boolean
 	get() {
 		val facade = JavaPsiFacadeEx.getInstanceEx(project)
 		return isInheritor(facade.findClass("java.lang.Exception"), true)

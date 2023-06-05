@@ -9,7 +9,9 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.elementType
 import com.intellij.util.ProcessingContext
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psiElement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.statement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.statementBody
@@ -30,7 +32,11 @@ private fun createLookupElement(str: String): LookupElement {
 
 class AdvancedSearchVariableCompletionProvider : CompletionProvider<CompletionParameters>() {
 	override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-		val element = parameters.originalFile.findElementAt(parameters.offset)
+		val element = parameters.originalFile.findElementAt(parameters.offset).let {
+			if (it?.elementType == AdvancedSearchTypes.VARIABLE) it else {
+				parameters.originalFile.findElementAt(parameters.offset - 1)
+			}
+		}
 		
 		javaTopLevelVariables(element, result)
 		javaInsideTypeVariables(element, result)

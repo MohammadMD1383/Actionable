@@ -14,13 +14,39 @@ private fun innerStringLiteralRangeOf(element: PsiElement): TextRange {
 	return TextRange.from(1, element.text.lastIndex - 1)
 }
 
+private fun commonCriteriaForIdentifiers(variable: Array<String>, identifier: Array<String>, language: String, checkParent: Boolean): AdvancedSearchStringLiteralPattern.Capture<AdvancedSearchPsiStringLiteral> {
+	return stringLiteral().withSuperParent(3, statement()
+		.withVariable(*variable, checkParent = checkParent)
+		.withIdentifier(*identifier)
+		.withTopLevelProperty("language", language))
+}
+
 class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
 		javaInterfaceForImplementsAndExtends(context, registrar) or
 			javaClassForExtends(context, registrar) or
+			javaTypeForSuper(context, registrar) or
 			javaMethodParam(context, registrar) or
 			regexpForMatches(context, registrar)
 		// todo: optimize patterns
+	}
+	
+	private fun javaTypeForSuper(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
+		val condition = commonCriteriaForIdentifiers(
+			variable = arrayOf("\$class", "\$interface", "\$type"),
+			identifier = arrayOf("super-of", "direct-super-of"),
+			language = "java",
+			checkParent = true
+		)
+		
+		return condition.accepts(context) then {
+			registrar.startInjecting(JavaLanguage.INSTANCE)
+				.addPlace(
+					"class A<T extends ", "> { }",
+					context as PsiLanguageInjectionHost,
+					innerStringLiteralRangeOf(context)
+				).doneInjecting()
+		}
 	}
 	
 	private fun regexpForMatches(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
@@ -39,11 +65,12 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	}
 	
 	private fun javaMethodParam(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
-		val condition = stringLiteral()
-			.withSuperParent(3, statement()
-				.withVariable("\$method", checkParent = true)
-				.withIdentifier("has-param")
-				.withTopLevelProperty("language", "java"))
+		val condition = commonCriteriaForIdentifiers(
+			variable = arrayOf("\$method"),
+			identifier = arrayOf("has-param"),
+			language = "java",
+			checkParent = true
+		)
 		
 		return condition.accepts(context) then {
 			registrar.startInjecting(JavaLanguage.INSTANCE)
@@ -56,11 +83,12 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	}
 	
 	private fun javaClassForExtends(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
-		val condition = stringLiteral()
-			.withSuperParent(3, statement()
-				.withVariable("\$class", checkParent = true)
-				.withIdentifier("extends", "extends-directly")
-				.withTopLevelProperty("language", "java"))
+		val condition = commonCriteriaForIdentifiers(
+			variable = arrayOf("\$class"),
+			identifier = arrayOf("extends", "extends-directly"),
+			language = "java",
+			checkParent = true
+		)
 		
 		return condition.accepts(context) then {
 			registrar.startInjecting(JavaLanguage.INSTANCE)
@@ -94,3 +122,16 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 		return mutableListOf(AdvancedSearchPsiStringLiteral::class.java)
 	}
 }
+
+// private fun MultiHostRegistrar.getInjectedFile(): PsiFile? {
+// 	return try {
+// 		val result = javaClass.getDeclaredMethod("getInjectedResult").run {
+// 			isAccessible = true
+// 			invoke(this@getInjectedFile)
+// 		}
+// 		val files = result.javaClass.getDeclaredField("files").get(result) as List<*>
+// 		files[0] as PsiFile
+// 	} catch (ignored: Exception) {
+// 		null
+// 	}
+// }
