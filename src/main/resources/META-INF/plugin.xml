@@ -49,15 +49,16 @@
 	
 	<extensionPoints>
 		<extensionPoint
-			name="find.advanced.agent"
-			beanClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchAgentBean"
+			name="advancedSearch.provider"
+			beanClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchProviderBean"
 			dynamic="true"/>
 	</extensionPoints>
 	
 	<extensions defaultExtensionNs="ir.mmd.intellijDev.Actionable">
-		<find.advanced.agent
+		<advancedSearch.provider
 			language="JAVA"
-			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.JavaAdvancedSearchAgent"/>
+			agentClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchAgent"
+			completionProviderInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchCompletionProvider.INSTANCE"/>
 	</extensions>
 	
 	<extensions defaultExtensionNs="com.intellij">

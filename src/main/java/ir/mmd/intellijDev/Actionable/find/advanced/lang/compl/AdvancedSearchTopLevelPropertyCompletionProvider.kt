@@ -9,25 +9,36 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.util.ProcessingContext
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
 import ir.mmd.intellijDev.Actionable.util.ext.moveForward
 
-private val insertHandler = InsertHandler<LookupElement> { context, _ ->
-	val editor = context.editor
+private val insertHandler = InsertHandler<LookupElement> { ctx, _ ->
+	val editor = ctx.editor
 	val caret = editor.caretModel.currentCaret
-	context.document.insertString(caret.offset, ": ''")
+	ctx.document.insertString(caret.offset, ": ''")
 	caret.moveForward(3)
-	AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
-}
+	AutoPopupController.getInstance(ctx.project).autoPopupMemberLookup(editor, null)
+}// todo: merge whitespace
 
-private fun createLookupElement(str: String): LookupElement {
-	return LookupElementBuilder.create(str).bold().withIcon(AllIcons.Nodes.Property)
-		.withInsertHandler(insertHandler)
+private fun CompletionResultSet.add(s: String) {
+	addElement(
+		LookupElementBuilder.create(s)
+			.bold().withIcon(AllIcons.Nodes.Property)
+			.withInsertHandler(insertHandler)
+	)
 }
 
 class AdvancedSearchTopLevelPropertyCompletionProvider : CompletionProvider<CompletionParameters>() {
 	override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-		result.addElement(createLookupElement("language"))
-		result.addElement(createLookupElement("scope"))
-		result.addElement(createLookupElement("scan-source"))
+		result.add("language")
+		
+		(parameters.originalFile as AdvancedSearchFile).properties?.languagePsiProperty?.value?.let { language ->
+			AdvancedSearchExtensionPoint.extensionList.find {
+				it.language.equals(language, ignoreCase = true)
+			}?.completionProviderInstance?.getTopLevelProperties(parameters.editor.project!!)?.forEach {
+				result.add(it)
+			}
+		}
 	}
 }

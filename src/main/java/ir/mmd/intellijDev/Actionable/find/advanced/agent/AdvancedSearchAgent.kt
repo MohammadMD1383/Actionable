@@ -2,7 +2,6 @@ package ir.mmd.intellijDev.Actionable.find.advanced.agent
 
 import com.intellij.lang.Language
 import com.intellij.openapi.application.ReadAction
-import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ex.ToolWindowManagerEx
@@ -14,46 +13,41 @@ import com.intellij.ui.components.JBScrollPane
 import com.intellij.util.OpenSourceUtil
 import com.intellij.util.application
 import com.intellij.util.ui.JBUI
-import com.intellij.util.xmlb.annotations.Attribute
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
+import ir.mmd.intellijDev.Actionable.util.wrap
 import java.awt.Component
 import java.util.concurrent.Callable
 import javax.swing.*
-
-class AdvancedSearchAgentBean {
-	@Attribute("language")
-	lateinit var language: String
-	
-	@Attribute("implementationClass")
-	lateinit var implementationClass: String
-}
 
 abstract class AdvancedSearchAgent protected constructor(
 	protected val project: Project,
 	protected val file: AdvancedSearchFile
 ) {
 	companion object {
-		// todo: make it throw instead of returning null
-		fun createAgent(project: Project, file: AdvancedSearchFile): AdvancedSearchAgent? {
+		@JvmStatic
+		fun createAgent(project: Project, file: AdvancedSearchFile): AdvancedSearchAgent {
 			if (PsiTreeUtil.hasErrorElements(file)) {
-				return null
+				throw IllegalStateException("aas file has errors that must be corrected before processing: $file").wrap(true)
 			}
 			
-			val language = file.properties?.languagePsiProperty?.value ?: return null
+			val language = file.properties?.languagePsiProperty?.value
+				?: throw IllegalArgumentException("language property must be set in the aas file: $file").wrap(true)
+			
 			if (!Language.getRegisteredLanguages().any { it.id.equals(language, ignoreCase = true) }) {
-				return null
+				throw UnsupportedOperationException("no language registered with name `$language` in file: $file").wrap(true)
 			}
 			
-			val className = EP_NAME.extensionList.find {
-				it.language.equals(language, ignoreCase = true)
-			}?.implementationClass ?: return null
-			
-			val constructor = Class.forName(className).getConstructor(Project::class.java, AdvancedSearchFile::class.java) ?: return null
-			return constructor.newInstance(project, file) as AdvancedSearchAgent
+			try {
+				val agent = AdvancedSearchExtensionPoint.extensionList.find {
+					it.language.equals(language, ignoreCase = true)
+				}?.agentClass ?: throw UnsupportedOperationException("no agent found for language `$language` in file: $file").wrap(true)
+				
+				return agent.new(project, file)
+			} catch (e: Exception) {
+				throw e.wrap(false)
+			}
 		}
-		
-		val EP_NAME = ExtensionPointName.create<AdvancedSearchAgentBean>("ir.mmd.intellijDev.Actionable.find.advanced.agent")
 	}
 	
 	class SearchResult(
@@ -100,7 +94,7 @@ abstract class AdvancedSearchAgent protected constructor(
 		return SearchStatement(variable, identifier, parameters, innerStatements)
 	}
 	
-	protected fun createRenderer(): ListCellRenderer<SearchResult> {
+	protected open fun createRenderer(): ListCellRenderer<SearchResult> {
 		return object : JBLabel(), ListCellRenderer<SearchResult> {
 			override fun getListCellRendererComponent(list: JList<out SearchResult>, value: SearchResult, index: Int, isSelected: Boolean, cellHasFocus: Boolean): Component {
 				border = JBUI.Borders.empty(2)
@@ -140,11 +134,14 @@ abstract class AdvancedSearchAgent protected constructor(
 		}
 		
 		application.invokeAndWait {
-			manager.addContent(factory.createContent(
+			val content = factory.createContent(
 				component,
 				"Search results for: ${file.virtualFile.nameWithoutExtension}",
 				false
-			))
+			)
+			
+			manager.addContent(content)
+			manager.requestFocus(content, true)
 		}
 		
 		ReadAction.nonBlocking(Callable {

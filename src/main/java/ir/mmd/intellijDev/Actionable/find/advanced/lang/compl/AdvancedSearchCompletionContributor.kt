@@ -11,18 +11,14 @@ import ir.mmd.intellijDev.Actionable.util.ext.elementAt
 
 class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 	init {
+		// for top-level property keys
 		extend(
 			CompletionType.BASIC,
-			variable().inside(statement()),
-			AdvancedSearchVariableCompletionProvider()
+			identifier().inside(topLevelProperty()),
+			AdvancedSearchTopLevelPropertyCompletionProvider()
 		)
 		
-		extend(
-			CompletionType.BASIC,
-			identifier().inside(statement()),
-			AdvancedSearchIdentifierCompletionProvider()
-		)
-		
+		// for top-level property values
 		extend(
 			CompletionType.BASIC,
 			stringSequence().inside(
@@ -31,12 +27,21 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 			AdvancedSearchParameterCompletionProvider()
 		)
 		
+		// for $variable inside statements
 		extend(
 			CompletionType.BASIC,
-			identifier().inside(topLevelProperty()),
-			AdvancedSearchTopLevelPropertyCompletionProvider()
+			variable().inside(statement()),
+			AdvancedSearchVariableCompletionProvider()
 		)
 		
+		// for identifier inside statements
+		extend(
+			CompletionType.BASIC,
+			identifier().inside(statement()),
+			AdvancedSearchIdentifierCompletionProvider()
+		)
+		
+		// for statement parameters
 		extend(
 			CompletionType.BASIC,
 			stringSequence().inside(

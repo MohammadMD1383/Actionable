@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.find.advanced.agent
+package ir.mmd.intellijDev.Actionable.find.advanced.agent.java
 
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.progress.ProgressIndicator
@@ -11,9 +11,9 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.PsiShortNamesCache
 import com.intellij.psi.search.searches.AllClassesSearch
 import com.intellij.util.ProcessingContext
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchAgent
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
 
-@Suppress("NonDefaultConstructor")
 class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) : AdvancedSearchAgent(project, searchFile) {
 	override fun search(progress: ProgressIndicator, addResult: (SearchResult) -> Unit) {
 		val scanSource = model.properties["scan-source"].toBoolean()
