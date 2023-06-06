@@ -1,13 +1,11 @@
 package ir.mmd.intellijDev.Actionable.find.advanced
 
-import com.intellij.openapi.progress.ProgressIndicator
-import com.intellij.openapi.progress.ProgressManager
-import com.intellij.openapi.progress.Task
 import ir.mmd.intellijDev.Actionable.action.ActionBase
 import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.action
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchAgent
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
+import ir.mmd.intellijDev.Actionable.util.ext.backgroundTask
 import javax.swing.JOptionPane
 
 class SearchAction : ActionBase() {
@@ -21,9 +19,9 @@ class SearchAction : ActionBase() {
 		
 		action("ActivateFindToolWindow")!!.actionPerformed(event)
 		
-		ProgressManager.getInstance().run(object : Task.Backgroundable(project, "Advanced search", true) {
-			override fun run(indicator: ProgressIndicator) = agent.process(indicator)
-		})
+		backgroundTask(project, "Advanced search", true) {
+			agent.process(it)
+		}
 	}
 	
 	context (LazyEventContext)

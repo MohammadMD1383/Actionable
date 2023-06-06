@@ -8,6 +8,7 @@ import com.intellij.patterns.*
 import com.intellij.psi.*
 import com.intellij.psi.impl.JavaPsiFacadeEx
 import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.search.PsiShortNamesCache
 import com.intellij.psi.search.searches.AllClassesSearch
 import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
@@ -15,6 +16,8 @@ import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
 @Suppress("NonDefaultConstructor")
 class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) : AdvancedSearchAgent(project, searchFile) {
 	override fun search(progress: ProgressIndicator, addResult: (SearchResult) -> Unit) {
+		val scanSource = model.properties["scan-source"].toBoolean()
+		
 		if (model.statements.map { it.variable }.distinct().size != 1) {
 			throw IllegalArgumentException("all top level statements should have the same variable")
 		}
@@ -29,6 +32,7 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 			}
 		}
 		
+		val total = PsiShortNamesCache.getInstance(project).allClassNames.size
 		val searchScope = when (val scope = model.properties["scope"] ?: "all") {
 			"project" -> GlobalSearchScope.projectScope(project)
 			"all" -> GlobalSearchScope.allScope(project)
@@ -36,17 +40,43 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 		}
 		
 		progress.text = "Searching..."
-		AllClassesSearch.search(searchScope, project).forEach {
+		AllClassesSearch.search(searchScope, project).forEachIndexed { i, it ->
 			progress.checkCanceled()
+			progress.fraction = i.toDouble() / total
 			
 			when (criteria) {
-				is PsiClassPattern -> if (criteria.accepts(it)) {
-					addResult(SearchResult(
-						it.name ?: "anonymous",
-						it.qualifiedName,
-						it,
-						getIconFor(it)
-					))
+				is PsiClassPattern -> {
+					if (criteria.accepts(it)) {
+						addResult(SearchResult(
+							it.name!!,
+							it.qualifiedName,
+							it,
+							getIconFor(it)
+						))
+					}
+					
+					if (scanSource) {
+						it.navigationElement.acceptChildren(object : JavaRecursiveElementVisitor() {
+							override fun visitClass(aClass: PsiClass) {
+								if (aClass is PsiAnonymousClass) {
+									super.visitClass(aClass)
+								}
+							}
+							
+							override fun visitAnonymousClass(aClass: PsiAnonymousClass) {
+								if (criteria.accepts(aClass)) {
+									addResult(SearchResult(
+										"(anonymous)",
+										"in ${it.qualifiedName}",
+										aClass,
+										getIconFor(aClass)
+									))
+								}
+								
+								super.visitAnonymousClass(aClass)
+							}
+						})
+					}
 				}
 				
 				is PsiMethodPattern -> {
@@ -81,16 +111,18 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 	
 	private fun buildCriteria(statement: SearchStatement, parent: PsiElementPattern<out PsiElement, *>? = null): PsiElementPattern<out PsiElement, *> {
 		var criteria: PsiElementPattern<out PsiElement, *> = when (statement.variable) {
+			null -> parent ?: throw IllegalArgumentException("both variable and parent cannot be null")
 			"\$type" -> PsiJavaPatterns.psiClass()
 			"\$class" -> PsiJavaPatterns.psiClass().nonInterface()
 			"\$interface" -> PsiJavaPatterns.psiClass().isInterface().nonAnnotationType()
 			"\$annotation" -> PsiJavaPatterns.psiClass().isAnnotationType()
 			"\$method" -> PsiJavaPatterns.psiMethod()
-			null -> parent ?: throw IllegalArgumentException("both variable and parent cannot be null")
 			else -> throw IllegalArgumentException("unknown variable: ${statement.variable}")
 		}
 		
 		when (statement.identifier) {
+			null -> {}
+			
 			"extends",
 			"implements",
 			"extends-directly",
@@ -154,7 +186,11 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 				criteria = (criteria as PsiClassPattern).isAnonymous()
 			}
 			
-			null -> {}
+			"not-anonymous" -> {
+				require(criteria is PsiClassPattern) { "only types can use ${statement.identifier}" }
+				criteria = (criteria as PsiClassPattern).nonAnonymous()
+			}
+			
 			else -> throw IllegalArgumentException("unknown identifier: ${statement.identifier}")
 		}
 		
@@ -189,6 +225,12 @@ private fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = wit
 private fun PsiClassPattern.isAnonymous() = with(object : PatternCondition<PsiClass>("isAnonymous") {
 	override fun accepts(t: PsiClass, context: ProcessingContext): Boolean {
 		return t.name == null
+	}
+})
+
+private fun PsiClassPattern.nonAnonymous() = with(object : PatternCondition<PsiClass?>("nonAnonymous") {
+	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
+		return t.name != null
 	}
 })
 

@@ -1,5 +1,8 @@
 package ir.mmd.intellijDev.Actionable.util.ext
 
+import com.intellij.openapi.progress.ProgressIndicator
+import com.intellij.openapi.progress.Task
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.util.StringCaseManipulator
 import java.awt.Toolkit
@@ -177,3 +180,14 @@ inline operator fun Path.plus(other: Path): Path = Path(this.toString(), other.t
  */
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun Path.plus(other: String): Path = Path(this.toString(), other)
+
+/**
+ * Runs a background task with progress indicator
+ */
+inline fun backgroundTask(project: Project, title: String, canBeCancelled: Boolean, crossinline task: (ProgressIndicator) -> Unit) {
+	object : Task.Backgroundable(project, title, canBeCancelled) {
+		override fun run(indicator: ProgressIndicator) {
+			task(indicator)
+		}
+	}.queue()
+}

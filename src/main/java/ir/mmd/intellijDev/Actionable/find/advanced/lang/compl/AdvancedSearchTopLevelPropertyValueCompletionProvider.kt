@@ -22,6 +22,18 @@ class AdvancedSearchTopLevelPropertyValueCompletionProvider : CompletionProvider
 		
 		languageValues(element, result)
 		scopeValues(element, result)
+		scanSourceValues(element, result)
+	}
+	
+	private fun scanSourceValues(element: PsiElement?, result: CompletionResultSet) {
+		val criteria = psiElement()
+			.inside(topLevelProperty()
+				.withKey("scan-source"))
+		
+		if (criteria.accepts(element)) {
+			result.addElement(createLookupElement("true"))
+			result.addElement(createLookupElement("false"))
+		}
 	}
 	
 	private fun scopeValues(element: PsiElement?, result: CompletionResultSet) {

@@ -28,5 +28,6 @@ class AdvancedSearchTopLevelPropertyCompletionProvider : CompletionProvider<Comp
 	override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
 		result.addElement(createLookupElement("language"))
 		result.addElement(createLookupElement("scope"))
+		result.addElement(createLookupElement("scan-source"))
 	}
 }

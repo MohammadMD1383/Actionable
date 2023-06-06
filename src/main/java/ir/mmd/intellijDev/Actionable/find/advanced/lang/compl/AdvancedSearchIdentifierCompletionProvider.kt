@@ -91,6 +91,7 @@ class AdvancedSearchIdentifierCompletionProvider : CompletionProvider<Completion
 			result.addElement(createLookupElement("has-method-directly"))
 			result.addElement(createLookupElement("name-matches"))
 			result.addElement(createLookupElement("is-anonymous", true))
+			result.addElement(createLookupElement("not-anonymous", true))
 		}
 	}
 	

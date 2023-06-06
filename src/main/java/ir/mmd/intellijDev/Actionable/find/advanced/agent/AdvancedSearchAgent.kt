@@ -1,6 +1,7 @@
 package ir.mmd.intellijDev.Actionable.find.advanced.agent
 
 import com.intellij.lang.Language
+import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.Project
@@ -17,6 +18,7 @@ import com.intellij.util.xmlb.annotations.Attribute
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
 import java.awt.Component
+import java.util.concurrent.Callable
 import javax.swing.*
 
 class AdvancedSearchAgentBean {
@@ -145,12 +147,12 @@ abstract class AdvancedSearchAgent protected constructor(
 			))
 		}
 		
-		application.runReadAction {
+		ReadAction.nonBlocking(Callable {
 			search(progress) {
 				application.invokeLater {
 					listModel.addElement(it)
 				}
 			}
-		}
+		}).inSmartMode(project).executeSynchronously()
 	}
 }
