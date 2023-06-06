@@ -67,6 +67,7 @@ class AdvancedSearchIdentifierCompletionProvider : CompletionProvider<Completion
 		
 		if (criteria.accepts(element)) {
 			result.addElement(createLookupElement("has-param"))
+			result.addElement(createLookupElement("with-param"))
 			result.addElement(createLookupElement("name-matches"))
 		}
 	}

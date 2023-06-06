@@ -122,6 +122,22 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 				}
 			}
 			
+			"with-param" -> {
+				require(criteria is PsiMethodPattern) { "only methods can use ${statement.identifier}" }
+				criteria = (criteria as PsiMethodPattern).withParams(*statement.parameters.toTypedArray())
+			}
+			
+			"has-param" -> {
+				require(criteria is PsiMethodPattern) { "only methods can use ${statement.identifier}" }
+				if (statement.parameters.isEmpty()) {
+					criteria = (criteria as PsiMethodPattern).hasParam(null)
+				} else {
+					statement.parameters.forEach {
+						criteria = (criteria as PsiMethodPattern).hasParam(it)
+					}
+				}
+			}
+			
 			"has-modifier" -> {
 				require(criteria is PsiMemberPattern) { "only classes and interfaces and methods can use ${statement.identifier}" }
 				criteria = (criteria as PsiMemberPattern<out PsiMember, *>).withModifiers(*statement.parameters.toTypedArray())
@@ -185,6 +201,45 @@ private fun PsiClassPattern.superOf(fqn: String, direct: Boolean) = with(object 
 	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
 		val facade = JavaPsiFacadeEx.getInstanceEx(t.project)
 		return facade.findClass(fqn).isInheritor(t, !direct)
+	}
+})
+
+private fun PsiMethodPattern.hasParam(param: String? = null) = with(object : PatternCondition<PsiMethod?>("withParam") {
+	override fun accepts(t: PsiMethod, context: ProcessingContext?): Boolean {
+		val parameterList = t.parameterList
+		if (param == null) {
+			return parameterList.parametersCount > 0
+		}
+		
+		val split = param.split(" +".toRegex())
+		return parameterList.parameters.any { p ->
+			split.first() == p.type.canonicalText &&
+				split.last().let { it == "_" || it == p.name }
+		}
+	}
+})
+
+private fun PsiMethodPattern.withParams(vararg param: String) = with(object : PatternCondition<PsiMethod?>("withParameters") {
+	override fun accepts(t: PsiMethod, context: ProcessingContext?): Boolean {
+		val parameterList = t.parameterList
+		if (parameterList.parametersCount != param.size) {
+			return false
+		}
+		
+		val psiParameters = parameterList.parameters
+		val regex = " +".toRegex()
+		param.forEachIndexed { i, p ->
+			val split = p.split(regex)
+			if (psiParameters[i].type.canonicalText != split.first()) {
+				return false
+			}
+			
+			if (split.last().let { it != "_" && psiParameters[i].name != it }) {
+				return false
+			}
+		}
+		
+		return true
 	}
 })
 

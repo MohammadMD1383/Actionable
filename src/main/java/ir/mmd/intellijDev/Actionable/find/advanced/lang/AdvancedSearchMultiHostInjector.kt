@@ -67,7 +67,7 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	private fun javaMethodParam(context: PsiElement, registrar: MultiHostRegistrar): Boolean {
 		val condition = commonCriteriaForIdentifiers(
 			variable = arrayOf("\$method"),
-			identifier = arrayOf("has-param"),
+			identifier = arrayOf("has-param", "with-param"),
 			language = "java",
 			checkParent = true
 		)
