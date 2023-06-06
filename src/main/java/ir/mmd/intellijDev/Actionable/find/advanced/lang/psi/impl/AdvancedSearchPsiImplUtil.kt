@@ -67,6 +67,10 @@ fun getIdentifier(element: AdvancedSearchPsiStatement): String? {
 	return element.psiIdentifier?.text
 }
 
+fun getParameters(element: AdvancedSearchPsiStatement): List<AdvancedSearchPsiParameter> {
+	return element.psiParameters?.parameterList ?: emptyList()
+}
+
 fun getParentStatement(element: AdvancedSearchPsiStatement): AdvancedSearchPsiStatement? {
 	return element.parentOfType<AdvancedSearchPsiStatement>()
 }

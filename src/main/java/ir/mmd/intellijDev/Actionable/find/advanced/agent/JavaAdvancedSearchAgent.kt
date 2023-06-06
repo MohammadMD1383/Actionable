@@ -154,6 +154,7 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 				criteria = (criteria as PsiClassPattern).isAnonymous()
 			}
 			
+			null -> {}
 			else -> throw IllegalArgumentException("unknown identifier: ${statement.identifier}")
 		}
 		

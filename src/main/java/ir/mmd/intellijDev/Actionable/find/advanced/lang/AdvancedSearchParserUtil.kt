@@ -15,21 +15,14 @@ fun statement(
 	variable: Parser, identifier: Parser, parameters: ParserFunction
 ): Boolean {
 	if (variable.parse(builder, level)) {
-		if (!identifier.parse(builder, level)) {
-			builder.error("Identifier expected")
-			return true
-		}
-		
+		identifier.parse(builder, level)
 		parameters(builder, level)
 	} else {
 		if (!identifier.parse(builder, level)) {
 			return false
 		}
 		
-		if (!parameters(builder, level)) {
-			builder.error("ParameterList expected")
-			return true
-		}
+		parameters(builder, level)
 	}
 	
 	return true
