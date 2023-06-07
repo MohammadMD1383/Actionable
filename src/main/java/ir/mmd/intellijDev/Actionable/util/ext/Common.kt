@@ -191,3 +191,9 @@ inline fun backgroundTask(project: Project, title: String, canBeCancelled: Boole
 		}
 	}.queue()
 }
+
+/**
+ * checks if `this` is equal to one of the [item]s
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> T?.equals(vararg item: T) = this in item
