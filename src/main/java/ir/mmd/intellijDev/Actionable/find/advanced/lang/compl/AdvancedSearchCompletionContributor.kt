@@ -22,9 +22,9 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 		extend(
 			CompletionType.BASIC,
 			stringSequence().inside(
-				stringLiteral().withSingleStringSequence().thatDoesntContain(" ").inside(parameter())
+				stringLiteral().withSingleStringSequence().thatDoesntContain(" ").inside(topLevelProperty())
 			),
-			AdvancedSearchParameterCompletionProvider()
+			AdvancedSearchTopLevelPropertyValueCompletionProvider()
 		)
 		
 		// for $variable inside statements
@@ -45,9 +45,9 @@ class AdvancedSearchCompletionContributor : CompletionContributor(), DumbAware {
 		extend(
 			CompletionType.BASIC,
 			stringSequence().inside(
-				stringLiteral().withSingleStringSequence().thatDoesntContain(" ").inside(topLevelProperty())
+				stringLiteral().withSingleStringSequence().thatDoesntContain(" ").inside(parameter())
 			),
-			AdvancedSearchTopLevelPropertyValueCompletionProvider()
+			AdvancedSearchParameterCompletionProvider()
 		)
 	}
 	

@@ -21,7 +21,7 @@ class AdvancedSearchProviderBean {
 	 *
 	 * This is the FQN of your class that implements [AdvancedSearchAgent].
 	 */
-	@Attribute("agentClass", converter = AgentConverter::class)
+	@Attribute("agentClass", converter = ConstructorConverter::class)
 	lateinit var agentClass: Constructor<AdvancedSearchAgent>
 	
 	/**
@@ -30,7 +30,7 @@ class AdvancedSearchProviderBean {
 	 * You may provide a class **instance** implementing [AdvancedSearchCompletionProvider]
 	 * to provide completions for the advanced search file when language property is set to [language].
 	 */
-	@Attribute("completionProviderInstance", converter = CompletionProviderConverter::class)
+	@Attribute("completionProviderInstance", converter = InstanceConverter::class)
 	var completionProviderInstance: AdvancedSearchCompletionProvider? = null
 	
 	/* ---------------------------------------------------------------------------------------------------- */
@@ -57,29 +57,27 @@ class AdvancedSearchProviderBean {
 		}
 	}
 	
-	@Suppress("UNCHECKED_CAST")
-	private abstract class ConstructorConverter<T : Any> : Converter<Constructor<T>>() {
-		override fun toString(value: Constructor<T>): String? = null
-		override fun fromString(value: String): Constructor<T> {
-			return Constructor(Class.forName(value) as Class<T>)
-		}
-	}
-	
-	@Suppress("UNCHECKED_CAST")
-	private abstract class InstanceConverter<T : Any> : Converter<T>() {
-		override fun toString(value: T) = null
-		override fun fromString(value: String): T? {
-			val fieldName = value.substringAfterLast('.')
-			val className = value.substring(0, value.length - fieldName.length - 1)
-			
+	private class ConstructorConverter : Converter<Constructor<out Any>>() {
+		override fun toString(value: Constructor<out Any>): String? = null
+		override fun fromString(value: String): Constructor<out Any>? {
 			return try {
-				Class.forName(className).getField(fieldName).get(null) as T
+				Constructor(Class.forName(value))
 			} catch (e: Exception) {
 				null
 			}
 		}
 	}
 	
-	private class AgentConverter : ConstructorConverter<AdvancedSearchAgent>()
-	private class CompletionProviderConverter : InstanceConverter<AdvancedSearchCompletionProvider>()
+	private class InstanceConverter : Converter<Any>() {
+		override fun toString(value: Any) = null
+		override fun fromString(value: String): Any? {
+			return try {
+				val fieldName = value.substringAfterLast('.')
+				val className = value.substring(0, value.length - fieldName.length - 1)
+				Class.forName(className).getField(fieldName).get(null)
+			} catch (e: Exception) {
+				null
+			}
+		}
+	}
 }

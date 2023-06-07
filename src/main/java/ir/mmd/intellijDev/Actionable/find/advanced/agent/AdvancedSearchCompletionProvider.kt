@@ -7,4 +7,5 @@ import com.intellij.openapi.project.Project
  */
 interface AdvancedSearchCompletionProvider {
 	fun getTopLevelProperties(project: Project): List<String>
+	fun getValuesForProperty(project: Project, property: String): List<String>
 }

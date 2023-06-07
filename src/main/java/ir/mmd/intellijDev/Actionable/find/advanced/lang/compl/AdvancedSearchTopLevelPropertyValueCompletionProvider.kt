@@ -3,59 +3,42 @@ package ir.mmd.intellijDev.Actionable.find.advanced.lang.compl
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
-import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.Language
-import com.intellij.psi.PsiElement
+import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psiElement
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.topLevelProperty
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiTopLevelProperties
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiTopLevelProperty
 import javax.swing.Icon
 
-private fun createLookupElement(str: String, icon: Icon? = null): LookupElement {
-	return LookupElementBuilder.create(str).withIcon(icon)
+private fun CompletionResultSet.add(str: String, icon: Icon? = null) {
+	addElement(LookupElementBuilder.create(str).withIcon(icon))
 }
 
 class AdvancedSearchTopLevelPropertyValueCompletionProvider : CompletionProvider<CompletionParameters>() {
 	override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-		val element = parameters.originalFile.findElementAt(parameters.offset)
+		val element = parameters.originalFile.findElementAt(parameters.offset) ?: return
+		val property = element.parentOfType<AdvancedSearchPsiTopLevelProperty>()?.key ?: return
+		val extensionList = AdvancedSearchExtensionPoint.extensionList
 		
-		languageValues(element, result)
-		scopeValues(element, result)
-		scanSourceValues(element, result)
-	}
-	
-	private fun scanSourceValues(element: PsiElement?, result: CompletionResultSet) {
-		val criteria = psiElement()
-			.inside(topLevelProperty()
-				.withKey("scan-source"))
-		
-		if (criteria.accepts(element)) {
-			result.addElement(createLookupElement("true"))
-			result.addElement(createLookupElement("false"))
+		if (property.equals("language", ignoreCase = true)) {
+			extensionList.forEach { ext ->
+				val language = Language.getRegisteredLanguages().find { ext.language.equals(it.id, ignoreCase = true) }
+				if (language != null) {
+					result.add(language.id, language.associatedFileType?.icon)
+				}
+			}
+			
+			return
 		}
-	}
-	
-	private fun scopeValues(element: PsiElement?, result: CompletionResultSet) {
-		val criteria = psiElement()
-			.inside(topLevelProperty()
-				.withKey("scope"))
 		
-		if (criteria.accepts(element)) {
-			result.addElement(createLookupElement("all"))
-			result.addElement(createLookupElement("project"))
-		}
-	}
-	
-	private fun languageValues(element: PsiElement?, result: CompletionResultSet) {
-		val criteria = psiElement()
-			.inside(topLevelProperty()
-				.withKey("language"))
-		
-		if (criteria.accepts(element)) {
-			result.addAllElements(Language.getRegisteredLanguages().mapNotNull {
-				if (it.id.isEmpty()) null else createLookupElement(it.id, it.associatedFileType?.icon)
-			})
-		}
+		val language = element.parentOfType<AdvancedSearchPsiTopLevelProperties>()?.languagePsiProperty?.value ?: return
+		extensionList.find { it.language.equals(language, ignoreCase = true) }
+			?.completionProviderInstance
+			?.getValuesForProperty(parameters.editor.project!!, property)
+			?.forEach {
+				result.add(it)
+			}
 	}
 }
