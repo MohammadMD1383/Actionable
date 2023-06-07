@@ -31,8 +31,9 @@ private val insertHandler = InsertHandler<LookupElement> { context, _ ->
 	} else {
 		context.document.insertString(caret.offset, " ")
 		caret.moveForward()
-		AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
 	}
+	
+	AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
 }
 
 private fun CompletionResultSet.add(str: String) {
