@@ -197,3 +197,8 @@ inline fun backgroundTask(project: Project, title: String, canBeCancelled: Boole
  */
 @Suppress("NOTHING_TO_INLINE")
 inline fun <T> T?.equals(vararg item: T) = this in item
+
+/**
+ * checks if this list contains one of the [item]s
+ */
+fun <T> List<T>.contains(vararg item: T?) = item.any { it in this }

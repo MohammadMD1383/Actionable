@@ -31,4 +31,13 @@ interface AdvancedSearchCompletionProvider {
 	 * @return variables **without** `$`
 	 */
 	fun getVariables(project: Project, context: List<String>): List<String>
+	
+	/**
+	 * @param variable the variable of current statement or null if not specified.
+	 * @param context see [getVariables]
+	 *
+	 * @return a list containing the completion item and a boolean indicating that this
+	 * completion item accepts parameters or not.
+	 */
+	fun getIdentifiers(project: Project, variable: String?, context: List<String>): List<Pair<String, Boolean>>
 }

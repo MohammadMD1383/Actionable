@@ -8,15 +8,14 @@ import com.intellij.codeInsight.completion.InsertHandler
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
-import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
+import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchElementPattern
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiFactory
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psiElement
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.statement
 import ir.mmd.intellijDev.Actionable.util.ext.elementAt
 import ir.mmd.intellijDev.Actionable.util.ext.moveForward
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
@@ -37,9 +36,11 @@ private val insertHandler = InsertHandler<LookupElement> { context, _ ->
 	}
 } // todo: merge whitespace inserted
 
-private fun createLookupElement(str: String, skipInsertHandler: Boolean = false): LookupElement {
-	val builder = LookupElementBuilder.create(str).bold().withIcon(AllIcons.Nodes.Variable)
-	return if (skipInsertHandler) builder else builder.withInsertHandler(insertHandler)
+private fun CompletionResultSet.add(str: String, withInsertHandler: Boolean) {
+	addElement(
+		LookupElementBuilder.create(str).bold().withIcon(AllIcons.Nodes.Variable)
+			.withInsertHandler(if (withInsertHandler) insertHandler else null)
+	)
 }
 
 class AdvancedSearchIdentifierCompletionProvider : CompletionProvider<CompletionParameters>() {
@@ -52,53 +53,23 @@ class AdvancedSearchIdentifierCompletionProvider : CompletionProvider<Completion
 						.replaceRange(parameters.offset, parameters.offset, "dummy")
 				).findElementAt(parameters.offset)
 			}
+		} ?: return
+		
+		val parents = mutableListOf<String>()
+		var e = element.parentOfType<AdvancedSearchPsiStatement>()
+		val variable = e!!.variable
+		e = e.parentOfType<AdvancedSearchPsiStatement>()
+		while (e != null) {
+			parents.add(e.variable ?: e.identifier ?: "")
+			e = e.parentOfType<AdvancedSearchPsiStatement>()
 		}
 		
-		javaIdentifiersForClassInterfaceType(element, result)
-		javaIdentifiersForMethod(element, result)
-	}
-	
-	private fun javaIdentifiersForMethod(element: PsiElement?, result: CompletionResultSet) {
-		val criteria = commonCriteria(
-			"\$method",
-			language = "java",
-			checkParent = true
-		)
-		
-		if (criteria.accepts(element)) {
-			result.addElement(createLookupElement("has-param"))
-			result.addElement(createLookupElement("with-param"))
-			result.addElement(createLookupElement("name-matches"))
-		}
-	}
-	
-	private fun javaIdentifiersForClassInterfaceType(element: PsiElement?, result: CompletionResultSet) {
-		val criteria = commonCriteria(
-			"\$class", "\$interface", "\$type",
-			language = "java",
-			checkParent = true
-		)
-		
-		if (criteria.accepts(element)) {
-			result.addElement(createLookupElement("super-of"))
-			result.addElement(createLookupElement("extends"))
-			result.addElement(createLookupElement("implements"))
-			result.addElement(createLookupElement("direct-super-of"))
-			result.addElement(createLookupElement("extends-directly"))
-			result.addElement(createLookupElement("implements-directly"))
-			result.addElement(createLookupElement("has-modifier"))
-			result.addElement(createLookupElement("has-method"))
-			result.addElement(createLookupElement("has-method-directly"))
-			result.addElement(createLookupElement("name-matches"))
-			result.addElement(createLookupElement("is-anonymous", true))
-			result.addElement(createLookupElement("not-anonymous", true))
-		}
-	}
-	
-	private fun commonCriteria(vararg variable: String, language: String, checkParent: Boolean): AdvancedSearchElementPattern.Capture<PsiElement> {
-		return psiElement()
-			.withParent(statement()
-				.withVariable(*variable, checkParent = checkParent))
-			.withTopLevelProperty("language", language)
+		val language = (element.containingFile as AdvancedSearchFile).properties?.languagePsiProperty?.value ?: return
+		AdvancedSearchExtensionPoint.extensionList.find { it.language.equals(language, ignoreCase = true) }
+			?.completionProviderInstance
+			?.getIdentifiers(parameters.editor.project!!, variable, parents)
+			?.forEach {
+				result.add(it.first, it.second)
+			}
 	}
 }
