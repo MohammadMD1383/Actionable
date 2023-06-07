@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.find.advanced.agent
 
+import com.intellij.lang.annotation.Annotator
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.annotations.Attribute
@@ -32,6 +33,15 @@ class AdvancedSearchProviderBean {
 	 */
 	@Attribute("completionProviderInstance", converter = InstanceConverter::class)
 	var completionProviderInstance: AdvancedSearchCompletionProvider? = null
+	
+	/**
+	 * **Optional**
+	 *
+	 * You may provide an instance of annotator to be used when the advanced search file's
+	 * language property is set to the [language].
+	 */
+	@Attribute("annotatorInstance", converter = InstanceConverter::class)
+	var annotatorInstance: Annotator? = null
 	
 	/* ---------------------------------------------------------------------------------------------------- */
 	

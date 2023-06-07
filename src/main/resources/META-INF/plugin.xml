@@ -58,7 +58,8 @@
 		<advancedSearch.provider
 			language="JAVA"
 			agentClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchAgent"
-			completionProviderInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchCompletionProvider.INSTANCE"/>
+			completionProviderInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchCompletionProvider.INSTANCE"
+			annotatorInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchAnnotator.INSTANCE"/>
 	</extensions>
 	
 	<extensions defaultExtensionNs="com.intellij">
@@ -108,6 +109,10 @@
 		<lang.syntaxHighlighterFactory
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchSyntaxHighlighterFactory"/>
+		
+		<annotator
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchAnnotator"/>
 		
 		<lang.commenter
 			language="AdvancedSearch"
