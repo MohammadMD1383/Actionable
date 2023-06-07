@@ -5,7 +5,7 @@ import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchCompletio
 import ir.mmd.intellijDev.Actionable.util.ext.contains
 import ir.mmd.intellijDev.Actionable.util.ext.equals
 
-object JavaAdvancedSearchCompletionProvider : AdvancedSearchCompletionProvider {
+object JavaAdvancedSearchCompletionProvider : AdvancedSearchCompletionProvider() {
 	override fun getTopLevelProperties(project: Project): List<String> {
 		return listOf("scope", "scan-source")
 	}
@@ -48,6 +48,15 @@ object JavaAdvancedSearchCompletionProvider : AdvancedSearchCompletionProvider {
 				"is-anonymous" to false,
 				"not-anonymous" to false,
 			)
+			
+			else -> emptyList()
+		}
+	}
+	
+	override fun getParameters(project: Project, variable: String?, identifier: String, context: List<String>): List<String> {
+		return when {
+			listOf("\$class", "\$type", "\$interface", "\$annotation").contains(variable ?: context.getOrNull(0)) &&
+				identifier == "has-modifier" -> listOf("public", "protected", "private")
 			
 			else -> emptyList()
 		}

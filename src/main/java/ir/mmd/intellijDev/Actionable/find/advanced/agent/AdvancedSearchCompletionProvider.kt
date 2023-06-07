@@ -5,10 +5,10 @@ import com.intellij.openapi.project.Project
 /**
  * **Note:** This may be used even in *dumb mode*, when indexing is not yet finished.
  */
-interface AdvancedSearchCompletionProvider {
-	fun getTopLevelProperties(project: Project): List<String>
+abstract class AdvancedSearchCompletionProvider {
+	open fun getTopLevelProperties(project: Project): List<String> = emptyList()
 	
-	fun getValuesForProperty(project: Project, property: String): List<String>
+	open fun getValuesForProperty(project: Project, property: String): List<String> = emptyList()
 	
 	/**
 	 * @param context will contain parent `$variable`s or `identifier`s if `$variable` is
@@ -30,7 +30,7 @@ interface AdvancedSearchCompletionProvider {
 	 *
 	 * @return variables **without** `$`
 	 */
-	fun getVariables(project: Project, context: List<String>): List<String>
+	open fun getVariables(project: Project, context: List<String>): List<String> = emptyList()
 	
 	/**
 	 * @param variable the variable of current statement or null if not specified.
@@ -39,5 +39,12 @@ interface AdvancedSearchCompletionProvider {
 	 * @return a list containing the completion item and a boolean indicating that this
 	 * completion item accepts parameters or not.
 	 */
-	fun getIdentifiers(project: Project, variable: String?, context: List<String>): List<Pair<String, Boolean>>
+	open fun getIdentifiers(project: Project, variable: String?, context: List<String>): List<Pair<String, Boolean>> = emptyList()
+	
+	/**
+	 * @param variable see [getIdentifiers]
+	 * @param identifier identifier of the current statement
+	 * @param context see [getVariables]
+	 */
+	open fun getParameters(project: Project, variable: String?, identifier: String, context: List<String>): List<String> = emptyList()
 }
