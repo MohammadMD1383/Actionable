@@ -59,7 +59,8 @@
 			language="JAVA"
 			agentClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchAgent"
 			completionProviderInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchCompletionProvider.INSTANCE"
-			annotatorInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchAnnotator.INSTANCE"/>
+			annotatorInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchAnnotator.INSTANCE"
+			documentationProviderInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchDocumentationProvider.INSTANCE"/>
 	</extensions>
 	
 	<extensions defaultExtensionNs="com.intellij">
@@ -128,6 +129,9 @@
 		
 		<multiHostInjector
 			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchMultiHostInjector"/>
+		
+		<platform.backend.documentation.targetProvider
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchDocumentationProvider"/>
 		<!--endregion-->
 		
 		<notificationGroup

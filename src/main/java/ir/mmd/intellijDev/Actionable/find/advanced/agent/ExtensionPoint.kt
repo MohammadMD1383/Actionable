@@ -43,6 +43,16 @@ class AdvancedSearchProviderBean {
 	@Attribute("annotatorInstance", converter = InstanceConverter::class)
 	var annotatorInstance: Annotator? = null
 	
+	/**
+	 * **Optional**
+	 *
+	 * You may provide an instance of [AdvancedSearchDocumentationProvider] in order to
+	 * render documentation for top-level properties, variables and identifiers when the
+	 * file's language property is set to the [language].
+	 */
+	@Attribute("documentationProviderInstance", converter = InstanceConverter::class)
+	var documentationProviderInstance: AdvancedSearchDocumentationProvider? = null
+	
 	/* ---------------------------------------------------------------------------------------------------- */
 	
 	@Suppress("UNCHECKED_CAST")
