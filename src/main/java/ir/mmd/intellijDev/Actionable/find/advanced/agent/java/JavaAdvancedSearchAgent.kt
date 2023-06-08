@@ -13,13 +13,14 @@ import com.intellij.psi.search.searches.AllClassesSearch
 import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchAgent
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
+import ir.mmd.intellijDev.Actionable.util.wrap
 
 class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) : AdvancedSearchAgent(project, searchFile) {
 	override fun search(progress: ProgressIndicator, addResult: (SearchResult) -> Unit) {
 		val scanSource = model.properties["scan-source"].toBoolean()
 		
 		if (model.statements.map { it.variable }.distinct().size != 1) {
-			throw IllegalArgumentException("all top level statements should have the same variable")
+			throw UnsupportedOperationException("all top level statements should have the same variable").wrap(true)
 		}
 		
 		var criteria = buildCriteria(model.statements.first())
@@ -36,7 +37,7 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 		val searchScope = when (val scope = model.properties["scope"] ?: "all") {
 			"project" -> GlobalSearchScope.projectScope(project)
 			"all" -> GlobalSearchScope.allScope(project)
-			else -> throw IllegalArgumentException("unknown scope: $scope")
+			else -> throw IllegalArgumentException("unknown scope: $scope").wrap(true)
 		}
 		
 		progress.text = "Searching..."
@@ -111,13 +112,13 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 	
 	private fun buildCriteria(statement: SearchStatement, parent: PsiElementPattern<out PsiElement, *>? = null): PsiElementPattern<out PsiElement, *> {
 		var criteria: PsiElementPattern<out PsiElement, *> = when (statement.variable) {
-			null -> parent ?: throw IllegalArgumentException("both variable and parent cannot be null")
+			null -> parent ?: throw IllegalArgumentException("both variable and parent cannot be null").wrap(true)
 			"\$type" -> PsiJavaPatterns.psiClass()
 			"\$class" -> PsiJavaPatterns.psiClass().nonInterface()
 			"\$interface" -> PsiJavaPatterns.psiClass().isInterface().nonAnnotationType()
 			"\$annotation" -> PsiJavaPatterns.psiClass().isAnnotationType()
 			"\$method" -> PsiJavaPatterns.psiMethod()
-			else -> throw IllegalArgumentException("unknown variable: ${statement.variable}")
+			else -> throw IllegalArgumentException("unknown variable: ${statement.variable}").wrap(true)
 		}
 		
 		when (statement.identifier) {
@@ -191,7 +192,7 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 				criteria = (criteria as PsiClassPattern).nonAnonymous()
 			}
 			
-			else -> throw IllegalArgumentException("unknown identifier: ${statement.identifier}")
+			else -> throw IllegalArgumentException("unknown identifier: ${statement.identifier}").wrap(true)
 		}
 		
 		statement.innerStatements?.forEach {
@@ -208,10 +209,10 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 	private fun mixCriteria(parent: PsiElementPattern<out PsiElement, *>, child: PsiElementPattern<out PsiElement, *>) = when (parent) {
 		is PsiClassPattern -> when (child) {
 			is PsiMethodPattern -> parent.withMethod(true, child)
-			else -> throw UnsupportedOperationException("cannot mix `${child.javaClass.simpleName}` into ${parent.javaClass.simpleName}")
+			else -> throw UnsupportedOperationException("cannot mix `${child.javaClass.simpleName}` into ${parent.javaClass.simpleName}").wrap(true)
 		}
 		
-		else -> throw UnsupportedOperationException("mixing is not supported for `${parent.javaClass.simpleName}` and `${child.javaClass.simpleName}`")
+		else -> throw UnsupportedOperationException("mixing is not supported for `${parent.javaClass.simpleName}` and `${child.javaClass.simpleName}`").wrap(true)
 	}
 }
 

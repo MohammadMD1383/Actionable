@@ -49,11 +49,9 @@ kotlin {
 
 tasks {
 	compileKotlin {
-		kotlinOptions {
-			freeCompilerArgs += listOf(
-				"-Xjvm-default=all",
-				"-Xcontext-receivers"
-			)
+		compilerOptions {
+			freeCompilerArgs.add("-Xjvm-default=all")
+			freeCompilerArgs.add("-Xcontext-receivers")
 		}
 	}
 	

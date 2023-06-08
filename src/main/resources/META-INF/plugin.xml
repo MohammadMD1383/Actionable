@@ -60,7 +60,8 @@
 			agentClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchAgent"
 			completionProviderInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchCompletionProvider.INSTANCE"
 			annotatorInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchAnnotator.INSTANCE"
-			documentationProviderInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchDocumentationProvider.INSTANCE"/>
+			documentationProviderInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchDocumentationProvider.INSTANCE"
+			injectionProviderInstance="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchInjectionProvider.INSTANCE"/>
 	</extensions>
 	
 	<extensions defaultExtensionNs="com.intellij">

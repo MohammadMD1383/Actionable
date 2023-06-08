@@ -53,6 +53,18 @@ class AdvancedSearchProviderBean {
 	@Attribute("documentationProviderInstance", converter = InstanceConverter::class)
 	var documentationProviderInstance: AdvancedSearchDocumentationProvider? = null
 	
+	/**
+	 * **Optional**
+	 *
+	 * You may provide an instance of [AdvancedSearchInjectionProvider] in order to
+	 * inject a language in parameters when needed.
+	 *
+	 * for example the [ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchInjectionProvider]
+	 * injects java into parameters when a statement like `$class extends '<base-class>'` is found in the code.
+	 */
+	@Attribute("injectionProviderInstance", converter = InstanceConverter::class)
+	var injectionProviderInstance: AdvancedSearchInjectionProvider? = null
+	
 	/* ---------------------------------------------------------------------------------------------------- */
 	
 	@Suppress("UNCHECKED_CAST")
