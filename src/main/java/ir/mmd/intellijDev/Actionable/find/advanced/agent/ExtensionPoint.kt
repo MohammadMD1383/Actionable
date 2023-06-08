@@ -4,6 +4,7 @@ import com.intellij.lang.annotation.Annotator
 import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.annotations.Attribute
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchInjectionProvider
 
 val AdvancedSearchExtensionPoint = ExtensionPointName.create<AdvancedSearchProviderBean>("ir.mmd.intellijDev.Actionable.advancedSearch.provider")
 
@@ -59,8 +60,8 @@ class AdvancedSearchProviderBean {
 	 * You may provide an instance of [AdvancedSearchInjectionProvider] in order to
 	 * inject a language in parameters when needed.
 	 *
-	 * for example the [ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchInjectionProvider]
-	 * injects java into parameters when a statement like `$class extends '<base-class>'` is found in the code.
+	 * for example the [JavaAdvancedSearchInjectionProvider] injects java into parameters
+	 * when a statement like `$class extends '<base-class>'` is found in the code.
 	 */
 	@Attribute("injectionProviderInstance", converter = InstanceConverter::class)
 	var injectionProviderInstance: AdvancedSearchInjectionProvider? = null
