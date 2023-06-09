@@ -1,6 +1,7 @@
 package ir.mmd.intellijDev.Actionable.util.ext
 
 import com.intellij.openapi.editor.Caret
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
 
@@ -22,4 +23,12 @@ inline fun PsiFile.elementAtOrBefore(
 	(findElementAt(o) ?: findElementAt(o - 1))?.let {
 		if (it is PsiWhiteSpace) it.prevLeafNoWhitespace(skipEmptyElements) else it
 	}
+}
+
+/**
+ * tries to find an element at [offset] or [offset]` - 1` if the first one is null
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun PsiFile.findElementAtOrBefore(offset: Int): PsiElement? {
+	return findElementAt(offset) ?: findElementAt(offset - 1)
 }

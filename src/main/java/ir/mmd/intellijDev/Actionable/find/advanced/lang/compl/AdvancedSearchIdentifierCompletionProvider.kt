@@ -9,14 +9,20 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.project.Project
-import com.intellij.psi.util.parentOfType
+import com.intellij.openapi.util.Key
+import com.intellij.psi.util.elementType
 import com.intellij.util.ProcessingContext
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.findExtensionFor
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.findLanguagePropertyValue
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement.ElementType.Identifier
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiFactory
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
 import ir.mmd.intellijDev.Actionable.util.ext.elementAt
+import ir.mmd.intellijDev.Actionable.util.ext.findElementAtOrBefore
 import ir.mmd.intellijDev.Actionable.util.ext.moveForward
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 
@@ -46,23 +52,27 @@ private fun CompletionResultSet.add(project: Project, str: String, withInsertHan
 }
 
 class AdvancedSearchIdentifierCompletionProvider : CompletionProvider<CompletionParameters>() {
+	companion object {
+		@JvmField
+		val DUMMY_IDENTIFIER = Key<Boolean>("AAS.DUMMY_IDENTIFIER")
+	}
+	
 	override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
 		val project = parameters.editor.project!!
-		val element = parameters.originalFile.findElementAt(parameters.offset) ?: return
-		
-		val parents = mutableListOf<String>()
-		var e = element.parentOfType<AdvancedSearchPsiStatement>()
-		val variable = e!!.variable
-		e = e.parentOfType<AdvancedSearchPsiStatement>()
-		while (e != null) {
-			parents.add(e.variable ?: e.identifier ?: "")
-			e = e.parentOfType<AdvancedSearchPsiStatement>()
+		val offset = parameters.offset
+		val language = parameters.originalFile.findLanguagePropertyValue() ?: return
+		val element = (parameters.originalFile.findElementAtOrBefore(offset) ?: return).let {
+			if (it.elementType == AdvancedSearchTypes.IDENTIFIER) it else {
+				AdvancedSearchPsiFactory.createFileFromText(
+					project, parameters.editor.document.text.replaceRange(offset, offset, "dummy")
+				).findElementAt(offset)!!.also { e -> e.putUserData(DUMMY_IDENTIFIER, true) }
+			}
 		}
+		val ctx = AdvancedSearchContext(element)
 		
-		val language = (element.containingFile as AdvancedSearchFile).properties?.languagePsiProperty?.value ?: return
-		AdvancedSearchExtensionPoint.extensionList.find { it.language.equals(language, ignoreCase = true) }
+		AdvancedSearchExtensionPoint.findExtensionFor(language)
 			?.completionProviderInstance
-			?.getIdentifiers(project, variable, parents)
+			?.getIdentifiers(project, ctx)
 			?.forEach {
 				result.add(project, it.first, it.second)
 			}

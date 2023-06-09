@@ -9,16 +9,16 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.project.Project
-import com.intellij.psi.util.elementType
-import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.findExtensionFor
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.findLanguagePropertyValue
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement.ElementType.Variable
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
 import ir.mmd.intellijDev.Actionable.util.ext.elementAt
+import ir.mmd.intellijDev.Actionable.util.ext.findElementAtOrBefore
 import ir.mmd.intellijDev.Actionable.util.ext.moveForward
 import ir.mmd.intellijDev.Actionable.util.ext.moveTo
 
@@ -48,24 +48,14 @@ private fun CompletionResultSet.add(project: Project, str: String) {
 
 class AdvancedSearchVariableCompletionProvider : CompletionProvider<CompletionParameters>() {
 	override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-		val element = parameters.originalFile.findElementAt(parameters.offset).let {
-			if (it?.elementType == AdvancedSearchTypes.VARIABLE) it else {
-				parameters.originalFile.findElementAt(parameters.offset - 1)
-			}
-		} ?: return
-		
-		val parents = mutableListOf<String>()
-		var e = element.parentOfType<AdvancedSearchPsiStatement>()?.parentOfType<AdvancedSearchPsiStatement>()
-		while (e != null) {
-			parents.add(e.variable ?: e.identifier ?: "")
-			e = e.parentOfType<AdvancedSearchPsiStatement>()
-		}
-		
-		val language = (element.containingFile as AdvancedSearchFile).properties?.languagePsiProperty?.value ?: return
+		val element = parameters.originalFile.findElementAtOrBefore(parameters.offset) ?: return
+		val ctx = AdvancedSearchContext(element)
+		val language = element.findLanguagePropertyValue() ?: return
 		val project = parameters.editor.project!!
-		AdvancedSearchExtensionPoint.extensionList.find { it.language.equals(language, ignoreCase = true) }
+		
+		AdvancedSearchExtensionPoint.findExtensionFor(language)
 			?.completionProviderInstance
-			?.getVariables(project, parents)
+			?.getVariables(project, ctx)
 			?.forEach {
 				result.add(project, it)
 			}

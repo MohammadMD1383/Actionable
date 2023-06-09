@@ -1,7 +1,10 @@
 package ir.mmd.intellijDev.Actionable.find.advanced.agent
 
+import com.intellij.openapi.extensions.ExtensionPointName
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.compl.AdvancedSearchIdentifierCompletionProvider
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
 import ir.mmd.intellijDev.Actionable.util.after
 
@@ -22,9 +25,13 @@ sealed interface Condition {
 		
 		infix fun contains(other: T) = this after { value = other in initial }
 		infix fun or(other: T) = this after { value = value || other in initial }
+		infix fun and(other: T) = this after { value = value && other in initial }
 	}
 }
 
+/**
+ * see [AdvancedSearchContext]
+ */
 class AdvancedSearchContextData internal constructor(
 	val variable: String?,
 	val identifier: String?,
@@ -35,7 +42,7 @@ class AdvancedSearchContextData internal constructor(
 		val identifier = Condition.StringCondition(this@AdvancedSearchContextData.identifier)
 		val parameters = Condition.ListCondition(this@AdvancedSearchContextData.parameters)
 		
-		fun evaluate() = variable.evaluate() and identifier.evaluate()
+		fun evaluate() = variable.evaluate() and identifier.evaluate() and parameters.evaluate()
 	}
 }
 
@@ -46,6 +53,46 @@ operator fun AdvancedSearchContextData?.invoke(block: context(AdvancedSearchCont
 	return c.evaluate()
 }
 
+operator fun List<AdvancedSearchContextData>.invoke(block: context(AdvancedSearchContextData.Criteria) () -> Unit): Boolean {
+	return any { it(block) }
+}
+
+/**
+ * **this context demonstrates where an operation happened in the advanced search file's hierarchy.**
+ *
+ * * `context[0]` stands for the current statement if there is one.
+ *
+ * * `context[1]...context[n]` stand for parent statements if there are some.
+ *
+ * * to check if the operation had happened at top-level in the file
+ * (meaning that this is the top-most statement), use [atTopLevel].
+ *
+ * to check for a criteria see below:
+ *
+ * * check if we have `$class` or `$interface` at current statement:
+ *     ```kotlin
+ *     context[0] { variable equalTo "\$class" or "\$interface" }
+ *     ```
+ *
+ * * check if we have `$method` at this statement or the parent and
+ * the identifier of this statement is `name-matches`:
+ *     ```kotlin
+ *     context[0..1] { variable equalTo "\$method" } and context[0] { identifier equalTo "name-matches" }
+ *     ```
+ *
+ * * to check parameters:
+ *     ```kotlin
+ *     context[n] { parameters contains ... or ... }
+ *     context[n] { parameters contains ... and ... }
+ *     ```
+ *
+ * * **NOTICE:** such expression is not supported and would result in an undefined behavior:
+ *     ```kotlin
+ *     context[n] { parameters contains (... and ...) or (... and ...) }
+ *     ```
+ *
+ * for examples please explore the [ir.mmd.intellijDev.Actionable.find.advanced.agent.java] package.
+ */
 class AdvancedSearchContext internal constructor(element: PsiElement) {
 	private val parents: List<AdvancedSearchContextData>
 	
@@ -53,9 +100,15 @@ class AdvancedSearchContext internal constructor(element: PsiElement) {
 		val mParents = mutableListOf<AdvancedSearchContextData>()
 		
 		var e = element.parentOfType<AdvancedSearchPsiStatement>()
-		while (e != null) {
-			mParents.add(AdvancedSearchContextData(e.variable, e.identifier, e.parameters.map { it.stringLiteral.content }))
+		if (e != null) {
+			val b = element.getUserData(AdvancedSearchIdentifierCompletionProvider.DUMMY_IDENTIFIER) != true
+			mParents.add(AdvancedSearchContextData(e.variable, if (b) e.identifier else null, e.parameters.map { it.stringLiteral.content }))
 			e = e.parentOfType<AdvancedSearchPsiStatement>()
+			
+			while (e != null) {
+				mParents.add(AdvancedSearchContextData(e.variable, e.identifier, e.parameters.map { it.stringLiteral.content }))
+				e = e.parentOfType<AdvancedSearchPsiStatement>()
+			}
 		}
 		
 		parents = mParents
@@ -64,4 +117,25 @@ class AdvancedSearchContext internal constructor(element: PsiElement) {
 	operator fun get(level: Int): AdvancedSearchContextData? {
 		return parents.getOrNull(level)
 	}
+	
+	operator fun get(levelRange: IntRange): List<AdvancedSearchContextData> {
+		if (parents.isEmpty()) {
+			return emptyList()
+		}
+		
+		val start = if (levelRange.first < 0) 0 else levelRange.first
+		val end = if (levelRange.last > parents.lastIndex) parents.size else levelRange.last
+		return parents.subList(start, end)
+	}
+	
+	val atTopLevel: Boolean get() = parents.size <= 1
+}
+
+fun PsiElement.findLanguagePropertyValue(): String? {
+	val file = (containingFile as? AdvancedSearchFile) ?: return null
+	return file.properties?.languagePsiProperty?.value
+}
+
+fun ExtensionPointName<AdvancedSearchProviderBean>.findExtensionFor(language: String): AdvancedSearchProviderBean? {
+	return extensionList.find { it.language.equals(language, ignoreCase = true) }
 }

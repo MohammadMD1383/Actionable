@@ -2,6 +2,7 @@ package ir.mmd.intellijDev.Actionable.find.advanced.agent.java
 
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchDocumentationProvider
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.invoke
 
 object JavaAdvancedSearchDocumentationProvider : AdvancedSearchDocumentationProvider() {
 	override fun getPropertyDocumentation(property: String) = when (property) {
@@ -63,11 +64,28 @@ object JavaAdvancedSearchDocumentationProvider : AdvancedSearchDocumentationProv
 		"direct-super-of" -> "check that this type is directly the super type of all types specified in parameters"
 		"extends-directly" -> "check that this type directly extends all the types specified in parameters"
 		"implements-directly" -> "check that this type directly implements all the interfaces specified in parameters"
-		"has-modifier" -> "checks that this entry has exactly all the modifiers specified in parameters"
+		"has-modifier" -> "checks that this entry has at least all the modifiers specified in parameters"
 		"has-method" -> "checks that this type has methods with names specified in parameters"
 		"has-method-directly" -> "checks that this type has methods that are defined in the type itself, not just inherited"
 		"is-anonymous" -> "checks that this type is an anonymous class"
 		"not-anonymous" -> "checks that this type is not an anonymous class"
 		else -> null
+	}
+	
+	override fun getParameterDocumentation(context: AdvancedSearchContext, parameter: String): String? {
+		return when {
+			context[0..1] {
+				variable equalTo "\$class" or "\$type" or "\$interface" or "\$annotation"
+			} and context[0] {
+				identifier equalTo "has-modifier"
+			} -> when (parameter) {
+				"public" -> "java <code>public</code> access modifier"
+				"private" -> "java <code>private</code> access modifier"
+				"protected" -> "java <code>protected</code> access modifier"
+				else -> null
+			}
+			
+			else -> null
+		}
 	}
 }
