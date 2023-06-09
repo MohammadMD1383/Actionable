@@ -8,10 +8,13 @@ import com.intellij.codeInsight.completion.InsertHandler
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.project.Project
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement.ElementType.Property
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiTopLevelProperty
 import ir.mmd.intellijDev.Actionable.util.ext.elementAt
 import ir.mmd.intellijDev.Actionable.util.ext.moveForward
@@ -46,9 +49,9 @@ private val insertHandler = InsertHandler<LookupElement> { context, _ ->
 	AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
 }
 
-private fun CompletionResultSet.add(s: String) {
+private fun CompletionResultSet.add(project: Project, str: String) {
 	addElement(
-		LookupElementBuilder.create(s)
+		LookupElementBuilder.create(AdvancedSearchLightPsiElement(project, Property, str))
 			.bold().withIcon(AllIcons.Nodes.Property)
 			.withInsertHandler(insertHandler)
 	)
@@ -56,13 +59,14 @@ private fun CompletionResultSet.add(s: String) {
 
 class AdvancedSearchTopLevelPropertyCompletionProvider : CompletionProvider<CompletionParameters>() {
 	override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-		result.add("language")
+		val project = parameters.editor.project!!
+		result.add(project, "language")
 		
 		(parameters.originalFile as AdvancedSearchFile).properties?.languagePsiProperty?.value?.let { language ->
 			AdvancedSearchExtensionPoint.extensionList.find {
 				it.language.equals(language, ignoreCase = true)
-			}?.completionProviderInstance?.getTopLevelProperties(parameters.editor.project!!)?.forEach {
-				result.add(it)
+			}?.completionProviderInstance?.getTopLevelProperties(project)?.forEach {
+				result.add(project, it)
 			}
 		}
 	}

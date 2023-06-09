@@ -8,11 +8,14 @@ import com.intellij.codeInsight.completion.InsertHandler
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.project.Project
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement.ElementType.Variable
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
 import ir.mmd.intellijDev.Actionable.util.ext.elementAt
@@ -36,10 +39,10 @@ private val insertHandler = InsertHandler<LookupElement> { context, _ ->
 	AutoPopupController.getInstance(context.project).autoPopupMemberLookup(editor, null)
 }
 
-private fun CompletionResultSet.add(str: String) {
+private fun CompletionResultSet.add(project: Project, str: String) {
 	addElement(
-		LookupElementBuilder.create("$$str").bold().withIcon(AllIcons.Nodes.Type)
-			.withInsertHandler(insertHandler)
+		LookupElementBuilder.create(AdvancedSearchLightPsiElement(project, Variable, "$$str"))
+			.bold().withIcon(AllIcons.Nodes.Type).withInsertHandler(insertHandler)
 	)
 }
 
@@ -59,11 +62,12 @@ class AdvancedSearchVariableCompletionProvider : CompletionProvider<CompletionPa
 		}
 		
 		val language = (element.containingFile as AdvancedSearchFile).properties?.languagePsiProperty?.value ?: return
+		val project = parameters.editor.project!!
 		AdvancedSearchExtensionPoint.extensionList.find { it.language.equals(language, ignoreCase = true) }
 			?.completionProviderInstance
-			?.getVariables(parameters.editor.project!!, parents)
+			?.getVariables(project, parents)
 			?.forEach {
-				result.add(it)
+				result.add(project, it)
 			}
 	}
 }

@@ -6,14 +6,18 @@ import com.intellij.navigation.TargetPresentation
 import com.intellij.platform.backend.documentation.DocumentationResult
 import com.intellij.platform.backend.documentation.DocumentationTarget
 import com.intellij.platform.backend.documentation.DocumentationTargetProvider
+import com.intellij.platform.backend.documentation.PsiDocumentationTargetProvider
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
+import com.intellij.psi.util.parentOfTypes
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiTopLevelProperty
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement.ElementType
 
-class AdvancedSearchDocumentationProvider : DocumentationTargetProvider {
+class AdvancedSearchDocumentationProvider : DocumentationTargetProvider, PsiDocumentationTargetProvider {
 	override fun documentationTargets(file: PsiFile, offset: Int): List<DocumentationTarget> {
 		if (file !is AdvancedSearchFile) {
 			return emptyList()
@@ -21,63 +25,99 @@ class AdvancedSearchDocumentationProvider : DocumentationTargetProvider {
 		
 		val element = file.findElementAt(offset) ?: return emptyList()
 		val language = file.properties?.languagePsiProperty?.value ?: return emptyList()
-		val symbol = when (element.elementType) {
-			AdvancedSearchTypes.VARIABLE -> element.text
+		val type: ElementType
+		val symbol: String
+		
+		when (element.elementType) {
+			AdvancedSearchTypes.VARIABLE -> {
+				type = ElementType.Variable
+				symbol = element.text
+			}
 			
 			AdvancedSearchTypes.IDENTIFIER -> {
-				val text = element.text
-				if (element.parentOfType<AdvancedSearchPsiTopLevelProperty>() != null) {
-					if (text == "language") {
-						return listOf(AdvancedSearchLanguagePropertyDocumentationTarget())
-					} else {
-						"#$text"
+				symbol = element.text
+				type = if (element.parentOfType<AdvancedSearchPsiTopLevelProperty>() != null) {
+					if (symbol == "language") {
+						return listOf(AdvancedSearchLanguagePropertyDocumentationTarget)
 					}
+					
+					ElementType.Property
 				} else {
-					text
+					ElementType.Identifier
 				}
+			}
+			
+			AdvancedSearchTypes.STRING_SEQ,
+			AdvancedSearchTypes.STRING_ESCAPE_SEQ -> {
+				val parent = element.parentOfTypes(AdvancedSearchPsiTopLevelProperty::class, AdvancedSearchPsiParameter::class) ?: return emptyList()
+				symbol = element.parentOfType<AdvancedSearchPsiStringLiteral>()!!.content
+				type = if (parent is AdvancedSearchPsiTopLevelProperty) ElementType.Value else ElementType.Parameter
 			}
 			
 			else -> return emptyList()
 		}
 		
-		return listOf(AdvancedSearchDocumentationTarget(file, language, symbol))
+		return listOf(AdvancedSearchDocumentationTarget(element, language, symbol, type))
+	}
+	
+	override fun documentationTarget(element: PsiElement, originalElement: PsiElement?): DocumentationTarget? {
+		if (element !is AdvancedSearchLightPsiElement) {
+			return null
+		}
+		
+		if (element.type == ElementType.Property && element.toString() == "language") {
+			return AdvancedSearchLanguagePropertyDocumentationTarget
+		}
+		
+		originalElement ?: return null
+		val language = (originalElement.containingFile as AdvancedSearchFile?)?.properties?.languagePsiProperty?.value ?: return null
+		return AdvancedSearchDocumentationTarget(originalElement, language, element.toString(), element.type)
 	}
 }
 
+@Suppress("UnstableApiUsage")
 open class AdvancedSearchDocumentationTarget(
-	private val file: AdvancedSearchFile,
+	private val element: PsiElement,
 	private val language: String,
-	private val symbol: String
+	private val symbol: String,
+	private val type: ElementType
 ) : DocumentationTarget {
 	override fun computePresentation(): TargetPresentation {
-		val icon = when {
-			symbol[0] == '$' -> AllIcons.Nodes.Type
-			symbol[0] == '#' -> AllIcons.Nodes.Property
-			else -> AllIcons.Nodes.Variable
+		val icon = when (type) {
+			ElementType.Variable -> AllIcons.Nodes.Type
+			ElementType.Property -> AllIcons.Nodes.Property
+			ElementType.Identifier -> AllIcons.Nodes.Variable
+			ElementType.Parameter -> AllIcons.Nodes.Parameter
+			ElementType.Value -> AllIcons.Debugger.Value
 		}
 		
 		return TargetPresentation
-			.builder(symbol.replace("#", ""))
+			.builder(symbol)
 			.icon(icon)
 			.presentation()
 	}
 	
 	override fun computeDocumentation(): DocumentationResult? {
-		val docText = AdvancedSearchExtensionPoint.extensionList.find { it.language.equals(language, ignoreCase = true) }
-			?.documentationProviderInstance
-			?.getDocumentationFor(symbol) ?: return null
+		val documentationProvider = AdvancedSearchExtensionPoint.extensionList.find { it.language.equals(language, ignoreCase = true) }
+			?.documentationProviderInstance ?: return null
+		val docText = when (type) {
+			ElementType.Property -> documentationProvider.getPropertyDocumentation(symbol)
+			ElementType.Value -> documentationProvider.getPropertyValueDocumentation(element.parentOfType<AdvancedSearchPsiTopLevelProperty>()!!.key, symbol)
+			ElementType.Variable -> documentationProvider.getVariableDocumentation(AdvancedSearchContext(element), symbol)
+			ElementType.Identifier -> documentationProvider.getIdentifierDocumentation(AdvancedSearchContext(element), symbol)
+			ElementType.Parameter -> documentationProvider.getParameterDocumentation(AdvancedSearchContext(element), symbol)
+		} ?: return null
 		
 		return DocumentationResult.documentation(docText)
 	}
 	
 	override fun createPointer(): Pointer<out DocumentationTarget> {
-		return Pointer {
-			if (file.properties?.languagePsiProperty?.value == language) this else null
-		}
+		return Pointer { this }
 	}
 }
 
-class AdvancedSearchLanguagePropertyDocumentationTarget : DocumentationTarget {
+@Suppress("UnstableApiUsage")
+object AdvancedSearchLanguagePropertyDocumentationTarget : DocumentationTarget {
 	override fun computePresentation(): TargetPresentation {
 		return TargetPresentation
 			.builder("language")

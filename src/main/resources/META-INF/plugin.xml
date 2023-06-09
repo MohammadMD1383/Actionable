@@ -133,6 +133,9 @@
 		
 		<platform.backend.documentation.targetProvider
 			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchDocumentationProvider"/>
+		
+		<platform.backend.documentation.psiTargetProvider
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchDocumentationProvider"/>
 		<!--endregion-->
 		
 		<notificationGroup

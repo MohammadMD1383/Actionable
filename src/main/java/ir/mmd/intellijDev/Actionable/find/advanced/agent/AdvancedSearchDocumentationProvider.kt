@@ -1,14 +1,33 @@
 package ir.mmd.intellijDev.Actionable.find.advanced.agent
 
-interface AdvancedSearchDocumentationProvider {
+abstract class AdvancedSearchDocumentationProvider {
 	/**
-	 * the symbol:
-	 *  * starts with `$` if it is a variable
-	 *  * starts with `#` if it is a top-level property
-	 *  * otherwise it is an identifier
-	 *
 	 *  @return documentation text that can be in html format or
-	 *  null if there is no documentation available for the [symbol].
+	 *  null if there is no documentation available for the [property].
 	 */
-	fun getDocumentationFor(symbol: String): String?
+	open fun getPropertyDocumentation(property: String): String? = null
+	
+	/**
+	 *  @return documentation text that can be in html format or
+	 *  null if there is no documentation available for the [value].
+	 */
+	open fun getPropertyValueDocumentation(property: String, value: String): String? = null
+	
+	/**
+	 *  @return documentation text that can be in html format or
+	 *  null if there is no documentation available for the [variable].
+	 */
+	open fun getVariableDocumentation(context: AdvancedSearchContext, variable: String): String? = null
+	
+	/**
+	 *  @return documentation text that can be in html format or
+	 *  null if there is no documentation available for the [identifier].
+	 */
+	open fun getIdentifierDocumentation(context: AdvancedSearchContext, identifier: String): String? = null
+	
+	/**
+	 *  @return documentation text that can be in html format or
+	 *  null if there is no documentation available for the [parameter].
+	 */
+	open fun getParameterDocumentation(context: AdvancedSearchContext, parameter: String): String? = null
 }
