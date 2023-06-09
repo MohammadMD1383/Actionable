@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLanguageInjectionHost
 import com.intellij.psi.util.parentOfType
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.findExtensionFor
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStringLiteral
 import org.intellij.lang.regexp.RegExpLanguage
@@ -39,7 +40,7 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 			return
 		}
 		
-		AdvancedSearchExtensionPoint.extensionList.find { it.language.equals(language, ignoreCase = true) }
+		AdvancedSearchExtensionPoint.findExtensionFor(language)
 			?.injectionProviderInstance
 			?.getInjectionFor(context.project, variable, identifier, parents)
 			?.let {

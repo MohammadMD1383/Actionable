@@ -14,6 +14,7 @@ import com.intellij.psi.util.parentOfType
 import com.intellij.psi.util.parentOfTypes
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.findExtensionFor
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement.ElementType
 
@@ -98,7 +99,7 @@ open class AdvancedSearchDocumentationTarget(
 	}
 	
 	override fun computeDocumentation(): DocumentationResult? {
-		val documentationProvider = AdvancedSearchExtensionPoint.extensionList.find { it.language.equals(language, ignoreCase = true) }
+		val documentationProvider = AdvancedSearchExtensionPoint.findExtensionFor(language)
 			?.documentationProviderInstance ?: return null
 		val docText = when (type) {
 			ElementType.Property -> documentationProvider.getPropertyDocumentation(symbol)

@@ -12,7 +12,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.ProcessingContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.findExtensionFor
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.findLanguagePropertyValue
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement.ElementType.Property
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiTopLevelProperty
@@ -62,12 +63,12 @@ class AdvancedSearchTopLevelPropertyCompletionProvider : CompletionProvider<Comp
 		val project = parameters.editor.project!!
 		result.add(project, "language")
 		
-		(parameters.originalFile as AdvancedSearchFile).properties?.languagePsiProperty?.value?.let { language ->
-			AdvancedSearchExtensionPoint.extensionList.find {
-				it.language.equals(language, ignoreCase = true)
-			}?.completionProviderInstance?.getTopLevelProperties(project)?.forEach {
+		val language = parameters.originalFile.findLanguagePropertyValue() ?: return
+		AdvancedSearchExtensionPoint.findExtensionFor(language)
+			?.completionProviderInstance
+			?.getTopLevelProperties(project)
+			?.forEach {
 				result.add(project, it)
 			}
-		}
 	}
 }
