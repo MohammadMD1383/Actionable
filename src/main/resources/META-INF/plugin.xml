@@ -144,6 +144,10 @@
 		<lang.formatter
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.fmt.AdvancedSearchFormattingModelBuilder"/>
+		
+		<lang.braceMatcher
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchBraceMatcher"/>
 		<!--endregion-->
 		
 		<notificationGroup
