@@ -136,6 +136,10 @@
 		
 		<platform.backend.documentation.psiTargetProvider
 			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchDocumentationProvider"/>
+		
+		<spellchecker.support
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchSpellCheckingStrategy"/>
 		<!--endregion-->
 		
 		<notificationGroup
