@@ -148,6 +148,10 @@
 		<lang.braceMatcher
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchBraceMatcher"/>
+		
+		<lang.quoteHandler
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchQuoteHandler"/>
 		<!--endregion-->
 		
 		<notificationGroup
