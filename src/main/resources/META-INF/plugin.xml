@@ -156,6 +156,9 @@
 		<moveLeftRightHandler
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchMoveElementLeftRightHandler"/>
+		
+		<highlightUsagesHandlerFactory
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchHighlightUsagesHandlerFactory"/>
 		<!--endregion-->
 		
 		<notificationGroup
