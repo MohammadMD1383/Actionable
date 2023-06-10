@@ -140,6 +140,10 @@
 		<spellchecker.support
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchSpellCheckingStrategy"/>
+		
+		<lang.formatter
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.fmt.AdvancedSearchFormattingModelBuilder"/>
 		<!--endregion-->
 		
 		<notificationGroup
