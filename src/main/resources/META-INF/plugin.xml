@@ -152,6 +152,10 @@
 		<lang.quoteHandler
 			language="AdvancedSearch"
 			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchQuoteHandler"/>
+		
+		<moveLeftRightHandler
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchMoveElementLeftRightHandler"/>
 		<!--endregion-->
 		
 		<notificationGroup
