@@ -216,7 +216,7 @@ class JavaAdvancedSearchAgent(project: Project, searchFile: AdvancedSearchFile) 
 	}
 }
 
-private fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object : PatternCondition<PsiClass>("inheritorOf") {
+private fun PsiClassPattern.inheritorOf(baseName: String, direct: Boolean) = with(object : PatternCondition<PsiClass>("inheritorOf($baseName, direct=$direct)") {
 	override fun accepts(t: PsiClass, context: ProcessingContext): Boolean {
 		val facade = JavaPsiFacadeEx.getInstanceEx(t.project)
 		return t.isInheritor(facade.findClass(baseName), !direct)
@@ -241,14 +241,14 @@ private fun PsiClassPattern.nonInterface() = with(object : PatternCondition<PsiC
 	}
 })
 
-private fun PsiClassPattern.superOf(fqn: String, direct: Boolean) = with(object : PatternCondition<PsiClass?>("superOf") {
+private fun PsiClassPattern.superOf(fqn: String, direct: Boolean) = with(object : PatternCondition<PsiClass?>("superOf($fqn, direct=$direct)") {
 	override fun accepts(t: PsiClass, context: ProcessingContext?): Boolean {
 		val facade = JavaPsiFacadeEx.getInstanceEx(t.project)
 		return facade.findClass(fqn).isInheritor(t, !direct)
 	}
 })
 
-private fun PsiMethodPattern.hasParam(param: String? = null) = with(object : PatternCondition<PsiMethod?>("withParam") {
+private fun PsiMethodPattern.hasParam(param: String? = null) = with(object : PatternCondition<PsiMethod?>("hasParam($param)") {
 	override fun accepts(t: PsiMethod, context: ProcessingContext?): Boolean {
 		val parameterList = t.parameterList
 		if (param == null) {
@@ -263,7 +263,7 @@ private fun PsiMethodPattern.hasParam(param: String? = null) = with(object : Pat
 	}
 })
 
-private fun PsiMethodPattern.withParams(vararg param: String) = with(object : PatternCondition<PsiMethod?>("withParameters") {
+private fun PsiMethodPattern.withParams(vararg param: String) = with(object : PatternCondition<PsiMethod?>("withParams(${param.joinToString()}})") {
 	override fun accepts(t: PsiMethod, context: ProcessingContext?): Boolean {
 		val parameterList = t.parameterList
 		if (parameterList.parametersCount != param.size) {

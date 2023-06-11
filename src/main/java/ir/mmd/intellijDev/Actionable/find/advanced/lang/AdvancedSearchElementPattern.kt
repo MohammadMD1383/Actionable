@@ -50,7 +50,7 @@ open class AdvancedSearchElementPattern<T : PsiElement, Self : AdvancedSearchEle
 	 * @param ignoreCase whether to compare [property] and [value] ignoring the case or not
 	 */
 	fun withTopLevelProperty(property: String, value: String? = null, ignoreCase: Boolean = true): Self {
-		return with("AdvancedSearchElementPattern.withTopLevelProperty") { t, _ ->
+		return with("withTopLevelProperty(property=$property, value=$value)") { t, _ ->
 			val file = t.containingFile
 			if (file !is AdvancedSearchFile) {
 				return@with false
@@ -61,7 +61,7 @@ open class AdvancedSearchElementPattern<T : PsiElement, Self : AdvancedSearchEle
 		}
 	}
 	
-	fun withoutParentStatement() = with("AdvancedSearchElementPattern.withoutParentStatement") { t, _ ->
+	fun withoutParentStatement() = with("withoutParentStatement") { t, _ ->
 		t.parentOfType<AdvancedSearchPsiStatement>() == null
 	}
 	
@@ -82,7 +82,7 @@ open class AdvancedSearchStringLiteralPattern<T : AdvancedSearchPsiStringLiteral
 	constructor(condition: InitialPatternCondition<T>) : super(condition)
 	
 	fun withSingleStringSequence(ignoreEscapes: Boolean = false): Self {
-		return with("AdvancedSearchStringLiteralPattern.withSingleStringSequence") { t, _ ->
+		return with("withSingleStringSequence(ignoreEscapes=$ignoreEscapes)") { t, _ ->
 			var count = 0
 			t.isRaw || (t.node.children().all {
 				when (it.elementType) {
@@ -98,7 +98,7 @@ open class AdvancedSearchStringLiteralPattern<T : AdvancedSearchPsiStringLiteral
 	 * quotes won't be included
 	 */
 	fun thatDoesntContain(text: String): Self {
-		return with("AdvancedSearchStringLiteralPattern.thatDoesntContain") { t, _ ->
+		return with("thatDoesntContain($text)") { t, _ ->
 			text !in t.content
 		}
 	}
@@ -114,21 +114,21 @@ class AdvancedSearchParameterPattern : AdvancedSearchElementPattern<AdvancedSear
 	 * specify [text] with '$'
 	 */
 	fun withVariable(vararg text: String): AdvancedSearchParameterPattern {
-		return with("AdvancedSearchParameterPattern.withVariable") { t, _ ->
+		return with("withVariable($text)") { t, _ ->
 			val v = t.parentOfType<AdvancedSearchPsiStatement>()?.identifier ?: return@with false
 			text.any { v == it }
 		}
 	}
 	
 	fun withIdentifier(vararg text: String): AdvancedSearchParameterPattern {
-		return with("AdvancedSearchParameterPattern.withIdentifier") { t, _ ->
+		return with("withIdentifier($text)") { t, _ ->
 			val i = t.parentOfType<AdvancedSearchPsiStatement>()?.identifier ?: return@with false
 			text.any { i == it }
 		}
 	}
 	
 	fun withIdentifier(pattern: Regex): AdvancedSearchParameterPattern {
-		return with("AdvancedSearchParameterPattern.withIdentifier(regex)") { t, _ ->
+		return with("withIdentifier(regex=$pattern)") { t, _ ->
 			val identifier = t.parentOfType<AdvancedSearchPsiStatement>()?.psiIdentifier?.text ?: return@with false
 			pattern.matches(identifier)
 		}
@@ -137,25 +137,25 @@ class AdvancedSearchParameterPattern : AdvancedSearchElementPattern<AdvancedSear
 
 class AdvancedSearchTopLevelPropertyPattern : AdvancedSearchElementPattern<AdvancedSearchPsiTopLevelProperty, AdvancedSearchTopLevelPropertyPattern>(AdvancedSearchPsiTopLevelProperty::class.java) {
 	fun withKey(k: String): AdvancedSearchTopLevelPropertyPattern {
-		return with("AdvancedSearchTopLevelPropertyPattern.withKey") { t, _ ->
+		return with("withKey($k)") { t, _ ->
 			t.key == k
 		}
 	}
 	
 	fun withValue(v: String): AdvancedSearchTopLevelPropertyPattern {
-		return with("AdvancedSearchTopLevelPropertyPattern.withValue") { t, _ ->
+		return with("withValue($v)") { t, _ ->
 			t.value == v
 		}
 	}
 }
 
 class AdvancedSearchStatementPattern : AdvancedSearchElementPattern<AdvancedSearchPsiStatement, AdvancedSearchStatementPattern>(AdvancedSearchPsiStatement::class.java) {
-	fun withVariable(vararg text: String, checkParent: Boolean = false) = with("AdvancedSearchStatementPattern.withVariable") { t, _ ->
+	fun withVariable(vararg text: String, checkParent: Boolean = false) = with("withVariable($text, checkParent=$checkParent)") { t, _ ->
 		val v = t.variable ?: (if (checkParent) t.parentStatement?.variable else null) ?: return@with false
 		text.any { v == it }
 	}
 	
-	fun withIdentifier(vararg text: String) = with("AdvancedSearchStatementPattern.withIdentifier") { t, _ ->
+	fun withIdentifier(vararg text: String) = with("withIdentifier($text)") { t, _ ->
 		val i = t.identifier ?: return@with false
 		text.any { i == it }
 	}
