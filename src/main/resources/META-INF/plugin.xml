@@ -155,6 +155,10 @@
 		
 		<highlightUsagesHandlerFactory
 			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchHighlightUsagesHandlerFactory"/>
+		
+		<runLineMarkerContributor
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchLineMarkerProvider"/>
 		<!--endregion-->
 		
 		<notificationGroup

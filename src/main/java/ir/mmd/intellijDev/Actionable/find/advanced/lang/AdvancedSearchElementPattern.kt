@@ -65,6 +65,12 @@ open class AdvancedSearchElementPattern<T : PsiElement, Self : AdvancedSearchEle
 		t.parentOfType<AdvancedSearchPsiStatement>() == null
 	}
 	
+	fun insideFirstStatement() = with("insideFirstStatement") { t, _ ->
+		val statement = t.parentOfType<AdvancedSearchPsiStatement>() ?: return@with false
+		val statements = statement.parentOfType<AdvancedSearchPsiStatements>() ?: return@with false
+		statements.statementList.first() == statement
+	}
+	
 	class Capture<T : PsiElement> : AdvancedSearchElementPattern<T, Capture<T>> {
 		constructor(aClass: Class<T>) : super(aClass)
 		constructor(condition: InitialPatternCondition<T>) : super(condition)
