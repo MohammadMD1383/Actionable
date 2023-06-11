@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.find.advanced.lang
+package ir.mmd.intellijDev.Actionable.find.advanced.lang.util
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx

@@ -110,15 +110,15 @@
 		
 		<annotator
 			language="AdvancedSearch"
-			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchAnnotator"/>
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchAnnotator"/>
 		
 		<lang.commenter
 			language="AdvancedSearch"
-			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchCommenter"/>
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchCommenter"/>
 		
 		<lang.foldingBuilder
 			language="AdvancedSearch"
-			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFoldingBuilder"/>
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchFoldingBuilder"/>
 		
 		<completion.contributor
 			language="AdvancedSearch"
@@ -128,14 +128,14 @@
 			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchMultiHostInjector"/>
 		
 		<platform.backend.documentation.targetProvider
-			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchDocumentationProvider"/>
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchDocumentationProvider"/>
 		
 		<platform.backend.documentation.psiTargetProvider
-			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchDocumentationProvider"/>
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchDocumentationProvider"/>
 		
 		<spellchecker.support
 			language="AdvancedSearch"
-			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchSpellCheckingStrategy"/>
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchSpellCheckingStrategy"/>
 		
 		<lang.formatter
 			language="AdvancedSearch"
@@ -143,22 +143,22 @@
 		
 		<lang.braceMatcher
 			language="AdvancedSearch"
-			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchBraceMatcher"/>
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchBraceMatcher"/>
 		
 		<lang.quoteHandler
 			language="AdvancedSearch"
-			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchQuoteHandler"/>
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchQuoteHandler"/>
 		
 		<moveLeftRightHandler
 			language="AdvancedSearch"
-			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchMoveElementLeftRightHandler"/>
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchMoveElementLeftRightHandler"/>
 		
 		<highlightUsagesHandlerFactory
-			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchHighlightUsagesHandlerFactory"/>
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchHighlightUsagesHandlerFactory"/>
 		
 		<runLineMarkerContributor
 			language="AdvancedSearch"
-			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchLineMarkerProvider"/>
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchLineMarkerProvider"/>
 		<!--endregion-->
 		
 		<notificationGroup

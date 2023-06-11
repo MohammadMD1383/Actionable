@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.find.advanced.lang
+package ir.mmd.intellijDev.Actionable.find.advanced.lang.util
 
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase
 import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerFactory
@@ -8,6 +8,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.parentOfType
 import com.intellij.util.Consumer
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatements
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes
 

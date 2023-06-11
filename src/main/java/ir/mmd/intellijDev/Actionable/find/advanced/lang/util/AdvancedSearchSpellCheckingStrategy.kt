@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.find.advanced.lang
+package ir.mmd.intellijDev.Actionable.find.advanced.lang.util
 
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement

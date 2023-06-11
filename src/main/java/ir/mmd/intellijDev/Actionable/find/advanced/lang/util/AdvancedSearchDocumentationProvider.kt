@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.find.advanced.lang
+package ir.mmd.intellijDev.Actionable.find.advanced.lang.util
 
 import com.intellij.icons.AllIcons
 import com.intellij.model.Pointer
@@ -15,6 +15,7 @@ import com.intellij.psi.util.parentOfTypes
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.findExtensionFor
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.*
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchLightPsiElement.ElementType
 

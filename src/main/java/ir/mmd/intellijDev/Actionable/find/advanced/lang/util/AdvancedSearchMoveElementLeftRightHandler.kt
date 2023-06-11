@@ -1,4 +1,4 @@
-package ir.mmd.intellijDev.Actionable.find.advanced.lang
+package ir.mmd.intellijDev.Actionable.find.advanced.lang.util
 
 import com.intellij.codeInsight.editorActions.moveLeftRight.MoveElementLeftRightHandler
 import com.intellij.psi.PsiElement
