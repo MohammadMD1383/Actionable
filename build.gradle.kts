@@ -26,7 +26,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "4.4.0"
+version = "4.5.0"
 
 sourceSets["main"].java.srcDirs("src/main/gen")
 
@@ -55,8 +55,28 @@ tasks {
 		}
 	}
 	
+	val createOpenApiSourceJar by registering(Jar::class) {
+		from(sourceSets.main.get().java) {
+			include("**/*.java")
+		}
+		
+		from(kotlin.sourceSets.main.get().kotlin) {
+			include("**/*.kt")
+		}
+		
+		destinationDirectory.set(layout.buildDirectory.dir("libs"))
+		archiveClassifier.set("src")
+	}
+	
 	buildPlugin {
+		dependsOn(createOpenApiSourceJar)
+		
 		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+		
+		from(createOpenApiSourceJar) {
+			into("lib/src")
+		}
+		
 		from("docs/site") {
 			into("docs")
 		}
