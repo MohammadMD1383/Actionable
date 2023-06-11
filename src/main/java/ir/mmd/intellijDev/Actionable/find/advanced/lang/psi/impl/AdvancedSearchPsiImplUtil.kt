@@ -39,7 +39,7 @@ fun getLanguagePsiProperty(element: AdvancedSearchPsiTopLevelProperties): Advanc
 	return element.topLevelPropertyList.find { it.key == "language" }
 }
 
-fun findPsiPropertyByKey(element: AdvancedSearchPsiTopLevelProperties, key: String, ignoreCase:Boolean): AdvancedSearchPsiTopLevelProperty? {
+fun findPsiPropertyByKey(element: AdvancedSearchPsiTopLevelProperties, key: String, ignoreCase: Boolean): AdvancedSearchPsiTopLevelProperty? {
 	return element.topLevelPropertyList.find { it.key.equals(key, ignoreCase) }
 }
 

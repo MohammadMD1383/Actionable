@@ -117,7 +117,7 @@ class AdvancedSearchContext internal constructor(element: PsiElement) {
 			}
 			
 			val b = element.getUserData(AdvancedSearchIdentifierCompletionProvider.DUMMY_IDENTIFIER) != true
-			add(AdvancedSearchContextData(e!!.variable, if (b) e.identifier else null, e.parameters.map { it.stringLiteral.content }))
+			add(AdvancedSearchContextData(e.variable, if (b) e.identifier else null, e.parameters.map { it.stringLiteral.content }))
 			
 			e = e.parentOfType<AdvancedSearchPsiStatement>()
 			while (e != null) {
