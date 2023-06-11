@@ -65,8 +65,8 @@ class AdvancedSearchTopLevelPropertyCompletionProvider : CompletionProvider<Comp
 		
 		val language = parameters.originalFile.findLanguagePropertyValue() ?: return
 		AdvancedSearchExtensionPoint.findExtensionFor(language)
-			?.completionProviderInstance
-			?.getTopLevelProperties(project)
+			?.getCompletionProvider(project)
+			?.getTopLevelProperties()
 			?.forEach {
 				result.add(project, it)
 			}

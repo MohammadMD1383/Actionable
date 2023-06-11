@@ -6,6 +6,7 @@ import com.intellij.psi.util.parentOfType
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.compl.AdvancedSearchIdentifierCompletionProvider
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
+import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatementBody
 import ir.mmd.intellijDev.Actionable.util.after
 
 sealed interface Condition {
@@ -17,6 +18,7 @@ sealed interface Condition {
 		
 		infix fun equalTo(other: String) = this after { value = initial == other }
 		infix fun or(other: String) = this after { value = value || initial == other }
+		infix fun matches(pattern: Regex) = this after { value = initial?.matches(pattern) ?: false }
 	}
 	
 	class ListCondition<T> internal constructor(private val initial: List<T>) : Condition {
@@ -97,21 +99,32 @@ class AdvancedSearchContext internal constructor(element: PsiElement) {
 	private val parents: List<AdvancedSearchContextData>
 	
 	init {
-		val mParents = mutableListOf<AdvancedSearchContextData>()
-		
-		var e = element.parentOfType<AdvancedSearchPsiStatement>()
-		if (e != null) {
-			val b = element.getUserData(AdvancedSearchIdentifierCompletionProvider.DUMMY_IDENTIFIER) != true
-			mParents.add(AdvancedSearchContextData(e.variable, if (b) e.identifier else null, e.parameters.map { it.stringLiteral.content }))
-			e = e.parentOfType<AdvancedSearchPsiStatement>()
+		parents = mutableListOf<AdvancedSearchContextData>().apply {
+			var e: AdvancedSearchPsiStatement? = element.parentOfType<AdvancedSearchPsiStatement>()
+			if (e == null) {
+				// handle top-level context
+				add(AdvancedSearchContextData(null, null, listOf()))
+				return@apply
+			}
 			
+			element.parentOfType<AdvancedSearchPsiStatementBody>()?.let {
+				// in order to handle an empty context inside statement body
+				// $class extends 'SomeClass' { | }
+				// where (|) is caret
+				if (it.textRange in e!!.textRange) {
+					add(AdvancedSearchContextData(null, null, listOf()))
+				}
+			}
+			
+			val b = element.getUserData(AdvancedSearchIdentifierCompletionProvider.DUMMY_IDENTIFIER) != true
+			add(AdvancedSearchContextData(e!!.variable, if (b) e.identifier else null, e.parameters.map { it.stringLiteral.content }))
+			
+			e = e.parentOfType<AdvancedSearchPsiStatement>()
 			while (e != null) {
-				mParents.add(AdvancedSearchContextData(e.variable, e.identifier, e.parameters.map { it.stringLiteral.content }))
+				add(AdvancedSearchContextData(e.variable, e.identifier, e.parameters.map { it.stringLiteral.content }))
 				e = e.parentOfType<AdvancedSearchPsiStatement>()
 			}
 		}
-		
-		parents = mParents
 	}
 	
 	operator fun get(level: Int): AdvancedSearchContextData? {
@@ -124,11 +137,11 @@ class AdvancedSearchContext internal constructor(element: PsiElement) {
 		}
 		
 		val start = if (levelRange.first < 0) 0 else levelRange.first
-		val end = if (levelRange.last > parents.lastIndex) parents.size else levelRange.last
+		val end = if (levelRange.last > parents.lastIndex) parents.size else levelRange.last + 1
 		return parents.subList(start, end)
 	}
 	
-	val atTopLevel: Boolean get() = parents.size <= 1
+	val atTopLevel: Boolean get() = parents.size == 1
 }
 
 fun PsiElement.findLanguagePropertyValue(): String? {
@@ -136,6 +149,6 @@ fun PsiElement.findLanguagePropertyValue(): String? {
 	return file.properties?.languagePsiProperty?.value
 }
 
-fun ExtensionPointName<AdvancedSearchProviderBean>.findExtensionFor(language: String): AdvancedSearchProviderBean? {
-	return extensionList.find { it.language.equals(language, ignoreCase = true) }
+fun ExtensionPointName<AdvancedSearchProviderFactoryBean>.findExtensionFor(language: String): AdvancedSearchExtensionFactory? {
+	return extensionList.find { it.language.equals(language, ignoreCase = true) }?.factoryClass
 }

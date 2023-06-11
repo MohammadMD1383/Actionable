@@ -54,8 +54,8 @@ class AdvancedSearchVariableCompletionProvider : CompletionProvider<CompletionPa
 		val project = parameters.editor.project!!
 		
 		AdvancedSearchExtensionPoint.findExtensionFor(language)
-			?.completionProviderInstance
-			?.getVariables(project, ctx)
+			?.getCompletionProvider(project)
+			?.getVariables(ctx)
 			?.forEach {
 				result.add(project, it)
 			}

@@ -71,8 +71,8 @@ class AdvancedSearchIdentifierCompletionProvider : CompletionProvider<Completion
 		val ctx = AdvancedSearchContext(element)
 		
 		AdvancedSearchExtensionPoint.findExtensionFor(language)
-			?.completionProviderInstance
-			?.getIdentifiers(project, ctx)
+			?.getCompletionProvider(project)
+			?.getIdentifiers(ctx)
 			?.forEach {
 				result.add(project, it.first, it.second)
 			}

@@ -100,7 +100,7 @@ open class AdvancedSearchDocumentationTarget(
 	
 	override fun computeDocumentation(): DocumentationResult? {
 		val documentationProvider = AdvancedSearchExtensionPoint.findExtensionFor(language)
-			?.documentationProviderInstance ?: return null
+			?.getDocumentationProvider(element.project) ?: return null
 		val docText = when (type) {
 			ElementType.Property -> documentationProvider.getPropertyDocumentation(symbol)
 			ElementType.Value -> documentationProvider.getPropertyValueDocumentation(element.parentOfType<AdvancedSearchPsiTopLevelProperty>()!!.key, symbol)

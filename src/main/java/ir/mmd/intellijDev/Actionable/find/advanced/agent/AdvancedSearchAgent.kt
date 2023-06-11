@@ -28,22 +28,21 @@ abstract class AdvancedSearchAgent protected constructor(
 		@JvmStatic
 		fun createAgent(project: Project, file: AdvancedSearchFile): AdvancedSearchAgent {
 			if (PsiTreeUtil.hasErrorElements(file)) {
-				throw IllegalStateException("aas file has errors that must be corrected before processing: $file").wrap(true)
+				throw IllegalStateException("aas file has errors that must be corrected before processing: $file").wrap()
 			}
 			
 			val language = file.properties?.languagePsiProperty?.value
-				?: throw IllegalArgumentException("language property must be set in the aas file: $file").wrap(true)
+				?: throw IllegalArgumentException("language property must be set in the aas file: $file").wrap()
 			
 			if (!Language.getRegisteredLanguages().any { it.id.equals(language, ignoreCase = true) }) {
-				throw UnsupportedOperationException("no language registered with name `$language` in file: $file").wrap(true)
+				throw UnsupportedOperationException("no language registered with name `$language` in file: $file").wrap()
 			}
 			
 			try {
-				val agent = AdvancedSearchExtensionPoint.extensionList.find {
-					it.language.equals(language, ignoreCase = true)
-				}?.agentClass ?: throw UnsupportedOperationException("no agent found for language `$language` in file: $file").wrap(true)
+				val factory = AdvancedSearchExtensionPoint.findExtensionFor(language)
+					?: throw UnsupportedOperationException("no agent found for language `$language` in file: $file").wrap()
 				
-				return agent.new(project, file)
+				return factory.createAgent(project, file)
 			} catch (e: Exception) {
 				throw e.wrap(false)
 			}

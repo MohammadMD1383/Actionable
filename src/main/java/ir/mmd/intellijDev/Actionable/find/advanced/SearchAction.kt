@@ -5,7 +5,7 @@ import ir.mmd.intellijDev.Actionable.action.LazyEventContext
 import ir.mmd.intellijDev.Actionable.action.action
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchAgent
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFile
-import ir.mmd.intellijDev.Actionable.util.ExceptionWrapper
+import ir.mmd.intellijDev.Actionable.util.WrappedException
 import ir.mmd.intellijDev.Actionable.util.ext.backgroundTask
 import javax.swing.JOptionPane
 
@@ -18,7 +18,7 @@ class SearchAction : ActionBase() {
 			backgroundTask(project, "Advanced search", true) {
 				agent.process(it)
 			}
-		} catch (wrapper: ExceptionWrapper) {
+		} catch (wrapper: WrappedException) {
 			wrapper.throwIfShouldNotBeCaught()
 			JOptionPane.showMessageDialog(null, wrapper.original.message, "Error", JOptionPane.ERROR_MESSAGE)
 		}

@@ -5,10 +5,7 @@ import com.intellij.lang.injection.MultiHostRegistrar
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLanguageInjectionHost
-import com.intellij.psi.util.parentOfType
-import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchExtensionPoint
-import ir.mmd.intellijDev.Actionable.find.advanced.agent.findExtensionFor
-import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStatement
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.*
 import ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchPsiStringLiteral
 import org.intellij.lang.regexp.RegExpLanguage
 
@@ -18,18 +15,10 @@ private fun innerStringLiteralRangeOf(element: PsiElement): TextRange {
 
 class AdvancedSearchMultiHostInjector : MultiHostInjector {
 	override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
-		var e: AdvancedSearchPsiStatement? = context.parentOfType<AdvancedSearchPsiStatement>() ?: return
-		val language = (context.containingFile as AdvancedSearchFile).properties?.languagePsiProperty?.value ?: return
-		val variable = e!!.variable
-		val identifier = e.identifier!!
-		val parents = mutableListOf<String>()
-		e = e.parentOfType<AdvancedSearchPsiStatement>()
-		while (e != null) {
-			parents.add(e.variable ?: e.identifier ?: "")
-			e = e.parentOfType<AdvancedSearchPsiStatement>()
-		}
+		val language = context.findLanguagePropertyValue() ?: return
+		val ctx = AdvancedSearchContext(context)
 		
-		if (identifier.matches(".+-matches".toRegex())) {
+		if (ctx[0] { identifier matches ".+-matches".toRegex() }) {
 			registrar.startInjecting(RegExpLanguage.INSTANCE)
 				.addPlace(
 					null, null,
@@ -41,8 +30,8 @@ class AdvancedSearchMultiHostInjector : MultiHostInjector {
 		}
 		
 		AdvancedSearchExtensionPoint.findExtensionFor(language)
-			?.injectionProviderInstance
-			?.getInjectionFor(context.project, variable, identifier, parents)
+			?.getInjectionProvider(context.project)
+			?.getInjectionFor(ctx)
 			?.let {
 				registrar.startInjecting(it.language)
 					.addPlace(

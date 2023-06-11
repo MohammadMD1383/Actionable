@@ -42,8 +42,8 @@ class AdvancedSearchTopLevelPropertyValueCompletionProvider : CompletionProvider
 		
 		val language = element.parentOfType<AdvancedSearchPsiTopLevelProperties>()?.languagePsiProperty?.value ?: return
 		extensionList.find { it.language.equals(language, ignoreCase = true) }
-			?.completionProviderInstance
-			?.getValuesForProperty(project, property)
+			?.factoryClass?.getCompletionProvider(project)
+			?.getValuesForProperty(property)
 			?.forEach {
 				result.add(project, it)
 			}

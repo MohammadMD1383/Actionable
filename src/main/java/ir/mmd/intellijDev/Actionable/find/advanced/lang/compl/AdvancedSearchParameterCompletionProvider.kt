@@ -25,8 +25,8 @@ class AdvancedSearchParameterCompletionProvider : CompletionProvider<CompletionP
 		val ctx = AdvancedSearchContext(element)
 		
 		AdvancedSearchExtensionPoint.findExtensionFor(language)
-			?.completionProviderInstance
-			?.getParameters(project, ctx)
+			?.getCompletionProvider(project)
+			?.getParameters(ctx)
 			?.forEach {
 				result.add(project, it)
 			}

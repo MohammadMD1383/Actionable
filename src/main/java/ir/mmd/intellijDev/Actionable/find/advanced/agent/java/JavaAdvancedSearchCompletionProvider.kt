@@ -1,16 +1,15 @@
 package ir.mmd.intellijDev.Actionable.find.advanced.agent.java
 
-import com.intellij.openapi.project.Project
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchCompletionProvider
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.invoke
 
 object JavaAdvancedSearchCompletionProvider : AdvancedSearchCompletionProvider() {
-	override fun getTopLevelProperties(project: Project): List<String> {
+	override fun getTopLevelProperties(): List<String> {
 		return listOf("scope", "scan-source")
 	}
 	
-	override fun getValuesForProperty(project: Project, property: String): List<String> {
+	override fun getValuesForProperty(property: String): List<String> {
 		return when (property) {
 			"scope" -> listOf("project", "all")
 			"scan-source" -> listOf("true", "false")
@@ -18,7 +17,7 @@ object JavaAdvancedSearchCompletionProvider : AdvancedSearchCompletionProvider()
 		}
 	}
 	
-	override fun getVariables(project: Project, context: AdvancedSearchContext): List<String> {
+	override fun getVariables(context: AdvancedSearchContext): List<String> {
 		return when {
 			context.atTopLevel -> listOf("type", "class", "interface", "annotation", "method")
 			context[1] { variable equalTo "\$type" or "\$class" or "\$interface" or "\$annotation" } -> listOf("method")
@@ -26,7 +25,7 @@ object JavaAdvancedSearchCompletionProvider : AdvancedSearchCompletionProvider()
 		}
 	}
 	
-	override fun getIdentifiers(project: Project, context: AdvancedSearchContext): List<Pair<String, Boolean>> {
+	override fun getIdentifiers(context: AdvancedSearchContext): List<Pair<String, Boolean>> {
 		return when {
 			context[0..1] { variable equalTo "\$method" } -> listOf(
 				"has-param" to true,
@@ -53,7 +52,7 @@ object JavaAdvancedSearchCompletionProvider : AdvancedSearchCompletionProvider()
 		}
 	}
 	
-	override fun getParameters(project: Project, context: AdvancedSearchContext): List<String> {
+	override fun getParameters(context: AdvancedSearchContext): List<String> {
 		return when {
 			context[0..1] {
 				variable equalTo "\$class" or "\$type" or "\$interface" or "\$annotation"

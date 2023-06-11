@@ -1,34 +1,50 @@
 package ir.mmd.intellijDev.Actionable.find.advanced.agent.java
 
 import com.intellij.lang.java.JavaLanguage
-import com.intellij.openapi.project.Project
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchInjectionProvider
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchInjectionProvider.InjectionDescriptor
-import ir.mmd.intellijDev.Actionable.util.ext.equals
+import ir.mmd.intellijDev.Actionable.find.advanced.agent.invoke
 
 object JavaAdvancedSearchInjectionProvider : AdvancedSearchInjectionProvider {
-	override fun getInjectionFor(project: Project, variable: String?, identifier: String, context: List<String>): InjectionDescriptor? {
+	override fun getInjectionFor(context: AdvancedSearchContext): InjectionDescriptor? {
 		return when {
-			(variable ?: context.getOrNull(0)).equals("\$class", "\$interface", "\$type") &&
-				identifier.equals("super-of", "direct-super-of") -> InjectionDescriptor(
+			context[0..1] {
+				variable equalTo "\$class" or "\$interface" or "\$type"
+			} and context[0] {
+				identifier equalTo "super-of" or "direct-super-of"
+			} -> InjectionDescriptor(
 				JavaLanguage.INSTANCE,
 				"class A<T extends ", "> { }"
 			)
 			
-			(variable ?: context.getOrNull(0)) == "\$method" &&
-				identifier.equals("has-param", "with-param") -> InjectionDescriptor(
+			context[0..1] {
+				variable equalTo "\$method"
+			} and context[0] {
+				identifier equalTo "has-param" or "with-param"
+			} -> InjectionDescriptor(
 				JavaLanguage.INSTANCE,
 				"class A { void m(", ") { } }"
 			)
 			
-			(variable ?: context.getOrNull(0)) == "\$class" &&
-				identifier.equals("extends", "extends-directly") -> InjectionDescriptor(
+			context[0..1] {
+				variable equalTo "\$class"
+			} and context[0] {
+				identifier equalTo "extends" or "extends-directly"
+			} -> InjectionDescriptor(
 				JavaLanguage.INSTANCE,
 				"class A extends ", " { }"
 			)
 			
-			((variable ?: context.getOrNull(0)) == "\$class" && identifier.equals("implements", "implements-directly")) ||
-				((variable ?: context.getOrNull(0)) == "\$interface" && identifier.equals("extends", "extends-directly")) -> InjectionDescriptor(
+			context[0..1] {
+				variable equalTo "\$class"
+			} and context[0] {
+				identifier equalTo "implements" or "implements-directly"
+			} || context[0..1] {
+				variable equalTo "\$interface"
+			} and context[0] {
+				identifier equalTo "extends" or "extends-directly"
+			} -> InjectionDescriptor(
 				JavaLanguage.INSTANCE,
 				"class A implements ", " { }"
 			)
