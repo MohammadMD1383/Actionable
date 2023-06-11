@@ -3,10 +3,9 @@ package ir.mmd.intellijDev.Actionable.find.advanced.agent.java
 import com.intellij.lang.java.JavaLanguage
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchContext
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchInjectionProvider
-import ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchInjectionProvider.InjectionDescriptor
 import ir.mmd.intellijDev.Actionable.find.advanced.agent.invoke
 
-object JavaAdvancedSearchInjectionProvider : AdvancedSearchInjectionProvider {
+object JavaAdvancedSearchInjectionProvider : AdvancedSearchInjectionProvider() {
 	override fun getInjectionFor(context: AdvancedSearchContext): InjectionDescriptor? {
 		return when {
 			context[0..1] {
