@@ -102,8 +102,11 @@ tasks {
 		sinceBuild.set("231")
 		untilBuild.set("233.*")
 		changeNotes.set("""
+			<h2>Meet the new Feature: Advanced Search! (since v4.5)</h2>
+			
 			<ul>
-				<li>New Feature<b></b>: #73 add option to specify \n count between duplications</li>
+				<li>New Feature<b></b>: #96 Advanced Search</li>
+				<li>New Feature<b></b>: advanced search support for java (beta)</li>
 			</ul>
 			<div>
 				To install nightly builds use <b>Download And Install Nightly Build</b> Action
