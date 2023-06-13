@@ -8,7 +8,7 @@
 	elementTypeHolderClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplateTypes"
 	elementTypeClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplateElementType"
 	tokenTypeClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.MacroTemplateTokenType"
-	psiImplUtilClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.impl.MacroTemplatePsiImplUtil"
+	psiImplUtilClass="ir.mmd.intellijDev.Actionable.text.macro.lang.psi.impl.MacroTemplatePsiImplUtilKt"
 	generateTokenAccessors=true
 }
 

@@ -1,16 +1,34 @@
 package ir.mmd.intellijDev.Actionable.util.ext
 
+import com.intellij.openapi.progress.ProgressIndicator
+import com.intellij.openapi.progress.Task
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
 import ir.mmd.intellijDev.Actionable.util.StringCaseManipulator
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
+import java.net.URLEncoder
 import java.nio.file.Path
 import kotlin.io.path.Path
+
+/**
+ * url encodes the string
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun String.urlEncode(encoding: String = "utf8") = URLEncoder.encode(this, encoding)
 
 /**
  * Copies the string to clipboard
  */
 fun String.copyToClipboard() = Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(this), null)
+
+/**
+ * drop [start] chars from start and [end] chars from the end of the string
+ */
+fun String.innerSubString(start: Int, end: Int): String {
+	val e = length - end
+	return if (start > lastIndex || e < 0) this else substring(start, e)
+}
 
 /**
  * Checks if all characters in the string are distinct characters
@@ -162,3 +180,25 @@ inline operator fun Path.plus(other: Path): Path = Path(this.toString(), other.t
  */
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun Path.plus(other: String): Path = Path(this.toString(), other)
+
+/**
+ * Runs a background task with progress indicator
+ */
+inline fun backgroundTask(project: Project, title: String, canBeCancelled: Boolean, crossinline task: (ProgressIndicator) -> Unit) {
+	object : Task.Backgroundable(project, title, canBeCancelled) {
+		override fun run(indicator: ProgressIndicator) {
+			task(indicator)
+		}
+	}.queue()
+}
+
+/**
+ * checks if `this` is equal to one of the [item]s
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T> T?.equals(vararg item: T) = this in item
+
+/**
+ * checks if this list contains one of the [item]s
+ */
+fun <T> List<T>.contains(vararg item: T?) = item.any { it in this }

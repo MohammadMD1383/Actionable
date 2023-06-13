@@ -1,0 +1,65 @@
+{
+	parserClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchParser"
+	extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+	psiClassPrefix="AdvancedSearchPsi"
+	psiImplClassSuffix="Impl"
+	psiPackage="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi"
+	psiImplPackage="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl"
+	elementTypeHolderClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTypes"
+	elementTypeClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchElementType"
+	tokenTypeClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.AdvancedSearchTokenType"
+	psiImplUtilClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.psi.impl.AdvancedSearchPsiImplUtilKt"
+	parserUtilClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchParserUtilKt"
+	parserImports="static com.intellij.lang.parser.GeneratedParserUtilBase.*"
+    generateTokenAccessors=true
+    tokens=[COMMENT="COMMENT"]
+}
+
+AdvancedSearchFile ::= EOS* TopLevelProperties? EOS* Statements?
+
+// property1: 'value1'
+// property2: 'value2'
+TopLevelProperties ::= (TopLevelProperty eos)+ {methods=[getLanguagePsiProperty findPsiPropertyByKey]}
+
+// property: 'value'
+TopLevelProperty ::= IDENTIFIER COLON StringLiteral {pin=1 recoverWhile=TopLevelPropertyRecover methods=[getKey getValue]}
+private TopLevelPropertyRecover ::= !eos
+
+/* --------------------------------------- */
+
+// $class extends 'java.lang.String'
+// $class has-method 'toString'
+Statements ::= (Statement eos)+
+
+// $class implements 'com.package.Interface'
+//Statement ::= VARIABLE IDENTIFIER Parameters? StatementBody? {pin=1 recoverWhile=StatementRecover}
+Statement ::= <<statement VARIABLE IDENTIFIER Parameters>> StatementBody? {
+	recoverWhile=StatementRecover
+	methods=[getPsiVariable getPsiIdentifier getPsiParameters getVariable getIdentifier getParameters getParentStatement]
+}
+private StatementRecover ::= !eos
+
+// 'com.package1.Interface', 'com.package2.Interface'
+Parameters ::= Parameter (COMMA Parameter)*
+Parameter ::= StringLiteral
+
+// {
+//     $method has-parameters 'java.lang.String s', 'java.util.Date d'
+// }
+StatementBody ::= LBRACE EOS* Statements? EOS* RBRACE {pin=1}
+
+/* -------------------- Helper -------------------- */
+
+// \n | ; | eof | }
+private eos ::= EOS+ | <<eof>> | <<rBraceAsEOSInBody>>
+
+// 'raw'
+// "supports escapes"
+StringLiteral ::= RawString | String {
+	implements="com.intellij.psi.PsiLanguageInjectionHost"
+	methods=[isValidHost updateText createLiteralTextEscaper getContent isRaw]
+}
+
+String ::= DOUBLE_QUOTE (STRING_SEQ | STRING_ESCAPE_SEQ)* DOUBLE_QUOTE {pin=1 extends=StringLiteral}
+
+RawString ::= SINGLE_QUOTE STRING_SEQ? SINGLE_QUOTE {pin=1 extends=StringLiteral}

@@ -21,3 +21,9 @@ inline val TextRange.intRange get() = startOffset..endOffset
 
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun TextRange?.contains(i: Int) = this != null && contains(i)
+
+/**
+ * creates a new [TextRange] with [TextRange.getStartOffset] + [start] and [TextRange.getEndOffset] - [end]
+ */
+@Suppress("NOTHING_TO_INLINE")
+inline fun TextRange.innerSubRange(start: Int, end: Int) = TextRange(startOffset + start, endOffset - end)

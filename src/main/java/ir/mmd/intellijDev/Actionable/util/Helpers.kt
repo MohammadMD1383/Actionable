@@ -34,6 +34,13 @@ inline fun afterDoing(block: () -> Unit) = block()
 inline infix fun <T> T.after(block: () -> Unit) = also { block() }
 
 /**
+ * executes [block] if `this` is `true`
+ *
+ * @return `this`
+ */
+inline infix fun Boolean.then(block: () -> Unit) = also { if (this) block() }
+
+/**
  * Helper method to get application-wide service
  */
 @Suppress("NOTHING_TO_INLINE")

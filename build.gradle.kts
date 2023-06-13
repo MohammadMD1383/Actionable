@@ -5,7 +5,7 @@ buildscript {
 }
 
 plugins {
-	id("org.jetbrains.intellij") version "1.13.3"
+	id("org.jetbrains.intellij") version "1.14.1"
 	kotlin("jvm") version "1.8.21"
 	java
 }
@@ -26,7 +26,7 @@ fun DependencyHandlerScope.classpath(path: String) {
 }
 
 group = "ir.mmd.intellijDev"
-version = "4.4.0"
+version = "4.5.0"
 
 sourceSets["main"].java.srcDirs("src/main/gen")
 
@@ -49,16 +49,34 @@ kotlin {
 
 tasks {
 	compileKotlin {
-		kotlinOptions {
-			freeCompilerArgs += listOf(
-				"-Xjvm-default=all",
-				"-Xcontext-receivers"
-			)
+		compilerOptions {
+			freeCompilerArgs.add("-Xjvm-default=all")
+			freeCompilerArgs.add("-Xcontext-receivers")
 		}
 	}
 	
+	val createOpenApiSourceJar by registering(Jar::class) {
+		from(sourceSets.main.get().java) {
+			include("**/*.java")
+		}
+		
+		from(kotlin.sourceSets.main.get().kotlin) {
+			include("**/*.kt")
+		}
+		
+		destinationDirectory.set(layout.buildDirectory.dir("libs"))
+		archiveClassifier.set("src")
+	}
+	
 	buildPlugin {
+		dependsOn(createOpenApiSourceJar)
+		
 		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+		
+		from(createOpenApiSourceJar) {
+			into("lib/src")
+		}
+		
 		from("docs/site") {
 			into("docs")
 		}
@@ -84,9 +102,11 @@ tasks {
 		sinceBuild.set("231")
 		untilBuild.set("233.*")
 		changeNotes.set("""
+			<h2>Meet the new Feature: Advanced Search! (since v4.5)</h2>
+			
 			<ul>
-				<li>New Feature<b></b>: #73 add option to specify \n count between duplications</li>
-				<li>New Feature<b></b>: Smart Temporary File (which provides all code insight features)</li>
+				<li>New Feature<b></b>: #96 Advanced Search</li>
+				<li>New Feature<b></b>: advanced search support for java (beta)</li>
 			</ul>
 			<div>
 				To install nightly builds use <b>Download And Install Nightly Build</b> Action

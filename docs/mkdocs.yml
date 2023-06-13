@@ -3,6 +3,7 @@ repo_name: MohammadMD1383/Actionable
 repo_url: https://github.com/MohammadMD1383/Actionable
 theme:
   name: material
+  custom_dir: overrides
   
   features:
     - navigation.tracking

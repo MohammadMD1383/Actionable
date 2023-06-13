@@ -47,7 +47,21 @@
 	<depends optional="true" config-file="plugin-javascript.xml">JavaScript</depends>
 	<depends optional="true" config-file="plugin-golang.xml">org.jetbrains.plugins.go</depends>
 	
+	<extensionPoints>
+		<extensionPoint
+			name="advancedSearch.providerFactory"
+			beanClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.AdvancedSearchProviderFactoryBean"
+			dynamic="true"/>
+	</extensionPoints>
+	
+	<extensions defaultExtensionNs="ir.mmd.intellijDev.Actionable">
+		<advancedSearch.providerFactory
+			language="JAVA"
+			factoryClass="ir.mmd.intellijDev.Actionable.find.advanced.agent.java.JavaAdvancedSearchExtensionFactory"/>
+	</extensions>
+	
 	<extensions defaultExtensionNs="com.intellij">
+		<!--region Macro Template Language-->
 		<fileType
 			name="Actionable Macro Template"
 			implementationClass="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateFileType"
@@ -76,6 +90,76 @@
 		
 		<backspaceHandlerDelegate
 			implementation="ir.mmd.intellijDev.Actionable.text.macro.lang.MacroTemplateDollarBackspaceHandler"/>
+		<!--endregion-->
+		
+		<!--region Advanced Search Language-->
+		<fileType
+			name="Advanced Search"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchFileType"
+			fieldName="INSTANCE"
+			language="AdvancedSearch"
+			extensions="aas"/>
+		
+		<lang.parserDefinition
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchParserDefinition"/>
+		
+		<lang.syntaxHighlighterFactory
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchSyntaxHighlighterFactory"/>
+		
+		<annotator
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchAnnotator"/>
+		
+		<lang.commenter
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchCommenter"/>
+		
+		<lang.foldingBuilder
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchFoldingBuilder"/>
+		
+		<completion.contributor
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.compl.AdvancedSearchCompletionContributor"/>
+		
+		<multiHostInjector
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.AdvancedSearchMultiHostInjector"/>
+		
+		<platform.backend.documentation.targetProvider
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchDocumentationProvider"/>
+		
+		<platform.backend.documentation.psiTargetProvider
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchDocumentationProvider"/>
+		
+		<spellchecker.support
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchSpellCheckingStrategy"/>
+		
+		<lang.formatter
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.fmt.AdvancedSearchFormattingModelBuilder"/>
+		
+		<lang.braceMatcher
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchBraceMatcher"/>
+		
+		<lang.quoteHandler
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchQuoteHandler"/>
+		
+		<moveLeftRightHandler
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchMoveElementLeftRightHandler"/>
+		
+		<highlightUsagesHandlerFactory
+			implementation="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchHighlightUsagesHandlerFactory"/>
+		
+		<runLineMarkerContributor
+			language="AdvancedSearch"
+			implementationClass="ir.mmd.intellijDev.Actionable.find.advanced.lang.util.AdvancedSearchLineMarkerProvider"/>
+		<!--endregion-->
 		
 		<notificationGroup
 			id="Actionable Notifications"
@@ -428,6 +512,16 @@
 					id="ir.mmd.intellijDev.Actionable.find.SelectPreviousOccurrence"
 					text="Add Selection to Previous Occurrence"
 					description="Adds selection to the previous occurrence of the word in the editor"/>
+				
+				<separator/>
+				
+				<group id="ir.mmd.intellijDev.Actionable.AdvancedSearchGroup" text="Advanced Search" popup="true">
+					<action
+						class="ir.mmd.intellijDev.Actionable.find.advanced.SearchAction"
+						id="ir.mmd.intellijDev.Actionable.find.advanced.SearchAction"
+						text="Search..."
+						description="Search using this .aas file"/>
+				</group>
 			</group>
 			
 			<group id="ir.mmd.intellijDev.Actionable.CaretGroup" text="Caret Actions" popup="true">
