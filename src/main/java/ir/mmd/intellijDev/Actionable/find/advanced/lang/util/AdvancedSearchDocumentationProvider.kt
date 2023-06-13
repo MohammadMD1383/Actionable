@@ -2,11 +2,11 @@ package ir.mmd.intellijDev.Actionable.find.advanced.lang.util
 
 import com.intellij.icons.AllIcons
 import com.intellij.model.Pointer
-import com.intellij.navigation.TargetPresentation
 import com.intellij.platform.backend.documentation.DocumentationResult
 import com.intellij.platform.backend.documentation.DocumentationTarget
 import com.intellij.platform.backend.documentation.DocumentationTargetProvider
 import com.intellij.platform.backend.documentation.PsiDocumentationTargetProvider
+import com.intellij.platform.backend.presentation.TargetPresentation
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.elementType
