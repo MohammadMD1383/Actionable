@@ -821,6 +821,13 @@
 					icon="AllIcons.FileTypes.Custom"/>
 				
 				<action
+					class="ir.mmd.intellijDev.Actionable.ide.CreateSmartTemporaryFileAction"
+					id="ir.mmd.intellijDev.Actionable.ide.CreateSmartTemporaryFileAction"
+					text="Create Smart Temporary File"
+					description="Creates a smart (with all code insight features available) temporary memory-mapped file"
+					icon="AllIcons.FileTypes.Custom"/>
+				
+				<action
 					class="ir.mmd.intellijDev.Actionable.ide.OpenKeymapSettingsAction"
 					id="ir.mmd.intellijDev.Actionable.ide.OpenKeymapSettingsAction"
 					text="Open Keymap Settings"
