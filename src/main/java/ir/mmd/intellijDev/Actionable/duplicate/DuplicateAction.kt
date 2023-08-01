@@ -75,7 +75,7 @@ abstract class DuplicateAction : MultiCaretAction(), DumbAware {
 		
 		if (start != end) /* has selection */ {
 			startingLine = document.getLineNumber(start)
-			endingLine = document.getLineNumber(end)
+			endingLine = document.getLineNumber(end - 1)
 			startOffset = document.getLineStartOffset(startingLine)
 			endOffset = document.getLineEndOffset(endingLine)
 		} else /* no selection */ {
