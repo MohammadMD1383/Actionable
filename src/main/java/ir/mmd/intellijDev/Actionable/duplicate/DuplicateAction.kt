@@ -25,8 +25,8 @@ abstract class DuplicateAction : MultiCaretAction(), DumbAware {
 		end: Int
 	) = with(getDuplicateString(start, end)) {
 		runWriteCommandAction {
-		    // Reset caret position and selection after inserting text.
-		    val caretOffset = editor.caretModel.offset
+			// Reset caret position and selection after inserting text.
+			val caretOffset = editor.caretModel.offset
 			document.insertString(endOffset, "\n${text}")
 			editor.caretModel.currentCaret.setSelection(start, end)
 			editor.caretModel.moveToOffset(caretOffset)
@@ -43,7 +43,7 @@ abstract class DuplicateAction : MultiCaretAction(), DumbAware {
 	) = with(getDuplicateString(start, end)) {
 		runWriteCommandAction {
 			// Reset caret position and selection after inserting text.
-		    val caretOffset = editor.caretModel.offset
+			val caretOffset = editor.caretModel.offset
 			document.insertString(startOffset, "${text}\n")
 			val insertLength = text.length + 1
 			editor.caretModel.currentCaret.setSelection(start + insertLength, end + insertLength)
