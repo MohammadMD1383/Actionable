@@ -25,7 +25,11 @@ abstract class DuplicateAction : MultiCaretAction(), DumbAware {
 		end: Int
 	) = with(getDuplicateString(start, end)) {
 		runWriteCommandAction {
+		    // Reset caret position and selection after inserting text.
+		    val caretOffset = editor.caretModel.offset
 			document.insertString(endOffset, "\n${text}")
+			editor.caretModel.currentCaret.setSelection(start, end)
+			editor.caretModel.moveToOffset(caretOffset)
 		}
 	}
 	
@@ -38,20 +42,12 @@ abstract class DuplicateAction : MultiCaretAction(), DumbAware {
 		end: Int
 	) = with(getDuplicateString(start, end)) {
 		runWriteCommandAction {
+			// Reset caret position and selection after inserting text.
+		    val caretOffset = editor.caretModel.offset
 			document.insertString(startOffset, "${text}\n")
-			
-			// Check if the caret is at line start,
-			// then move the caret manually.
-			// Due to an issue that caret won't move automatically.
-			// To be more clear, you can comment out the statements below and see the effect.
-			// Put the caret at the line start and fire the `duplicate down` action.
-			if (startOffset == start) (editor.caretModel.getCaretAt(VisualPosition(startingLine, 0)) ?: return@runWriteCommandAction)
-				.moveToLogicalPosition(
-					LogicalPosition(
-						startingLine + (endingLine - startingLine + 1),
-						0
-					)
-				)
+			val insertLength = text.length + 1
+			editor.caretModel.currentCaret.setSelection(start + insertLength, end + insertLength)
+			editor.caretModel.moveToOffset(caretOffset + insertLength)
 		}
 	}
 	
@@ -72,9 +68,9 @@ abstract class DuplicateAction : MultiCaretAction(), DumbAware {
 		val endingLine: Int
 		val startOffset: Int
 		val endOffset: Int
-		
 		if (start != end) /* has selection */ {
 			startingLine = document.getLineNumber(start)
+			// move back one character to avoid selecting last line when at start of line
 			endingLine = document.getLineNumber(end - 1)
 			startOffset = document.getLineStartOffset(startingLine)
 			endOffset = document.getLineEndOffset(endingLine)
