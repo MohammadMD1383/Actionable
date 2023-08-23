@@ -27,6 +27,8 @@
 You can find nightly builds at [releases page](https://github.com/MohammadMD1383/Actionable/releases).
 They are just tested once and may have some bugs.
 
+Also available from `Edit > Actioable > Download And Install Nightly Build` in the IDE!
+
 ## Working With The Plugin
 
 ### Find Your Favorite Actions
