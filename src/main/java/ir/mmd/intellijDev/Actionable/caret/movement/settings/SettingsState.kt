@@ -1,80 +1,74 @@
-package ir.mmd.intellijDev.Actionable.caret.movement.settings;
+package ir.mmd.intellijDev.Actionable.caret.movement.settings
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.util.xmlb.XmlSerializerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
+import com.intellij.util.xmlb.XmlSerializerUtil
 
 /**
- * Settings State for {@code Actionable > Caret > Editing}
+ * Settings State for `Actionable > Caret > Editing`
  */
 @State(
 	name = "ir.mmd.intellijDev.Actionable.caret.movement.settings.SettingsState",
-	storages = @Storage("Actionable.CaretMovementSettingsState.xml")
+	storages = [Storage("Actionable.CaretMovementSettingsState.xml")]
 )
-public class SettingsState implements PersistentStateComponent<SettingsState> {
+class SettingsState : PersistentStateComponent<SettingsState?> {
 	/**
-	 * <b>enum</b><br>
-	 * for behaviour of <code>move caret ...</code> actions<br>
-	 * see {@link UI} for what these constants mean
+	 * **enum**
+	 *
+	 * for behaviour of `move caret ...` actions
+	 *
+	 * see [UI] for what these constants mean
 	 */
-	public enum WSBehaviour {
+	enum class WSBehaviour {
 		/**
 		 * Example of moving caret with this mode
-		 * <pre>
-		 *     hello| world from java
-		 *     hello |world from java
-		 *     hello world| from java
-		 *     hello world |from java
-		 *     ...
-		 * </pre>
+		 * ```
+		 * hello| world from java
+		 * hello |world from java
+		 * hello world| from java
+		 * hello world |from java
+		 * ...
+		 * ```
 		 */
 		StopAtCharTypeChange,
 		
 		/**
 		 * Example of moving caret with this mode
-		 * <pre>
-		 *     hello| world from java
-		 *     hello world| from java
-		 *     hello world from| java
-		 *     hello world from java|
-		 *     ...
-		 * </pre>
+		 * ```
+		 * hello| world from java
+		 * hello world| from java
+		 * hello world from| java
+		 * hello world from java|
+		 * ...
+		 * ```
 		 */
 		StopAtNextSameCharType
 	}
 	
-	public enum SEMBehaviour {
+	enum class SEMBehaviour {
 		Start, Offset, End
 	}
 	
 	/**
 	 * this class holds default values for settings
 	 */
-	public static class Defaults {
-		public static final @NotNull String wordSeparators = "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?\n\t";
-		public static final @NotNull WSBehaviour wordSeparatorsBehaviour = WSBehaviour.StopAtCharTypeChange;
-		public static final @NotNull String hardStopSeparators = " ";
-		public static final @NotNull SettingsState.SEMBehaviour sameElementMovementBehaviour = SEMBehaviour.Start;
+	object Defaults {
+		const val wordSeparators: String = "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?\n\t"
+		
+		@JvmField
+		val wordSeparatorsBehaviour: WSBehaviour = WSBehaviour.StopAtCharTypeChange
+		const val hardStopSeparators: String = " "
+		
+		@JvmField
+		val sameElementMovementBehaviour: SEMBehaviour = SEMBehaviour.Start
 	}
 	
-	public @NotNull String wordSeparators = Defaults.wordSeparators;
+	var wordSeparators: String = Defaults.wordSeparators
+	var wordSeparatorsBehaviour: WSBehaviour = Defaults.wordSeparatorsBehaviour
+	var hardStopCharacters: String = Defaults.hardStopSeparators
+	var sameElementMovementBehaviour: SEMBehaviour = Defaults.sameElementMovementBehaviour
 	
-	public @NotNull WSBehaviour wordSeparatorsBehaviour = Defaults.wordSeparatorsBehaviour;
-	
-	public @NotNull String hardStopCharacters = Defaults.hardStopSeparators;
-	
-	public @NotNull SettingsState.SEMBehaviour sameElementMovementBehaviour = Defaults.sameElementMovementBehaviour;
-	
-	@Override
-	public @Nullable SettingsState getState() {
-		return this;
-	}
-	
-	@Override
-	public void loadState(@NotNull SettingsState state) {
-		XmlSerializerUtil.copyBean(state, this);
-	}
+	override fun getState() = this
+	override fun loadState(state: SettingsState) = XmlSerializerUtil.copyBean(state, this)
 }

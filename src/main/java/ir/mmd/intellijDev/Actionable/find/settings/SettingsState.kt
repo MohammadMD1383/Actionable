@@ -1,36 +1,28 @@
-package ir.mmd.intellijDev.Actionable.find.settings;
+package ir.mmd.intellijDev.Actionable.find.settings
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.util.xmlb.XmlSerializerUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
+import com.intellij.util.xmlb.XmlSerializerUtil
 
 /**
- * Settings State for {@code Actionable > Find}
+ * Settings State for `Actionable > Find`
  */
 @State(
 	name = "ir.mmd.intellijDev.Actionable.find.settings.SettingsState",
-	storages = @Storage("Actionable.FindSettingsState.xml")
+	storages = [Storage("Actionable.FindSettingsState.xml")]
 )
-public class SettingsState implements PersistentStateComponent<SettingsState> {
+class SettingsState : PersistentStateComponent<SettingsState?> {
 	/**
 	 * This class contains the default values for the settings
 	 */
-	public static class Defaults {
-		public static final boolean IS_CASE_SENSITIVE = true;
+	@Suppress("ConstPropertyName")
+	object Defaults {
+		const val isCaseSensitive: Boolean = true
 	}
 	
-	public boolean isCaseSensitive = Defaults.IS_CASE_SENSITIVE;
+	var isCaseSensitive: Boolean = Defaults.isCaseSensitive
 	
-	@Override
-	public @Nullable SettingsState getState() {
-		return this;
-	}
-	
-	@Override
-	public void loadState(@NotNull SettingsState state) {
-		XmlSerializerUtil.copyBean(state, this);
-	}
+	override fun getState() = this
+	override fun loadState(state: SettingsState) = XmlSerializerUtil.copyBean(state, this)
 }

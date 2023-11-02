@@ -1,44 +1,31 @@
-package ir.mmd.intellijDev.Actionable.lang.java.settings;
+package ir.mmd.intellijDev.Actionable.lang.java.settings
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.util.xmlb.XmlSerializerUtil;
-import ir.mmd.intellijDev.Actionable.lang.java.type.AutoClassCase;
-import ir.mmd.intellijDev.Actionable.lang.java.type.AutoInsertSemicolon;
-import ir.mmd.intellijDev.Actionable.lang.java.type.JITRefactoringDelete;
-import ir.mmd.intellijDev.Actionable.lang.java.type.JITRefactoringInsert;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.State
+import com.intellij.openapi.components.Storage
+import com.intellij.util.xmlb.XmlSerializerUtil
 
 @State(
 	name = "ir.mmd.intellijDev.Actionable.lang.java.settings.SettingsState",
-	storages = @Storage("Actionable.Lang.Java.SettingsState.xml")
+	storages = [Storage("Actionable.Lang.Java.SettingsState.xml")]
 )
-public class SettingsState implements PersistentStateComponent<SettingsState> {
+class SettingsState : PersistentStateComponent<SettingsState?> {
 	/**
-	 * @see AutoClassCase
+	 * @see ir.mmd.intellijDev.Actionable.lang.java.type.AutoClassCase
 	 */
-	public boolean autoClassCaseEnabled = true;
-	
-	/**
-	 * @see AutoInsertSemicolon
-	 */
-	public boolean autoInsertSemicolonEnabled = true;
+	var autoClassCaseEnabled: Boolean = true
 	
 	/**
-	 * @see JITRefactoringDelete
-	 * @see JITRefactoringInsert
+	 * @see ir.mmd.intellijDev.Actionable.lang.java.type.AutoInsertSemicolon
 	 */
-	public boolean jitRefactoringEnabled = false;
+	var autoInsertSemicolonEnabled: Boolean = true
 	
-	@Override
-	public @Nullable SettingsState getState() {
-		return this;
-	}
+	/**
+	 * @see ir.mmd.intellijDev.Actionable.lang.java.type.JITRefactoringDelete
+	 * @see ir.mmd.intellijDev.Actionable.lang.java.type.JITRefactoringInsert
+	 */
+	var jitRefactoringEnabled: Boolean = false
 	
-	@Override
-	public void loadState(@NotNull SettingsState state) {
-		XmlSerializerUtil.copyBean(state, this);
-	}
+	override fun getState() = this
+	override fun loadState(state: SettingsState) = XmlSerializerUtil.copyBean(state, this)
 }

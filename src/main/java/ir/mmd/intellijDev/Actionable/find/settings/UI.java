@@ -17,7 +17,7 @@ public class UI {
 		caseSensitiveCheckBoxDefault.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				caseSensitiveCheckBox.setSelected(SettingsState.Defaults.IS_CASE_SENSITIVE);
+				caseSensitiveCheckBox.setSelected(SettingsState.Defaults.isCaseSensitive);
 			}
 		});
 	}

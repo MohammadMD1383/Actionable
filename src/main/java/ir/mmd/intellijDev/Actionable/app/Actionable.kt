@@ -1,29 +1,24 @@
-package ir.mmd.intellijDev.Actionable.app;
+package ir.mmd.intellijDev.Actionable.app
 
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
-import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.notification.Notification
+import com.intellij.notification.NotificationType
+import com.intellij.notification.Notifications
+import com.intellij.openapi.project.Project
 
-public class Actionable {
-	private Actionable() {
-	}
+object Actionable {
+	const val PLUGIN_ID: String = "ir.mmd.intellijDev.Actionable"
+	const val PLUGIN_NAME: String = "Actionable"
+	const val AUTHOR: String = "MohammadMD1383"
 	
-	public static final String PLUGIN_ID = "ir.mmd.intellijDev.Actionable";
-	public static final String PLUGIN_NAME = "Actionable";
-	public static final String AUTHOR = "MohammadMD1383";
+	const val NOTIFICATION_GROUP: String = "Actionable Notifications"
+	const val DOCS_TOOLWINDOW_ID: String = "Actionable Docs"
 	
-	public static final String NOTIFICATION_GROUP = "Actionable Notifications";
-	public static final String DOCS_TOOLWINDOW_ID = "Actionable Docs";
-	
-	public static void showNotification(@NotNull Project project, String content, NotificationType type) {
+	fun showNotification(project: Project, content: String, type: NotificationType) {
 		Notifications.Bus.notify(
-			new Notification(NOTIFICATION_GROUP, content, type),
+			Notification(NOTIFICATION_GROUP, content, type),
 			project
-		);
+		)
 	}
 	
-	public static class UpToDateException extends Exception {
-	}
+	class UpToDateException : Exception()
 }
