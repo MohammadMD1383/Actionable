@@ -5,8 +5,8 @@ buildscript {
 }
 
 plugins {
-	id("org.jetbrains.intellij") version "1.14.1"
-	kotlin("jvm") version "1.8.21"
+	id("org.jetbrains.intellij") version "1.16.0"
+	kotlin("jvm") version "1.9.20"
 	java
 }
 
@@ -15,14 +15,8 @@ repositories {
 }
 
 dependencies {
-	classpath("lib")
-	
 	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
-}
-
-fun DependencyHandlerScope.classpath(path: String) {
-	compileOnly(fileTree("include" to "**/*.jar", "dir" to path))
 }
 
 group = "ir.mmd.intellijDev"
@@ -38,9 +32,10 @@ java {
 intellij {
 	plugins.add("com.intellij.java")
 	plugins.add("org.jetbrains.kotlin")
+	plugins.add("JavaScript")
+	plugins.add("org.jetbrains.plugins.go:233.11361.10")
 	
-	type.set("IC")
-	version.set("2023.1.2")
+	localPath.set("/path/to/intellij-idea-ultimate")
 }
 
 kotlin {
