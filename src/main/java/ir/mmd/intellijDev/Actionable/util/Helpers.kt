@@ -1,5 +1,8 @@
 package ir.mmd.intellijDev.Actionable.util
 
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.observable.properties.ObservableMutableProperty
+import com.intellij.openapi.util.Disposer
 import com.intellij.util.application
 
 /**
@@ -45,3 +48,23 @@ inline infix fun Boolean.then(block: () -> Unit) = also { if (this) block() }
  */
 @Suppress("NOTHING_TO_INLINE")
 inline fun <T> service(clazz: Class<T>): T = application.getService(clazz)
+
+fun <T> observableMutablePropertyOf(initialValue: T) = object : ObservableMutableProperty<T> {
+	private var v = initialValue
+	private var listener: ((T) -> Unit)? = null
+	
+	override fun get() = v
+	override fun set(value: T) {
+		v = value
+		listener?.let { it(v) }
+	}
+	
+	override fun afterChange(parentDisposable: Disposable?, listener: (T) -> Unit) {
+		this.listener = listener
+		parentDisposable?.let {
+			Disposer.register(it) {
+				this.listener = null
+			}
+		}
+	}
+}

@@ -1,36 +1,23 @@
-package ir.mmd.intellijDev.Actionable.find.settings;
+package ir.mmd.intellijDev.Actionable.find.settings
 
-import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import com.intellij.ui.dsl.builder.*
+import ir.mmd.intellijDev.Actionable.ActionableBundle
+import ir.mmd.intellijDev.Actionable.util.observableMutablePropertyOf
 
-public class UI {
-	private JPanel component;
-	private JCheckBox caseSensitiveCheckBox;
-	private JButton caseSensitiveCheckBoxDefault;
+class UI {
+	private val isCaseSensitiveProperty = observableMutablePropertyOf(SettingsState.Defaults.isCaseSensitive)
+	var isCaseSensitive by isCaseSensitiveProperty
 	
-	public UI() {
-		initListeners();
-	}
-	
-	private void initListeners() {
-		caseSensitiveCheckBoxDefault.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				caseSensitiveCheckBox.setSelected(SettingsState.Defaults.isCaseSensitive);
-			}
-		});
-	}
-	
-	public JPanel getComponent() {
-		return component;
-	}
-	
-	public boolean isCaseSensitive() {
-		return caseSensitiveCheckBox.isSelected();
-	}
-	
-	public void setCaseSensitive(boolean b) {
-		caseSensitiveCheckBox.setSelected(b);
+	val component = panel {
+		row {
+			checkBox(ActionableBundle.string("findPanel.caseSensitiveCheckBox.label"))
+				.bindSelected(isCaseSensitiveProperty)
+				.align(Align.FILL)
+				.comment(ActionableBundle.string("findPanel.caseSensitiveCheckBox.comment"))
+			
+			button(ActionableBundle.string("global.defaultButton.label")) {
+				isCaseSensitive = SettingsState.Defaults.isCaseSensitive
+			}.align(AlignX.RIGHT + AlignY.CENTER)
+		}
 	}
 }

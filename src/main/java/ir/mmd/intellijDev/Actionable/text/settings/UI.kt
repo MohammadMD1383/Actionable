@@ -1,22 +1,22 @@
-package ir.mmd.intellijDev.Actionable.text.settings;
+package ir.mmd.intellijDev.Actionable.text.settings
 
-import org.jetbrains.annotations.NotNull;
+import com.intellij.ui.dsl.builder.*
+import ir.mmd.intellijDev.Actionable.ActionableBundle
+import ir.mmd.intellijDev.Actionable.util.observableMutablePropertyOf
 
-import javax.swing.*;
-
-public class UI {
-	private JPanel component;
-	private JCheckBox preserveCaseCheckbox;
+class UI {
+	private val preserveCaseProperty = observableMutablePropertyOf(SettingsState.Defaults.preserveCase)
+	var preserveCase by preserveCaseProperty
 	
-	public @NotNull JPanel getComponent() {
-		return component;
-	}
-	
-	public boolean getPreserveCase() {
-		return preserveCaseCheckbox.isSelected();
-	}
-	
-	public void setPreserveCase(boolean b) {
-		preserveCaseCheckbox.setSelected(b);
+	val component = panel {
+		row {
+			checkBox(ActionableBundle.string("textPanel.preserveCase.label"))
+				.bindSelected(preserveCaseProperty)
+				.align(Align.FILL)
+			
+			button(ActionableBundle.string("global.defaultButton.label")) {
+				preserveCase = SettingsState.Defaults.preserveCase
+			}.align(AlignX.RIGHT + AlignY.CENTER)
+		}
 	}
 }
