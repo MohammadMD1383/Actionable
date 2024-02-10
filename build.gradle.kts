@@ -5,8 +5,8 @@ buildscript {
 }
 
 plugins {
-	id("org.jetbrains.intellij") version "1.16.0"
-	kotlin("jvm") version "1.9.20"
+	id("org.jetbrains.intellij") version "1.17.1"
+	kotlin("jvm") version "1.9.22"
 	java
 }
 
@@ -33,7 +33,7 @@ intellij {
 	plugins.add("com.intellij.java")
 	plugins.add("org.jetbrains.kotlin")
 	plugins.add("JavaScript")
-	plugins.add("org.jetbrains.plugins.go:233.11555.11")
+	plugins.add("org.jetbrains.plugins.go:241.11761.10")
 	
 	localPath.set("/path/to/intellij-idea-ultimate")
 }
