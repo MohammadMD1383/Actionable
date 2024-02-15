@@ -3,6 +3,7 @@ package ir.mmd.intellijDev.Actionable.util
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.observable.properties.ObservableMutableProperty
 import com.intellij.openapi.util.Disposer
+import com.intellij.ui.dsl.builder.MutableProperty
 import com.intellij.util.application
 
 /**
@@ -49,7 +50,7 @@ inline infix fun Boolean.then(block: () -> Unit) = also { if (this) block() }
 @Suppress("NOTHING_TO_INLINE")
 inline fun <T> service(clazz: Class<T>): T = application.getService(clazz)
 
-fun <T> observableMutablePropertyOf(initialValue: T) = object : ObservableMutableProperty<T> {
+class ObservableMutablePropertyImpl<T>(initialValue: T) : ObservableMutableProperty<T>, MutableProperty<T> {
 	private var v = initialValue
 	private var listener: ((T) -> Unit)? = null
 	
@@ -68,3 +69,5 @@ fun <T> observableMutablePropertyOf(initialValue: T) = object : ObservableMutabl
 		}
 	}
 }
+
+fun <T> observableMutablePropertyOf(initialValue: T) = ObservableMutablePropertyImpl(initialValue)

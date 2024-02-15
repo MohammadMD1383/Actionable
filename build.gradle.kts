@@ -95,7 +95,7 @@ tasks {
 	patchPluginXml {
 		version.set(project.version.toString())
 		sinceBuild.set("231")
-		untilBuild.set("233.*")
+		untilBuild.set("")
 		changeNotes.set("""
 			<h2>Meet the new Feature: Advanced Search! (since v4.5)</h2>
 			<ul>

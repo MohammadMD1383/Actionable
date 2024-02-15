@@ -1,5 +1,6 @@
 package ir.mmd.intellijDev.Actionable.caret.editing.settings
 
+import com.intellij.openapi.observable.properties.ObservableMutableProperty
 import com.intellij.ui.dsl.builder.*
 import ir.mmd.intellijDev.Actionable.ActionableBundle
 import ir.mmd.intellijDev.Actionable.util.observableMutablePropertyOf
@@ -11,7 +12,7 @@ class UI {
 	val component = panel {
 		row {
 			checkBox(ActionableBundle.string("caretEditingPanel.showPasteActionHintsCheckBox.label"))
-				.bindSelected(isPasteActionHintsShownProperty)
+				.bindSelected(isPasteActionHintsShownProperty as ObservableMutableProperty<Boolean>)
 				.align(Align.FILL)
 				.comment(ActionableBundle.string("caretEditingPanel.showPasteActionHintsCheckBox.comment"))
 			
