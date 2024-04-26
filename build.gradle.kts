@@ -5,7 +5,7 @@ buildscript {
 }
 
 plugins {
-	id("org.jetbrains.intellij") version "1.17.1"
+	id("org.jetbrains.intellij") version "1.17.3"
 	kotlin("jvm") version "1.9.22"
 	java
 }
@@ -33,7 +33,7 @@ intellij {
 	plugins.add("com.intellij.java")
 	plugins.add("org.jetbrains.kotlin")
 	plugins.add("JavaScript")
-	plugins.add("org.jetbrains.plugins.go:241.11761.10")
+	plugins.add("org.jetbrains.plugins.go:241.15989.21")
 	
 	localPath.set("/path/to/intellij-idea-ultimate")
 }
@@ -102,6 +102,7 @@ tasks {
 				<li><b>New Feature</b>: #96 Advanced Search</li>
 				<li><b>New Feature</b>: advanced search support for java (beta)</li>
 				<li><b>Bug Fix</b>: fixed advanced search documentation provider</li>
+				<li><b>Compatibility</b>: now there is no limit for until-build</li>
 			</ul>
 			<div>
 				To install nightly builds use <b>Download And Install Nightly Build</b> Action
