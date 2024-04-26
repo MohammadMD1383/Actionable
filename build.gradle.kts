@@ -102,6 +102,7 @@ tasks {
 				<li><b>New Feature</b>: #96 Advanced Search</li>
 				<li><b>New Feature</b>: advanced search support for java (beta)</li>
 				<li><b>Bug Fix</b>: fixed advanced search documentation provider</li>
+				<li><b>Bug Fix</b>: new ui for some settings</li>
 				<li><b>Compatibility</b>: now there is no limit for until-build</li>
 			</ul>
 			<div>
