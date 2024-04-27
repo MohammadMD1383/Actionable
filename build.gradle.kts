@@ -35,7 +35,9 @@ intellij {
 	plugins.add("JavaScript")
 	plugins.add("org.jetbrains.plugins.go:241.15989.21")
 	
-	localPath.set("/path/to/intellij-idea-ultimate")
+	// localPath.set("/path/to/intellij-idea-ultimate")
+	type = "IU"
+	version = "2024.1"
 }
 
 kotlin {
