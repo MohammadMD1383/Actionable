@@ -33,7 +33,7 @@ intellij {
 	plugins.add("com.intellij.java")
 	plugins.add("org.jetbrains.kotlin")
 	plugins.add("JavaScript")
-	plugins.add("org.jetbrains.plugins.go:241.15989.21")
+	plugins.add("org.jetbrains.plugins.go:241.17011.2")
 	
 	// localPath.set("/path/to/intellij-idea-ultimate")
 	type = "IU"
