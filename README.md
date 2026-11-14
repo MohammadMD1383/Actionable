@@ -10,16 +10,18 @@ interesting things!
 
 Enough here, let’s see the plugin in action! [Getting Started](https://mohammadmd1383.github.io/Actionable/Getting%20Started/)
 
+## Compatibility
+
+| Version | Compatible IDEs |
+| --- | --- |
+| **v4.6+** | IntelliJ Platform **2025.1 and newer** (open-ended) |
+| v4.0 – v4.5 | 2023.1 – 2023.3 (explicit until-build) |
+| v3.x | 2020.1+ (open-ended) |
+
 ## What's New In v4?
 
 Along with all refactorings, cleanup and documentation changes, I decided to add language-specific actions
 that help you do interesting things with your favorite language.
-
-## Version 3 vs 4
-
-Prior to v4 (up to v3.20.x), the plugin was used to provide a wide compatibility range.
-But as of v4, the compatibility range would be less than it was in v3 and before.
-This is because of providing better quality.
 
 ## Test Latest Features ASAP
 
