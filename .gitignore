@@ -2,5 +2,6 @@
 /.gradle/
 /build/
 /.idea/
+/.intellijPlatform/
 /out/
 /docs/site

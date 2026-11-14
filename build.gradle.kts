@@ -1,111 +1,71 @@
-buildscript {
-	repositories {
-		mavenCentral()
-	}
-}
-
 plugins {
-	id("org.jetbrains.intellij") version "1.17.3"
-	kotlin("jvm") version "1.9.22"
-	java
-}
-
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
+	id("java")
+	id("org.jetbrains.kotlin.jvm") version "2.1.21"
+	id("org.jetbrains.intellij.platform") version "2.20.1"
 }
 
 group = "ir.mmd.intellijDev"
-version = "4.5.0"
+version = "4.6.0"
+
+repositories {
+	mavenCentral()
+	intellijPlatform {
+		defaultRepositories()
+	}
+}
+
+dependencies {
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.12.2")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.12.2")
+
+	intellijPlatform {
+		// Ultimate is required for JavaScript / Go-related optional features while developing.
+		intellijIdeaUltimate("2025.1.7.2")
+
+		bundledPlugin("com.intellij.java")
+		bundledPlugin("org.jetbrains.kotlin")
+		bundledPlugin("JavaScript")
+		plugin("org.jetbrains.plugins.go", "251.28293.39")
+
+		pluginVerifier()
+		zipSigner()
+	}
+}
 
 sourceSets["main"].java.srcDirs("src/main/gen")
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
-}
-
-intellij {
-	plugins.add("com.intellij.java")
-	plugins.add("org.jetbrains.kotlin")
-	plugins.add("JavaScript")
-	plugins.add("org.jetbrains.plugins.go:241.17011.2")
-	
-	// localPath.set("/path/to/intellij-idea-ultimate")
-	type = "IU"
-	version = "2024.1"
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(21))
+	}
 }
 
 kotlin {
-	jvmToolchain(17)
+	jvmToolchain(21)
+	compilerOptions {
+		freeCompilerArgs.add("-Xjvm-default=all")
+		freeCompilerArgs.add("-Xcontext-receivers")
+		freeCompilerArgs.add("-Xsuppress-warning=CONTEXT_RECEIVERS_DEPRECATED")
+	}
 }
 
-tasks {
-	compileKotlin {
-		compilerOptions {
-			freeCompilerArgs.add("-Xjvm-default=all")
-			freeCompilerArgs.add("-Xcontext-receivers")
+intellijPlatform {
+	pluginConfiguration {
+		version = project.version.toString()
+
+		ideaVersion {
+			// Fixed minimum: IntelliJ Platform 2025.1; unlimited maximum (open-ended).
+			sinceBuild = "251"
+			untilBuild = provider { null }
 		}
-	}
-	
-	val createOpenApiSourceJar by registering(Jar::class) {
-		from(sourceSets.main.get().java) {
-			include("**/*.java")
-		}
-		
-		from(kotlin.sourceSets.main.get().kotlin) {
-			include("**/*.kt")
-		}
-		
-		destinationDirectory.set(layout.buildDirectory.dir("libs"))
-		archiveClassifier.set("src")
-	}
-	
-	buildPlugin {
-		dependsOn(createOpenApiSourceJar)
-		
-		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-		
-		from(createOpenApiSourceJar) {
-			into("lib/src")
-		}
-		
-		from("docs/site") {
-			into("docs")
-		}
-	}
-	
-	runIde {
-		autoReloadPlugins.set(true)
-	}
-	
-	prepareSandbox {
-		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-		from("docs/site") {
-			into("${pluginName.get()}/docs")
-		}
-	}
-	
-	buildSearchableOptions {
-		enabled = environment["SKIP_BSO"] == null
-	}
-	
-	patchPluginXml {
-		version.set(project.version.toString())
-		sinceBuild.set("231")
-		untilBuild.set("")
-		changeNotes.set("""
-			<h2>Meet the new Feature: Advanced Search! (since v4.5)</h2>
+
+		changeNotes = """
+			<h2>v4.6.0 — Compatibility Update</h2>
 			<ul>
-				<li><b>New Feature</b>: #96 Advanced Search</li>
-				<li><b>New Feature</b>: advanced search support for java (beta)</li>
-				<li><b>Bug Fix</b>: fixed advanced search documentation provider</li>
-				<li><b>Bug Fix</b>: new ui for some settings</li>
-				<li><b>Compatibility</b>: now there is no limit for until-build</li>
+				<li><b>Compatibility</b>: supports IntelliJ Platform 2025.1 and newer (open-ended until-build)</li>
+				<li><b>Build</b>: migrated to IntelliJ Platform Gradle Plugin 2.x, Gradle 9, Kotlin 2.1, Java 21</li>
+				<li><b>Fix</b>: replaced removed PreloadingActivity with a modern startup activity</li>
+				<li><b>Note</b>: Kotlin-specific actions remain optional and may stay unloaded under Kotlin K2 mode until migrated to the Analysis API</li>
 			</ul>
 			<div>
 				To install nightly builds use <b>Download And Install Nightly Build</b> Action
@@ -114,14 +74,46 @@ tasks {
 				<br>
 				<b>To see the offline docs right from your ide use the action: Open Offline Help</b>
 			</div>
-		""".trimIndent())
+		""".trimIndent()
 	}
-	
-	test {
-		useJUnitPlatform()
+
+	publishing {
+		token = providers.environmentVariable("ACTIONABLE_PUBLISH_TOKEN")
 	}
-	
-	publishPlugin {
-		token.set(System.getenv("ACTIONABLE_PUBLISH_TOKEN"))
+
+	pluginVerification {
+		ides {
+			recommended()
+		}
 	}
+}
+
+val createOpenApiSourceJar = tasks.register<Jar>("createOpenApiSourceJar") {
+	from(sourceSets.main.get().java) {
+		include("**/*.java")
+	}
+
+	from(kotlin.sourceSets.main.get().kotlin) {
+		include("**/*.kt")
+	}
+
+	destinationDirectory.set(layout.buildDirectory.dir("libs"))
+	archiveClassifier.set("src")
+}
+
+tasks.named<org.jetbrains.intellij.platform.gradle.tasks.PrepareSandboxTask>("prepareSandbox") {
+	dependsOn(createOpenApiSourceJar)
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+	from(createOpenApiSourceJar) {
+		into(pluginName.map { "$it/lib/src" })
+	}
+
+	from("docs/site") {
+		into(pluginName.map { "$it/docs" })
+	}
+}
+
+tasks.test {
+	useJUnitPlatform()
 }

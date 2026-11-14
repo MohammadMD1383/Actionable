@@ -186,7 +186,7 @@
 			implementationClass="ir.mmd.intellijDev.Actionable.lang.xml.type.ExpandTagSmartEnterProcessor"
 			language="XML"/>
 		
-		<preloadingActivity
+		<postStartupActivity
 			implementation="ir.mmd.intellijDev.Actionable.app.Startup"/>
 		
 		<applicationService
